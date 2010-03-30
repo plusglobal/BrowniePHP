@@ -356,7 +356,9 @@ class CmsBehavior extends ModelBehavior {
 						' . ife($value['description'], $value['description'], __d('brownie', 'Download file', true)) . '
 					</a>',
 			);
-
+			if (empty($value['description'])) {
+				$r[$key]['description'] = $value['name'];
+			}
 			$merged = am($r[$key], $paths);
 			if (!empty($Model->brownieCmsConfig['files'][$value['category_code']]['index'])) {
 				$ret[$value['category_code']] = $merged;
