@@ -800,8 +800,8 @@ div.image{
 
 ul.image-actions{
 	background: url(img/action_image.png);
-	position: absolute;
 }
+
 ul.image-actions li{
 	float: left;
 }
