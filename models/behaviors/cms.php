@@ -264,19 +264,21 @@ class CmsBehavior extends ModelBehavior {
 				'path' => $Helper->url('/uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'])
 			);
 			if (!empty($Model->brownieCmsConfig['images'][$value['category_code']]['sizes'])) {
+				$paths['sizes'] = array();
 				$sizes = $Model->brownieCmsConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$paths[$size] =  $this->graphic($value, $size);
+					$paths['sizes'][$size] = $this->graphic($value, $size);
+					//$paths['sizes'][] = $paths['sizes'][$size];
+				}
+				if (empty($value['description'])) {
+					$value['description'] = $r[$key]['description'] = $value['name'];
 				}
 				if (!empty($sizes[0])) {
 					if ($sizes[0] != end($sizes)) {
-						$paths['tag'] = '<a title="'.$value['description'].'" href="'.$paths[end($sizes)].'" rel="brw_image_'.$value['record_id'].'"><img alt="'.$value['description'].'" src="'.$paths[$sizes[0]].'" /></a>';
+						$paths['tag'] = '<a title="'.$value['description'].'" href="'.$paths['sizes'][end($sizes)].'" rel="brw_image_'.$value['record_id'].'"><img alt="'.$value['description'].'" src="'.$paths['sizes'][$sizes[0]].'" /></a>';
 					} else {
-						$paths['tag'] = '<img alt="'.$value['description'].'" src="'.$paths[$sizes[0]].'" />';
+						$paths['tag'] = '<img alt="'.$value['description'].'" src="'.$paths['sizes'][$sizes[0]].'" />';
 					}
-				}
-				if (empty($value['description'])) {
-					$r[$key]['description'] = $value['name'];
 				}
 			}
 			$merged = am($r[$key], $paths);
