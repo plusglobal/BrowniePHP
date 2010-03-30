@@ -257,6 +257,9 @@ class CmsBehavior extends ModelBehavior {
 			$ret[$catCode] = array();
 		}
 		foreach ($r as $key => $value) {
+			if (!isset($Model->brownieCmsConfig['images'][$value['category_code']])) {
+				continue;
+			}
 			$paths = array(
 				'path' => $Helper->url('/uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'])
 			);
@@ -346,19 +349,25 @@ class CmsBehavior extends ModelBehavior {
 		App::Import('Helper');
 		$Helper = new Helper;
 		$ret = array();
+		foreach ($Model->brownieCmsConfig['files'] as $catCode => $value) {
+			$ret[$catCode] = array();
+		}
 		foreach($r as $key => $value) {
+			if (!isset($Model->brownieCmsConfig['files'][$value['category_code']])) {
+				continue;
+			}
+			if (empty($value['description'])) {
+				$value['description'] = $r[$key]['description'] = $value['name'];
+			}
 			$completePath = $Helper->url('/uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name']);
 			$extension = end(explode(".", $value['name']));
 			$paths = array(
 				'path' => $completePath,
 				'tag' => '
 					<a title="'.$value['description'].'" href="'.$completePath.'" class="BrwFile '.$extension.'">
-						' . ife($value['description'], $value['description'], __d('brownie', 'Download file', true)) . '
+						' . $value['description'] . '
 					</a>',
 			);
-			if (empty($value['description'])) {
-				$r[$key]['description'] = $value['name'];
-			}
 			$merged = am($r[$key], $paths);
 			if (!empty($Model->brownieCmsConfig['files'][$value['category_code']]['index'])) {
 				$ret[$value['category_code']] = $merged;
@@ -366,9 +375,7 @@ class CmsBehavior extends ModelBehavior {
 				$ret[$value['category_code']][] = $merged;
 			}
 		}
-		//pr($ret);
 		return $ret;
-
 	}
 
 
