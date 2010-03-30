@@ -1,0 +1,17 @@
+function hoverRowsColors() {
+   $('tr.list').hover(function() {
+		$(this).css('background-color', '#E1EBF5');
+	},
+	function() {
+		$(this).css('background-color', '#fff');
+	});
+}
+
+function multipleComboSelect() {
+	$('.combo-select').comboselect({ sort: 'none', addbtn: '&raquo;',  rembtn: '&laquo;' });
+}
+
+$(document).ready(function(){
+	multipleComboSelect();
+	hoverRowsColors();
+});

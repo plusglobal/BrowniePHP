@@ -1,0 +1,989 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+body {
+	line-height: 1;
+	color: black;
+	background: white;
+}
+ol, ul {
+	list-style: none;
+}
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+blockquote, q {
+	quotes: "" "";
+}
+
+.clearfix:after {
+content:".";
+display:block;
+height:0;
+clear:both;
+visibility:hidden;
+}
+.clearfix {display:inline-block;}
+/* Hide from IE Mac \*/
+.clearfix {display:block;}
+ /* End hide from IE Mac */
+
+/* End CSS reseter */
+
+
+/* General Style Info */
+body {
+	background: #e6e6e6;
+	color: #676767;
+	font-family: verdana,helvetica,arial,sans-serif;
+	font-size: 12px;
+	margin: 0;
+}
+
+strong{
+	font-weight: bold;
+}
+
+a{
+	text-decoration: none;
+}
+
+#header{
+	background: url(img/header.jpg) 0 0 no-repeat #2f2f2f;
+	height: 109px;
+	line-height: 109px;
+	padding-left: 317px;
+	border: 1px solid #fff;
+}
+
+#header a{
+	color: #fff;
+	font: bold 16px/109px verdana;
+	letter-spacing: -0.3px;
+}
+
+#container{
+	font-family: Arial;
+}
+
+#login {
+	width: 411px;
+	background: url(img/login-top.png) 0 0 no-repeat;
+	margin: auto;
+	margin-top: 10%;
+}
+
+#login  h1{
+	color: #268afc;
+	padding: 34px 0 0 120px;
+	font: bold 18px Arial;
+	letter-spacing: -0.3px;
+	text-transform: uppercase;
+}
+
+#login p{
+	font: normal 11px Arial;
+	padding: 2px 10px 0 120px;
+	
+}
+
+#login-inside{
+	background: url(img/login-bottom.gif) left bottom no-repeat;
+	padding-bottom: 40px;
+}
+
+#login form{
+	margin-top: 43px;
+}
+
+#login form label{
+	width: 90px;
+	float: left;
+	margin-left: 64px;
+	font: bold 12px Arial;
+	padding: 4px 4px 4px 0;
+	text-align: right;
+}
+
+#login  form input{
+	float: left;
+	width: 115px;
+	border: 1px solid #ccc;
+	padding: 2px;
+	margin: 2px 2px 3px 2px;
+	font: normal 11px Verdana;
+}
+
+#login form div.submit input{
+	width: 44px;
+	height: 44px;
+	background: url(img/submit.gif) 0 0 no-repeat;
+	padding: 0;
+	overflow: hidden;
+	text-indent: -650px;
+	position: absolute;
+	border: 0;
+	*margin-top: -23px;
+}
+
+#login  #flashMessage{
+	margin: 14px 0 0 64px;
+	width: 283px;
+	text-align: center;
+	color: #fff;
+	padding: 4px;
+	background: #B62441;
+	font: bold 12px Verdana;
+	position: absolute;
+}
+
+#menu{
+	width: 225px;
+	float: left;
+	margin-top: 17px;
+}
+
+#content{
+	padding: 20px 5px; /*20px 20px 40px 20px;*/
+	overflow: auto;
+	margin: 0 10px 10px 15px;	
+}
+
+#menu-items{
+	width: 216px;
+	background: url(img/menu.gif) 0 0 repeat-y;
+}
+
+#menu-items h2{
+	background: url(img/menu-top.gif) 0 0 no-repeat;
+	height: 39px;
+	font: bold 12px/47px Arial;
+	color: #268afc;
+	text-transform: uppercase;
+	overflow: hidden;
+	padding-left: 37px;
+}
+
+#menu-items li ul{
+	background: url(img/menu-bottom.gif) left bottom no-repeat;
+	padding-bottom: 17px;
+	margin-bottom: 2px;
+}
+
+#menu-items a{
+	display: block;
+	background: #e9e9e9 url(img/menu-item.gif) 14px center no-repeat;
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #d3d3d3;
+	padding: 7px 7px 7px 30px;
+	margin: 0 6px 0 5px;
+	font-size: 12px;
+	color: #676767;
+}
+
+#menu-items a:hover{
+	background-color: #dddddd;
+}
+
+#options-bar{
+	background: url(img/options-bar.gif) 0 0 repeat-x #fff;
+	height: 40px;
+	line-height: 40px;
+}
+
+#options-bar p{
+	height: 40px;
+	line-height: 40px;
+	width: 200px;
+	float: left;
+	padding: 0 20px;
+}
+
+#options-bar ul{
+	float: right;
+	text-align: right;
+}
+
+#options-bar ul li{
+	float: left;
+}
+
+#options-bar ul li a{
+	display: block;
+	padding: 0 25px;
+	color: #6c6c6c;
+	height: 37px;
+	line-height: 37px;
+	background: left center no-repeat;
+}
+
+#options-bar ul li.home a{
+	background-image: url(img/home.gif);
+}
+
+#options-bar ul li.logout a{
+	background-image: url(img/logout.gif);
+}
+
+#options-bar ul li.users a{
+	background-image: url(img/user.gif);
+}
+
+#options-bar ul li.groups a{
+	background-image: url(img/users.gif);
+}
+
+
+/* desprolijo revisar despues */
+
+/*  Actions  */
+div.actions-view{
+	float: right;
+	margin: 0 0 5px 0;
+}
+
+div.actions-view ul {
+	margin: 0;
+	padding: 0;
+}
+div.actions-view li {
+	float: left;
+}
+
+div.actions-view ul li a {
+	background:#fff;
+	display: block;
+	background: center center no-repeat;
+	text-indent: -500px;
+	overflow: hidden;
+	width: 42px;
+	height: 42px;
+	margin: 2px;
+}
+
+div.actions-view ul li a:hover {
+	background-color: #268AFC;
+}
+
+div.actions-view li.add a{
+	background-image: url(img/agregar2_ico.png);
+}
+
+div.actions-view li.edit a{
+	background-image: url(img/editar_ico.png);
+}
+
+div.actions-view li.delete a{
+	background-image: url(img/eliminar_ico.png);
+}
+
+div.actions-view li.url_view a{
+	background-image: url(img/applications-internet.png);
+}
+
+div.actions-view li.prev a{
+	background-image: url(img/anterior_ico.png);
+}
+
+div.actions-view li.next a{
+	background-image: url(img/siguiente_ico.png);
+}
+
+
+/* tree */
+
+div.tree{
+	width: 650px;
+}
+
+div.tree ul{
+	margin: 0;
+	clear: both;
+}
+
+div.tree ul li{
+	padding: 0 0 0 10px;
+	background: url(img/1level.png) 0 0 repeat-x;
+	line-height: 32px;
+	border-top: 2px solid #e6e6e6;
+}
+
+div.tree ul li li{
+	background: url(img/2level.png) 13px 0 no-repeat;
+	padding-left: 42px;
+	margin-left: 17px;
+}
+
+div.tree ul li div.actions{
+	position: absolute;
+	margin-left: 10px;
+	float: right;
+	margin-top: -32px;
+	left: 786px;
+}
+
+div.tree ul li div.actions a{
+	width: 41px;
+	height: 31px;
+	float: left;
+	overflow: hidden;
+	background: center center no-repeat;
+	margin: 1px;
+	line-height: 10px;
+	text-indent: 100px;
+}
+
+div.tree ul li div.actions a:hover{
+	background-color: #268AFC;
+}
+
+div.tree a{
+	background: center center no-repeat;
+	display: block;
+	float: left;
+}
+
+
+div.tree ul li div.actions a.view{
+	background-image: url(img/func_ver_ico.png);
+}
+
+div.tree ul li div.actions a.edit{
+	background-image: url(img/func_editar_ico.png);
+}
+
+div.tree ul li div.actions a.delete{
+	background-image: url(img/func_borrar_ico.png);
+}
+
+
+
+/* Paging */
+div.pagination p{
+	margin: 10px 0 35px 0;
+}
+
+div.paging{
+	margin: 10px 0;
+}
+
+div.paging span{
+	display: block;
+	float: left;
+	width: 31px;
+	height: 23px;
+	background: url(img/page.png) 0 0 no-repeat;
+	margin: 2px;
+	font: bold 12px Verdana;
+	color: #000;
+	line-height: 23px;
+	text-align: center;
+	overflow: hidden;
+}
+
+div.paging a{
+	display: block;
+	height: 23px;
+	color: #fff;
+}
+
+div.paging span.prev, div.paging span.next{
+	text-indent: 100px;
+}
+
+div.paging span.prev{
+	background-image: url(img/anterior2_ico.png);
+}
+
+div.paging span.next{
+	background-image: url(img/siguiente2_ico.png);
+}
+
+div.paging span.prev div.disabled{
+	background-image: url(img/anterior2_ico_disabled.png);
+}
+
+div.paging span.next div.disabled{
+	background-image: url(img/siguiente2_ico_disabled.png);
+}
+
+/* Notices and Errors */
+div.message {
+	clear: both;
+	color: #900;
+	font-size: 140%;
+	font-weight: bold;
+	margin: 1em 0;
+}
+div.error-message {
+	clear: both;
+	color: #900;
+	font-weight: bold;
+}
+p.error {
+	background-color: #e32;
+	color: #fff;
+	font-family: Courier, monospace;
+	font-size: 120%;
+	line-height: 140%;
+	padding: 0.8em;
+	margin: 1em 0;
+}
+p.error em {
+	color: #000;
+	font-weight: normal;
+	line-height: 140%;
+}
+.notice {
+	background: #ffcc00;
+	color: #000;
+	display: block;
+	font-family: Courier, monospace;
+	font-size: 120%;
+	line-height: 140%;
+	padding: 0.8em;
+	margin: 1em 0;
+}
+.success {
+	background: green;
+	color: #fff;
+}
+
+#content h2, #content h1{
+	font: bold 18px Arial;
+	color: #676767;
+	margin-bottom: 10px;
+}
+
+#content h2{
+	font-size: 16px;
+}
+
+/* tables */
+
+table{
+	width: 100%;
+	border-collapse: collapse;
+	background: #fff;
+}
+
+th, td, div.view td{
+	border-collapse: collapse;
+	font: normal 13px Arial;
+	border: 1px solid #E6E6E6;
+	background: transparent;
+}
+
+th{
+	background: #777;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+th a{
+	color: #fff;
+	display: block;
+	padding: 10px;
+}
+
+th a:hover{
+	background: #444;
+}
+
+div.view td, td.field, p.norecords{
+	padding: 7px;
+}
+
+th.actions{
+	text-align: center;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+th.actions{
+	overflow: hidden;
+}
+
+table td.actions{
+	padding: 0;
+	width: 130px;
+	line-height: 1px;
+	vertical-align: top;
+}
+
+td.actions ul{
+}
+
+td.actions li{
+	width: 41px;
+	height: 33px;
+	float: left;
+	margin: 1px;
+}
+
+td.actions a{
+	width: 41px;
+	height: 33px;
+	float: left;
+	overflow: hidden;
+	background: 2px center no-repeat;
+	line-height: 10px;
+	text-indent: 100px;
+}
+
+td.actions a:hover{
+	background-color: #268AFC;
+}
+
+li.view a{
+	background-image: url(img/func_ver_ico.png);
+}
+
+li.edit a{
+	background-image: url(img/func_editar_ico.png);
+}
+
+li.delete a{
+	background-image: url(img/func_borrar_ico.png);
+}
+
+table.view{
+	margin-bottom: 35px;
+}
+
+div.view td.label{
+	width: 150px;
+	background: #444;
+	color: #fff;
+	font-weight: bold;
+}
+
+.fcktxt ul, .fcktxt ol, .fcktxt p, .fcktxt table{
+    margin: 0 0 15px 0;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.fcktxt a{
+    color: #FB7E00;
+}
+
+.fcktxt a:hover{
+    color: #fff;
+    background: #7B7B7B;
+}
+
+.fcktxt ul, .fcktxt ul li{
+    list-style-type: disc;
+}
+
+.fcktxt ol, .fcktxt ol li{
+    list-style-type: decimal;
+}
+
+.fcktxt li{
+    margin-left: 23px;
+}
+
+.fcktxt table{
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+.fcktxt table td{
+    padding: 3px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+}
+
+.fcktxt b, .fck strong{
+    font-weight: bold;
+}
+
+.fcktxt u{
+    text-decoration: underline;
+}
+
+.fcktxt em, .fcktxt i{
+    font-style: italic;
+}
+
+div.view h1, div.view #flashMessage{
+	float: left;
+}
+
+div.index div.actions, div.brw-images div.actions{
+	margin-left: 15px;
+	padding-left: 15px;
+	border-left: 1px solid #97989D;
+	float: left;
+}
+
+div.index div.actions ul li a{
+	display: block;
+	line-height: 40px;
+	height: 40px;
+	padding: 0 10px 0 45px;
+	background: left center no-repeat;
+	color: #444;
+}
+
+div.index div.actions ul li a:hover{
+	background-color: #268AFC;
+	color: #fff;
+}
+
+div.index h2, div.view h1{
+	line-height: 40px !important;
+	height: 40px;
+	float: left;
+}
+
+.images-gallery{
+	clear: both;
+	margin-bottom: 25px;
+}
+
+div.index div.actions ul li.add a{
+	background-image: url(img/agregar2_ico.png);
+}
+
+div.index div.actions ul li.add-image a{
+	background-image: url(img/imagen_ico.png);
+}
+
+p.norecords{
+	margin-bottom: 20px;
+	background: #fff;
+}
+
+
+/* form */
+
+#content form {
+	clear: both;
+	margin-right: 20px;
+	padding: 0;
+	width: 95%;
+}
+#content fieldset {
+	border: 1px solid #ccc;
+	padding: 16px 20px;
+	margin-bottom: 20px;
+}
+#content fieldset legend {
+	font-size: 160%;
+	font-weight: bold;
+}
+#content fieldset fieldset {
+	margin-top: 0px;
+	margin-bottom: 20px;
+	padding: 16px 10px;
+}
+#content fieldset fieldset legend {
+	font-size: 120%;
+	font-weight: normal;
+}
+#content fieldset fieldset div {
+	clear: left;
+	margin: 0 20px;
+}
+#content form div {
+	clear: both;
+	padding: .5em;
+	vertical-align: text-top;
+}
+#content form div.input {
+	color: #444;
+}
+#content form div.required {
+	color: #333;
+	font-weight: bold;
+}
+#content form div.submit {
+	border: 0;
+	clear: both;
+	margin-top: 10px;
+	margin-left: 140px;
+}
+#content label {
+	display: block;
+	font-size: 120%;
+	padding-bottom: 5px;
+	font-weight: bold;
+}
+#content input, #content textarea {
+	clear: both;
+	font-size: 12px;
+	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
+	padding: 2px;
+	width: 100%;
+}
+#content select {
+	clear: both;
+	font-size: 12px;
+	vertical-align: text-bottom;
+}
+#content select[multiple=multiple] {
+	width: 100%;
+}
+#content option {
+	font-size: 120%;
+	padding: 0 3px;
+}
+#content input[type=checkbox] {
+	clear: left;
+	float: left;
+	margin: 0px 6px 7px 2px;
+	width: auto;
+}
+#content input[type=radio] {
+	float:left;
+	width:auto;
+	margin: 0 3px 7px 0;
+}
+div.radio label {
+	margin: 0 0 6px 20px;
+}
+div.checkbox{
+	
+}
+div.checkbox label{
+	font-weight: normal;
+}
+#content input[type=submit] {
+	display: inline;
+	font-size: 110%;
+	padding: 2px 5px;
+	width: auto;
+	vertical-align: bottom;
+}
+
+ #footer{
+	clear: both;
+	height: 40px;
+}
+
+div.image{
+	float: left;
+	margin: 10px 10px 0 0;
+}
+
+ul.image-actions{
+	background: url(img/action_image.png);
+	position: absolute;
+}
+ul.image-actions li{
+	float: left;
+}
+
+ul.image-actions li a {
+	display: block;
+	background: center center no-repeat;
+	text-indent: 100px;
+	overflow: hidden;
+	width: 32px;
+	height: 32px;
+	margin: 0px;
+}
+
+ul.image-actions li a:hover {
+	background-color: #268AFC;
+}
+
+ul.image-actions li.edit a{
+	background-image: url(img/edit_foto.png);
+}
+
+ul.image-actions li.delete a{
+	background-image: url(img/delete_foto.png);
+}
+
+div.files-gallery{
+	clear: both;
+	margin-bottom: 15px;
+}
+
+div.brw-files div.actions li.add-file a{
+	background: url(img/agregar_ico.png) left center no-repeat;
+}
+
+div.files-gallery div.file{
+	background: #fff;
+	padding-left: 15px;
+	margin-bottom: 2px;
+}
+
+div.files-gallery ul.file-actions{
+	float: right;
+}
+
+div.files-gallery ul.file-actions li{
+	float: left;
+}
+
+div.files-gallery ul.file-actions li a{
+	display: block;
+	background: center center no-repeat;
+	text-indent: 100px;
+	overflow: hidden;
+	width: 32px;
+	height: 32px;
+	margin: 0px;
+}
+
+div.files-gallery ul.file-actions li.edit a{
+	background-image: url(img/edit_foto.png);
+}
+
+div.files-gallery ul.file-actions li.delete a{
+	background-image: url(img/delete_foto.png);
+}
+
+div.files-gallery ul.file-actions li a:hover {
+	background-color: #268AFC;
+}
+
+
+div.files-gallery a.BrwFile{
+	display: block;
+	float: left;
+	line-height: 32px;
+	height: 32px;
+	color: #444;
+}
+
+#home h2{
+	font: normal 18px Arial;
+	color: #248cfd;
+	text-transform: uppercase;
+	background: url(img/border-h2-home.gif) left bottom repeat-x;
+	padding: 10px 0 12px 0;
+	margin-bottom: 20px;
+}
+
+.home-box{
+	width: 213px;
+	float: left;
+	border: #fff 1px solid;
+	margin: 0 15px 15px 0;
+	background: url(img/home.png) 0 0;
+}
+
+#home h3{
+	font: bold 12px Arial;
+	height: 51px;
+	border: 1px solid #e6e6e6;
+	text-transform: uppercase;
+}
+
+#home h3 span{
+	display: block;
+	padding: 10px;
+}
+
+.home-box ul{
+	border: 1px solid #e6e6e6;
+	border-top: 0;
+}
+
+.home-box ul li{
+	width: 105px;
+	float: left;
+}
+
+.home-box ul li a{
+	display: block;
+	color: #676767;
+	text-align: center;
+	padding: 50px 0 10px 0;
+	background: center 7px no-repeat;
+}
+
+.home-box ul li a:hover{
+	background-color: #268AFC;
+	color: #fff;
+	font-weight: bold;
+}
+
+.home-box ul li.add a{
+	background-image: url(img/home_nuevo.png);
+	border-right: 1px solid #fff;
+}
+
+.home-box ul li.index a{
+	background-image: url(img/home_examinar.png);
+	border-left: 1px solid #d8d8d8;
+}
+
+
+/* plugin combo select */
+
+div#content fieldset.comboselect {
+	border: 0;
+	display: block;
+	float: left;
+	width: 100%;
+	margin-bottom: 10px;
+	padding: 0;
+}
+
+div#content fieldset.comboselect * {
+	display: block;
+	float: left;
+	width: 45%;
+}
+
+div#content fieldset.comboselect select {
+	height: 112px;
+	clear: right;
+
+}
+
+div#content fieldset.comboselect fieldset {
+	border: 0;
+	width: 40px;
+	margin: 0;
+	padding-top: 25px;
+}
+
+div#content fieldset.comboselect fieldset input {
+	width: 100%;
+	clear: left;
+	margin: 5px 0;
+}
+
+div#content fieldset.comboselect select option {
+	width: 100% !important;
+	border: 0;
+	border-bottom: 1px dotted #959DB7;
+}
