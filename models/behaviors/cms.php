@@ -222,7 +222,7 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 
-	function _addFilePaths($r) {
+	function _addFilePaths($r, $Model) {
 		if (!is_array($r)) {
 			return $r;
 		}
