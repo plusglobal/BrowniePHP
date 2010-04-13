@@ -29,7 +29,7 @@
 <?php
 $passed = array('model' => $model, 'records' => $records, 'schema' => $schema);
 
-if(empty($tree)) {
+if(empty($isTree)) {
 	echo $this->element('list', $passed);
 } else {
 	echo $this->element('tree', $passed);
