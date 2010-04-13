@@ -36,7 +36,7 @@ class ContentsController extends BrownieAppController {
 	function index() {
 		if($this->Content->isTree($this->Model)) {
 			$this->helpers[] = 'tree';
-			$this->set('records', $this->Model->find('all', array('order' => 'lft ASC')));
+			$this->set('records', $this->Model->findAllThreaded());
 			$this->set('tree', true);
 		} else {
 			$this->paginate = $this->Content->getCmsConfig($this->Model, 'paginate');
