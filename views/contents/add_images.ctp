@@ -21,7 +21,13 @@ if (!empty($brwConfig['images'][$categoryCode])) {
 		<fieldset>
 		<legend>' . $image['name_category'] . '</legend>';
 
-	for ($i = 0; $i < 10; $i++) {
+	if ($brwConfig['images'][$categoryCode]['index']) {
+		$iterations = 1;
+	} else {
+		$iterations = 10;
+	}
+
+	for ($i = 0; $i < $iterations; $i++) {
 		echo '
 		' . $form->input('BrwImage.'.$i.'.id') . '
 		' . $form->input('BrwImage.'.$i.'.file', array('type' => 'file', 'label' => __d('brownie', 'Image', true))) . '
