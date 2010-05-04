@@ -9,7 +9,7 @@ class BrownieAppController extends AppController {
 	function beforeFilter() {
 		//pr($this->params);
 		$this->BrwUser = ClassRegistry::init('BrwUser');
-		if (!($this->params['controller'] =='users' and $this->params['action']=='login')) {
+		if (!empty($this->params['controller']) and !($this->params['controller'] =='users' and $this->params['action']=='login')) {
 			$this->checkAdminSession();
 			$this->set('authUser', $this->user);
 		}

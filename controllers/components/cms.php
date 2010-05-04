@@ -32,6 +32,7 @@ class CmsComponent extends Object{
 
 
 	function attachUploads($Model) {
+		//var_dump($Model);
 		if(!empty($Model->brownieCmsConfig['images'])){
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',

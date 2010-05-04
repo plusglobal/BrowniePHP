@@ -8,13 +8,14 @@
     array('type' => 'icon')
 );?>
 <?php
-echo $html->css('/brownie/css/brownie');
-echo $html->css('/brownie/css/thickbox');
-echo $javascript->link('/brownie/js/jquery');
-echo $javascript->link('/brownie/js/jquery.selso');
-echo $javascript->link('/brownie/js/jquery.comboselect');
-echo $javascript->link('/brownie/js/thickbox');
-echo $javascript->link('/brownie/js/brownie');
+echo $html->css(array('/brownie/css/brownie', '/brownie/css/fancybox/jquery.fancybox-1.3.1'));
+echo $javascript->link(array(
+	'/brownie/js/jquery-1.3.2.min',
+	'/brownie/js/jquery.fancybox-1.3.1.pack',
+	'/brownie/js/jquery.selso',
+	'/brownie/js/jquery.comboselect',
+	'/brownie/js/brownie'
+));
 echo $scripts_for_layout;
 ?>
 <title><?php echo $title_for_layout; ?></title>
