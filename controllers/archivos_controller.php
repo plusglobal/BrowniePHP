@@ -10,7 +10,7 @@ class ArchivosController extends BrownieAppController {
 	}
 
 	function delete($id = null) {
-		if($this->FileModel->del($id)) {
+		if($this->FileModel->delete($id)) {
 			$this->Session->setFlash(__d('brownie', 'The file was deleted', true));
 		} else {
 			$this->Session->setFlash(__d('brownie', 'The file couldn\'t be deleted', true));

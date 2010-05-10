@@ -211,7 +211,7 @@ class ContentsController extends BrownieAppController {
 		if (!$id) {
 			$this->Session->setFlash(__d('brownie', 'Invalid identifier', true));
 			$this->redirect(array('action' => 'index'));
-		} elseif ($this->Model->del($id)) {
+		} elseif ($this->Model->delete($id)) {
 			$this->Session->setFlash(__d('brownie', 'Successful delete', true));
 		} else {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true));

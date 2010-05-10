@@ -10,7 +10,7 @@ class ImagesController extends BrownieAppController {
 	}
 
 	function delete($id = null) {
-		if($this->ImageModel->del($id)) {
+		if($this->ImageModel->delete($id)) {
 			$this->Session->setFlash(__d('brownie', 'The image was deleted', true));
 		} else {
 			$this->Session->setFlash(__d('brownie', 'The image couldn\'t be deleted', true));
