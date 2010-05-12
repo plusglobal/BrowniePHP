@@ -1,11 +1,7 @@
-<?php
-list($modelName, $model) = each($data);
-?>
+<?php list($modelName, $model) = each($data) ?>
 
 <span class="name">
-<?php
-echo $model['name'];
-?>
+<?php echo $model[$displayField] ?>
 </span>
 
 <div class="actions">
