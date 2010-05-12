@@ -179,7 +179,7 @@ class Content extends BrownieAppModel{
 
 	function isTree($Model) {
 		//pr($Model->Behaviors->_attached);
-		return in_array('tree', $Model->Behaviors->_attached);
+		return in_array('Tree', $Model->Behaviors->_attached) or in_array('tree', $Model->Behaviors->_attached);
 	}
 
 
