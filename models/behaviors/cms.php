@@ -250,18 +250,20 @@ class CmsBehavior extends ModelBehavior {
 	    )
 	)*/
 	function _addBrwImagePaths($r, $Model) {
-		App::Import('Helper');
-		$Helper = new Helper;
+		//return $r;
+
+		//App::Import('Helper');$Helper = new Helper;
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
 		}
 		foreach ($r as $key => $value) {
 			if (!isset($Model->brownieCmsConfig['images'][$value['category_code']])) {
+				pr($Model->name);
 				continue;
 			}
 			$paths = array(
-				'path' => $Helper->url('/uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'])
+				'path' => Router::url('/uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'])
 			);
 			if (!empty($Model->brownieCmsConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
@@ -341,15 +343,13 @@ class CmsBehavior extends ModelBehavior {
 		}
 
 		//return $abs_dest;
-		App::Import('Helper');
-		$Helper = new Helper;
+		//App::Import('Helper');		$Helper = new Helper;
 
-		return $Helper->url('/' . str_replace('\\', '/', $dir) . '/' . $dest_file);
+		return Router::url('/' . str_replace('\\', '/', $dir) . '/' . $dest_file);
 	}
 
 	function _addBrwFilePaths($r, $Model) {
-		App::Import('Helper');
-		$Helper = new Helper;
+		//App::Import('Helper');		$Helper = new Helper;
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['files'] as $catCode => $value) {
 			$ret[$catCode] = array();
@@ -361,7 +361,7 @@ class CmsBehavior extends ModelBehavior {
 			if (empty($value['description'])) {
 				$value['description'] = $r[$key]['description'] = $value['name'];
 			}
-			$completePath = $Helper->url('/uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name']);
+			$completePath = Router::url('/uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name']);
 			$extension = end(explode(".", $value['name']));
 			$paths = array(
 				'path' => $completePath,
@@ -383,8 +383,6 @@ class CmsBehavior extends ModelBehavior {
 
 	function _addUrlView($results, $Model) {
 		if ($Model->brownieCmsConfig['actions']['url_view'] and !empty($results[0][$Model->name])) {
-			App::import('Helper');
-			$Helper = new Helper;
 			$url = $Model->brownieCmsConfig['actions']['url_view'];
 			foreach($results as $i => $record) {
 				if (!empty($results[$i][$Model->name]['id'])) {
