@@ -212,7 +212,11 @@ class CmsBehavior extends ModelBehavior {
 		foreach ($r as $key => $value) {
 			if ($key === 'BrwImage') {
 				//echo $key.'<br />';					pr($value);
-				$r[$key] = $this->_addBrwImagePaths($value, $Model);
+				$thisModel = $Model;
+				if(!empty($r[$key][0]['model']) and $r[$key][0]['model'] != $thisModel->alias) {
+					$thisModel = ClassRegistry::init($r[$key][0]['model']);
+				}
+				$r[$key] = $this->_addBrwImagePaths($value, $thisModel);
 			} else {
 				//pr($value); echo '<hr>';
 				$r[$key] = $this->_addImagePaths($value, $Model);
