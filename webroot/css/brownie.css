@@ -673,8 +673,16 @@ div.index h2, div.view h1{
 	margin-bottom: 25px;
 }
 
+div.index div.actions {
+	margin-bottom: 20px;
+}
+
 div.index div.actions ul li.add a{
 	background-image: url(img/agregar2_ico.png);
+}
+
+div.index div.actions ul li.import a{
+	background-image: url(img/import.png);
 }
 
 div.index div.actions ul li.add-image a{
