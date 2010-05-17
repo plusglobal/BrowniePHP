@@ -163,5 +163,5 @@ if ($referer = env('HTTP_REFERER')) {
 	}
 	echo $form->input('backto', array('value' => $referer, 'type' => 'hidden'));
 }
-echo $form->end(__d('brownie', 'Submit', true)); ?>
+echo $form->end(__d('brownie', 'Save', true)); ?>
 </div>
