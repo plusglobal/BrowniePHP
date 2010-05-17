@@ -51,11 +51,11 @@ echo $scripts_for_layout;
 			</div>
 			<div id="menu">'. $this->element('menu') . '</div>
 			<div id="content">';
-			$session->flash();
+			echo $session->flash();
 			echo $content_for_layout;
 			echo '</div>';
 		} else {
-			$session->flash();
+			echo $session->flash();
 			echo $content_for_layout;
 		}
 		?>
