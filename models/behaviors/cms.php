@@ -373,6 +373,10 @@ class CmsBehavior extends ModelBehavior {
 					<a title="'.$value['description'].'" href="'.$completePath.'" class="BrwFile '.$extension.'">
 						' . $value['description'] . '
 					</a>',
+				'force_download' => Router::url(array(
+					'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
+					$Model->alias, $value['record_id'], $value['name']
+				)),
 			);
 			$merged = am($r[$key], $paths);
 			if (!empty($Model->brownieCmsConfig['files'][$value['category_code']]['index'])) {
