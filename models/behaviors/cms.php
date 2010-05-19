@@ -276,9 +276,13 @@ class CmsBehavior extends ModelBehavior {
 					$paths['sizes'][$size] = $this->graphic($value, $size);
 					//$paths['sizes'][] = $paths['sizes'][$size];
 				}
+				$value['alt'] = $value['description'];
 				if (empty($value['description'])) {
-					$value['description'] = $r[$key]['description'] = $value['name'];
+					$value['alt'] = $value['name'];
+					$value['description'] = '';
 				}
+				$r[$key]['alt'] = $value['alt'];
+				$r[$key]['description'] = $value['description'];
 				if (!empty($sizes[0])) {
 					if ($sizes[0] != end($sizes)) {
 						$paths['tag'] = '<a title="'.$value['description'].'" href="'.$paths['sizes'][end($sizes)].'" rel="brw_image_'.$value['record_id'].'"><img alt="'.$value['description'].'" src="'.$paths['sizes'][$sizes[0]].'" /></a>';
