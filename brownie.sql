@@ -3,11 +3,10 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 12, 2010 at 11:55 
+-- Generation Time: May 25, 2010 at 03:32 
 -- Server version: 5.0.51
 -- PHP Version: 5.3.0
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,7 +15,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `jedi`
+-- Database: `brownie`
 --
 
 -- --------------------------------------------------------
@@ -38,7 +37,12 @@ CREATE TABLE IF NOT EXISTS `brw_files` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table `brw_files`
+--
+
 
 -- --------------------------------------------------------
 
@@ -53,7 +57,12 @@ CREATE TABLE IF NOT EXISTS `brw_groups` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `brw_groups`
+--
+
 
 -- --------------------------------------------------------
 
@@ -75,7 +84,12 @@ CREATE TABLE IF NOT EXISTS `brw_images` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table `brw_images`
+--
+
 
 -- --------------------------------------------------------
 
@@ -90,7 +104,12 @@ CREATE TABLE IF NOT EXISTS `brw_models` (
   `seccion` varchar(255) NOT NULL,
   `orden` int(10) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `brw_models`
+--
+
 
 -- --------------------------------------------------------
 
@@ -109,7 +128,12 @@ CREATE TABLE IF NOT EXISTS `brw_permissions` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) TYPE=MyISAM AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `brw_permissions`
+--
+
 
 -- --------------------------------------------------------
 
@@ -129,4 +153,9 @@ CREATE TABLE IF NOT EXISTS `brw_users` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) TYPE=MyISAM  AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `brw_users`
+--
+
