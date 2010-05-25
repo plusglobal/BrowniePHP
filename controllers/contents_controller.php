@@ -2,8 +2,9 @@
 class ContentsController extends BrownieAppController {
 
 	var $name = 'Contents';
+	var $helpers = array('Brownie.Fck');
 	var $Model;
-	var $helpers = array('Brownie.Fck', 'Javascript', 'Html');
+
 
 	function beforeFilter() {
 		if(!empty($this->params['pass'][0])) {

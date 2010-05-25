@@ -76,7 +76,6 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function afterFind($Model, $results, $primary) {
-		//if ($Model->)
 		$results = $this->_addImagePaths($results, $Model);
 		$results = $this->_addFilePaths($results, $Model);
 		$results = $this->_addUrlView($results, $Model);
@@ -254,9 +253,7 @@ class CmsBehavior extends ModelBehavior {
 	    )
 	)*/
 	function _addBrwImagePaths($r, $Model) {
-		//return $r;
 
-		//App::Import('Helper');$Helper = new Helper;
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
@@ -273,7 +270,15 @@ class CmsBehavior extends ModelBehavior {
 				$paths['sizes'] = array();
 				$sizes = $Model->brownieCmsConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$paths['sizes'][$size] = $this->graphic($value, $size);
+					$cachedPath = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $value['model'] . DS . $size
+						. DS . $value['record_id'] . DS . $value['id'] . $value['extension'];
+					if (is_file($cachedPath)) {
+						$paths['sizes'][$size] = Router::url('/uploads/thumbs/' . $value['model'] . '/' . $size
+							. '/' . $value['record_id'] . '/' . $value['id'] . $value['extension']);
+					} else {
+						$paths['sizes'][$size] = Router::url(array('plugin' => 'brownie', 'controller' => 'thumbs',
+							'action' => 'view', $value['model'], $value['record_id'], $size, $value['id'] . $value['extension']));
+					}
 					//$paths['sizes'][] = $paths['sizes'][$size];
 				}
 				$value['alt'] = $value['description'];
@@ -303,6 +308,7 @@ class CmsBehavior extends ModelBehavior {
 
 	}
 
+	/*
 	function graphic($image, $sizes) {
 		$filename = $image['id'];
 		$id = $image['record_id'];
@@ -355,6 +361,7 @@ class CmsBehavior extends ModelBehavior {
 
 		return Router::url('/' . str_replace('\\', '/', $dir) . '/' . $dest_file);
 	}
+	*/
 
 	function _addBrwFilePaths($r, $Model) {
 		//App::Import('Helper');		$Helper = new Helper;
