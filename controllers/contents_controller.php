@@ -13,9 +13,10 @@ class ContentsController extends BrownieAppController {
 			$model = $this->data['Content']['model'];
 		}
 
+		/*
 		if(empty($model) or !$this->Content->modelExists($model)) {
 			$this->cakeError('error404');
-		}
+		}*/
 
 		if(!$this->_checkPermissions($model, $this->params['action'])) {
 			$this->Session->setFlash(__d('brownie', 'You are not allowed to perform this action', true));
@@ -28,6 +29,7 @@ class ContentsController extends BrownieAppController {
 
 		$brwConfig = $this->Content->getCmsConfig($this->Model);
 		$schema = $this->Model->_schema;
+		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
 
 		parent::beforeFilter();
@@ -144,13 +146,6 @@ class ContentsController extends BrownieAppController {
 				$this->Session->setFlash(__d('brownie', 'The information could not be saved. Please, check the error messages.', true));
 			}
 		}
-		if($id) {
-			$fields = $this->Content->fieldsEdit($this->Model);
-		} else {
-			$fields = $this->Content->fieldsAdd($this->Model);
-		}
-		$this->set('fields', $fields);
-
 
 		$related = array();
 		$contain = array();
@@ -204,8 +199,20 @@ class ContentsController extends BrownieAppController {
 				$this->data = array($this->Model->name => $this->Model->brownieCmsConfig['default']);
 			}
 		}
-		$this->set('fckFields', $this->Content->fckFields($this->Model));
 
+		if (method_exists($this->Model, 'brwBeforeEdit')) {
+			$this->data = $this->Model->brwBeforeEdit($this->data);
+			$this->set('schema', $this->Model->_schema);
+		}
+
+		if($id) {
+			$fields = $this->Content->fieldsEdit($this->Model);
+		} else {
+			$fields = $this->Content->fieldsAdd($this->Model);
+		}
+		$this->set('fields', $fields);
+
+		$this->set('fckFields', $this->Content->fckFields($this->Model));
 	}
 
 
@@ -275,6 +282,7 @@ class ContentsController extends BrownieAppController {
 
 	}
 
+
 	function add_images($model, $recordId, $categoryCode) {
 		if (!empty($this->data)) {
 			$saved = 0;
@@ -289,12 +297,13 @@ class ContentsController extends BrownieAppController {
 			} else {
 				$this->Session->setFlash(__d('brownie', 'None images uploaded. Please try again.', true), $saved);
 			}
-
 		}
 		$this->set(compact('categoryCode', 'recordId', 'imageId'));
 	}
 
+
 	function edit_file($model = null, $recordId = null, $categoryCode = null, $fileId = null) {
+
 		if (!empty($this->data)) {
 			//pr($this->data);
 			if (!$categoryCode){
@@ -351,4 +360,3 @@ class ContentsController extends BrownieAppController {
 
 
 }
-?>

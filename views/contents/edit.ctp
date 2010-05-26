@@ -2,7 +2,7 @@
 <?php
 echo $javascript->link('/js/fckeditor/fckeditor');
 $adding = empty($this->data[$model]['id']);
-echo $form->create('Content', array('type' => 'file', 'action' => 'edit'));
+echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off'));
 ?>
 	<fieldset>
  		<legend>
@@ -65,7 +65,10 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit'));
 				}
 				$params = array('type' => 'select', 'options' => $translatedOptions);
 			}
-			//	pr($params);
+			if (!empty($brwConfig['legends'][$key])) {
+				$params['after'] = $brwConfig['legends'][$key];
+			}
+
 			echo $form->input($model . '.' . $key, $params);
 			if (in_array($key, $fckFields)){
 				echo $fck->load($model . '.' . Inflector::camelize($key), 'Brownie');
@@ -158,7 +161,7 @@ foreach($uploads as $upload){
 	}
 }
 if ($referer = env('HTTP_REFERER')) {
-	if (!empty($this->data['Content']['backto'])){
+	if (!empty($this->data['Content']['backto'])) {
 		$referer = $this->data['Content']['backto'];
 	}
 	echo $form->input('backto', array('value' => $referer, 'type' => 'hidden'));
