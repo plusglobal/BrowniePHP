@@ -71,30 +71,18 @@ class CmsBehavior extends ModelBehavior {
 
 	function setup($Model, $config = array()) {
 		$this->cmsConfigInit($Model);
-		//pr($Model->brownieCmsConfig);
 	}
 
 
 	function afterFind($Model, $results, $primary) {
-		//if ($Model->)
 		$results = $this->_addImagePaths($results, $Model);
 		$results = $this->_addFilePaths($results, $Model);
 		$results = $this->_addUrlView($results, $Model);
 		return $results;
 	}
 
-	/*
-	function beforeSave($Model) {
-		pr($Model->data);
-		if (!empty($Model->data['BrownieImage'])) {
-			$data['BrwImage'] = $Model->data['BrownieImage'];
-			$Model->BrwImage->save($data);
-		}
-	}*/
 
 	function cmsConfigInit($Model) {
-		//echo $Model->name;
-		//pr($Model->brownieCmsConfig);
 
 		if (empty($Model->brownieCmsConfig['paginate']['fields'])) {
 			$Model->brownieCmsConfig['paginate']['fields'] = $this->listableFields($Model);
@@ -114,8 +102,6 @@ class CmsBehavior extends ModelBehavior {
 		if (empty($Model->order)) {
 			$Model->order = $config['paginate']['order'];
 		}
-
-
 
 		$config['names'] = $this->cmsConfigNames($config['names'], $Model);
 
@@ -140,10 +126,8 @@ class CmsBehavior extends ModelBehavior {
 		}
 
 		$Model->brownieCmsConfig = $config;
-
-		//pr($config);
-		//pr($this->cmsConfig);
 	}
+
 
 	function listableFields($Model) {
 		$fields = array();
@@ -178,7 +162,6 @@ class CmsBehavior extends ModelBehavior {
 		if (empty($names['section']) or !$names['section']) {
 			$names['section'] = $names['plural'];
 		}
-		//pr($names);
 		return $names;
 	}
 
@@ -211,14 +194,12 @@ class CmsBehavior extends ModelBehavior {
 		}
 		foreach ($r as $key => $value) {
 			if ($key === 'BrwImage') {
-				//echo $key.'<br />';					pr($value);
 				$thisModel = $Model;
 				if(!empty($r[$key][0]['model']) and $r[$key][0]['model'] != $thisModel->alias) {
-					$thisModel = ClassRegistry::init($r[$key][0]['model']);
+					$thisModel = ClassRegistry::getObject($r[$key][0]['model']);
 				}
 				$r[$key] = $this->_addBrwImagePaths($value, $thisModel);
 			} else {
-				//pr($value); echo '<hr>';
 				$r[$key] = $this->_addImagePaths($value, $Model);
 			}
 		}
@@ -232,10 +213,12 @@ class CmsBehavior extends ModelBehavior {
 		}
 		foreach($r as $key => $value) {
 			if ($key === 'BrwFile') {
-				//echo $key.'<br />';					pr($value);
-				$r[$key] = $this->_addBrwFilePaths($value, $Model);
+				$thisModel = $Model;
+				if(!empty($r[$key][0]['model']) and $r[$key][0]['model'] != $thisModel->alias) {
+					$thisModel = ClassRegistry::getObject($r[$key][0]['model']);
+				}
+				$r[$key] = $this->_addBrwFilePaths($value, $thisModel);
 			} else {
-				//pr($value); echo '<hr>';
 				$r[$key] = $this->_addFilePaths($value, $Model);
 			}
 		}
@@ -254,16 +237,12 @@ class CmsBehavior extends ModelBehavior {
 	    )
 	)*/
 	function _addBrwImagePaths($r, $Model) {
-		//return $r;
-
-		//App::Import('Helper');$Helper = new Helper;
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
 		}
 		foreach ($r as $key => $value) {
 			if (!isset($Model->brownieCmsConfig['images'][$value['category_code']])) {
-				pr($Model->name);
 				continue;
 			}
 			$paths = array(
@@ -298,7 +277,6 @@ class CmsBehavior extends ModelBehavior {
 				$ret[$value['category_code']][] = $merged;
 			}
 		}
-		//pr($ret);
 		return $ret;
 
 	}
@@ -350,37 +328,36 @@ class CmsBehavior extends ModelBehavior {
 			resizeImage($resizeMethod, $dest_file, $dir . '/', false, $r_sizes[0], $r_sizes[1]);
 		}
 
-		//return $abs_dest;
-		//App::Import('Helper');		$Helper = new Helper;
-
 		return Router::url('/' . str_replace('\\', '/', $dir) . '/' . $dest_file);
 	}
 
+
 	function _addBrwFilePaths($r, $Model) {
-		//App::Import('Helper');		$Helper = new Helper;
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['files'] as $catCode => $value) {
 			$ret[$catCode] = array();
 		}
-		foreach($r as $key => $value) {
+		foreach ($r as $key => $value) {
 			if (!isset($Model->brownieCmsConfig['files'][$value['category_code']])) {
 				continue;
 			}
 			if (empty($value['description'])) {
 				$value['description'] = $r[$key]['description'] = $value['name'];
 			}
+
 			$completePath = Router::url('/uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name']);
 			$extension = end(explode(".", $value['name']));
+			$forceDownloadUrl = Router::url(array(
+				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
+				$Model->alias, $value['record_id'], $value['name']
+			));
 			$paths = array(
 				'path' => $completePath,
 				'tag' => '
 					<a title="'.$value['description'].'" href="'.$completePath.'" class="BrwFile '.$extension.'">
 						' . $value['description'] . '
 					</a>',
-				'force_download' => Router::url(array(
-					'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
-					$Model->alias, $value['record_id'], $value['name']
-				)),
+				'force_download' => $forceDownloadUrl,
 			);
 			$merged = am($r[$key], $paths);
 			if (!empty($Model->brownieCmsConfig['files'][$value['category_code']]['index'])) {
@@ -396,7 +373,7 @@ class CmsBehavior extends ModelBehavior {
 	function _addUrlView($results, $Model) {
 		if ($Model->brownieCmsConfig['actions']['url_view'] and !empty($results[0][$Model->name])) {
 			$url = $Model->brownieCmsConfig['actions']['url_view'];
-			foreach($results as $i => $record) {
+			foreach ($results as $i => $record) {
 				if (!empty($results[$i][$Model->name]['id'])) {
 					if (is_array($url)) {
 						$url[0] = $results[$i][$Model->name]['id'];
