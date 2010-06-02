@@ -1,26 +1,14 @@
 <?php
-/**
- *
- *
- */
+
 class CmsComponent extends Object{
-	/**
-	 * Constructor
-	 * @access protected
-	 */
+
 	function initialize(&$Controller, $settings) {
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.Image');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
 
-		$relatedModels = array();
-		foreach($Controller->modelNames as $model){
-			$relatedModels = array_merge($relatedModels, $this->accesibleModels($Controller->{$model}));
-		}
-		foreach($relatedModels as $Model) {
-			$this->attachUploads($Model);
-		}
+		$this->attachAllUploads();
 
-		if($Controller->Session->check('BrwUser')) {
+		if ($Controller->Session->check('BrwUser')) {
 			$BrwUser = $Controller->Session->read('BrwUser');
 			unset($BrwUser['BrwUser']['password']);
 			$Controller->set('BrwUser', $BrwUser);
@@ -28,7 +16,14 @@ class CmsComponent extends Object{
 
 	}
 
-
+	function attachAllUploads() {
+		$models = App::objects('model');
+		foreach ($models as $model) {
+			if ($Model = ClassRegistry::getObject($model)) {
+				$this->attachUploads($Model);
+			}
+		}
+	}
 
 
 	function attachUploads($Model) {
@@ -46,27 +41,6 @@ class CmsComponent extends Object{
 			))));
 		}
 		$Model->Behaviors->attach('Brownie.Cms');
-	}
-
-	function accesibleModels($Model) {
-		/*
-		acá tengo que hacer un recorrido recursivo para poder attachar a todos los modelos
-		por ahora retorno sólo los directos
-		*/
-		return $this->directRelated($Model);
-	}
-
-	function directRelated($Model) {
-		$ret[] = $Model;
-		$relations = array('hasMany', 'belongsTo', 'hasAndBelongsToMany', 'hasOne');
-		foreach($relations as $relation) {
-			if(!empty($Model->{$relation})){
-				foreach($Model->{$relation} as $aliasModel => $relatedModel){
-					$ret[] = $Model->$aliasModel;
-				}
-			}
-		}
-		return $ret;
 	}
 
 }
