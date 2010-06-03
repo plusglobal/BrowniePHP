@@ -245,8 +245,10 @@ class CmsBehavior extends ModelBehavior {
 			if (!isset($Model->brownieCmsConfig['images'][$value['category_code']])) {
 				continue;
 			}
+			$relative_path = 'uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'];
 			$paths = array(
-				'path' => Router::url('/uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'])
+				'path' => Router::url('/' . $relative_path),
+				'real_path' => WWW_ROOT . $relative_path,
 			);
 			if (!empty($Model->brownieCmsConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
@@ -345,7 +347,8 @@ class CmsBehavior extends ModelBehavior {
 				$value['description'] = $r[$key]['description'] = $value['name'];
 			}
 
-			$completePath = Router::url('/uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name']);
+			$relativePath = 'uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name'];
+			$completePath = Router::url('/' . $relativePath);
 			$extension = end(explode(".", $value['name']));
 			$forceDownloadUrl = Router::url(array(
 				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
@@ -353,6 +356,7 @@ class CmsBehavior extends ModelBehavior {
 			));
 			$paths = array(
 				'path' => $completePath,
+				'real_path' => WWW_ROOT . str_replace('/', DS, $relativePath),
 				'tag' => '
 					<a title="'.$value['description'].'" href="'.$completePath.'" class="BrwFile '.$extension.'">
 						' . $value['description'] . '
