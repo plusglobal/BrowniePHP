@@ -74,6 +74,12 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 
+	function afterSave($Model, $data) {
+		pr($Model->id);
+		pr($Model->data);
+	}
+
+
 	function afterFind($Model, $results, $primary) {
 		$results = $this->_addImagePaths($results, $Model);
 		$results = $this->_addFilePaths($results, $Model);
