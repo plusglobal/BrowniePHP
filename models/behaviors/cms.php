@@ -74,12 +74,6 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 
-	function afterSave($Model, $data) {
-		pr($Model->id);
-		pr($Model->data);
-	}
-
-
 	function afterFind($Model, $results, $primary) {
 		$results = $this->_addImagePaths($results, $Model);
 		$results = $this->_addFilePaths($results, $Model);
@@ -231,17 +225,7 @@ class CmsBehavior extends ModelBehavior {
 		return $r;
 	}
 
-	/* this funcion expects an array like
-	[BrwImage] => Array(
-	    [0] => Array(
-	    	[id] => 4a6a23a8-837c-4485-834f-0fa816fac25f
-			etc...
-	    )
-	    [1] => Array(
-			[id] => 4a6a23a8-cd5c-4ae9-b69b-0fa816fac25f
-			etc...
-	    )
-	)*/
+
 	function _addBrwImagePaths($r, $Model) {
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
@@ -251,7 +235,7 @@ class CmsBehavior extends ModelBehavior {
 			if (!isset($Model->brownieCmsConfig['images'][$value['category_code']])) {
 				continue;
 			}
-			$relative_path = 'uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['id'] . $value['extension'];
+			$relative_path = 'uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
 			$paths = array(
 				'path' => Router::url('/' . $relative_path),
 				'real_path' => WWW_ROOT . $relative_path,
@@ -260,7 +244,15 @@ class CmsBehavior extends ModelBehavior {
 				$paths['sizes'] = array();
 				$sizes = $Model->brownieCmsConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$paths['sizes'][$size] = $this->graphic($value, $size);
+					$cachedPath = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $value['model'] . DS . $size
+						. DS . $value['record_id'] . DS . $value['name'];
+					if (is_file($cachedPath)) {
+						$paths['sizes'][$size] = Router::url('/uploads/thumbs/' . $value['model'] . '/' . $size
+							. '/' . $value['record_id'] . '/' . $value['name']);
+					} else {
+						$paths['sizes'][$size] = Router::url(array('plugin' => 'brownie', 'controller' => 'thumbs',
+							'action' => 'view', $value['model'], $value['record_id'], $size, $value['name']));
+					}
 					//$paths['sizes'][] = $paths['sizes'][$size];
 				}
 				$value['alt'] = $value['description'];
@@ -286,57 +278,6 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 		return $ret;
-
-	}
-
-	function graphic($image, $sizes) {
-		$filename = $image['id'];
-		$id = $image['record_id'];
-		$extension = $image['extension'];
-		$model = $image['model'];
-		$source_file = $filename . $extension;
-		$dest_file = $filename . '-' . $sizes . $extension;
-		$dir = 'uploads/' . $model . '/' . $id;
-		$abs_dir = $dir;
-		$abs_source = $abs_dir . '/' . $source_file;
-		$abs_dest = $abs_dir . '/' . $dest_file;
-		$error_img = '/img/error.gif';
-
-		if (!file_exists($abs_source)) {
-			return $error_img;
-		}
-
-		if (!file_exists($abs_dest)) {
-			if (!copy($abs_source, $abs_dest)) {
-				$this->log('Brownie CMS: ' . $abs_source . ' wasn\'t able to be copied to ' . $abs_dest);
-				return $error_img;
-			}
-			if (!chmod($abs_dest, 0777)) {
-				$this->log('Brownie CMS: ' . $abs_dest . ' wasn\'t able to chmod');
-				return $error_img;
-			}
-
-			$r_sizes = explode('x', str_replace('-','x',$sizes));
-			if (count($r_sizes) == 2) {
-				$resizeMethod = 'resizeCrop';
-			} else {
-				$r_sizes = explode('_', $sizes);
-				if (count($r_sizes) == 2) {
-					$resizeMethod = 'resize';
-				} else {
-					return $error_img;
-				}
-			}
-
-			if (!ctype_digit($r_sizes[0]) or !ctype_digit($r_sizes[1])) {
-				return $error_img;
-			}
-
-			App::import('Vendor', 'Brownie.Resizeimage');
-			resizeImage($resizeMethod, $dest_file, $dir . '/', false, $r_sizes[0], $r_sizes[1]);
-		}
-
-		return Router::url('/' . str_replace('\\', '/', $dir) . '/' . $dest_file);
 	}
 
 

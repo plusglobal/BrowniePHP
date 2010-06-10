@@ -11,7 +11,7 @@ class BrwImageBehavior extends ModelBehavior {
 	}
 
 
-	function beforeValidate(&$BrwImage) {
+	function beforeValidate($BrwImage) {
 		$kB = round($this->max_upload_size / 1024, 2);
 		$mB = round($this->max_upload_size / (1024 * 1024), 2);
 		$BrwImage->validate = array (
@@ -22,33 +22,36 @@ class BrwImageBehavior extends ModelBehavior {
 				),
 				'valid_image' => array(
 					'rule' => array('validateImageFile'),
-					'message' => __d('brownie', 'Invalid image. Only jpg, gif and png is allowed.', true),
+					'message' => __d('brownie', 'Invalid image. Only jpg, gif and png are allowed.', true),
 				),
-				/*
-				'upload_ok' => array (
-					'rule' => array('validateUploadedFile'),
-					'message' => __d('brownie', 'Error in the upload, please try again.', true),
-				),*/
-
 			),
 		);
 
 		$BrwImage->data['BrwImage']['name'] = null;
-		if (
-			is_array($BrwImage->data['BrwImage']['file'])
-			and !empty($BrwImage->data['BrwImage']['file']['tmp_name'])
-			and empty($BrwImage->data['BrwImage']['file']['error'])
-		) {
-			$BrwImage->data['BrwImage']['name'] = $BrwImage->data['BrwImage']['file']['name'];
-			$BrwImage->data['BrwImage']['file'] = $BrwImage->data['BrwImage']['file']['tmp_name'];
-		} elseif(is_string($data['file'])) {
-			$fileInfo = pathinfo($data['file']);
-			$BrwImage->data['BrwImage']['name'] = $data['file']['name'] = $fileInfo['filename'];
+		if (isset($BrwImage->data['BrwImage']['file']['tmp_name'])) {
+			//the image was uploaded
+			switch ($BrwImage->data['BrwImage']['file']['error']) {
+				case 0:
+					$BrwImage->data['BrwImage']['name'] = $BrwImage->data['BrwImage']['file']['name'];
+					$BrwImage->data['BrwImage']['file'] = $BrwImage->data['BrwImage']['file']['tmp_name'];
+				break;
+				case 4:
+					$BrwImage->data['BrwImage']['file'] = '';
+				break;
+			}
+		} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
+			$BrwImage->data['BrwImage']['name'] = end(explode('/', $BrwImage->data['BrwImage']['file']));
 		}
+		//pr($BrwImage->data);
 	}
 
 	function beforeSave($BrwImage) {
-		pr($BrwImage->data);
+		$updating = !empty($BrwImage->data['BrwImage']['id']);
+		if ($updating) {
+			$image = array_shift($BrwImage->findById($BrwImage->id));
+			echo $BrwImage->data['name_prev'] = $image['name'];
+		}
+
 		if (empty($BrwImage->data['BrwImage']['name'])) {
 			return false;
 		}
@@ -58,9 +61,7 @@ class BrwImageBehavior extends ModelBehavior {
 		pr($BrwImage->data);
 		$model = $BrwImage->data['BrwImage']['model'];
 		$source = $BrwImage->data['BrwImage']['file'];
-
 		$dest_model_dir = 'uploads/' . $model;
-
 		if (!is_dir($dest_model_dir)) {
 			if (!mkdir($dest_model_dir, 0777)) {
 				$BrwImage->log('Brownie CMS: unable to create dir ' . $dest_model_dir);
@@ -68,7 +69,6 @@ class BrwImageBehavior extends ModelBehavior {
 				chmod($dest_model_dir, 0777);
 			}
 		}
-
 		$dest_dir = $dest_model_dir . '/' . $BrwImage->data['BrwImage']['record_id'];
 		if (!is_dir($dest_dir)) {
 			if(!mkdir($dest_dir, 0777)){
@@ -77,78 +77,50 @@ class BrwImageBehavior extends ModelBehavior {
 				chmod($dest_dir, 0777);
 			}
 		}
-
 		//eliminar cache al actualizar
+		$dest =  $dest_dir . '/' . $BrwImage->data['BrwImage']['name'];
+		if(copy($source, $dest)){
+			chmod($dest, 0777);
+			$updating = !empty($BrwImage->data['BrwImage']['id']);
+			$file_changed = !empty($BrwImage->data['BrwImage']['file']);
+			if ($updating and $file_changed) {
+				$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
+			}
+		}
 
-		//$this->_cleanImages($dest_dir, $BrwImage->id);
-
-		echo $dest =  $dest_dir . '/' . $BrwImage->data['BrwImage']['name'];
-		copy($source, $dest);
-		chmod($dest, 0777);
 	}
 
 
 	function beforeDelete($BrwImage) {
 		$image = array_shift($BrwImage->findById($BrwImage->id));
-		$dest_dir = 'uploads/' . $image['model'] . '/' . $image['record_id'] ;
-		$this->_cleanImages($dest_dir, $BrwImage->id);
-		return true;
+		$this->_deleteFiles($image['model'], $image['record_id'], $image['name']);
 	}
 
-	function _cleanImages($dest_dir, $id_image) {
-		$handle = opendir($dest_dir);
-		while($file = readdir($handle)){
-			if(strstr($file, $id_image)){
-				unlink($dest_dir . DS . $file);
+
+	function _deleteFiles($model, $record, $filename) {
+		$filePath = WWW_ROOT . 'uploads' . DS . $model . DS . $record . DS . $filename;
+		unlink($filePath);
+		$baseCacheDir = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $model;
+		if(is_dir($baseCacheDir)) {
+			$handle = opendir($baseCacheDir);
+			while ($sizeDir = readdir($handle)) {
+				if(is_dir($baseCacheDir . DS . $sizeDir)) {
+					$fileToDelete = $baseCacheDir . DS . $sizeDir . DS . $record . DS . $filename;
+					if (file_exists($fileToDelete)) {
+						unlink($fileToDelete);
+					}
+				}
 			}
 		}
 	}
-
-	/*
-	function afterDelete($BrwImage, $data, $created) {
-		pr($data);
-	}
-	*/
-
-	/*
-	Validate functions
-	*/
-
-	/*
-	function validateUploadedFile($BrwImage, $data)
-	{
-		$upload_info = array_shift($data);
-		if ($upload_info['error'] == 4) {
-			//the image was not uploaded and it isn't required
-			return true;
-		}
-
-		if ($upload_info['size'] == 0) {
-			return false;
-		}
-
-		if ($upload_info['error'] !== 0) {
-			return false;
-		}
-
-		$extension = '.' . strtolower(end(explode('.', $upload_info['name'])));
-		if(!empty($this->extension)){
-			if(!in_array($extension, $this->extension)){
-				return false;
-			}
-		}
-		if(!empty($this->excluded_extensions)){
-			if(in_array($extension, $this->excluded_extensions)){
-				return false;
-			}
-		}
-
-		return is_uploaded_file($upload_info['tmp_name']);
-
-	}*/
 
 
 	function validateSizeFile($BrwImage, $data) {
+		//pr($BrwImage->data['BrwImage']);
+		if (empty($BrwImage->data['BrwImage']['file'])) {
+			return true;
+		}
+
 		if(filesize($BrwImage->data['BrwImage']['file']) > $this->max_upload_size){
 			return false;
 		} else {
@@ -158,6 +130,10 @@ class BrwImageBehavior extends ModelBehavior {
 
 
 	function validateImageFile($BrwImage, $data) {
+		if (empty($BrwImage->data['BrwImage']['file'])) {
+			return true;
+		}
+
 		return getimagesize($BrwImage->data['BrwImage']['file']);
 	}
 
