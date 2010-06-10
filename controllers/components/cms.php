@@ -3,7 +3,7 @@
 class CmsComponent extends Object{
 
 	function initialize(&$Controller, $settings) {
-		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.Image');
+		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
 
 		$this->attachAllUploads();

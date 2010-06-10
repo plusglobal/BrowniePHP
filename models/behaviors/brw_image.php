@@ -1,6 +1,6 @@
 <?php
 
-class ImageBehavior extends ModelBehavior {
+class BrwImageBehavior extends ModelBehavior {
 
 	var $max_upload_size = 0;
 	var $extensions = array('png', 'jpg', 'gif', 'jpeg');
@@ -31,12 +31,6 @@ class ImageBehavior extends ModelBehavior {
 
 			),
 		);
-	}
-
-
-	function afterFind($Model, $results, $primary) {
-		//if($Model->)
-		//return $this->_addImagePaths($Model, $results);
 	}
 
 
