@@ -47,49 +47,70 @@ class BrwImageBehavior extends ModelBehavior {
 
 	function beforeSave($BrwImage) {
 		$updating = !empty($BrwImage->data['BrwImage']['id']);
+		$file_changed = !empty($BrwImage->data['BrwImage']['file']);
 		if ($updating) {
-			$image = array_shift($BrwImage->findById($BrwImage->id));
-			echo $BrwImage->data['name_prev'] = $image['name'];
+			if($file_changed) {
+				$image = array_shift($BrwImage->findById($BrwImage->id));
+				$BrwImage->data['name_prev'] = $image['name'];
+			} else {
+				unset($BrwImage->data['BrwImage']['name']);
+				return true;
+			}
 		}
-
 		if (empty($BrwImage->data['BrwImage']['name'])) {
 			return false;
 		}
 	}
 
 	function afterSave($BrwImage, $created) {
-		pr($BrwImage->data);
-		$model = $BrwImage->data['BrwImage']['model'];
-		$source = $BrwImage->data['BrwImage']['file'];
-		$dest_model_dir = 'uploads/' . $model;
-		if (!is_dir($dest_model_dir)) {
-			if (!mkdir($dest_model_dir, 0777)) {
-				$BrwImage->log('Brownie CMS: unable to create dir ' . $dest_model_dir);
-			} else {
-				chmod($dest_model_dir, 0777);
+		$file_changed = !empty($BrwImage->data['BrwImage']['file']);
+		if ($file_changed) {
+			$model = $BrwImage->data['BrwImage']['model'];
+			$source = $BrwImage->data['BrwImage']['file'];
+			$dest_model_dir = 'uploads/' . $model;
+			if (!is_dir($dest_model_dir)) {
+				if (!mkdir($dest_model_dir, 0777)) {
+					$BrwImage->log('Brownie CMS: unable to create dir ' . $dest_model_dir);
+				} else {
+					chmod($dest_model_dir, 0777);
+				}
+			}
+			$dest_dir = $dest_model_dir . '/' . $BrwImage->data['BrwImage']['record_id'];
+			if (!is_dir($dest_dir)) {
+				if (!mkdir($dest_dir, 0777)) {
+					$this->log('Brownie CMS: unable to create dir ' . $dest_dir);
+				} else {
+					chmod($dest_dir, 0777);
+				}
+			}
+			$dest =  $dest_dir . '/' . $BrwImage->data['BrwImage']['name'];
+			if ($this->_copy($BrwImage, $source, $dest)) {
+				chmod($dest, 0777);
+				$updating = !empty($BrwImage->data['BrwImage']['id']);
+				if ($updating and $file_changed) {
+					$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
+				}
 			}
 		}
-		$dest_dir = $dest_model_dir . '/' . $BrwImage->data['BrwImage']['record_id'];
-		if (!is_dir($dest_dir)) {
-			if(!mkdir($dest_dir, 0777)){
-				$this->log('Brownie CMS: unable to create dir ' . $dest_dir);
-			} else {
-				chmod($dest_dir, 0777);
-			}
-		}
-		//eliminar cache al actualizar
-		$dest =  $dest_dir . '/' . $BrwImage->data['BrwImage']['name'];
-		if(copy($source, $dest)){
-			chmod($dest, 0777);
-			$updating = !empty($BrwImage->data['BrwImage']['id']);
-			$file_changed = !empty($BrwImage->data['BrwImage']['file']);
-			if ($updating and $file_changed) {
-				$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
-			}
-		}
-
 	}
 
+	function _copy($BrwImage, $source, $dest) {
+		$newDest = $dest;
+		while (is_file($newDest)) {
+			$parts = explode('/', $newDest);
+			$file = '_' . array_pop($parts);
+			$newDest = join('/', $parts) . '/' . $file;
+		}
+		if (copy($source, $newDest)) {
+			if($newDest != $dest) {
+				return $BrwImage->save(array('id' => $BrwImage->id, 'name' => $file), array('callbacks' => false, 'validate' => false));
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
 
 	function beforeDelete($BrwImage) {
 		$image = array_shift($BrwImage->findById($BrwImage->id));
@@ -99,14 +120,16 @@ class BrwImageBehavior extends ModelBehavior {
 
 	function _deleteFiles($model, $record, $filename) {
 		$filePath = WWW_ROOT . 'uploads' . DS . $model . DS . $record . DS . $filename;
-		unlink($filePath);
+		if(is_file($filePath)) {
+			unlink($filePath);
+		}
 		$baseCacheDir = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $model;
 		if(is_dir($baseCacheDir)) {
 			$handle = opendir($baseCacheDir);
 			while ($sizeDir = readdir($handle)) {
 				if(is_dir($baseCacheDir . DS . $sizeDir)) {
 					$fileToDelete = $baseCacheDir . DS . $sizeDir . DS . $record . DS . $filename;
-					if (file_exists($fileToDelete)) {
+					if (is_file($fileToDelete)) {
 						unlink($fileToDelete);
 					}
 				}
