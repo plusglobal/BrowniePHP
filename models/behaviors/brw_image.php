@@ -26,9 +26,8 @@ class BrwImageBehavior extends ModelBehavior {
 				),
 			),
 		);
-
 		$BrwImage->data['BrwImage']['name'] = null;
-		if (isset($BrwImage->data['BrwImage']['file']['tmp_name'])) {
+		if (is_array($BrwImage->data['BrwImage']['file'])) {
 			//the image was uploaded
 			switch ($BrwImage->data['BrwImage']['file']['error']) {
 				case 0:
@@ -40,9 +39,8 @@ class BrwImageBehavior extends ModelBehavior {
 				break;
 			}
 		} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
-			$BrwImage->data['BrwImage']['name'] = end(explode('/', $BrwImage->data['BrwImage']['file']));
+			$BrwImage->data['BrwImage']['name'] = end(explode(DS, $BrwImage->data['BrwImage']['file']));
 		}
-		//pr($BrwImage->data);
 	}
 
 	function beforeSave($BrwImage) {
@@ -63,6 +61,7 @@ class BrwImageBehavior extends ModelBehavior {
 	}
 
 	function afterSave($BrwImage, $created) {
+
 		$file_changed = !empty($BrwImage->data['BrwImage']['file']);
 		if ($file_changed) {
 			$model = $BrwImage->data['BrwImage']['model'];
@@ -97,7 +96,7 @@ class BrwImageBehavior extends ModelBehavior {
 	function _copy($BrwImage, $source, $dest) {
 		$newDest = $dest;
 		while (is_file($newDest)) {
-			$parts = explode('/', $newDest);
+			$parts = explode(DS, $newDest);
 			$file = '_' . array_pop($parts);
 			$newDest = join('/', $parts) . '/' . $file;
 		}
@@ -139,12 +138,11 @@ class BrwImageBehavior extends ModelBehavior {
 
 
 	function validateSizeFile($BrwImage, $data) {
-		//pr($BrwImage->data['BrwImage']);
 		if (empty($BrwImage->data['BrwImage']['file'])) {
 			return true;
 		}
 
-		if(filesize($BrwImage->data['BrwImage']['file']) > $this->max_upload_size){
+		if (filesize($BrwImage->data['BrwImage']['file']) > $this->max_upload_size) {
 			return false;
 		} else {
 			return true;
@@ -156,7 +154,6 @@ class BrwImageBehavior extends ModelBehavior {
 		if (empty($BrwImage->data['BrwImage']['file'])) {
 			return true;
 		}
-
 		return getimagesize($BrwImage->data['BrwImage']['file']);
 	}
 

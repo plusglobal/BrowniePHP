@@ -238,7 +238,7 @@ class CmsBehavior extends ModelBehavior {
 			$relative_path = 'uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
 			$paths = array(
 				'path' => Router::url('/' . $relative_path),
-				'real_path' => WWW_ROOT . $relative_path,
+				'real_path' => WWW_ROOT . str_replace('/', DS, $relative_path),
 			);
 			if (!empty($Model->brownieCmsConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
