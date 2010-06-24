@@ -39,7 +39,7 @@ class BrwImageBehavior extends ModelBehavior {
 				break;
 			}
 		} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
-			$BrwImage->data['BrwImage']['name'] = end(explode(DS, $BrwImage->data['BrwImage']['file']));
+			$BrwImage->data['BrwImage']['name'] = end(explode('/', $BrwImage->data['BrwImage']['file']));
 		}
 	}
 
@@ -83,12 +83,12 @@ class BrwImageBehavior extends ModelBehavior {
 				}
 			}
 			$dest =  $dest_dir . '/' . $BrwImage->data['BrwImage']['name'];
+			$updating = !empty($BrwImage->data['BrwImage']['id']);
+			if ($updating and $file_changed) {
+				$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
+			}
 			if ($this->_copy($BrwImage, $source, $dest)) {
 				chmod($dest, 0777);
-				$updating = !empty($BrwImage->data['BrwImage']['id']);
-				if ($updating and $file_changed) {
-					$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
-				}
 			}
 		}
 	}
@@ -96,7 +96,7 @@ class BrwImageBehavior extends ModelBehavior {
 	function _copy($BrwImage, $source, $dest) {
 		$newDest = $dest;
 		while (is_file($newDest)) {
-			$parts = explode(DS, $newDest);
+			$parts = explode('/', $newDest);
 			$file = '_' . array_pop($parts);
 			$newDest = join('/', $parts) . '/' . $file;
 		}
@@ -142,7 +142,13 @@ class BrwImageBehavior extends ModelBehavior {
 			return true;
 		}
 
-		if (filesize($BrwImage->data['BrwImage']['file']) > $this->max_upload_size) {
+		if (substr($BrwImage->data['BrwImage']['file'], 0, 7) == 'http://') {
+			$filesize = 0;
+		} else {
+			$filesize = filesize($BrwImage->data['BrwImage']['file']);
+		}
+
+		if ($filesize > $this->max_upload_size) {
 			return false;
 		} else {
 			return true;

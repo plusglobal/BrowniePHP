@@ -43,13 +43,32 @@ class ThumbsController extends AppController{
 
 		if (is_file($phpThumb->cache_filename)) {
 			$cachedImage = getimagesize($phpThumb->cache_filename);
-			//$this->log(convert(memory_get_usage()));
 			header('Content-Type: '.$cachedImage['mime']);
 			readfile($phpThumb->cache_filename);
 			exit;
 		}
 
     }
+
+	function generate() {
+		$args = func_get_args();
+		$sizes = array_shift($args);
+		$sourceFile = implode('/', $args);
+		if (substr($sourceFile, 0, 8) != 'uploads/' or !is_file($sourceFile)) {
+			$this->cakeError('error404');
+		}
+		$pathinfo = pathinfo($sourceFile);
+		App::import('Vendor', 'Brownie.phpThumb', array('file' => 'phpThumb' . DS . 'phpthumb.class.php'));
+		$phpThumb = new phpthumb();
+		$phpThumb->src = $sourceFile;
+		$phpThumb->q = '95';
+		$phpThumb->config_output_format = $pathinfo['extension'];
+		$phpThumb->config_error_die_on_error = true;
+		$phpThumb->config_temp_directory = ROOT . DS . APP_DIR . DS . 'tmp';
+		$sizes = $this->_sizes($sizes, $phpThumb);
+		$phpThumb->GenerateThumbnail();
+		$phpThumb->OutputThumbnail();
+	}
 
 
 	function _sizes($sizes, $phpThumb) {
