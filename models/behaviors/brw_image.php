@@ -66,17 +66,9 @@ class BrwImageBehavior extends ModelBehavior {
 		if ($file_changed) {
 			$model = $BrwImage->data['BrwImage']['model'];
 			$source = $BrwImage->data['BrwImage']['file'];
-			$dest_model_dir = 'uploads/' . $model;
-			if (!is_dir($dest_model_dir)) {
-				if (!mkdir($dest_model_dir, 0777)) {
-					$BrwImage->log('Brownie CMS: unable to create dir ' . $dest_model_dir);
-				} else {
-					chmod($dest_model_dir, 0777);
-				}
-			}
-			$dest_dir = $dest_model_dir . '/' . $BrwImage->data['BrwImage']['record_id'];
+			$dest_dir = 'uploads/' . $model . '/' . $BrwImage->data['BrwImage']['record_id'];
 			if (!is_dir($dest_dir)) {
-				if (!mkdir($dest_dir, 0777)) {
+				if (!mkdir($dest_dir, 0777, true)) {
 					$this->log('Brownie CMS: unable to create dir ' . $dest_dir);
 				} else {
 					chmod($dest_dir, 0777);
