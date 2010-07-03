@@ -40,9 +40,9 @@ class BrwImageBehavior extends ModelBehavior {
 			}
 		} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
 			$BrwImage->data['BrwImage']['name'] = end(explode('/', $BrwImage->data['BrwImage']['file']));
-		}
-		if ($BrwImage->data['BrwImage']['file'][0] == '/') {
-			$BrwImage->data['BrwImage']['file'] = substr($BrwImage->data['BrwImage']['file'], 1);
+			if ($BrwImage->data['BrwImage']['file'][0] == '/') {
+				$BrwImage->data['BrwImage']['file'] = substr($BrwImage->data['BrwImage']['file'], 1);
+			}
 		}
 	}
 

@@ -28,6 +28,7 @@ class CmsBehavior extends ModelBehavior {
 			'no_export' => array(),
 			'search' => array(),
 			'no_search' => array(),
+			'no_editor' => array(),
 		),
 
 		'actions' => array(

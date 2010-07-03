@@ -101,6 +101,8 @@ class ThumbsController extends AppController{
     }
 
     function _checkValidSizes($model, $sizes) {
+    	return true;
+
 		$Model = ClassRegistry::init($model);
 		$Model->Behaviors->attach('Brownie.Cms');
 		foreach ($Model->brownieCmsConfig['images'] as $imageCategory) {

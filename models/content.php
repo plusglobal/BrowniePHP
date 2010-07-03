@@ -198,11 +198,10 @@ class Content extends BrownieAppModel{
 	}
 
 
-	function fckFields($Model){
+	function fckFields($Model) {
 		$out = array();
-		//pr($Model->_schema);
 		foreach($Model->_schema as $field => $metadata){
-			if($metadata['type'] == 'text'){
+			if($metadata['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_editor'])) {
 				$out[] = $field;
 			}
 		}
