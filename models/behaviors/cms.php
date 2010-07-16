@@ -29,6 +29,7 @@ class CmsBehavior extends ModelBehavior {
 			'search' => array(),
 			'no_search' => array(),
 			'no_editor' => array(),
+			'virtual' => array(),
 		),
 
 		'actions' => array(
@@ -228,6 +229,18 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _addBrwImagePaths($r, $Model) {
+	/* this funcion expects an array like
+	[BrwImage] => Array(
+	    [0] => Array(
+	    	[id] => 4a6a23a8-837c-4485-834f-0fa816fac25f
+			etc...
+	    )
+	    [1] => Array(
+			[id] => 4a6a23a8-cd5c-4ae9-b69b-0fa816fac25f
+			etc...
+	    )
+	)*/
+
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
@@ -280,6 +293,7 @@ class CmsBehavior extends ModelBehavior {
 		}
 		return $ret;
 	}
+
 
 
 	function _addBrwFilePaths($r, $Model) {

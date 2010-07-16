@@ -25,21 +25,4 @@ class CmsComponent extends Object{
 		}
 	}
 
-
-	function attachUploads($Model) {
-		if(!empty($Model->brownieCmsConfig['images'])){
-			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
-				'foreignKey' => 'record_id',
-				'conditions' => array('BrwImage.model' => $Model->name)
-			))));
-		}
-		if(!empty($Model->brownieCmsConfig['files'])){
-			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
-				'foreignKey' => 'record_id',
-				'conditions' => array('BrwFile.model' => $Model->name)
-			))));
-		}
-		$Model->Behaviors->attach('Brownie.Cms');
-	}
-
 }

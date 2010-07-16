@@ -3,12 +3,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex,nofollow" />
-<?php echo $html->meta('favicon.ico',
-	$html->url('/favicon.ico'),
-    array('type' => 'icon')
-);?>
 <?php
-echo $html->css(array('/brownie/css/brownie', '/brownie/css/fancybox/jquery.fancybox-1.3.1'));
+echo $html->meta('favicon.ico', $html->url('/favicon.ico'), array('type' => 'icon'));
+echo $html->css(array(
+	'/brownie/css/brownie',
+	'/brownie/css/fancybox/jquery.fancybox-1.3.1'
+));
 echo $javascript->link(array(
 	'/brownie/js/jquery-1.3.2.min',
 	'/brownie/js/jquery.fancybox-1.3.1.pack',
@@ -46,7 +46,7 @@ echo $scripts_for_layout;
 
 					echo'
 					<li class="logout">'.$html->link(__d('brownie', 'Logout', true),
-					array('controller' => 'users', 'action' => 'logout')).'</li>
+					array('controller' => 'brw_users', 'action' => 'logout')).'</li>
 				</ul>
 			</div>
 			<div id="menu">'. $this->element('menu') . '</div>

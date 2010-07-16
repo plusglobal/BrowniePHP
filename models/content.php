@@ -76,26 +76,54 @@ class Content extends BrownieAppModel{
 	}
 
 	function fieldsAdd($Model) {
-		return $this->fieldsForForm($Model, 'add');
+		return $this->_fieldsForForm($Model, 'add');
 	}
 
 
 	function fieldsEdit($Model) {
-		return $this->fieldsForForm($Model, 'edit');
+		return $this->_fieldsForForm($Model, 'edit');
 	}
 
-	function fieldsForForm($Model, $action) {
+	function _fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
 		$fieldsConfig = $this->getCmsConfig($Model, 'fields');
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach($fieldsNotUsed as $field){
-			if(!empty($schema[$field])) {
+			if (isset($schema[$field])) {
 				unset($schema[$field]);
+			}
+		}
+		$schema = $this->_addVirtualFields($schema, $fieldsConfig['virtual']);
+		return $schema;
+	}
+
+
+	function _addVirtualFields($schema, $virtuals) {
+		$virtuals = Set::normalize($virtuals);
+		$default = array(
+			'type' => array('type' => 'string', 'null' => true, 'length' => 255),
+			'after' => null,
+		);
+		foreach($virtuals as $virtualField => $options) {
+			if (empty($options)) {
+				$options = array();
+			}
+			$options = array_merge($default, $options);
+			if (empty($options['after'])) {
+				$schema[$virtualField] = $options['type'];
+			} else {
+				$ret = array();
+				foreach ($schema as $field => $type) {
+					$ret[$field] = $type;
+					if ($field == $options['after']) {
+						$ret[$virtualField] = $options['type'];
+					}
+				}
+				$schema = $ret;
 			}
 		}
 		return $schema;
 	}
-
 
 	function addValidationsRules($Model, $edit) {
 		if($edit){

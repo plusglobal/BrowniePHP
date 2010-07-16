@@ -1,15 +1,25 @@
 <?php
-class UsersController extends BrownieAppController {
+class BrwUsersController extends BrownieAppController {
 
-	var $name = 'Users';
+	var $name = 'BrwUsers';
 
 	function beforeFilter() {
 		//$this->ImageModel = ClassRegistry::init('BrwImage');
 		parent::beforeFilter();
 	}
 
-	function login()
-	{
+
+    function login() {
+    	$this->set($this->Auth->password('123'));
+    }
+
+    function logout() {
+        $this->redirect($this->Auth->logout());
+    }
+
+
+	/*
+	function login() {
 		// if the form was submitted
 		if(!empty($this->data)) {
 			// find the user in the database
@@ -39,12 +49,14 @@ class UsersController extends BrownieAppController {
 		}
 	}
 
+
 	function logout()
 	{
 		// delete the user session
 		$this->Session->delete('BrwUser');
 		$this->redirect(array('plugin'=>'brownie', 'controller' => 'users', 'action' => 'login'));
 	}
+	*/
 
 
 }

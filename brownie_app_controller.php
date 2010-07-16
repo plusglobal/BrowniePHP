@@ -2,26 +2,27 @@
 
 class BrownieAppController extends AppController {
 
-	var $BrwUser = null;
-	var $user = null;
-	var $helpers = array('Javascript', 'Html');
+	var $components = array('Auth');
 
 	function beforeFilter() {
-		//pr($this->params);
-		$this->BrwUser = ClassRegistry::init('BrwUser');
-		if (!empty($this->params['controller']) and !($this->params['controller'] =='users' and $this->params['action']=='login')) {
-			$this->checkAdminSession();
-			$this->set('authUser', $this->user);
-		}
+		$this->_authSettings();
+
 		$this->set('menuSections', $this->menuConfig($this->menuConfig));
 		$this->set('companyName', $this->companyName);
-		$this->set('isUserRoot', $this->Session->read('BrwUser.root'));
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 		parent::beforeFilter();
 	}
 
-	function checkAdminSession()
-	{
+	function _authSettings() {
+		$this->Auth->userModel = 'Brownie.BrwUser';
+		$this->Auth->loginAction = array('controller' => 'brw_users', 'action' => 'login', 'plugin' => 'brownie');
+		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
+		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
+		$this->set('isUserRoot', true);
+	}
+
+	/*
+	function checkAdminSession() {
 		// if the admin session hasn't been set
 		if (!$this->Session->check('BrwUser')) {
 			// set flash message and redirect
@@ -35,7 +36,7 @@ class BrownieAppController extends AppController {
 		} else {
 			$this->user = $this->Session->read('BrwUser');
 		}
-	}
+	}*/
 
 	function menuConfig($menu) {
 		if ($this->Session->read('BrwUser.root')) {
@@ -118,7 +119,6 @@ class BrownieAppController extends AppController {
 
 		return $ret;
 	}
-
 
 }
 
