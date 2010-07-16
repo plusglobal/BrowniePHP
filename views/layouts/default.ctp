@@ -31,7 +31,7 @@ echo $scripts_for_layout;
 		if(!empty($authUser)){
 			echo '
 			<div id="options-bar">
-				<p>' . sprintf(__d('brownie', 'Welcome %s', true), $authUser['username']) . '</p>
+				<p>' . sprintf(__d('brownie', 'User: %s', true), $authUser['email']) . '</p>
 				<ul>
 					<li class="home">'.$html->link(__d('brownie', 'Home', true),
 					array('controller' => 'brownie', 'action' => 'index')) . '</li>';
@@ -46,7 +46,7 @@ echo $scripts_for_layout;
 
 					echo'
 					<li class="logout">'.$html->link(__d('brownie', 'Logout', true),
-					array('controller' => 'brw_users', 'action' => 'logout')).'</li>
+					array('controller' => 'brownie', 'action' => 'logout')).'</li>
 				</ul>
 			</div>
 			<div id="menu">'. $this->element('menu') . '</div>

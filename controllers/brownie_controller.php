@@ -7,6 +7,28 @@ class BrownieController extends BrownieAppController {
 
 	}
 
+	function beforeFilter() {
+		if (!empty($this->data['BrwUser']) and !$this->BrwUser->find('first')) {
+			$this->BrwUser->save(array(
+				'email' => $this->data['BrwUser']['email'],
+				'password' => $this->Auth->password($this->data['BrwUser']['password']),
+			));
+		}
+		parent::beforeFilter();
+	}
+
+
+    function login() {
+    	if($this->Session->check('Auth.BrwUser')){
+			$this->redirect(array('action' => 'index'));
+		}
+    }
+
+    function logout() {
+        $this->redirect($this->Auth->logout());
+    }
+
+
 	function translations() {
 		$models = Configure::listObjects('model');
 		$out = '<?php ';

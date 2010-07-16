@@ -2,7 +2,7 @@
 /**
 * based on http://bakery.cakephp.org/articles/view/thumbnails-generation-with-phpthumb
 */
-class ThumbsController extends AppController{
+class ThumbsController extends BrownieAppController{
 
 	var $name = 'Thumbs';
 	var $uses = array();

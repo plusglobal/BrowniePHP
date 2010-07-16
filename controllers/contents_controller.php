@@ -4,6 +4,7 @@ class ContentsController extends BrownieAppController {
 	var $name = 'Contents';
 	var $helpers = array('Brownie.Fck');
 	var $Model;
+	var $uses = array('Brownie.Content');
 
 
 	function beforeFilter() {
@@ -126,7 +127,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function edit($model = null, $id = null) {
+	function edit($model, $id = null) {
 
 		if (!empty($this->data)) {
 

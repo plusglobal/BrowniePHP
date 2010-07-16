@@ -5,6 +5,7 @@ class CmsComponent extends Object{
 	function initialize(&$Controller, $settings) {
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
+		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 
 		$this->attachAllUploads();
 
@@ -23,6 +24,23 @@ class CmsComponent extends Object{
 				$this->attachUploads($Model);
 			}
 		}
+	}
+
+
+	function attachUploads($Model) {
+		if(!empty($Model->brownieCmsConfig['images'])){
+			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
+				'foreignKey' => 'record_id',
+				'conditions' => array('BrwImage.model' => $Model->name)
+			))));
+		}
+		if(!empty($Model->brownieCmsConfig['files'])){
+			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
+				'foreignKey' => 'record_id',
+				'conditions' => array('BrwFile.model' => $Model->name)
+			))));
+		}
+		$Model->Behaviors->attach('Brownie.Cms');
 	}
 
 }

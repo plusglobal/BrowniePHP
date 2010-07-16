@@ -3,10 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 25, 2010 at 03:32 
+-- Generation Time: Jul 16, 2010 at 07:32 
 -- Server version: 5.0.51
 -- PHP Version: 5.3.0
 
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -15,7 +16,7 @@
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `brownie`
+-- Database: `acltest`
 --
 
 -- --------------------------------------------------------
@@ -26,23 +27,18 @@
 
 DROP TABLE IF EXISTS `brw_files`;
 CREATE TABLE IF NOT EXISTS `brw_files` (
-  `id` char(36) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `record_id` int(10) unsigned NOT NULL,
-  `model` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `category_code` char(10) NOT NULL,
+  `model` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `description` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `category_code` char(10) collate utf8_unicode_ci NOT NULL,
   `order` int(10) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) TYPE=MyISAM;
-
---
--- Dumping data for table `brw_files`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -53,16 +49,11 @@ CREATE TABLE IF NOT EXISTS `brw_files` (
 DROP TABLE IF EXISTS `brw_groups`;
 CREATE TABLE IF NOT EXISTS `brw_groups` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `brw_groups`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -72,24 +63,17 @@ CREATE TABLE IF NOT EXISTS `brw_groups` (
 
 DROP TABLE IF EXISTS `brw_images`;
 CREATE TABLE IF NOT EXISTS `brw_images` (
-  `id` char(36) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `extension` char(5) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `record_id` int(10) unsigned NOT NULL,
-  `model` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `category_code` char(10) NOT NULL,
-  `order` int(10) NOT NULL,
+  `model` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `description` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `category_code` char(10) collate utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) TYPE=MyISAM;
-
---
--- Dumping data for table `brw_images`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -100,16 +84,11 @@ CREATE TABLE IF NOT EXISTS `brw_images` (
 DROP TABLE IF EXISTS `brw_models`;
 CREATE TABLE IF NOT EXISTS `brw_models` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `model` varchar(255) NOT NULL,
-  `seccion` varchar(255) NOT NULL,
+  `model` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `seccion` varchar(255) collate utf8_unicode_ci NOT NULL,
   `orden` int(10) default NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `brw_models`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -128,12 +107,7 @@ CREATE TABLE IF NOT EXISTS `brw_permissions` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `brw_permissions`
---
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -144,18 +118,13 @@ CREATE TABLE IF NOT EXISTS `brw_permissions` (
 DROP TABLE IF EXISTS `brw_users`;
 CREATE TABLE IF NOT EXISTS `brw_users` (
   `id` int(5) unsigned NOT NULL auto_increment,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `email` varchar(50) collate utf8_unicode_ci NOT NULL,
+  `password` varchar(255) collate utf8_unicode_ci NOT NULL,
   `brw_group_id` int(10) NOT NULL,
   `root` tinyint(1) NOT NULL default '0',
   `last_login` datetime NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `username` (`username`)
-) TYPE=MyISAM  AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `brw_users`
---
-
+  UNIQUE KEY `username` (`email`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;

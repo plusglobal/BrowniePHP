@@ -1,8 +1,12 @@
 <div class="form">
 <?php
 echo $javascript->link('/js/fckeditor/fckeditor');
+$url = array('controller' => 'contents', 'action' => 'edit', $model);
 $adding = empty($this->data[$model]['id']);
-echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off'));
+if(!$adding){
+	$url[] = $this->data[$model]['id'];
+}
+echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url));
 ?>
 	<fieldset>
  		<legend>
@@ -115,13 +119,6 @@ foreach($uploads as $upload){
 				<legend>' . $uploadCat['name_category'] . '</legend>';
 
 				if ($uploadCat['index']) {
-					/*
-					if (!empty($this->data['BrwImage'][$categoryCode]['id'])){
-						if (!$adding){
-							echo $form->input('BrwImage.' . $i . '.id', array('value' => $this->data['BrwImage'][$categoryCode]['id']));
-						}
-					}
-					*/
 					echo '
 					' . $form->input('Brw' . $upload . '.' . $i . '.file', array('type' => 'file', 'label' => __d('brownie', $upload, true))) . '
 					' .	$form->input('Brw' . $upload . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden')) . '

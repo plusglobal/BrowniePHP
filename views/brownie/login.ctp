@@ -10,8 +10,8 @@
 		<?php
 		echo $session->flash('auth');
 		echo $form->create();
-		echo $form->input('BrwUser.username', array('size'=>'60', 'label' => __d('brownie', 'Username', true)));
-		echo $form->input('BrwUser.password', array('size'=>'60', 'label' => __d('brownie', 'Password', true)));
+		echo $form->input('BrwUser.email', array('label' => __d('brownie', 'Username', true)));
+		echo $form->input('BrwUser.password', array('label' => __d('brownie', 'Password', true)));
 		echo $form->end(__d('brownie', 'Login', true), array('class' => 'submit'));
 		?>
 	</div>

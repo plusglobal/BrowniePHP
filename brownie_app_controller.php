@@ -2,23 +2,40 @@
 
 class BrownieAppController extends AppController {
 
-	var $components = array('Auth');
+	var $components = array('Auth', 'Session');
+	var $helpers = array('Html', 'Session', 'Javascript');
+	var $uses = array('BrwUser');
 
 	function beforeFilter() {
 		$this->_authSettings();
-
-		$this->set('menuSections', $this->menuConfig($this->menuConfig));
+		if(empty($this->companyName)) {
+			$this->companyName = '';
+		}
+		$this->set('menuSections', $this->menuConfig());
 		$this->set('companyName', $this->companyName);
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 		parent::beforeFilter();
 	}
 
 	function _authSettings() {
-		$this->Auth->userModel = 'Brownie.BrwUser';
-		$this->Auth->loginAction = array('controller' => 'brw_users', 'action' => 'login', 'plugin' => 'brownie');
+		$this->Auth->userModel = 'BrwUser';
+		$this->Auth->fields = array('username'  => 'email', 'password'  => 'password');
+		$this->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('isUserRoot', true);
+	}
+
+	function menuConfig() {
+		if (!empty($this->menuConfig)) {
+			return $this->menuConfig;
+		}
+		$menu = array();
+		$models = App::objects('model');
+		foreach($models as $model) {
+			$menu[$model] = $model;
+		}
+		return array('Menu' => $menu);
 	}
 
 	/*
@@ -38,6 +55,7 @@ class BrownieAppController extends AppController {
 		}
 	}*/
 
+	/*
 	function menuConfig($menu) {
 		if ($this->Session->read('BrwUser.root')) {
 			return $menu;
@@ -53,56 +71,10 @@ class BrownieAppController extends AppController {
 			}
 		}
 		return $menu;
-	}
+	}*/
 
 	function _checkPermissions($model, $action = 'view') {
-		//static $user, $User;
-		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'add_images', 'edit_image', 'edit_file', 'import'))) {
-			return false;
-		}
-
-		$Model = ClassRegistry::init($model);
-		$Model->Behaviors->attach('Brownie.Cms');
-		if (!empty($this->Content)) {
-			$actions = $this->Content->getCmsConfig($Model, 'actions');
-			//pr($Model->brownieCmsConfig);
-			if (!in_array($action, array('index', 'view')) and !$actions[$action]) {
-				return false;
-			}
-		}
-
-		if ($this->Session->read('BrwUser.root')) {
-			return true;
-		}
-
-
-		$User = ClassRegistry::init('BrwUser');
-		$User->Behaviors->attach('Containable');
-		$user = $User->find('first', array(
-			'conditions' => array('BrwUser.id' => $this->Session->read('BrwUser.id')),
-			'contain' => array('BrwGroup' => array('BrwPermission' => array('BrwModel')))
-		));
-		//pr($user);
-		$mapActions = array(
-			'index' => 'view',
-			'view' => 'view',
-			'delete' => 'delete',
-			'add_images' => 'edit',
-			'edit' => 'edit',
-		);
-
-		if (empty($user['BrwGroup']['BrwPermission'])) {
-			return false;
-		} else {
-			foreach ($user['BrwGroup']['BrwPermission'] as $permission) {
-				if ($model == $permission['BrwModel']['model']) {
-					return $permission[$mapActions[$action]];
-				}
-			}
-		}
-
-		return false;
-
+		return true;
 	}
 
 	function arrayPermissions($model) {
@@ -120,11 +92,10 @@ class BrownieAppController extends AppController {
 		return $ret;
 	}
 
+
 }
 
 
 function enum2array($string) {
 	return explode("','", substr($string, 6, -2));
 }
-
-?>
