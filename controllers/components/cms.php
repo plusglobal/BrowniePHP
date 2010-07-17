@@ -3,6 +3,11 @@
 class CmsComponent extends Object{
 
 	function initialize(&$Controller, $settings) {
+		Configure::write('multiSitesModel', false);
+		if (!empty($settings['multiSitesModel'])) {
+			Configure::write('multiSitesModel', $settings['multiSitesModel']);
+		}
+
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');

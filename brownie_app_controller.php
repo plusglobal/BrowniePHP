@@ -8,6 +8,7 @@ class BrownieAppController extends AppController {
 
 	function beforeFilter() {
 		$this->_authSettings();
+		$this->_multiSiteSettings();
 		if(empty($this->companyName)) {
 			$this->companyName = '';
 		}
@@ -24,6 +25,12 @@ class BrownieAppController extends AppController {
 		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('isUserRoot', true);
+	}
+
+	function _multiSiteSettings() {
+		if($multiSitesModel = Configure::read('multiSitesModel')){
+			Controller::loadModel($multiSitesModel);
+		}
 	}
 
 	function menuConfig() {
