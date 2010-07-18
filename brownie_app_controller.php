@@ -9,7 +9,7 @@ class BrownieAppController extends AppController {
 	function beforeFilter() {
 		$this->_authSettings();
 		$this->_multiSiteSettings();
-		$this->BrwModel->toDb();
+		$this->_models2db();
 		if(empty($this->companyName)) {
 			$this->companyName = '';
 		}
@@ -32,6 +32,27 @@ class BrownieAppController extends AppController {
 		if($multiSitesModel = Configure::read('multiSitesModel')){
 			Controller::loadModel($multiSitesModel);
 		}
+	}
+
+	function _models2db() {
+		if (Configure::read('debug')) {
+			$modelsHash = $this->_modelsHash();
+			if (!$this->Session->check('modelsHash') or $this->Session->read('modelsHash') != $modelsHash) {
+				$this->Session->write('modelsHash', $modelsHash);
+				$this->BrwModel->toDb();
+			}
+		}
+	}
+
+	function _modelsHash() {
+		$handle = opendir(MODELS);
+		$toHash = date('h');
+		while ($file = readdir($handle)) {
+			if ($file != '.' and $file != '..') {
+				$toHash .= $file . filesize(MODELS . DS . $file);
+			}
+		}
+		return Security::hash($toHash);
 	}
 
 	function menuConfig() {
