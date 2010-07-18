@@ -39,7 +39,7 @@ class ContentsController extends BrownieAppController {
 
 	function index() {
 		if ($this->Content->isTree($this->Model)) {
-			$this->helpers[] = 'tree';
+			$this->helpers[] = 'Brownie.Tree';
 			$this->set('records', $this->Model->find('threaded'));
 			$this->set('isTree', true);
 			$this->set('displayField', $this->Model->displayField);

@@ -47,13 +47,13 @@ class CmsBehavior extends ModelBehavior {
 			'url_view' => array(),
 		),
 
-		'fields_rename' => array(),
-
 		'images' => array(),
 
 		'files' => array(),
 
 		'default' => array(),
+
+		'parent' => null,
 
 	);
 
@@ -127,6 +127,13 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 
+		if (!$config['parent']) {
+			$keys = array_keys($Model->belongsTo);
+			if (!empty($keys[0])) {
+				$config['parent'] = $keys[0];
+			}
+		}
+		//$this->log($config);
 		$Model->brownieCmsConfig = $config;
 	}
 

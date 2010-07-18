@@ -2,13 +2,14 @@
 
 class BrownieAppController extends AppController {
 
-	var $components = array('Auth', 'Session');
+	var $components = array('Auth', 'Session', 'Acl');
 	var $helpers = array('Html', 'Session', 'Javascript');
-	var $uses = array('BrwUser');
+	var $uses = array('BrwUser', 'BrwGroup', 'BrwModel');
 
 	function beforeFilter() {
 		$this->_authSettings();
 		$this->_multiSiteSettings();
+		$this->BrwModel->toDb();
 		if(empty($this->companyName)) {
 			$this->companyName = '';
 		}

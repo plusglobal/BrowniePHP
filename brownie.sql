@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 16, 2010 at 07:32 
+-- Generation Time: Jul 17, 2010 at 10:10 
 -- Server version: 5.0.51
 -- PHP Version: 5.3.0
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `brw_files` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -49,11 +49,14 @@ CREATE TABLE IF NOT EXISTS `brw_files` (
 DROP TABLE IF EXISTS `brw_groups`;
 CREATE TABLE IF NOT EXISTS `brw_groups` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `parent_id` bigint(20) unsigned default NULL,
+  `lft` bigint(20) unsigned default NULL,
+  `rght` bigint(20) unsigned default NULL,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1011 ;
 
 -- --------------------------------------------------------
 
@@ -73,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `brw_images` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -85,10 +88,13 @@ DROP TABLE IF EXISTS `brw_models`;
 CREATE TABLE IF NOT EXISTS `brw_models` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `model` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `seccion` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `name` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `parent_id` bigint(20) default NULL,
+  `lft` bigint(20) default NULL,
+  `rght` bigint(20) default NULL,
   `orden` int(10) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -121,10 +127,9 @@ CREATE TABLE IF NOT EXISTS `brw_users` (
   `email` varchar(50) collate utf8_unicode_ci NOT NULL,
   `password` varchar(255) collate utf8_unicode_ci NOT NULL,
   `brw_group_id` int(10) NOT NULL,
-  `root` tinyint(1) NOT NULL default '0',
   `last_login` datetime NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `username` (`email`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;

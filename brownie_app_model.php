@@ -13,8 +13,10 @@ class BrownieAppModel extends AppModel {
 		}
 		*/
 	}
+
 }
 
+/*
 if ( !function_exists('image_type_to_extension') ) {
 
     function image_type_to_extension ($type, $dot = true)
@@ -67,5 +69,4 @@ if ( !function_exists('image_type_to_mime_type') ) {
 
 }
 
-
-?>
+*/

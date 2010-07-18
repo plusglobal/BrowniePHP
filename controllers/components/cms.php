@@ -10,7 +10,8 @@ class CmsComponent extends Object{
 
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
-		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
+		//ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
+		//ClassRegistry::init('BrwGroup')->Behaviors->attach('Brownie.BrwGroup');
 
 		$this->attachAllUploads();
 

@@ -9,9 +9,13 @@ class BrownieController extends BrownieAppController {
 
 	function beforeFilter() {
 		if (!empty($this->data['BrwUser']) and !$this->BrwUser->find('first')) {
+			$this->BrwGroup->create();
+			$this->BrwGroup->save(array('name' => 'root'));
+			$this->BrwUser->create();
 			$this->BrwUser->save(array(
 				'email' => $this->data['BrwUser']['email'],
 				'password' => $this->Auth->password($this->data['BrwUser']['password']),
+				'brw_group_id' => $this->BrwGroup->id,
 			));
 		}
 		parent::beforeFilter();
@@ -32,7 +36,7 @@ class BrownieController extends BrownieAppController {
 	function translations() {
 		$models = Configure::listObjects('model');
 		$out = '<?php ';
-		foreach($models as $model){
+		foreach($models as $model) {
 			$Model = ClassRegistry::init($model);
 			$out .= ' __("'.Inflector::humanize(Inflector::underscore($Model->name)).'"); ';
 			$schema = (array)$Model->_schema;
@@ -50,40 +54,4 @@ class BrownieController extends BrownieAppController {
 		fwrite(fopen($forTranslate, 'w'), $out);
 	}
 
-	function models_2_db() {
-		$BrwModel = ClassRegistry::init('BrwModel');
-		$models = Configure::listObjects('model');
-		foreach($models as $model){
-			$Model = ClassRegistry::init($model);
-			if($this->_isAdministrable($Model)) {
-				$data = array();
-				$data['BrwModel']['model'] = $Model->name;
-
-				if(!empty($Model->brownieCmsConfig['names']['plural'])){
-					$data['BrwModel']['seccion'] = $Model->brownieCmsConfig['names']['plural'];
-				} else {
-					$data['BrwModel']['seccion'] = Inflector::humanize(Inflector::pluralize($Model->name));
-				}
-
-				if($modelData = $BrwModel->findByModel($Model->name)) {
-					$data['BrwModel']['id'] = $modelData['BrwModel']['id'];
-				} else {
-					$data['BrwModel']['id'] = '';
-				}
-				//pr($data);
-				$BrwModel->save($data);
-			}
-		}
-	}
-
-	function _isAdministrable($Model) {
-		if(empty($Model->brownieCmsConfig) or !$Model->brownieCmsConfig){
-			return false;
-		} elseif(isset($Model->brownieCmsConfig['admin']['hide'])) {
-			return !$Model->brownieCmsConfig['admin']['hide'];
-		} else {
-			return true;
-		}
-	}
 }
-?>

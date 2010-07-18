@@ -1,31 +1,21 @@
 <?php
 
-class BrwUserBehavior extends ModelBehavior {
+class BrwGroupBehavior extends ModelBehavior {
 
 	function setup($Model, $config = array()) {
 		$Model->brownieCmsConfig = $this-> _brwConfig($Model);
 		$Model->validate = $this->_validate($Model);
-		$Model->bindModel(array('belongsTo' => array('BrwGroup')));
+		$Model->bindModel(array('hasMany' => array('BrwUser')));
 		$Model->Behaviors->attach('Acl');
+		$Model->Behaviors->attach('Tree');
 	}
 
 	function _brwConfig($Model) {
 		$defaultBrwConfig = array(
-			'fields' => array(
-				'no_edit' => array('last_login'),
-				'no_add' => array('last_login'),
-				'virtual' => array('repeat_password' => array('after' => 'password'))
-			),
 			'names' => array(
-				'section' => 'Usuarios',
-				'plural' => 'Usuarios',
-				'singular' => 'Usuario',
-			),
-			'paginate' => array(
-				'fields' => array('id', 'email', 'last_login'),
-			),
-			'legends' => array(
-				'password' => 'Leave blank for no change',
+				'section' => 'Grupos de usuarios',
+				'plural' => 'Grupos de usuarios',
+				'singular' => 'Grupo de usuarios',
 			),
 		);
 		if(empty($Model->brownieCmsConfig)) {
@@ -35,6 +25,8 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 	function _validate($Model) {
+		return array();
+
 		$defaultValidate = array(
 			'email' => array(
 				array(
@@ -54,7 +46,6 @@ class BrwUserBehavior extends ModelBehavior {
 		);
 		return Set::merge($defaultValidate, $Model->validate);
 	}
-
 
 	function brwBeforeEdit($data) {
 		$data['BrwUser']['password'] = $data['BrwUser']['repeat_password'] = '';
