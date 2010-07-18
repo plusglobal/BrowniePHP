@@ -861,7 +861,7 @@ div.files-gallery ul.file-actions li{
 
 div.files-gallery ul.file-actions li a{
 	display: block;
-	background: center center no-repeat;
+	background: 0 0 no-repeat;
 	text-indent: 100px;
 	overflow: hidden;
 	width: 32px;
@@ -994,4 +994,8 @@ div#content fieldset.comboselect select option {
 	width: 100% !important;
 	border: 0;
 	border-bottom: 1px dotted #959DB7;
+}
+
+.csleft, .csright{
+	*width: 300px !important;
 }

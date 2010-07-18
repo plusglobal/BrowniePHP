@@ -53,7 +53,7 @@ class CmsBehavior extends ModelBehavior {
 
 		'default' => array(),
 
-		'parent' => null,
+		'parent' => false,
 
 	);
 
@@ -94,6 +94,14 @@ class CmsBehavior extends ModelBehavior {
 			$Model->brownieCmsConfig['paginate']['order'] = $Model->order;
 		}
 
+		if (!isset($Model->brownieCmsConfig['parent'])) {
+			$keys = array_keys($Model->belongsTo);
+			if (!empty($keys[0])) {
+				$Model->brownieCmsConfig['parent'] = $keys[0];
+			}
+		}
+
+
 		if (!empty($Model->brownieCmsConfig)) {
 			$config = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
 		} else {
@@ -127,13 +135,6 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 
-		if (!$config['parent']) {
-			$keys = array_keys($Model->belongsTo);
-			if (!empty($keys[0])) {
-				$config['parent'] = $keys[0];
-			}
-		}
-		//$this->log($config);
 		$Model->brownieCmsConfig = $config;
 	}
 
