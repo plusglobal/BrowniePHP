@@ -8,6 +8,10 @@ class ThumbsController extends BrownieAppController{
 	var $uses = array();
 	var $autoRender = false;
 
+	function beforeFilter() {
+		$this->Auth->allow('*');
+	}
+
 	/**
 	* 150x113 recorta, si es necesario agranda la imagen
 	* 200_900 no recorta, no agranda
