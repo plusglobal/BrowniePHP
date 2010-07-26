@@ -8,8 +8,8 @@ class BrownieAppController extends AppController {
 
 	function beforeFilter() {
 		$this->_authSettings();
-		$this->_multiSiteSettings();
-		$this->_models2db();
+		//$this->_multiSiteSettings();
+		$this->_modelsToDb();
 		if(empty($this->companyName)) {
 			$this->companyName = '';
 		}
@@ -25,16 +25,17 @@ class BrownieAppController extends AppController {
 		$this->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
+		//$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('isUserRoot', true);
 	}
 
-	function _multiSiteSettings() {
+	/*function _multiSiteSettings() {
 		if($multiSitesModel = Configure::read('multiSitesModel')){
 			Controller::loadModel($multiSitesModel);
 		}
-	}
+	}*/
 
-	function _models2db() {
+	function _modelsToDb() {
 		if (Configure::read('debug')) {
 			$modelsHash = $this->_modelsHash();
 			if (!$this->Session->check('modelsHash') or $this->Session->read('modelsHash') != $modelsHash) {
