@@ -6,7 +6,6 @@ class BrwGroupBehavior extends ModelBehavior {
 		$Model->brownieCmsConfig = $this-> _brwConfig($Model);
 		$Model->validate = $this->_validate($Model);
 		$Model->bindModel(array('hasMany' => array('BrwUser')));
-		$Model->Behaviors->attach('Acl');
 		$Model->Behaviors->attach('Tree');
 	}
 

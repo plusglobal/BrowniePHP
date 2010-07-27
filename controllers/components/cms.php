@@ -3,17 +3,16 @@
 class CmsComponent extends Object{
 
 	function initialize(&$Controller, $settings) {
-		Configure::write('multiSitesModel', false);
+		$multiSitesModel = false;
 		if (!empty($settings['multiSitesModel'])) {
-			Configure::write('multiSitesModel', $settings['multiSitesModel']);
+			$multiSitesModel = $settings['multiSitesModel'];
 		}
+		Configure::write('multiSitesModel', $multiSitesModel);
 
-		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
-		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
-		//ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
+		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		//ClassRegistry::init('BrwGroup')->Behaviors->attach('Brownie.BrwGroup');
 
-		$this->attachAllUploads();
+		$this->_attachAllUploads();
 
 		if ($Controller->Session->check('BrwUser')) {
 			$BrwUser = $Controller->Session->read('BrwUser');
@@ -23,17 +22,19 @@ class CmsComponent extends Object{
 
 	}
 
-	function attachAllUploads() {
+	function _attachAllUploads() {
+		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
+		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
 		$models = App::objects('model');
 		foreach ($models as $model) {
 			if ($Model = ClassRegistry::getObject($model)) {
-				$this->attachUploads($Model);
+				$this->_attachUploads($Model);
 			}
 		}
 	}
 
 
-	function attachUploads($Model) {
+	function _attachUploads($Model) {
 		if(!empty($Model->brownieCmsConfig['images'])){
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',

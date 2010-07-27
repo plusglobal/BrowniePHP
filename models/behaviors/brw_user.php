@@ -5,8 +5,10 @@ class BrwUserBehavior extends ModelBehavior {
 	function setup($Model, $config = array()) {
 		$Model->brownieCmsConfig = $this-> _brwConfig($Model);
 		$Model->validate = $this->_validate($Model);
-		$Model->bindModel(array('belongsTo' => array('BrwGroup')));
-		$Model->Behaviors->attach('Acl');
+		//$Model->bindModel(array('belongsTo' => array('BrwGroup')));
+		if ($multiSitesModel = Configure::read('multiSitesModel')) {
+			$Model->bindModel(array('hasAndBelongsToMany' => array($multiSitesModel)));
+		}
 	}
 
 	function _brwConfig($Model) {
@@ -14,7 +16,8 @@ class BrwUserBehavior extends ModelBehavior {
 			'fields' => array(
 				'no_edit' => array('last_login'),
 				'no_add' => array('last_login'),
-				'virtual' => array('repeat_password' => array('after' => 'password'))
+				'virtual' => array('repeat_password' => array('after' => 'password')),
+				'hide' => array('brw_group_id'),
 			),
 			'names' => array(
 				'section' => 'Usuarios',
@@ -59,6 +62,18 @@ class BrwUserBehavior extends ModelBehavior {
 	function brwBeforeEdit($data) {
 		$data['BrwUser']['password'] = $data['BrwUser']['repeat_password'] = '';
 		return $data;
+	}
+
+	function sites($Model, $user) {
+		$conditions = array();
+		if (!$user['root']) {
+			//filtro los sitios por los que puede ver el usuario
+		}
+		$sites = $Model->{Configure::read('multiSitesModel')}->find('list', $conditions);
+		if (count($sites) <= 1) {
+			$sites = array();
+		}
+		return $sites;
 	}
 
 }

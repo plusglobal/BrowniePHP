@@ -2,22 +2,20 @@
 
 class BrownieAppController extends AppController {
 
-	var $components = array('Auth', 'Session', 'Acl');
+	var $components = array('Auth', 'Session');
 	var $helpers = array('Html', 'Session', 'Javascript');
-	var $uses = array('BrwUser', 'BrwGroup', 'BrwModel');
+	var $uses = array('BrwUser');
 
 	function beforeFilter() {
 		$this->_authSettings();
-		//$this->_multiSiteSettings();
-		$this->_modelsToDb();
-		if(empty($this->companyName)) {
-			$this->companyName = '';
-		}
-		$this->set('menuSections', $this->menuConfig());
-		$this->set('companyName', $this->companyName);
+		$this->_multiSiteSettings();
+		//$this->_modelsToDb();
+		$this->_menuConfig();
+		$this->_companyName();
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 		parent::beforeFilter();
 	}
+
 
 	function _authSettings() {
 		$this->Auth->userModel = 'BrwUser';
@@ -25,16 +23,23 @@ class BrownieAppController extends AppController {
 		$this->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
-		//$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
+		$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('isUserRoot', true);
 	}
 
-	/*function _multiSiteSettings() {
-		if($multiSitesModel = Configure::read('multiSitesModel')){
+	function _multiSiteSettings() {
+		if ($multiSitesModel = Configure::read('multiSitesModel')) {
 			Controller::loadModel($multiSitesModel);
+			$this->set('sitesOptions', $this->BrwUser->sites($this->Session->read('Auth.BrwUser')));
+			Configure::write('currentSite', $this->Session->read('BrwSite.Site'));
 		}
-	}*/
+	}
 
+	function _currentSite() {
+		return Configure::read('currentSite');
+	}
+
+	/*
 	function _modelsToDb() {
 		if (Configure::read('debug')) {
 			$modelsHash = $this->_modelsHash();
@@ -54,18 +59,33 @@ class BrownieAppController extends AppController {
 			}
 		}
 		return Security::hash($toHash);
+	}*/
+
+	function _menuConfig() {
+		if	($this->_currentSite() and !empty($this->brwSiteMenu)) {
+			$menu = $this->brwSiteMenu;
+		} else if (!empty($this->brwMenu)) {
+			$menu = $this->brwMenu;
+		} else {
+			$menu = array();
+			$models = App::objects('model');
+			foreach($models as $model) {
+				$menu[$model] = $model;
+			}
+			$menu = array(__d('brownie', 'Menu', true) => $menu);
+		}
+
+		$this->set('brwMenu', $menu);
 	}
 
-	function menuConfig() {
-		if (!empty($this->menuConfig)) {
-			return $this->menuConfig;
+
+	function _companyName() {
+		if ($this->Session->check('BrwSite')) {
+			$this->companyName = $this->Session->read('BrwSite.Site.name');
+		} elseif (empty($this->companyName)) {
+			$this->companyName = '';
 		}
-		$menu = array();
-		$models = App::objects('model');
-		foreach($models as $model) {
-			$menu[$model] = $model;
-		}
-		return array('Menu' => $menu);
+		$this->set('companyName', $this->companyName);
 	}
 
 	/*

@@ -75,12 +75,38 @@ class CmsBehavior extends ModelBehavior {
 		$this->cmsConfigInit($Model);
 	}
 
+	function beforeFind($Model, $query) {
+		//var_dump($query['conditions']);
+		if ($site = Configure::read('currentSite')) {
+			if($this->_isSiteDependant($Model)) {
+				if (empty($query['conditions'])) {
+					$query['conditions'] = array();
+				}
+				if (is_array($query['conditions'])) {
+					$query['conditions'][] = array($Model->alias . '.site_id' => $site['id']);
+				}
+			}
+		}
+		return $query;
+	}
 
 	function afterFind($Model, $results, $primary) {
 		$results = $this->_addImagePaths($results, $Model);
 		$results = $this->_addFilePaths($results, $Model);
 		$results = $this->_addUrlView($results, $Model);
 		return $results;
+	}
+
+	function beforeSave($Model) {
+		if ($site = Configure::read('currentSite') and $this->_isSiteDependant($Model)) {
+			$Model->data[$Model->alias]['site_id'] = $site['id'];
+		}
+		return $Model->data;
+	}
+
+
+	function _isSiteDependant($Model) {
+		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]);
 	}
 
 
@@ -100,7 +126,6 @@ class CmsBehavior extends ModelBehavior {
 				$Model->brownieCmsConfig['parent'] = $keys[0];
 			}
 		}
-
 
 		if (!empty($Model->brownieCmsConfig)) {
 			$config = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
@@ -135,7 +160,12 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 
+		if ($this->_isSiteDependant($Model) and Configure::read('multiSitesModel')) {
+			$config['fields']['hide'][] = 'site_id';
+		}
+
 		$Model->brownieCmsConfig = $config;
+		//pr($Model->brownieCmsConfig);
 	}
 
 

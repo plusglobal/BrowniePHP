@@ -1,8 +1,6 @@
 <div id="home">
 <?php
-//echo '<h1>' . __d('brownie', 'Home', true) . '</h1>';
-
-foreach($menuSections as $section => $items){
+foreach ($brwMenu as $section => $items) {
 	echo '
 	<div class="section clearfix">
 	<h2>' . $section . '</h2>';
@@ -27,6 +25,5 @@ foreach($menuSections as $section => $items){
 	echo '
 	</div>';
 }
-
 ?>
 </div>
