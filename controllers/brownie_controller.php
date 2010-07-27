@@ -9,8 +9,7 @@ class BrownieController extends BrownieAppController {
 
 	function beforeFilter() {
 		if (!empty($this->data['BrwUser']) and !$this->BrwUser->find('first')) {
-			$this->BrwGroup->create();
-			$this->BrwGroup->save(array('name' => 'root'));
+			//$this->BrwGroup->create();$this->BrwGroup->save(array('name' => 'root'));
 			$this->BrwUser->create();
 			$this->BrwUser->save(array(
 				'email' => $this->data['BrwUser']['email'],
