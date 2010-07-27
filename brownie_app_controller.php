@@ -6,6 +6,7 @@ class BrownieAppController extends AppController {
 	var $helpers = array('Html', 'Session', 'Javascript');
 	var $uses = array('BrwUser');
 
+
 	function beforeFilter() {
 		$this->_authSettings();
 		$this->_multiSiteSettings();
