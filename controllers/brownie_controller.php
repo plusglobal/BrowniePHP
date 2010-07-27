@@ -14,7 +14,7 @@ class BrownieController extends BrownieAppController {
 			$this->BrwUser->save(array(
 				'email' => $this->data['BrwUser']['email'],
 				'password' => $this->Auth->password($this->data['BrwUser']['password']),
-				'brw_group_id' => $this->BrwGroup->id,
+				//'brw_group_id' => $this->BrwGroup->id,
 			));
 		}
 		parent::beforeFilter();
