@@ -24,11 +24,11 @@ echo $scripts_for_layout;
 	<div id="container">
 		<div id="header">
 			<h1>
-			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index'));?>
+			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index')) ?>
 			</h1>
 		</div>
 		<?php
-		if(!empty($authUser)){
+		if (!empty($authUser)) {
 			echo '
 			<div id="options-bar">
 				<p>' . sprintf(__d('brownie', 'User: %s', true), $authUser['email']) . '</p>
@@ -36,20 +36,19 @@ echo $scripts_for_layout;
 					<li class="home">'.$html->link(__d('brownie', 'Home', true),
 					array('controller' => 'brownie', 'action' => 'index')) . '</li>';
 
-					if($isUserRoot) {
-						echo '
-						<li class="users">' . $html->link(__d('brownie', 'Users', true),
-						array('controller' => 'contents', 'action' => 'index', 'BrwUser')) . '</li>
-						<li class="groups">' . $html->link(__d('brownie', 'Users groups', true),
-						array('controller' => 'contents', 'action' => 'index', 'BrwGroup')) . '</li>';
-					}
+					echo '
+					<li class="users">' . $html->link(__d('brownie', 'Users', true),
+					array('controller' => 'contents', 'action' => 'index', 'BrwUser')) . '</li>';
+					/*echo '
+					<li class="groups">' . $html->link(__d('brownie', 'Users groups', true),
+					array('controller' => 'contents', 'action' => 'index', 'BrwGroup')) . '</li>';*/
 
 					echo'
-					<li class="logout">'.$html->link(__d('brownie', 'Logout', true),
-					array('controller' => 'brownie', 'action' => 'logout')).'</li>
+					<li class="logout">' . $html->link(__d('brownie', 'Logout', true),
+					array('controller' => 'brownie', 'action' => 'logout')) . '</li>
 				</ul>
 			</div>
-			<div id="menu">'. $this->element('menu') . '</div>
+			<div id="menu">' . $this->element('menu') . '</div>
 			<div id="content">';
 			echo $session->flash();
 			echo $content_for_layout;

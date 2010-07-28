@@ -73,6 +73,10 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 				$params['after'] = $brwConfig['legends'][$key];
 			}
 
+			if (strstr($key, 'password')) {
+				$params['type'] = 'password';
+			}
+
 			echo $form->input($model . '.' . $key, $params);
 			if (in_array($key, $fckFields)){
 				echo $fck->load($model . '.' . Inflector::camelize($key), 'Brownie');

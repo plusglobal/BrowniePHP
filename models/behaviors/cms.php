@@ -76,7 +76,6 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function beforeFind($Model, $query) {
-		//var_dump($query['conditions']);
 		if ($site = Configure::read('currentSite')) {
 			if($this->_isSiteDependant($Model)) {
 				if (empty($query['conditions'])) {

@@ -23,16 +23,31 @@ class BrownieAppController extends AppController {
 		$this->Auth->fields = array('username'  => 'email', 'password'  => 'password');
 		$this->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
+		Configure::write('Auth.BrwUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
-		$this->set('isUserRoot', true);
+		$this->set('isUserRoot', $this->Session->read('Auth.BrwUser.root'));
 	}
 
 	function _multiSiteSettings() {
 		if ($multiSitesModel = Configure::read('multiSitesModel')) {
 			Controller::loadModel($multiSitesModel);
-			$this->set('sitesOptions', $this->BrwUser->sites($this->Session->read('Auth.BrwUser')));
-			Configure::write('currentSite', $this->Session->read('BrwSite.Site'));
+			$sitesOptions = $this->BrwUser->sites($this->Session->read('Auth.BrwUser'));
+			if ($this->Session->read('Auth.BrwUser.root')) {
+				Configure::write('currentSite', $this->Session->read('BrwSite.Site'));
+			} else {
+				if (count($sitesOptions) == 1) {
+					$siteId = array_shift(array_keys($sitesOptions));
+					Configure::write('currentSite', array_shift($this->{$multiSitesModel}->read(null, $siteId)));
+				} else {
+					if (in_array($this->Session->read('BrwSite.Site.id'), array_keys($sitesOptions))) {
+						Configure::write('currentSite', $this->Session->read('BrwSite.Site'));
+					} else {
+						Configure::write('currentSite', null);
+					}
+				}
+			}
+			$this->set('sitesOptions', $sitesOptions);
 		}
 	}
 
@@ -63,17 +78,20 @@ class BrownieAppController extends AppController {
 	}*/
 
 	function _menuConfig() {
+		$menu = array();
 		if	($this->_currentSite() and !empty($this->brwSiteMenu)) {
 			$menu = $this->brwSiteMenu;
-		} else if (!empty($this->brwMenu)) {
-			$menu = $this->brwMenu;
-		} else {
-			$menu = array();
-			$models = App::objects('model');
-			foreach($models as $model) {
-				$menu[$model] = $model;
+		} elseif($this->Session->read('Auth.BrwUser.root')) {
+			if (!empty($this->brwMenu)) {
+				$menu = $this->brwMenu;
+			} else {
+				$menu = array();
+				$models = App::objects('model');
+				foreach($models as $model) {
+					$menu[$model] = $model;
+				}
+				$menu = array(__d('brownie', 'Menu', true) => $menu);
 			}
-			$menu = array(__d('brownie', 'Menu', true) => $menu);
 		}
 
 		$this->set('brwMenu', $menu);
@@ -125,7 +143,64 @@ class BrownieAppController extends AppController {
 	}*/
 
 	function _checkPermissions($model, $action = 'view') {
+		//static $user, $User;
+		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'add_images', 'edit_image', 'edit_file', 'import'))) {
+			return false;
+		}
+
+		$Model = ClassRegistry::init($model);
+		$Model->Behaviors->attach('Brownie.Cms');
+		if (!empty($this->Content)) {
+			$actions = $Model->brownieCmsConfig['actions'];
+			if (!in_array($action, array('index', 'view')) and !$actions[$action]) {
+				return false;
+			}
+		}
+
+		if ($this->Session->read('Auth.BrwUser.root')) {
+			return true;
+		} else {
+			if ($model == 'BrwUser') {
+				switch ($action) {
+					case 'add': case 'delete':
+						return false;
+					break;
+					case 'index': case 'edit': case 'view':
+						return true;
+					break;
+				}
+			}
+		}
+
 		return true;
+
+		/*$User = ClassRegistry::init('BrwUser');
+		$User->Behaviors->attach('Containable');
+		$user = $User->find('first', array(
+			'conditions' => array('BrwUser.id' => $this->Session->read('BrwUser.id')),
+			'contain' => array('BrwGroup' => array('BrwPermission' => array('BrwModel')))
+		));
+		//pr($user);
+		$mapActions = array(
+			'index' => 'view',
+			'view' => 'view',
+			'delete' => 'delete',
+			'add_images' => 'edit',
+			'edit' => 'edit',
+		);
+
+		if (empty($user['BrwGroup']['BrwPermission'])) {
+			return false;
+		} else {
+			foreach ($user['BrwGroup']['BrwPermission'] as $permission) {
+				if ($model == $permission['BrwModel']['model']) {
+					return $permission[$mapActions[$action]];
+				}
+			}
+		}
+		*/
+		return false;
+
 	}
 
 	function arrayPermissions($model) {
