@@ -30,6 +30,7 @@ class CmsBehavior extends ModelBehavior {
 			'no_search' => array(),
 			'no_editor' => array(),
 			'virtual' => array(),
+			'conditional_hide' => array(),
 		),
 
 		'actions' => array(
@@ -315,9 +316,12 @@ class CmsBehavior extends ModelBehavior {
 				$r[$key]['description'] = $value['description'];
 				if (!empty($sizes[0])) {
 					if ($sizes[0] != end($sizes)) {
-						$paths['tag'] = '<a title="'.$value['description'].'" href="'.$paths['sizes'][end($sizes)].'" rel="brw_image_'.$value['record_id'].'"><img alt="'.$value['description'].'" src="'.$paths['sizes'][$sizes[0]].'" /></a>';
+						$paths['tag'] = '<a title="' . htmlspecialchars($value['description']) .
+							'" href="' . $paths['sizes'][end($sizes)] . '" rel="brw_image_' . $value['record_id'] .
+							'"><img alt="' . htmlspecialchars($value['description']) . '" src="' . $paths['sizes'][$sizes[0]] . '" /></a>';
 					} else {
-						$paths['tag'] = '<img alt="'.$value['description'].'" src="'.$paths['sizes'][$sizes[0]].'" />';
+						$paths['tag'] = '<img alt="' . htmlspecialchars($value['description']) .
+							'" src="' . $paths['sizes'][$sizes[0]] . '" />';
 					}
 				}
 			}
@@ -357,7 +361,8 @@ class CmsBehavior extends ModelBehavior {
 				'path' => $completePath,
 				'real_path' => WWW_ROOT . str_replace('/', DS, $relativePath),
 				'tag' => '
-					<a title="'.$value['description'].'" href="'.$completePath.'" class="BrwFile '.$extension.'">
+					<a title="' . htmlspecialchars($value['description']) . '" href="' . $completePath .
+						'" class="BrwFile '.$extension.'">
 						' . $value['description'] . '
 					</a>',
 				'force_download' => $forceDownloadUrl,
