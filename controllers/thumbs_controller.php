@@ -34,12 +34,15 @@ class ThumbsController extends BrownieAppController{
 		$phpThumb->config_cache_directory = WWW_ROOT . DS . 'uploads' . DS . 'thumbs';
 		$phpThumb->config_cache_disable_warning = true;
 		$phpThumb->cache_filename = $phpThumb->config_cache_directory . DS . $model . DS . $sizes . DS . $recordId . DS . $file;
-		$this->_makeDir($phpThumb->config_cache_directory, $model, $recordId, $sizes);
+		if (!mkdir($phpThumb->config_cache_directory . DS . $model . DS . $sizes. DS . $recordId, 0755, true)) {
+			$this->log('cant create dir on ' . __FILE__ . ' line ' . __LINE__);
+		}
 		$sizes = $this->_sizes($sizes, $phpThumb);
 
 		if (!is_file($phpThumb->cache_filename)) {
 			if ($phpThumb->GenerateThumbnail()) {
 				$phpThumb->RenderToFile($phpThumb->cache_filename);
+				chmod($phpThumb->cache_filename, 0755);
 			} else {
 				die('Failed: '.$phpThumb->error);
 			}
@@ -118,19 +121,5 @@ class ThumbsController extends BrownieAppController{
     }
 
 
-	function _makeDir($base, $model, $recordId, $sizes) {
-		if (!is_dir($base)) {
-			mkdir($base);
-		}
-		if (!is_dir($base . DS . $model)) {
-			mkdir($base . DS . $model);
-		}
-		if (!is_dir($base . DS . $model . DS . $sizes)) {
-			mkdir($base . DS . $model . DS . $sizes);
-		}
-		if (!is_dir($base . DS . $model . DS . $sizes . DS . $recordId)) {
-			mkdir($base . DS . $model . DS . $sizes. DS . $recordId);
-		}
-    }
 }
 
