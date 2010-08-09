@@ -27,7 +27,8 @@ class ContentsController extends BrownieAppController {
 		$this->Model->Behaviors->attach('Brownie.Cms');
 
 		$this->Model->brownieCmsConfig['actions'] = array_merge(
-			$this->Model->brownieCmsConfig['actions'], $this->arrayPermissions($this->Model->alias));
+			$this->Model->brownieCmsConfig['actions'], $this->arrayPermissions($this->Model->alias)
+		);
 
 		$brwConfig = $this->Model->brownieCmsConfig;
 		$schema = $this->Model->_schema;
@@ -384,6 +385,11 @@ class ContentsController extends BrownieAppController {
 		if (Configure::read('debug') and !method_exists($this->Model, 'brwImport')) {
 			$this->Session->setFlash(sprintf(__d('brownie', 'Warning: %s::brwImport() must be defined', true), $model));
 		}
+	}
+
+	function js_edit($model) {
+		$this->header('Content-type: text/javascript');
+		$this->layout = 'ajax';
 	}
 
 

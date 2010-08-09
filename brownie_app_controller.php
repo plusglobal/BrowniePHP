@@ -144,10 +144,13 @@ class BrownieAppController extends AppController {
 
 	function _checkPermissions($model, $action = 'view') {
 		//static $user, $User;
+		if ($action == 'js_edit') {
+			return true;
+		}
+
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'add_images', 'edit_image', 'edit_file', 'import'))) {
 			return false;
 		}
-
 		$Model = ClassRegistry::init($model);
 		$Model->Behaviors->attach('Brownie.Cms');
 		if (!empty($this->Content)) {

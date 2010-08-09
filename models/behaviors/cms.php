@@ -30,7 +30,7 @@ class CmsBehavior extends ModelBehavior {
 			'no_search' => array(),
 			'no_editor' => array(),
 			'virtual' => array(),
-			'conditional_hide' => array(),
+			'conditional' => array(),
 		),
 
 		'actions' => array(
@@ -162,6 +162,10 @@ class CmsBehavior extends ModelBehavior {
 
 		if ($this->_isSiteDependant($Model) and Configure::read('multiSitesModel')) {
 			$config['fields']['hide'][] = 'site_id';
+		}
+
+		if (!empty($config['fields']['conditional'])) {
+			$config['fields']['conditional'] = $this->_camelize($config['fields']['conditional']);
 		}
 
 		$Model->brownieCmsConfig = $config;
@@ -396,4 +400,17 @@ class CmsBehavior extends ModelBehavior {
 		return $results;
 	}
 
+	function _camelize($array) {
+		foreach($array as $key => $value) {
+			if (is_array($value)) {
+				$array[Inflector::camelize($key)] = $this->_camelize($value);
+			} else {
+				$array[Inflector::camelize($key)] = Inflector::camelize($value);
+			}
+			if($key != Inflector::camelize($key)) {
+				unset($array[$key]);
+			}
+		}
+		return $array;
+	}
 }
