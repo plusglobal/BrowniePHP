@@ -33,10 +33,13 @@ class ThumbsController extends BrownieAppController{
 		$phpThumb->config_temp_directory = ROOT . DS . APP_DIR . DS . 'tmp';
 		$phpThumb->config_cache_directory = WWW_ROOT . DS . 'uploads' . DS . 'thumbs';
 		$phpThumb->config_cache_disable_warning = true;
-		$phpThumb->cache_filename = $phpThumb->config_cache_directory . DS . $model . DS . $sizes . DS . $recordId . DS . $file;
-		if (!mkdir($phpThumb->config_cache_directory . DS . $model . DS . $sizes. DS . $recordId, 0755, true)) {
-			$this->log('cant create dir on ' . __FILE__ . ' line ' . __LINE__);
+		$uploadDir = $phpThumb->config_cache_directory . DS . $model . DS . $sizes. DS . $recordId;
+		if (!is_dir($uploadDir)) {
+			if (!mkdir($uploadDir, 0755, true)) {
+				$this->log('cant create dir on ' . __FILE__ . ' line ' . __LINE__);
+			}
 		}
+		$phpThumb->cache_filename = $uploadDir . DS . $file;
 		$sizes = $this->_sizes($sizes, $phpThumb);
 
 		if (!is_file($phpThumb->cache_filename)) {
