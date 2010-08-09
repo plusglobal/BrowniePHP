@@ -142,7 +142,7 @@ class BrownieAppController extends AppController {
 		return $menu;
 	}*/
 
-	function _checkPermissions($model, $action = 'view') {
+	function _checkPermissions($model, $action = 'view', $id = null) {
 		//static $user, $User;
 		if ($action == 'js_edit') {
 			return true;
@@ -161,6 +161,7 @@ class BrownieAppController extends AppController {
 		}
 
 		if ($this->Session->read('Auth.BrwUser.root')) {
+
 			return true;
 		} else {
 			if ($model == 'BrwUser') {

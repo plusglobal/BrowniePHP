@@ -5,6 +5,7 @@ class BrwUserBehavior extends ModelBehavior {
 	function setup($Model, $config = array()) {
 		$Model->brownieCmsConfig = $this-> _brwConfig($Model);
 		$Model->validate = $this->_validate($Model);
+
 		/*
 		$Model->bindModel(array('belongsTo' => array('BrwGroup')));
 		if ($multiSitesModel = Configure::read('multiSitesModel')) {
@@ -15,22 +16,22 @@ class BrwUserBehavior extends ModelBehavior {
 	function _brwConfig($Model) {
 		$defaultBrwConfig = array(
 			'fields' => array(
-				'no_edit' => array('last_login'),
+				'no_edit' => array('last_login', 'email'),
 				'no_add' => array('last_login'),
 				'no_view' => array('password'),
 				'virtual' => array('repeat_password' => array('after' => 'password')),
 				'hide' => array('brw_group_id', 'last_login'),
 			),
 			'names' => array(
-				'section' => 'Usuarios',
-				'plural' => 'Usuarios',
-				'singular' => 'Usuario',
+				'section' => __d('brownie', 'User', true),
+				'singular' => __d('brownie', 'User', true),
+				'plural' => __d('brownie', 'Users', true),
 			),
 			'paginate' => array(
 				'fields' => array('id', 'email', 'root'),
 			),
 			'legends' => array(
-				'password' => 'Leave blank for no change',
+				'password' => __d('brownie', 'Leave blank for no change', true),
 			),
 		);
 		if (!Configure::read('multiSitesModel')) {
@@ -46,18 +47,18 @@ class BrwUserBehavior extends ModelBehavior {
 		$defaultValidate = array(
 			'email' => array(
 				array(
+					'rule' => 'isUnique',
+					'message' =>  __d('brownie', 'Email already registered', true),
+				),
+				array(
 					'rule' => 'email',
-					'message' => __d('brownie', 'Email not valid', true),
+					'message' => __d('brownie', 'Email notd valid', true),
 				),
 				array(
 					'rule' => 'notEmpty',
 					'on' => 'create',
 					'required' => true,
 					'message' =>  __d('brownie', 'Email cannot be empty', true),
-				),
-				array(
-					'rule' => 'isUnique',
-					'message' =>  __d('brownie', 'Email already registered', true),
 				),
 			),
 			'repeat_password' => array(
@@ -73,6 +74,7 @@ class BrwUserBehavior extends ModelBehavior {
 			)
 		);
 		return Set::merge($defaultValidate, $Model->validate);
+
 	}
 
 

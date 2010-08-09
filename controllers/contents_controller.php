@@ -8,17 +8,17 @@ class ContentsController extends BrownieAppController {
 
 
 	function beforeFilter() {
-		if(!empty($this->params['pass'][0])) {
+		if (!empty($this->params['pass'][0])) {
 			$model = $this->params['pass'][0];
-		} elseif(!empty($this->data['Content']['model'])) {
+		} elseif (!empty($this->data['Content']['model'])) {
 			$model = $this->data['Content']['model'];
 		}
 
-		/*if(empty($model) or !$this->Content->modelExists($model)) {
+		/*if (empty($model) or !$this->Content->modelExists($model)) {
 			$this->cakeError('error404');
 		}*/
 
-		if(!$this->_checkPermissions($model, $this->params['action'])) {
+		if (!$this->_checkPermissions($model, $this->params['action'])) {
 			$this->cakeError('error404');
 		}
 
@@ -70,11 +70,11 @@ class ContentsController extends BrownieAppController {
 
 		$contain = array();
 
-		if($this->Content->getCmsConfig($this->Model, 'images')) {
+		if ($this->Content->getCmsConfig($this->Model, 'images')) {
 			$contain['BrwImage'] = array('order' => 'BrwImage.category_code, BrwImage.modified asc');
 		}
 
-		if($this->Content->getCmsConfig($this->Model, 'files')) {
+		if ($this->Content->getCmsConfig($this->Model, 'files')) {
 			$contain['BrwFile'] = array('order' => 'BrwFile.category_code, BrwFile.modified asc');
 		}
 
@@ -95,9 +95,9 @@ class ContentsController extends BrownieAppController {
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assoc_models = $pages = $names = array();
-		if(!empty($this->Model->hasMany)){
+		if (!empty($this->Model->hasMany)){
 			foreach($this->Model->hasMany as $key_model => $related_model){
-				if(!in_array($key_model, array('BrwImage', 'BrwFile'))){
+				if (!in_array($key_model, array('BrwImage', 'BrwFile'))){
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
 					//ClassRegistry::init($related_model['className']);
@@ -113,7 +113,7 @@ class ContentsController extends BrownieAppController {
 					*/
 					//$this->paginate['conditions'] = array($related_model['foreignKey'] => $id);
 
-					if($this->_checkPermissions($key_model)){
+					if ($this->_checkPermissions($key_model)){
 						$assoc_models[] = array(
 							'brwConfig' => $this->Content->getCmsConfig($AssocModel),
 							'model' => $key_model,
@@ -138,7 +138,7 @@ class ContentsController extends BrownieAppController {
 	function edit($model, $id = null) {
 
 		if (!empty($id)) {
-			if(!$this->Model->read(null, $id)){
+			if (!$this->Model->read(null, $id)){
 				$this->cakeError('error404');
 			}
 			$action = 'edit';
@@ -146,7 +146,7 @@ class ContentsController extends BrownieAppController {
 			$action = 'add';
 		}
 
-		if(!$this->_checkPermissions($model, $action)) {
+		if (!$this->_checkPermissions($model, $action)) {
 			$this->cakeError('error404');
 		}
 
@@ -161,9 +161,9 @@ class ContentsController extends BrownieAppController {
 			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model);
 
 			$this->Model->create();
-			if($this->Model->saveAll($this->data, array('validate' => 'first', 'model' => $this->Model->name))) {
+			if ($this->Model->saveAll($this->data, array('validate' => 'first', 'model' => $this->Model->name))) {
 				$this->Session->setFlash(__d('brownie', 'The information has been saved', true));
-				if(!empty($this->data['Content']['backto'])){
+				if (!empty($this->data['Content']['backto'])){
 					$this->redirect($this->data['Content']['backto']);
 				} else {
 					$this->redirect(array('action'=>'view', $this->Model->name, $this->Model->id));
@@ -178,7 +178,7 @@ class ContentsController extends BrownieAppController {
 		if (!empty($this->Model->belongsTo)) {
 			foreach($this->Model->belongsTo as $key_model => $related_model){
 				$AssocModel = $this->Model->$key_model;
-				if($this->Content->isTree($AssocModel)){
+				if ($this->Content->isTree($AssocModel)){
 					$relatedData = $AssocModel->generatetreelist();
 				} else {
 					$relatedData = $AssocModel->find('list');
@@ -255,7 +255,7 @@ class ContentsController extends BrownieAppController {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true));
 		}
 
-		if(env('HTTP_REFERER')) {
+		if (env('HTTP_REFERER')) {
 			$this->redirect(env('HTTP_REFERER'));
 		} else {
 			$this->redirect(array('action'=>'index'));
@@ -347,7 +347,7 @@ class ContentsController extends BrownieAppController {
 
 			if ($this->Model->BrwFile->save($this->data)) {
 				//pr($ret);
-				if($fileId){
+				if ($fileId){
 					$this->Session->setFlash(__d('brownie', 'The file was Successfully edited', true));
 				} else {
 					$this->Session->setFlash(__d('brownie', 'The file was Successfully added', true));
@@ -356,7 +356,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		if($fileId and empty($this->data)) {
+		if ($fileId and empty($this->data)) {
 			$this->data = $this->Model->BrwFile->find('first',
 				array('conditions' => array('BrwFile.id' => $fileId))
 			);
