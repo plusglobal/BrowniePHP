@@ -1,0 +1,449 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2010-08-09 14:32-0300\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: \brownie_app_controller.php:16
+msgid "Control panel"
+msgstr ""
+
+#: \brownie_app_controller.php:93
+msgid "Menu"
+msgstr ""
+
+#: \controllers\archivos_controller.php:14
+msgid "The file was deleted"
+msgstr ""
+
+#: \controllers\archivos_controller.php:16
+msgid "The file couldn't be deleted"
+msgstr ""
+
+#: \controllers\contents_controller.php:165
+msgid "The information has been saved"
+msgstr ""
+
+#: \controllers\contents_controller.php:172
+msgid "The information could not be saved. Please, check the error messages."
+msgstr ""
+
+#: \controllers\contents_controller.php:253
+msgid "Successful delete"
+msgstr ""
+
+#: \controllers\contents_controller.php:255
+msgid "Unable to delete"
+msgstr ""
+
+#: \controllers\contents_controller.php:296
+msgid "The image was Successfully edited"
+msgstr ""
+
+#: \controllers\contents_controller.php:298
+msgid "The image was Successfully added"
+msgstr ""
+
+#: \controllers\contents_controller.php:324
+msgid "%d images successfully added"
+msgstr ""
+
+#: \controllers\contents_controller.php:327
+msgid "None images uploaded. Please try again."
+msgstr ""
+
+#: \controllers\contents_controller.php:351
+msgid "The file was Successfully edited"
+msgstr ""
+
+#: \controllers\contents_controller.php:353
+msgid "The file was Successfully added"
+msgstr ""
+
+#: \controllers\contents_controller.php:378
+msgid "The import could not be done. Please try again"
+msgstr ""
+
+#: \controllers\contents_controller.php:386
+msgid "Warning: %s::brwImport() must be defined"
+msgstr ""
+
+#: \controllers\images_controller.php:14
+msgid "The image was deleted"
+msgstr ""
+
+#: \controllers\images_controller.php:16
+msgid "The image couldn't be deleted"
+msgstr ""
+
+#: \models\content.php:53
+msgid "Yes"
+msgstr ""
+
+#: \models\content.php:53
+msgid "No"
+msgstr ""
+
+#: \models\content.php:146
+msgid "This field is required"
+msgstr ""
+
+#: \models\content.php:157
+msgid "Please supply  a valid number"
+msgstr ""
+
+#: \models\content.php:166
+msgid "Please supply a valid email address"
+msgstr ""
+
+#: \models\content.php:173
+msgid "Incorrect value"
+msgstr ""
+
+#: \models\content.php:189
+msgid "Date not set"
+msgstr ""
+
+#: \models\content.php:193
+msgid "Invalid date"
+msgstr ""
+
+#: \models\content.php:199
+msgid "Datetime not set"
+msgstr ""
+
+#: \models\content.php:203
+msgid "Invalid datetime"
+msgstr ""
+
+#: \models\behaviors\brw_image.php:21
+#: \models\behaviors\file.php:20
+msgid "File too heavy. Maximum allowed: %s KB (%s MB)"
+msgstr ""
+
+#: \models\behaviors\brw_image.php:25
+msgid "Invalid image. Only jpg, gif and png are allowed."
+msgstr ""
+
+#: \models\behaviors\brw_user.php:50
+msgid "Email not valid"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:56
+msgid "Email cannot be empty"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:60
+msgid "Email already registered"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:67
+msgid "Password cannot be empty"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:71
+msgid "Passwords do not match"
+msgstr ""
+
+#: \models\behaviors\file.php:24
+msgid "Error in the upload, please try again."
+msgstr ""
+
+#: \views\brownie\index.ctp:12
+#: \views\contents\view.ctp:11;13;96;110;136;150
+msgid "Add"
+msgstr ""
+
+#: \views\brownie\index.ctp:17
+msgid "Index"
+msgstr ""
+
+#: \views\brownie\login.ctp:3;15
+msgid "Login"
+msgstr ""
+
+#: \views\brownie\login.ctp:6
+msgid "Welcome"
+msgstr ""
+
+#: \views\brownie\login.ctp:7
+msgid "Please provide your user and password."
+msgstr ""
+
+#: \views\brownie\login.ctp:13
+msgid "Username"
+msgstr ""
+
+#: \views\brownie\login.ctp:14
+msgid "Password"
+msgstr ""
+
+#: \views\contents\add_images.ctp:11
+#: \views\contents\edit_image.ctp:6
+msgid "Add image"
+msgstr ""
+
+#: \views\contents\add_images.ctp:33
+#: \views\contents\edit_image.ctp:21
+msgid "Image"
+msgstr ""
+
+#: \views\contents\add_images.ctp:38
+#: \views\contents\edit_image.ctp:30
+msgid "Image description"
+msgstr ""
+
+#: \views\contents\add_images.ctp:51
+#: \views\contents\edit_file.ctp:44
+#: \views\contents\edit_image.ctp:41
+#: \views\contents\import.ctp:17
+#: \views\elements\menu.ctp:23
+msgid "Submit"
+msgstr ""
+
+#: \views\contents\edit.ctp:18
+#: \views\elements\index.ctp:11
+msgid "Add :name_singular"
+msgstr ""
+
+#: \views\contents\edit.ctp:20
+msgid "Edit :name_singular"
+msgstr ""
+
+#: \views\contents\edit.ctp:50
+msgid "(No parent)"
+msgstr ""
+
+#: \views\contents\edit.ctp:135
+msgid "Description"
+msgstr ""
+
+#: \views\contents\edit.ctp:145
+msgid "These files are optional. You will be able to add more images later."
+msgstr ""
+
+#: \views\contents\edit.ctp:147
+msgid "These files will be added among to the rest. If you want to replace images click the \"Images\" button at the top"
+msgstr ""
+
+#: \views\contents\edit.ctp:151
+msgid "File %s"
+msgstr ""
+
+#: \views\contents\edit.ctp:155
+msgid "Description %d"
+msgstr ""
+
+#: \views\contents\edit.ctp:174
+msgid "Save"
+msgstr ""
+
+#: \views\contents\edit_file.ctp:6
+msgid "Add file"
+msgstr ""
+
+#: \views\contents\edit_file.ctp:21
+msgid "File"
+msgstr ""
+
+#: \views\contents\edit_file.ctp:25
+msgid "You can leave the file field blank if you don't want to change the file"
+msgstr ""
+
+#: \views\contents\edit_file.ctp:33
+msgid "File description"
+msgstr ""
+
+#: \views\contents\edit_image.ctp:23
+msgid "You can leave the Image field blank if you don't want to change the image"
+msgstr ""
+
+#: \views\contents\import.ctp:9
+msgid "Import :name_plural"
+msgstr ""
+
+#: \views\contents\view.ctp:19;21
+#: \views\elements\file.ctp:5
+#: \views\elements\image.ctp:5
+#: \views\elements\list.ctp:42
+#: \views\elements\tree_option.ctp:15
+msgid "Edit"
+msgstr ""
+
+#: \views\contents\view.ctp:27;29
+#: \views\elements\file.ctp:11
+#: \views\elements\image.ctp:11
+#: \views\elements\list.ctp:46
+#: \views\elements\tree_option.ctp:20
+msgid "Delete"
+msgstr ""
+
+#: \views\contents\view.ctp:30
+#: \views\elements\list.ctp:48
+#: \views\elements\tree_option.ctp:23
+msgid "Are you sure you want to delete # %s?"
+msgstr ""
+
+#: \views\contents\view.ctp:36;39
+msgid "View on line"
+msgstr ""
+
+#: \views\contents\view.ctp:47;49
+msgid "Previous"
+msgstr ""
+
+#: \views\contents\view.ctp:55;57
+msgid "Next"
+msgstr ""
+
+#: \views\elements\file.ctp:16
+msgid "Are you sure you want to delete this file?"
+msgstr ""
+
+#: \views\elements\image.ctp:16
+msgid "Are you sure you want to delete this image?"
+msgstr ""
+
+#: \views\elements\index.ctp:20
+msgid "Import"
+msgstr ""
+
+#: \views\elements\list.ctp:18
+msgid "Actions"
+msgstr ""
+
+#: \views\elements\list.ctp:38
+#: \views\elements\tree_option.ctp:10
+msgid "View"
+msgstr ""
+
+#: \views\elements\list.ctp:55
+msgid "No records"
+msgstr ""
+
+#: \views\elements\list.ctp:63
+msgid "previous"
+msgstr ""
+
+#: \views\elements\list.ctp:65
+msgid "next"
+msgstr ""
+
+#: \views\elements\list.ctp:72
+msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
+msgstr ""
+
+#: \views\elements\menu.ctp:18
+msgid "Sites"
+msgstr ""
+
+#: \views\elements\menu.ctp:22
+msgid "Choose site"
+msgstr ""
+
+#: \views\elements\translations.ctp:2
+msgid "Done"
+msgstr ""
+
+#: \views\elements\translations.ctp:3
+msgid "This field cannot be left blank"
+msgstr ""
+
+#: \views\elements\translations.ctp:6
+msgid "January"
+msgstr ""
+
+#: \views\elements\translations.ctp:7
+msgid "February"
+msgstr ""
+
+#: \views\elements\translations.ctp:8
+msgid "March"
+msgstr ""
+
+#: \views\elements\translations.ctp:9
+msgid "April"
+msgstr ""
+
+#: \views\elements\translations.ctp:10
+msgid "May"
+msgstr ""
+
+#: \views\elements\translations.ctp:11
+msgid "June"
+msgstr ""
+
+#: \views\elements\translations.ctp:12
+msgid "July"
+msgstr ""
+
+#: \views\elements\translations.ctp:13
+msgid "August"
+msgstr ""
+
+#: \views\elements\translations.ctp:14
+msgid "September"
+msgstr ""
+
+#: \views\elements\translations.ctp:15
+msgid "October"
+msgstr ""
+
+#: \views\elements\translations.ctp:16
+msgid "November"
+msgstr ""
+
+#: \views\elements\translations.ctp:17
+msgid "December"
+msgstr ""
+
+#: \views\elements\translations.ctp:20
+msgid "Brw Group"
+msgstr ""
+
+#: \views\elements\translations.ctp:21
+msgid "Brw Permission"
+msgstr ""
+
+#: \views\elements\translations.ctp:22
+msgid "Brw User"
+msgstr ""
+
+#: \views\elements\translations.ctp:23
+msgid "Brw Model"
+msgstr ""
+
+#: \views\elements\translations.ctp:24
+msgid "Add User"
+msgstr ""
+
+#: \views\elements\translations.ctp:25
+msgid "Root"
+msgstr ""
+
+#: \views\layouts\default.ctp:34
+msgid "User: %s"
+msgstr ""
+
+#: \views\layouts\default.ctp:36
+msgid "Home"
+msgstr ""
+
+#: \views\layouts\default.ctp:40
+msgid "Users"
+msgstr ""
+
+#: \views\layouts\default.ctp:47
+msgid "Logout"
+msgstr ""
+
