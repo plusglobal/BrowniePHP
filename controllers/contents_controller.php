@@ -181,7 +181,7 @@ class ContentsController extends BrownieAppController {
 				if ($this->Content->isTree($AssocModel)){
 					$relatedData = $AssocModel->generatetreelist();
 				} else {
-					$relatedData = $AssocModel->find('list');
+					$relatedData = $AssocModel->find('list', $related_model);
 				}
 				$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
 			}
@@ -190,7 +190,7 @@ class ContentsController extends BrownieAppController {
 
 		if (!empty($this->Model->hasAndBelongsToMany)) {
 			foreach ($this->Model->hasAndBelongsToMany as $key_model => $related_model) {
-				$related['hasAndBelongsToMany'][$key_model] = $this->Model->$key_model->find('list');
+				$related['hasAndBelongsToMany'][$key_model] = $this->Model->$key_model->find('list', $related_model);
 				$contain[] = $key_model;
 			}
 		}
