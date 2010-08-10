@@ -214,6 +214,10 @@ a{
 	background-color: #dddddd;
 }
 
+#menu select{
+	width: 200px;
+}
+
 #options-bar{
 	background: url(img/options-bar.gif) 0 0 repeat-x #fff;
 	height: 40px;
