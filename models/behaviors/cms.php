@@ -144,7 +144,7 @@ class CmsBehavior extends ModelBehavior {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwImage.model' => $Model->name)
-			))));
+			))), false);
 			foreach($config['images'] as $key => $value) {
 				$config['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
 			}
@@ -154,7 +154,7 @@ class CmsBehavior extends ModelBehavior {
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwFile.model' => $Model->name)
-			))));
+			))), false);
 			foreach($config['files'] as $key => $value) {
 				$config['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
 			}
