@@ -86,7 +86,7 @@ class Content extends BrownieAppModel{
 
 	function _fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
-		$fieldsConfig = $this->getCmsConfig($Model, 'fields');
+		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach($fieldsNotUsed as $field){
 			if (isset($schema[$field])) {

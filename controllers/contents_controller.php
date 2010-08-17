@@ -30,16 +30,53 @@ class ContentsController extends BrownieAppController {
 			$this->Model->brownieCmsConfig['actions'], $this->arrayPermissions($this->Model->alias)
 		);
 
+		parent::beforeFilter();
+
+		$noPermission = (
+			$siteModel = Configure::read('multiSitesModel')
+			and $this->Model->name != $siteModel
+			and $this->Model->name != 'BrwUser'
+			and !Configure::read('Auth.BrwUser.root')
+			and empty($this->Model->belongsTo[Configure::read('multiSitesModel')])
+		);
+		if ($noPermission) {
+			$this->cakeError('error404');
+		}
+
+		if (!Configure::read('Auth.BrwUser.root')) {
+			$this->Model->brownieCmsConfig['actions'] = Set::merge(
+				$this->Model->brownieCmsConfig['actions'],
+				$this->Model->brownieCmsConfig['actions_no_root']
+			);
+			$this->Model->brownieCmsConfig['fields'] = Set::merge(
+				$this->Model->brownieCmsConfig['fields'],
+				$this->Model->brownieCmsConfig['fields_no_root']
+			);
+		}
+	}
+
+	function beforeRender() {
 		$brwConfig = $this->Model->brownieCmsConfig;
 		$schema = $this->Model->_schema;
 		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
-
-		parent::beforeFilter();
+		parent::beforeRender();
 	}
 
-
 	function index() {
+		$filterSites = (
+			$siteModel = Configure::read('multiSitesModel')
+			and !Configure::read('Auth.BrwUser.root')
+			and $this->Model->name == $siteModel
+		);
+		if ($filterSites) {
+			$this->Model->brownieCmsConfig['paginate']['conditions'][] = array(
+				$this->Model->name . '.brw_user_id' => Configure::read('Auth.BrwUser.id')
+			);
+			$this->Model->brownieCmsConfig['actions']['add'] = false;
+			$this->Model->brownieCmsConfig['actions']['delete'] = false;
+		}
+
 		if (!$this->Content->isTree($this->Model)) {
 			$this->paginate = $this->Model->brownieCmsConfig['paginate'];
 			$records = $this->paginate($this->Model);
@@ -67,6 +104,20 @@ class ContentsController extends BrownieAppController {
 
 
 	function view($model, $id) {
+		$restricted = (
+			$siteModel = Configure::read('multiSitesModel')
+			and !Configure::read('Auth.BrwUser.root')
+			and $this->Model->name == $siteModel
+
+		);
+		if ($restricted) {
+			if($id != Configure::read('currentSite.id')) {
+				$this->cakeError('error404');
+			} else {
+				$this->Model->brownieCmsConfig['actions']['add'] = false;
+				$this->Model->brownieCmsConfig['actions']['delete'] = false;
+			}
+		}
 
 		$contain = array();
 
@@ -90,29 +141,23 @@ class ContentsController extends BrownieAppController {
 		}
 
 		$this->set('record', $this->Content->formatForView($record, $this->Model));
-		$this->set('neighbors', $this->Model->find('neighbors', array('field' => 'id', 'value' => $id)));
+
+		if(!$restricted){
+			$neighbors = $this->Model->find('neighbors', array('field' => 'id', 'value' => $id));
+		} else {
+			$neighbors = array();
+		}
+		$this->set('neighbors', $neighbors);
 
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assoc_models = $pages = $names = array();
-		if (!empty($this->Model->hasMany)){
+		if (!empty($this->Model->hasMany) and $this->Model->brownieCmsConfig['show_children']){
 			foreach($this->Model->hasMany as $key_model => $related_model){
 				if (!in_array($key_model, array('BrwImage', 'BrwFile'))){
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
-					//ClassRegistry::init($related_model['className']);
-					//$AssocModel->recursive = -1;
-					//$this->Content->cmsConfigInit($AssocModel);
 					$this->paginate[$AssocModel->name] = $this->Content->getCmsConfig($AssocModel, 'paginate');
-					//$paginator->__defaultModel = $AssocModel->name;
-					//$page = $this->pageForPagination($AssocModel->name);
-					/*
-					$this->paginate[$AssocModel->name]['page'] = $page;
-					$this->paginate['page'] = $page;
-					$pages[$AssocModel->name] = $page;
-					*/
-					//$this->paginate['conditions'] = array($related_model['foreignKey'] => $id);
-
 					if ($this->_checkPermissions($key_model)){
 						$assoc_models[] = array(
 							'brwConfig' => $this->Content->getCmsConfig($AssocModel),
@@ -126,16 +171,25 @@ class ContentsController extends BrownieAppController {
 				 }
 			}
 		}
-		//pr($assoc_models);
-		//$this->set('pages', $pages);
-
 		$this->set('assoc_models', $assoc_models);
 		$this->set('permissions', $permissions);
-
 	}
 
 
 	function edit($model, $id = null) {
+
+		$restricted = (
+			$siteModel = Configure::read('multiSitesModel')
+			and !Configure::read('Auth.BrwUser.root')
+			and $this->Model->name == $siteModel
+
+		);
+		if ($restricted) {
+			if($id != Configure::read('currentSite.id')) {
+				$this->cakeError('error404');
+			}
+		}
+
 
 		if (!empty($id)) {
 			if (!$this->Model->read(null, $id)){

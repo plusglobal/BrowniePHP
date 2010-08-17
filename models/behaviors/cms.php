@@ -33,6 +33,8 @@ class CmsBehavior extends ModelBehavior {
 			'conditional' => array(),
 		),
 
+		'fields_no_root' => array(),
+
 		'actions' => array(
 			'add' => true,
 			'edit' => true,
@@ -48,6 +50,8 @@ class CmsBehavior extends ModelBehavior {
 			'url_view' => array(),
 		),
 
+		'actions_no_root' => array(),
+
 		'images' => array(),
 
 		'files' => array(),
@@ -55,6 +59,8 @@ class CmsBehavior extends ModelBehavior {
 		'default' => array(),
 
 		'parent' => false,
+
+		'show_children' => true,
 
 	);
 

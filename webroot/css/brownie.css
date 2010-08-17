@@ -266,6 +266,10 @@ a{
 	background-image: url(img/users.gif);
 }
 
+#options-bar ul li.site a{
+	background-image: url(img/site.png);
+}
+
 
 /* desprolijo revisar despues */
 
@@ -1002,4 +1006,23 @@ div#content fieldset.comboselect select option {
 
 .csleft, .csright{
 	*width: 300px !important;
+}
+
+#siteSelector{
+	padding: 4px;
+	margin: 0;
+}
+#siteSelector h2{
+	margin: 0.6em 0;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+#siteSelector div.submit{
+	display: inline;
+	vertical-align: middle;
+}
+#siteSelector select{
+	width: 160px;
+	vertical-align: middle;
+	margin-right: 4px;
 }

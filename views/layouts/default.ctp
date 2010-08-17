@@ -27,37 +27,42 @@ echo $scripts_for_layout;
 			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index')) ?>
 			</h1>
 		</div>
-		<?php
-		if (!empty($authUser)) {
-			echo '
-			<div id="options-bar">
-				<p>' . sprintf(__d('brownie', 'User: %s', true), $authUser['email']) . '</p>
-				<ul>
-					<li class="home">'.$html->link(__d('brownie', 'Home', true),
-					array('controller' => 'brownie', 'action' => 'index')) . '</li>';
+		<?php if (!empty($authUser)) { ?>
+		<div id="options-bar">
+			<p id="welcome-user"><?php echo sprintf(__d('brownie', 'User: %s', true), $authUser['email']) ?></p>
+			<ul>
+				<li class="home"><?php echo $html->link(__d('brownie', 'Home', true),
+				array('controller' => 'brownie', 'action' => 'index')) ?></li>
+				<?php if($sitesModel = Configure::read('multiSitesModel') and $currentSite = Configure::read('currentSite.id')): ?>
+				<li class="site"><?php echo $html->link(__d('brownie', 'Sitio', true),
+				array('controller' => 'contents', 'action' => 'view', $sitesModel, $currentSite)) ?></li>
+				<?php endif ?>
 
-					echo '
-					<li class="users">' . $html->link(__d('brownie', 'Users', true),
-					array('controller' => 'contents', 'action' => 'index', 'BrwUser')) . '</li>';
-					/*echo '
-					<li class="groups">' . $html->link(__d('brownie', 'Users groups', true),
-					array('controller' => 'contents', 'action' => 'index', 'BrwGroup')) . '</li>';*/
+				<?php //parche provisorio para que un usuario no cambie el valor root
+				if(Configure::read('Auth.BrwUser.root')): ?>
+				<li class="users"><?php echo $html->link(__d('brownie', 'Users', true),
+				array('controller' => 'contents', 'action' => 'index', 'BrwUser')) ?></li>
+				<?php endif ?>
 
-					echo'
-					<li class="logout">' . $html->link(__d('brownie', 'Logout', true),
-					array('controller' => 'brownie', 'action' => 'logout')) . '</li>
-				</ul>
-			</div>
-			<div id="menu">' . $this->element('menu') . '</div>
-			<div id="content">';
+
+				<?php /*<li class="groups"><?php echo $html->link(__d('brownie', 'Users groups', true),
+				array('controller' => 'contents', 'action' => 'index', 'BrwGroup')) ?></li>*/ ?>
+				<li class="logout"><?php echo $html->link(__d('brownie', 'Logout', true),
+				array('controller' => 'brownie', 'action' => 'logout')) ?></li>
+			</ul>
+		</div>
+		<div id="menu"><?php echo $this->element('menu') ?></div>
+		<div id="content">
+			<?php
 			echo $session->flash();
 			echo $content_for_layout;
-			echo '</div>';
-		} else {
-			echo $session->flash();
-			echo $content_for_layout;
-		}
-		?>
+			?>
+		</div>
+	<?php
+	} else {
+		echo $session->flash();
+		echo $content_for_layout;
+	} ?>
 	</div>
 	<div id="footer">&nbsp;</div>
 </body>

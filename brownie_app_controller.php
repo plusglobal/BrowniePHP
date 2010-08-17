@@ -12,11 +12,14 @@ class BrownieAppController extends AppController {
 		$this->_multiSiteSettings();
 		//$this->_modelsToDb();
 		$this->_menuConfig();
-		$this->_companyName();
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 		parent::beforeFilter();
 	}
 
+	function beforeRender() {
+		$this->_companyName();
+		parent::beforeRender();
+	}
 
 	function _authSettings() {
 		$this->Auth->userModel = 'BrwUser';
