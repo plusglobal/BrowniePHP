@@ -155,9 +155,9 @@ a{
 	*margin-top: -23px;
 }
 
-#login  #flashMessage{
-	margin: 14px 0 0 64px;
-	width: 283px;
+#authMessage{
+	margin: 14px 0 0 14px;
+	width: 373px;
 	text-align: center;
 	color: #fff;
 	padding: 4px;
@@ -1025,4 +1025,8 @@ div#content fieldset.comboselect select option {
 	width: 160px;
 	vertical-align: middle;
 	margin-right: 4px;
+}
+
+.cake-sql-log{
+	*display: none;
 }

@@ -34,7 +34,10 @@ class BrownieController extends BrownieAppController {
 
 	function translations() {
 		$models = Configure::listObjects('model');
-		$out = '<?php ';
+		$out = '<?php
+		__("Login failed. Invalid username or password.");
+		__("You are not authorized to access that location.");
+		';
 		foreach($models as $model) {
 			$Model = ClassRegistry::init($model);
 			$out .= ' __("'.Inflector::humanize(Inflector::underscore($Model->name)).'"); ';
