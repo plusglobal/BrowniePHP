@@ -14,9 +14,9 @@ class ContentsController extends BrownieAppController {
 			$model = $this->data['Content']['model'];
 		}
 
-		/*if (empty($model) or !$this->Content->modelExists($model)) {
+		if (empty($model) or !$this->Content->modelExists($model)) {
 			$this->cakeError('error404');
-		}*/
+		}
 
 		if (!$this->_checkPermissions($model, $this->params['action'])) {
 			$this->cakeError('error404');

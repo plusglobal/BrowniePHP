@@ -6,7 +6,6 @@ class Content extends BrownieAppModel{
 
 	var $cmsConfig = array();
 
-
 	function modelExists($model) {
 		return in_array($model, Configure::listObjects('model'));
 	}
