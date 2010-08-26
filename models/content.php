@@ -43,6 +43,8 @@ class Content extends BrownieAppModel{
 		foreach($data[$Model->name] as $key => $value) {
 			if(in_array($key, $fieldsHide)){
 				unset($data[$Model->name][$key]);
+			} elseif(in_array($key, $fieldsConfig['code'])) {
+				$data[$Model->name][$key] = '<pre>' . htmlspecialchars($data[$Model->name][$key]) . '</pre>';
 			} elseif(isset($foreignKeys[$key])) {
 				$read = $Model->{$foreignKeys[$key]}->read(null, $data[$Model->name][$key]);
 				$data[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];

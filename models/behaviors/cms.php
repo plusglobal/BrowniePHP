@@ -31,6 +31,7 @@ class CmsBehavior extends ModelBehavior {
 			'no_editor' => array(),
 			'virtual' => array(),
 			'conditional' => array(),
+			'code' => array(),
 		),
 
 		'fields_no_root' => array(),
