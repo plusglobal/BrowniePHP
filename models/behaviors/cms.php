@@ -112,6 +112,19 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 
+	function afterDelete($Model) {
+		if (!empty($Model->BrwImage)) {
+			$Model->BrwImage->deleteAll(
+				array('model' => $Model->alias, 'record_id' => $Model->data[$Model->alias]['id']), false, true
+			);
+		}
+		if (!empty($Model->BrwFile)) {
+			$Model->BrwFile->deleteAll(
+				array('model' => $Model->alias, 'record_id' => $Model->data[$Model->alias]['id']), false, true
+			);
+		}
+	}
+
 	function _isSiteDependant($Model) {
 		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]);
 	}

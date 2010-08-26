@@ -60,6 +60,7 @@ class ContentsController extends BrownieAppController {
 		$schema = $this->Model->_schema;
 		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
+		//$this->log($this->Model);
 		parent::beforeRender();
 	}
 
@@ -137,7 +138,7 @@ class ContentsController extends BrownieAppController {
 
 
 		if (empty($record)) {
-			$this->cakeError('error404');
+			$this->redirect(array('action' => 'index', $model));
 		}
 
 		$this->set('record', $this->Content->formatForView($record, $this->Model));
@@ -302,12 +303,10 @@ class ContentsController extends BrownieAppController {
 			$this->cakeError('error404');
 		}
 
-		foreach ($this->Model->hasMany as $key => $Model) {
-
-		}
+		//foreach ($this->Model->hasMany as $key => $Model) {	}
 
 
-		if ($this->Model->delete($id)) {
+		if ($this->Model->delete($id, false)) {
 			$this->Session->setFlash(__d('brownie', 'Successful delete', true));
 		} else {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true));
