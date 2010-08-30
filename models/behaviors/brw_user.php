@@ -16,7 +16,7 @@ class BrwUserBehavior extends ModelBehavior {
 	function _brwConfig($Model) {
 		$defaultBrwConfig = array(
 			'fields' => array(
-				'no_edit' => array('last_login', 'email'),
+				'no_edit' => array('last_login', '_email'),
 				'no_add' => array('last_login'),
 				'no_view' => array('password'),
 				'virtual' => array('repeat_password' => array('after' => 'password')),
@@ -74,7 +74,6 @@ class BrwUserBehavior extends ModelBehavior {
 			)
 		);
 		return Set::merge($defaultValidate, $Model->validate);
-
 	}
 
 
@@ -92,12 +91,14 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	function beforeSave($Model) {
-		if (!empty($Model->data['BrwUser']['id']) and !empty($Model->data['BrwUser']['password'])) {
+		if (!empty($Model->data['BrwUser']['id']) and isset($Model->data['BrwUser']['password'])) {
 			if (Security::hash('', null, true) == $Model->data['BrwUser']['password']) {
 				unset($Model->data['BrwUser']['password']);
 				if (isset($Model->data['BrwUser']['repeat_password'])) {
 					unset($Model->data['BrwUser']['repeat_password']);
 				}
+			} else {
+				//$Model->data['BrwUser']['password'] = Security::hash($Model->data['BrwUser']['password'], null, true);
 			}
 		}
 		return $Model->data;
