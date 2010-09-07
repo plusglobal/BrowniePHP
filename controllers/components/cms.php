@@ -25,16 +25,16 @@ class CmsComponent extends Object{
 	function _attachAllUploads() {
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
-		$models = App::objects('model');
+		/*$models = App::objects('model');
 		foreach ($models as $model) {
 			if ($Model = ClassRegistry::getObject($model)) {
 				$this->_attachUploads($Model);
 			}
-		}
+		}*/
 	}
 
 
-	function _attachUploads($Model) {
+	/*function _attachUploads($Model) {
 		if (!empty($Model->brownieCmsConfig['images'])) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
@@ -50,6 +50,6 @@ class CmsComponent extends Object{
 			))), false);
 		}
 		$Model->Behaviors->attach('Brownie.Cms');
-	}
+	}*/
 
 }

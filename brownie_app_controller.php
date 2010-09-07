@@ -50,6 +50,9 @@ class BrownieAppController extends AppController {
 					}
 				}
 			}
+			if (!$this->Session->check('BrwSite.Site')) {
+				$this->Session->write('BrwSite.Site', Configure::read('currentSite'));
+			}
 			$this->set('sitesOptions', $sitesOptions);
 		}
 	}
@@ -96,7 +99,6 @@ class BrownieAppController extends AppController {
 				$menu = array(__d('brownie', 'Menu', true) => $menu);
 			}
 		}
-
 		$this->set('brwMenu', $menu);
 	}
 

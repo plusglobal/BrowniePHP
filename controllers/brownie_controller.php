@@ -28,6 +28,7 @@ class BrownieController extends BrownieAppController {
     }
 
     function logout() {
+    	$this->Session->delete('BrwSite');
         $this->redirect($this->Auth->logout());
     }
 
