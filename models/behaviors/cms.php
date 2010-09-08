@@ -63,6 +63,8 @@ class CmsBehavior extends ModelBehavior {
 
 		'show_children' => true,
 
+		'hide_children' => array('BrwImage', 'BrwFile'),
+
 	);
 
 	var $cmsConfigDefaultImage = array(

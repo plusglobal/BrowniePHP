@@ -155,10 +155,11 @@ class ContentsController extends BrownieAppController {
 		$assoc_models = $pages = $names = array();
 		if (!empty($this->Model->hasMany) and $this->Model->brownieCmsConfig['show_children']){
 			foreach($this->Model->hasMany as $key_model => $related_model){
-				if (!in_array($key_model, array('BrwImage', 'BrwFile'))){
+				if (!in_array($key_model, $this->Model->brownieCmsConfig['hide_children'])){
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
-					$this->paginate[$AssocModel->name] = Set::merge($related_model, $AssocModel->brownieCmsConfig['paginate']);
+					//$this->paginate[$AssocModel->name] = Set::merge($related_model, $AssocModel->brownieCmsConfig['paginate']);
+					$this->paginate[$AssocModel->name] = $AssocModel->brownieCmsConfig['paginate'];
 					if ($this->_checkPermissions($key_model)) {
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brownieCmsConfig,
