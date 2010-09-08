@@ -10,20 +10,6 @@ class Content extends BrownieAppModel{
 		return in_array($model, Configure::listObjects('model'));
 	}
 
-	function getCmsConfig($Model, $key = null) {
-		$config = $Model->brownieCmsConfig;
-		//pr($config);
-		if($key){
-			if(!empty($config[$key])){
-				return $config[$key];
-			} else {
-				return array();
-			}
-		} else {
-			return $config;
-		}
-	}
-
 	function formatForView($data, $Model) {
 		$out = array();
 		if(!empty($data[$Model->name])){
@@ -37,7 +23,7 @@ class Content extends BrownieAppModel{
 	}
 
 	function formatSingleForView($data, $Model) {
-		$fieldsConfig = $this->getCmsConfig($Model, 'fields');
+		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
 		$foreignKeys = $this->getForeignKeys($Model);
 		foreach($data[$Model->name] as $key => $value) {

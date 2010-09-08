@@ -99,9 +99,19 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function afterFind($Model, $results, $primary) {
+		if (!empty($Model->brownieCmsConfig['images'])) {
+			$results = $this->_addImagePaths($results, $Model);
+		}
+		if (!empty($Model->brownieCmsConfig['images'])) {
+			$results = $this->_addFilePaths($results, $Model);
+		}
+		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {
+			$results = $this->_addUrlView($results, $Model);
+		}/*
 		$results = $this->_addImagePaths($results, $Model);
 		$results = $this->_addFilePaths($results, $Model);
 		$results = $this->_addUrlView($results, $Model);
+		*/
 		return $results;
 	}
 
@@ -190,16 +200,16 @@ class CmsBehavior extends ModelBehavior {
 		}
 
 		$Model->brownieCmsConfig = $config;
-		//pr($Model->brownieCmsConfig);
 	}
 
 
 	function listableFields($Model) {
+		$listableTypes = array('integer', 'float', 'string', 'boolean', 'date', 'datetime', 'time', 'timestamp');
 		$fields = array();
 		$i = 0;
 		$schema = (array)$Model->_schema;
 		foreach($schema as $key => $values) {
-			if ($this->isListable($values['type'])) {
+			if (in_array($values['type'], $listableTypes)) {
 				$fields[] = $key;
 			}
 			if ($i++ > 5) {
@@ -207,12 +217,6 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 		return $fields;
-	}
-
-
-	function isListable($fieldType) {
-		$listableTypes = array('integer', 'float', 'string', 'boolean', 'date', 'datetime', 'time', 'timestamp');
-		return in_array($fieldType, $listableTypes);
 	}
 
 
@@ -242,7 +246,7 @@ class CmsBehavior extends ModelBehavior {
 
 	function fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
-		$fieldsConfig = $this->getCmsConfig($Model, 'fields');
+		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach($fieldsNotUsed as $field) {
 			if (!empty($schema[$field])) {
@@ -254,9 +258,6 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _addImagePaths($r, $Model) {
-		if (!is_array($r)) {
-			return $r;
-		}
 		foreach ($r as $key => $value) {
 			if ($key === 'BrwImage') {
 				$thisModel = $Model;
@@ -265,7 +266,11 @@ class CmsBehavior extends ModelBehavior {
 				}
 				$r[$key] = $this->_addBrwImagePaths($value, $thisModel);
 			} else {
-				$r[$key] = $this->_addImagePaths($value, $Model);
+				if(is_array($value)) {
+					$r[$key] = $this->_addImagePaths($value, $Model);
+				} else {
+					$r[$key] = $value;
+				}
 			}
 		}
 		return $r;
@@ -273,9 +278,6 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _addFilePaths($r, $Model) {
-		if (!is_array($r)) {
-			return $r;
-		}
 		foreach($r as $key => $value) {
 			if ($key === 'BrwFile') {
 				$thisModel = $Model;
@@ -284,7 +286,11 @@ class CmsBehavior extends ModelBehavior {
 				}
 				$r[$key] = $this->_addBrwFilePaths($value, $thisModel);
 			} else {
-				$r[$key] = $this->_addFilePaths($value, $Model);
+				if(is_array($value)) {
+					$r[$key] = $this->_addFilePaths($value, $Model);
+				} else {
+					$r[$key] = $value;
+				}
 			}
 		}
 		return $r;

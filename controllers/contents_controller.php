@@ -122,11 +122,11 @@ class ContentsController extends BrownieAppController {
 
 		$contain = array();
 
-		if ($this->Content->getCmsConfig($this->Model, 'images')) {
+		if ($this->Model->brownieCmsConfig['images']) {
 			$contain['BrwImage'] = array('order' => 'BrwImage.category_code, BrwImage.modified asc');
 		}
 
-		if ($this->Content->getCmsConfig($this->Model, 'files')) {
+		if ($this->Model->brownieCmsConfig['files']) {
 			$contain['BrwFile'] = array('order' => 'BrwFile.category_code, BrwFile.modified asc');
 		}
 
@@ -158,10 +158,10 @@ class ContentsController extends BrownieAppController {
 				if (!in_array($key_model, array('BrwImage', 'BrwFile'))){
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
-					$this->paginate[$AssocModel->name] = $this->Content->getCmsConfig($AssocModel, 'paginate');
-					if ($this->_checkPermissions($key_model)){
+					$this->paginate[$AssocModel->name] = Set::merge($related_model, $AssocModel->brownieCmsConfig['paginate']);
+					if ($this->_checkPermissions($key_model)) {
 						$assoc_models[] = array(
-							'brwConfig' => $this->Content->getCmsConfig($AssocModel),
+							'brwConfig' => $AssocModel->brownieCmsConfig,
 							'model' => $key_model,
 							'records' => $this->Content->formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
 							'foreignKeyValue' => $related_model['foreignKey'] . ':' . $id,
@@ -255,11 +255,11 @@ class ContentsController extends BrownieAppController {
 		}
 		$this->set('related', $related);
 
-		if ($this->Content->getCmsConfig($this->Model, 'images')) {
+		if ($this->Model->brownieCmsConfig['images']) {
 			$contain[] = 'BrwImage';
 		}
 
-		if ($this->Content->getCmsConfig($this->Model, 'files')) {
+		if ($this->Model->brownieCmsConfig['files']) {
 			$contain[] = 'BrwFile';
 		}
 
@@ -336,7 +336,6 @@ class ContentsController extends BrownieAppController {
 
 	function edit_image($model = null, $recordId = null, $categoryCode = null, $imageId = null) {
 		if (!empty($this->data)) {
-			//pr($this->data);
 			if (!$categoryCode){
 				$categoryCode = $this->data['BrwImage']['category_code'];
 			}
@@ -348,7 +347,6 @@ class ContentsController extends BrownieAppController {
 			}
 
 			if ($this->Model->BrwImage->save($this->data)) {
-				//pr($ret);
 				if ($imageId){
 					$this->Session->setFlash(__d('brownie', 'The image was Successfully edited', true));
 				} else {
@@ -391,7 +389,6 @@ class ContentsController extends BrownieAppController {
 	function edit_file($model = null, $recordId = null, $categoryCode = null, $fileId = null) {
 
 		if (!empty($this->data)) {
-			//pr($this->data);
 			if (!$categoryCode){
 				$categoryCode = $this->data['BrwFile']['category_code'];
 			}
@@ -403,7 +400,6 @@ class ContentsController extends BrownieAppController {
 			}
 
 			if ($this->Model->BrwFile->save($this->data)) {
-				//pr($ret);
 				if ($fileId){
 					$this->Session->setFlash(__d('brownie', 'The file was Successfully edited', true));
 				} else {
