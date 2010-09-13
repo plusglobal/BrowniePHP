@@ -338,7 +338,6 @@ class CmsBehavior extends ModelBehavior {
 						$paths['sizes'][$size] = Router::url(array('plugin' => 'brownie', 'controller' => 'thumbs',
 							'action' => 'view', $value['model'], $value['record_id'], $size, $value['name']));
 					}
-					//$paths['sizes'][] = $paths['sizes'][$size];
 				}
 				$value['alt'] = $value['description'];
 				if (empty($value['description'])) {
@@ -447,18 +446,27 @@ class CmsBehavior extends ModelBehavior {
 		if (!empty($Model->brownieCmsConfig['images'])) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
-				'conditions' => array('BrwImage.model' => $Model->name),
+				'conditions' => array('BrwImage.model' => $Model->alias),
+				'dependent' => true,
+			))), false);
+			$Model->BrwImage->bindModel(array('belongsTo' => array($Model->alias => array(
+				'foreignKey' => 'record_id',
+				'conditions' => array('BrwImage.model' => $Model->alias),
 				'dependent' => true,
 			))), false);
 		}
 		if (!empty($Model->brownieCmsConfig['files'])) {
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
-				'conditions' => array('BrwFile.model' => $Model->name),
+				'conditions' => array('BrwFile.model' => $Model->alias),
+				'dependent' => true,
+			))), false);
+			$Model->BrwFile->bindModel(array('belongsTo' => array($Model->alias => array(
+				'foreignKey' => 'record_id',
+				'conditions' => array('BrwFile.model' => $Model->alias),
 				'dependent' => true,
 			))), false);
 		}
-		//$Model->Behaviors->attach('Brownie.Cms');
 	}
 
 }
