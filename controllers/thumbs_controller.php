@@ -43,6 +43,7 @@ class ThumbsController extends BrownieAppController{
 		$sizes = $this->_sizes($sizes, $phpThumb);
 
 		if (!is_file($phpThumb->cache_filename)) {
+			ini_set('memory_limit', '128M');
 			if ($phpThumb->GenerateThumbnail()) {
 				$phpThumb->RenderToFile($phpThumb->cache_filename);
 				chmod($phpThumb->cache_filename, 0755);
