@@ -107,9 +107,12 @@ class BrwImageBehavior extends ModelBehavior {
 	}
 
 	function beforeDelete($BrwImage) {
-		$image = array_shift($BrwImage->findById($BrwImage->id));
+		$image = $BrwImage->read();
+		$image = array_shift($image);
 		$this->_deleteFiles($image['model'], $image['record_id'], $image['name']);
 	}
+
+
 
 
 	function _deleteFiles($model, $record, $filename) {

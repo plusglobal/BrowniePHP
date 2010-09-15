@@ -31,6 +31,9 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 			$params = array();
 			if (!empty($related['belongsTo'][$key])) {
 				$params = array('type' => 'select', 'options' => $related['belongsTo'][$key]);
+				if ($schema[$key]['null']) {
+					$params['empty'] = '- ' . __d('brownie', 'None', true);
+				}
 				if (!empty($this->params['named'][$key])) {
 					$params['selected'] = $this->params['named'][$key];
 				}

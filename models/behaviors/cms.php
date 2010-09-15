@@ -87,13 +87,14 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function beforeFind($Model, $query) {
-		if ($site = Configure::read('currentSite')) {
+		if ($site = Configure::read('currentSite') and !in_array($Model->name, array('BrwImage', 'BrwFile'))) {
 			if($this->_isSiteDependant($Model)) {
 				if (empty($query['conditions'])) {
 					$query['conditions'] = array();
 				}
 				if (is_array($query['conditions'])) {
-					$query['conditions'][] = array($Model->alias . '.site_id' => $site['id']);
+					$foreignKey = $Model->belongsTo[Configure::read('multiSitesModel')]['foreignKey'];
+					$query['conditions'][$Model->alias . '.' . $foreignKey] = $site['id'];
 				}
 			}
 		}
@@ -109,11 +110,7 @@ class CmsBehavior extends ModelBehavior {
 		}
 		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {
 			$results = $this->_addUrlView($results, $Model);
-		}/*
-		$results = $this->_addImagePaths($results, $Model);
-		$results = $this->_addFilePaths($results, $Model);
-		$results = $this->_addUrlView($results, $Model);
-		*/
+		}
 		return $results;
 	}
 
