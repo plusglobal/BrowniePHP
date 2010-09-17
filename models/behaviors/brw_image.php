@@ -39,7 +39,7 @@ class BrwImageBehavior extends ModelBehavior {
 				break;
 			}
 		} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
-			$BrwImage->data['BrwImage']['name'] = end(explode('/', $BrwImage->data['BrwImage']['file']));
+			$BrwImage->data['BrwImage']['name'] = end(explode(DS, $BrwImage->data['BrwImage']['file']));
 			if ($BrwImage->data['BrwImage']['file'][0] == '/') {
 				$BrwImage->data['BrwImage']['file'] = substr($BrwImage->data['BrwImage']['file'], 1);
 			}
@@ -61,10 +61,10 @@ class BrwImageBehavior extends ModelBehavior {
 		if (empty($BrwImage->data['BrwImage']['name'])) {
 			return false;
 		}
+		return true;
 	}
 
 	function afterSave($BrwImage, $created) {
-
 		$file_changed = !empty($BrwImage->data['BrwImage']['file']);
 		if ($file_changed) {
 			$model = $BrwImage->data['BrwImage']['model'];
@@ -116,9 +116,15 @@ class BrwImageBehavior extends ModelBehavior {
 
 
 	function _deleteFiles($model, $record, $filename) {
-		$filePath = WWW_ROOT . 'uploads' . DS . $model . DS . $record . DS . $filename;
-		if(is_file($filePath)) {
+		$baseFilePath = WWW_ROOT . 'uploads' . DS . $model . DS . $record;
+		$filePath = $baseFilePath . DS . $filename;
+		if (is_file($filePath)) {
 			unlink($filePath);
+		}
+		if (is_dir($baseFilePath)) {
+			if (count(scandir($baseFilePath)) <= 2) {
+				rmdir($baseFilePath);
+			}
 		}
 		$baseCacheDir = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $model;
 		if(is_dir($baseCacheDir)) {
