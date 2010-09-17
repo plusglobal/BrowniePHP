@@ -27,21 +27,23 @@ class BrwImageBehavior extends ModelBehavior {
 			),
 		);
 		$BrwImage->data['BrwImage']['name'] = null;
-		if (is_array($BrwImage->data['BrwImage']['file'])) {
-			//the image was uploaded
-			switch ($BrwImage->data['BrwImage']['file']['error']) {
-				case 0:
-					$BrwImage->data['BrwImage']['name'] = $BrwImage->data['BrwImage']['file']['name'];
-					$BrwImage->data['BrwImage']['file'] = $BrwImage->data['BrwImage']['file']['tmp_name'];
-				break;
-				case 4:
-					$BrwImage->data['BrwImage']['file'] = '';
-				break;
-			}
-		} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
-			$BrwImage->data['BrwImage']['name'] = end(explode(DS, $BrwImage->data['BrwImage']['file']));
-			if ($BrwImage->data['BrwImage']['file'][0] == '/') {
-				$BrwImage->data['BrwImage']['file'] = substr($BrwImage->data['BrwImage']['file'], 1);
+		if (!empty($BrwImage->data['BrwImage']['file'])) {
+			if (is_array($BrwImage->data['BrwImage']['file'])) {
+				//the image was uploaded
+				switch ($BrwImage->data['BrwImage']['file']['error']) {
+					case 0:
+						$BrwImage->data['BrwImage']['name'] = $BrwImage->data['BrwImage']['file']['name'];
+						$BrwImage->data['BrwImage']['file'] = $BrwImage->data['BrwImage']['file']['tmp_name'];
+					break;
+					case 4:
+						$BrwImage->data['BrwImage']['file'] = '';
+					break;
+				}
+			} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
+				$BrwImage->data['BrwImage']['name'] = end(explode(DS, $BrwImage->data['BrwImage']['file']));
+				if ($BrwImage->data['BrwImage']['file'][0] == '/') {
+					$BrwImage->data['BrwImage']['file'] = substr($BrwImage->data['BrwImage']['file'], 1);
+				}
 			}
 		}
 	}
@@ -69,18 +71,18 @@ class BrwImageBehavior extends ModelBehavior {
 		if ($file_changed) {
 			$model = $BrwImage->data['BrwImage']['model'];
 			$source = $BrwImage->data['BrwImage']['file'];
-			$dest_dir = 'uploads/' . $model . '/' . $BrwImage->data['BrwImage']['record_id'];
+			$dest_dir = WWW_ROOT . 'uploads' . DS . $model . DS . $BrwImage->data['BrwImage']['record_id'];
+			$dest =  $dest_dir . DS . $BrwImage->data['BrwImage']['name'];
+			$updating = !empty($BrwImage->data['BrwImage']['id']);
+			if ($updating and $file_changed) {
+				$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
+			}
 			if (!is_dir($dest_dir)) {
 				if (!mkdir($dest_dir, 0777, true)) {
 					$this->log('Brownie CMS: unable to create dir ' . $dest_dir);
 				} else {
 					chmod($dest_dir, 0777);
 				}
-			}
-			$dest =  $dest_dir . '/' . $BrwImage->data['BrwImage']['name'];
-			$updating = !empty($BrwImage->data['BrwImage']['id']);
-			if ($updating and $file_changed) {
-				$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
 			}
 			if ($this->_copy($BrwImage, $source, $dest)) {
 				chmod($dest, 0777);
@@ -91,9 +93,9 @@ class BrwImageBehavior extends ModelBehavior {
 	function _copy($BrwImage, $source, $dest) {
 		$newDest = $dest;
 		while (is_file($newDest)) {
-			$parts = explode('/', $newDest);
+			$parts = explode(DS, $newDest);
 			$file = '_' . array_pop($parts);
-			$newDest = join('/', $parts) . '/' . $file;
+			$newDest = join(DS, $parts) . DS . $file;
 		}
 		if (copy($source, $newDest)) {
 			if($newDest != $dest) {
