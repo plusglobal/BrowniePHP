@@ -52,7 +52,7 @@ class BrwUserBehavior extends ModelBehavior {
 				),
 				array(
 					'rule' => 'email',
-					'message' => __d('brownie', 'Email notd valid', true),
+					'message' => __d('brownie', 'Email not valid', true),
 				),
 				array(
 					'rule' => 'notEmpty',

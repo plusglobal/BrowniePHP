@@ -34,7 +34,7 @@ echo $scripts_for_layout;
 				<li class="home"><?php echo $html->link(__d('brownie', 'Home', true),
 				array('controller' => 'brownie', 'action' => 'index')) ?></li>
 				<?php if($sitesModel = Configure::read('multiSitesModel') and $currentSite = Configure::read('currentSite.id')): ?>
-				<li class="site"><?php echo $html->link(__d('brownie', 'Sitio', true),
+				<li class="site"><?php echo $html->link(__d('brownie', 'Site', true),
 				array('controller' => 'contents', 'action' => 'view', $sitesModel, $currentSite)) ?></li>
 				<?php endif ?>
 

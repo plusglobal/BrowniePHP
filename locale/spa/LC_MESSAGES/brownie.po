@@ -5,19 +5,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-08-09 14:32-0300\n"
-"PO-Revision-Date: 2010-08-09 14:34-0300\n"
+"POT-Creation-Date: 2010-09-20 11:53-0300\n"
+"PO-Revision-Date: 2010-09-20 11:53-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: \brownie_app_controller.php:16
+#: \brownie_app_controller.php:15
 msgid "Control panel"
 msgstr "Panel de control"
 
-#: \brownie_app_controller.php:93
+#: \brownie_app_controller.php:99
 msgid "Menu"
 msgstr "Menú"
 
@@ -29,99 +29,99 @@ msgstr "El archivo fue eliminado"
 msgid "The file couldn't be deleted"
 msgstr "El archivo no ha podido eliminarse"
 
-#: \controllers\contents_controller.php:165
+#: \controllers\contents_controller.php:221
 msgid "The information has been saved"
 msgstr "La información ha sido guardada"
 
-#: \controllers\contents_controller.php:172
+#: \controllers\contents_controller.php:228
 msgid "The information could not be saved. Please, check the error messages."
 msgstr "La información no ha podido guardarse. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:253
+#: \controllers\contents_controller.php:311
 msgid "Successful delete"
 msgstr "Eliminación exitosa"
 
-#: \controllers\contents_controller.php:255
+#: \controllers\contents_controller.php:313
 msgid "Unable to delete"
 msgstr "No se ha podido eliminar"
 
-#: \controllers\contents_controller.php:296
+#: \controllers\contents_controller.php:352
 msgid "The image was Successfully edited"
 msgstr "La imagen fue modificada con éxito"
 
-#: \controllers\contents_controller.php:298
+#: \controllers\contents_controller.php:354
 msgid "The image was Successfully added"
 msgstr "La imagen fue agregada con éxito"
 
-#: \controllers\contents_controller.php:324
+#: \controllers\contents_controller.php:380
 msgid "%d images successfully added"
 msgstr "%d imágenes agregadas exitosamente"
 
-#: \controllers\contents_controller.php:327
+#: \controllers\contents_controller.php:383
 msgid "None images uploaded. Please try again."
 msgstr "No se han subido imágenes. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:351
+#: \controllers\contents_controller.php:405
 msgid "The file was Successfully edited"
 msgstr "El archivo fue modificado con éxito"
 
-#: \controllers\contents_controller.php:353
+#: \controllers\contents_controller.php:407
 msgid "The file was Successfully added"
 msgstr "El archivo fue agregado con éxito"
 
-#: \controllers\contents_controller.php:378
+#: \controllers\contents_controller.php:432
 msgid "The import could not be done. Please try again"
 msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:386
+#: \controllers\contents_controller.php:440
 msgid "Warning: %s::brwImport() must be defined"
 msgstr "Atención: %s::brwImport() debe estar definida"
 
-#: \controllers\images_controller.php:14
+#: \controllers\images_controller.php:10
 msgid "The image was deleted"
 msgstr "La imagen fue eliminada"
 
-#: \controllers\images_controller.php:16
+#: \controllers\images_controller.php:12
 msgid "The image couldn't be deleted"
 msgstr "La imagen no ha podido eliminarse"
 
-#: \models\content.php:53
+#: \models\content.php:40
 msgid "Yes"
 msgstr "Sí"
 
-#: \models\content.php:53
+#: \models\content.php:40
 msgid "No"
 msgstr "No"
 
-#: \models\content.php:146
+#: \models\content.php:133
 msgid "This field is required"
 msgstr "Campo requerido"
 
-#: \models\content.php:157
+#: \models\content.php:144
 msgid "Please supply  a valid number"
 msgstr "Número no válido"
 
-#: \models\content.php:166
+#: \models\content.php:153
 msgid "Please supply a valid email address"
 msgstr "addDirección de email no válida"
 
-#: \models\content.php:173
+#: \models\content.php:160
 msgid "Incorrect value"
 msgstr "Valor incorrecto"
 
-#: \models\content.php:189
+#: \models\content.php:176
 msgid "Date not set"
 msgstr "Fecha no establecida"
 
-#: \models\content.php:193
+#: \models\content.php:180
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
-#: \models\content.php:199
+#: \models\content.php:186
 msgid "Datetime not set"
 msgstr "Fecha/hora no establecida"
 
-#: \models\content.php:203
+#: \models\content.php:190
 msgid "Invalid datetime"
 msgstr "Fecha/hora no válida"
 
@@ -134,23 +134,36 @@ msgstr "Archivo muy pesado. Máximo permitido: %s KB (%s MB)"
 msgid "Invalid image. Only jpg, gif and png are allowed."
 msgstr "Imagen no válida. Sólo se permite jpg, gif y png."
 
-#: \models\behaviors\brw_user.php:50
-msgid "Email not valid"
-msgstr "Email no válido"
+#: \models\behaviors\brw_user.php:26;27
+msgid "User"
+msgstr "Usuario"
 
-#: \models\behaviors\brw_user.php:56
-msgid "Email cannot be empty"
-msgstr "Email no puede estar vacío"
+#: \models\behaviors\brw_user.php:28
+#: \views\layouts\default.ctp:43
+msgid "Users"
+msgstr "Usuarios"
 
-#: \models\behaviors\brw_user.php:60
+#: \models\behaviors\brw_user.php:34
+msgid "Leave blank for no change"
+msgstr "Dejar en blanco para no cambiar"
+
+#: \models\behaviors\brw_user.php:51
 msgid "Email already registered"
 msgstr "Email ya registrado"
 
-#: \models\behaviors\brw_user.php:67
+#: \models\behaviors\brw_user.php:55
+msgid "Email not valid"
+msgstr "Email no válido"
+
+#: \models\behaviors\brw_user.php:61
+msgid "Email cannot be empty"
+msgstr "Email no puede estar vacío"
+
+#: \models\behaviors\brw_user.php:68
 msgid "Password cannot be empty"
 msgstr "Contraseña no puede estar vacía"
 
-#: \models\behaviors\brw_user.php:71
+#: \models\behaviors\brw_user.php:72
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
@@ -206,7 +219,6 @@ msgstr "Descripción de la imagen"
 #: \views\contents\edit_file.ctp:44
 #: \views\contents\edit_image.ctp:41
 #: \views\contents\import.ctp:17
-#: \views\elements\menu.ctp:23
 msgid "Submit"
 msgstr "Enviar"
 
@@ -219,31 +231,35 @@ msgstr "Agregar :name_singular"
 msgid "Edit :name_singular"
 msgstr "Editar :name_singular"
 
-#: \views\contents\edit.ctp:50
+#: \views\contents\edit.ctp:36
+msgid "None"
+msgstr "Ninguno"
+
+#: \views\contents\edit.ctp:54
 msgid "(No parent)"
 msgstr "(Sin padre)"
 
-#: \views\contents\edit.ctp:135
+#: \views\contents\edit.ctp:140
 msgid "Description"
 msgstr "Descripción"
 
-#: \views\contents\edit.ctp:145
+#: \views\contents\edit.ctp:150
 msgid "These files are optional. You will be able to add more images later."
 msgstr "Estos archivos son opcionales. Podrás agregar más archivos después."
 
-#: \views\contents\edit.ctp:147
+#: \views\contents\edit.ctp:152
 msgid "These files will be added among to the rest. If you want to replace images click the \"Images\" button at the top"
 msgstr "Estos archivo serán agregados con los demás. Si quiers reemplazar achivos haz click en el botón \"Archivos\""
 
-#: \views\contents\edit.ctp:151
+#: \views\contents\edit.ctp:156
 msgid "File %s"
 msgstr "Archivo %s"
 
-#: \views\contents\edit.ctp:155
+#: \views\contents\edit.ctp:160
 msgid "Description %d"
 msgstr "Descripción %d"
 
-#: \views\contents\edit.ctp:174
+#: \views\contents\edit.ctp:179
 msgid "Save"
 msgstr "Guardar"
 
@@ -342,13 +358,13 @@ msgstr "siguiente"
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr "Página %page% de %pages%, mostrando %current% :name_plural de un total de %count%"
 
-#: \views\elements\menu.ctp:18
-msgid "Sites"
-msgstr "Sitios"
-
-#: \views\elements\menu.ctp:22
+#: \views\elements\menu.ctp:19;25
 msgid "Choose site"
 msgstr "Elegir sitio"
+
+#: \views\elements\menu.ctp:27
+msgid "Go"
+msgstr "Ir"
 
 #: \views\elements\translations.ctp:2
 msgid "Done"
@@ -430,241 +446,344 @@ msgstr "Agregar usuario"
 msgid "Root"
 msgstr "Permisos totales"
 
-#: \views\layouts\default.ctp:34
+#: \views\layouts\default.ctp:32
 msgid "User: %s"
 msgstr "Usuario: %s"
 
-#: \views\layouts\default.ctp:36
+#: \views\layouts\default.ctp:34
 msgid "Home"
 msgstr "Inicio"
 
-#: \views\layouts\default.ctp:40
-msgid "Users"
-msgstr "Usuarios"
+#: \views\layouts\default.ctp:37
+msgid "Site"
+msgstr "Sitio"
 
-#: \views\layouts\default.ctp:47
+#: \views\layouts\default.ctp:50
 msgid "Logout"
 msgstr "Cerrar sesión"
 
 #~ msgid "You are not allowed to perform this action"
 #~ msgstr "No estás autorizado a realizar esta acción"
+
 #~ msgid "Invalid identifier"
 #~ msgstr "Identificador inválido"
+
 #~ msgid "Login successful"
 #~ msgstr "Acceso exitoso"
+
 #~ msgid "Welcome %s"
 #~ msgstr "Bienvenido %s"
+
 #~ msgid "Users groups"
 #~ msgstr "Grupos de usuarios"
+
 #~ msgid "Download file"
 #~ msgstr "Descargar archivo"
+
 #~ msgid ""
 #~ "These images are optional. You will be able to add more images later."
 #~ msgstr "Estas imágenes son opcionales. Podrás agregar más imágenes después."
+
 #~ msgid ""
 #~ "These images will be added among to the rest. If you want to replace "
 #~ "images click the \"Images\" button at the top"
 #~ msgstr ""
 #~ "Estas imágenes serán agregadas con las demás. Si quieres reemplazar "
 #~ "imágenes haz click en el botón \"Imágenes\""
+
 #~ msgid "Image %s"
 #~ msgstr "Imagen %s"
+
 #~ msgid "Image %s description"
 #~ msgstr "Descripción de la imagen %s"
+
 #~ msgid "Banner"
 #~ msgstr "Banner"
+
 #~ msgid "Id"
 #~ msgstr "ID"
+
 #~ msgid "Name"
 #~ msgstr "Nombre"
+
 #~ msgid "Created"
 #~ msgstr "Creado"
+
 #~ msgid "Modified"
 #~ msgstr "Modificado"
+
 #~ msgid "Model"
 #~ msgstr "Sección"
+
 #~ msgid "Seccion"
 #~ msgstr "Sección"
+
 #~ msgid "Orden"
 #~ msgstr "Orden"
+
 #~ msgid "Last Login"
 #~ msgstr "Último acceso"
+
 #~ msgid "Country"
 #~ msgstr "País"
+
 #~ msgid "Logpoll"
 #~ msgstr "Log de encuesta"
+
 #~ msgid "Poll"
 #~ msgstr "Encuestas"
-#~ msgid "User"
-#~ msgstr "Usuario"
+
 #~ msgid "access"
 #~ msgstr "acceso"
+
 #~ msgid "start"
 #~ msgstr "comienzo"
+
 #~ msgid "end"
 #~ msgstr "fin"
+
 #~ msgid "Type"
 #~ msgstr "Tipo"
+
 #~ msgid "Occupation"
 #~ msgstr "Ocupación"
+
 #~ msgid "Panel"
 #~ msgstr "Panel"
+
 #~ msgid "Panel State"
 #~ msgstr "Estado del panel"
+
 #~ msgid "male"
 #~ msgstr "hombre"
+
 #~ msgid "female"
 #~ msgstr "mujer"
+
 #~ msgid "both"
 #~ msgstr "ambos"
+
 #~ msgid "Gender"
 #~ msgstr "Sexo"
+
 #~ msgid "Birthday From"
 #~ msgstr "Fecha de nacimiento desde"
+
 #~ msgid "Birthday To"
 #~ msgstr "Fecha de nacimiento hasta"
+
 #~ msgid "Start"
 #~ msgstr "Comienzo"
+
 #~ msgid "End"
 #~ msgstr "Fin"
+
 #~ msgid "Url"
 #~ msgstr "URL"
+
 #~ msgid "Poll State"
 #~ msgstr "Estado de la encuesta"
+
 #~ msgid "Province"
 #~ msgstr "Provincia"
+
 #~ msgid "Study"
 #~ msgstr "Educación"
+
 #~ msgid "Text"
 #~ msgstr "Texto"
+
 #~ msgid "Last Name"
 #~ msgstr "Apellido"
+
 #~ msgid "Email"
 #~ msgstr "Email"
+
 #~ msgid "Birthday"
 #~ msgstr "Fecha de nacimiento"
+
 #~ msgid "Nationality"
 #~ msgstr "Nacionalidad"
+
 #~ msgid "City"
 #~ msgstr "Ciudad"
+
 #~ msgid "Boss"
 #~ msgstr "Jefe de familia"
+
 #~ msgid "Study Boss"
 #~ msgstr "Estudios del jefe de familia"
+
 #~ msgid "Occupation Boss"
 #~ msgstr "Ocupación del jefe de familia"
+
 #~ msgid "Error in field %s"
 #~ msgstr "Error en el campo %s"
+
 #~ msgid "New"
 #~ msgstr "Nuevo"
+
 #~ msgid "Telefono"
 #~ msgstr "Teléfono"
+
 #~ msgid "Direccion"
 #~ msgstr "Dirección"
+
 #~ msgid "Codigo Postal"
 #~ msgstr "Código postal"
+
 #~ msgid "Pais"
 #~ msgstr "País"
+
 #~ msgid "Mostrar Texto"
 #~ msgstr "Mostrar texto"
+
 #~ msgid "Mostrar En Sitio Principal"
 #~ msgstr "Mostrar en sitio principal"
+
 #~ msgid "Mostrar En Micrositio"
 #~ msgstr "Mostrar en micrositio"
+
 #~ msgid "Catedras Enlace"
 #~ msgstr "Enlaces de cátedras"
+
 #~ msgid "Catedras Seccion"
 #~ msgstr "Sección de Cátedras"
+
 #~ msgid "Fotos En Galeria"
 #~ msgstr "Fotos en galería"
+
 #~ msgid "Catedras Subseccion"
 #~ msgstr "Subsección de Cátedras"
+
 #~ msgid "Texto Es"
 #~ msgstr "Texto español"
+
 #~ msgid "Texto En"
 #~ msgstr "Texto inglés"
+
 #~ msgid "Espanol Boton"
 #~ msgstr "Botón"
+
 #~ msgid "Espanol Seccion"
 #~ msgstr "Sección de Cursos de español"
+
 #~ msgid "Espanol Subseccion"
 #~ msgstr "Subsección de Cursos de español"
+
 #~ msgid "Parent"
 #~ msgstr "Padre"
+
 #~ msgid "Lft"
 #~ msgstr "Izquierda"
+
 #~ msgid "Rght"
 #~ msgstr "Derecha"
+
 #~ msgid "Name En"
 #~ msgstr "Nombre inglés"
+
 #~ msgid "Formacion Area"
 #~ msgstr "Area"
+
 #~ msgid "Nombre Es"
 #~ msgstr "Nombre español"
+
 #~ msgid "Nombre En"
 #~ msgstr "Nombre inglés"
+
 #~ msgid "Formacion Seccion"
 #~ msgstr "Sección de Formación"
+
 #~ msgid "Formacion Curso"
 #~ msgstr "Curso"
+
 #~ msgid "Tiene Matricula"
 #~ msgstr "Tiene matrícula"
+
 #~ msgid "Matricula Abierta"
 #~ msgstr "Matrícula abierta"
+
 #~ msgid "Permite Descargar Programa"
 #~ msgstr "Permite descargar programa"
+
 #~ msgid "Formacion Curso Seccion"
 #~ msgstr "Sección de curso"
+
 #~ msgid "Titulo Es"
 #~ msgstr "Título español"
+
 #~ msgid "Titulo En"
 #~ msgstr "Título inglés"
+
 #~ msgid "Formacion Curso Subseccion"
 #~ msgstr "Sección de Cursos de Formación"
+
 #~ msgid "Formacion Subseccion"
 #~ msgstr "Subsección de Formación"
+
 #~ msgid "Fundacion Seccion"
 #~ msgstr "Sección"
+
 #~ msgid "Order"
 #~ msgstr "Orden"
+
 #~ msgid "Fundacion Subseccion"
 #~ msgstr "Subsección de Fundación"
+
 #~ msgid "Investigacion Seccion"
 #~ msgstr "Sección de Investigación"
+
 #~ msgid "Investigacion Subseccion"
 #~ msgstr "Subsección de Investigación"
+
 #~ msgid "Link"
 #~ msgstr "Enlace"
+
 #~ msgid "Pago Permitido"
 #~ msgstr "Pago permitido"
+
 #~ msgid "Fecha Caducidad"
 #~ msgstr "Fecha de caducidad"
+
 #~ msgid "Pedidos Producto"
 #~ msgstr "Productos del pedido"
+
 #~ msgid "Name Es"
 #~ msgstr "Nombre español"
+
 #~ msgid "Codigo"
 #~ msgstr "Código"
+
 #~ msgid "Precio Venta Al Publico"
 #~ msgstr "Precio venta al público"
+
 #~ msgid "Precio Universidad"
 #~ msgstr "Precio universidad"
+
 #~ msgid "Descripcion Es"
 #~ msgstr "Descripción español"
+
 #~ msgid "Descripcion En"
 #~ msgstr "Descripción inglés"
+
 #~ msgid "Nombre Departamento Es"
 #~ msgstr "Nombre del departamento Español"
+
 #~ msgid "Nombre Departamento En"
 #~ msgstr "Nombre del departamento Inglés"
+
 #~ msgid "Recomendacion"
 #~ msgstr "Recomendación"
+
 #~ msgid "Images"
 #~ msgstr "Imágenes"
+
 #~ msgid "Nombre Producto"
 #~ msgstr "Nombre de producto"
+
 #~ msgid "List"
 #~ msgstr "Listar"
+
 #~ msgid "You need to be logged in to access this area"
 #~ msgstr "Necesitas autenticarte para acceder"
-
