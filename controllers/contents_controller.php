@@ -234,12 +234,14 @@ class ContentsController extends BrownieAppController {
 		if (!empty($this->Model->belongsTo)) {
 			foreach($this->Model->belongsTo as $key_model => $related_model){
 				$AssocModel = $this->Model->$key_model;
-				if ($this->Content->isTree($AssocModel)){
-					$relatedData = $AssocModel->generatetreelist();
-				} else {
-					$relatedData = $AssocModel->find('list', $related_model);
+				if(!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
+					if ($this->Content->isTree($AssocModel)){
+						$relatedData = $AssocModel->generatetreelist();
+					} else {
+						$relatedData = $AssocModel->find('list', $related_model);
+					}
+					$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
 				}
-				$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
 			}
 			$contain[] = $key_model;
 		}
@@ -256,13 +258,13 @@ class ContentsController extends BrownieAppController {
 		}
 		$this->set('related', $related);
 
-		if ($this->Model->brownieCmsConfig['images']) {
+		/*if ($this->Model->brownieCmsConfig['images']) {
 			$contain[] = 'BrwImage';
 		}
 
 		if ($this->Model->brownieCmsConfig['files']) {
 			$contain[] = 'BrwFile';
-		}
+		}*/
 
 
 		if (empty($this->data)) {
@@ -275,7 +277,6 @@ class ContentsController extends BrownieAppController {
 						'contain' => $contain
 					)
 				);
-
 				$this->data = array_shift($data);
 			} else {
 				$this->data = array($this->Model->name => $this->Model->brownieCmsConfig['default']);
