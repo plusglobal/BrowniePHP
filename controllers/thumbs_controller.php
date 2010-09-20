@@ -18,9 +18,9 @@ class ThumbsController extends BrownieAppController{
 	* w-200 ancho maximo
 	* h-300 alto maximo
 	*/
-	function view($model, $recordId, $sizes, $file) {
-		$sourceFile = WWW_ROOT . DS . 'uploads' . DS . $model . DS . $recordId . DS . $file;
-		if (!is_file($sourceFile) or !$this->_checkValidSizes($model, $sizes)) {
+	function view($model = '', $recordId = '', $sizes = '', $file = '') {
+		$sourceFile = WWW_ROOT . 'uploads' . DS . $model . DS . $recordId . DS . $file;
+		if (!file_exists($sourceFile) or !$this->_checkValidSizes($model, $sizes)) {
 			$this->cakeError('error404');
 		}
 		$pathinfo = pathinfo($sourceFile);
