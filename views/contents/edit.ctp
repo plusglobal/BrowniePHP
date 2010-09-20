@@ -29,7 +29,8 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 		echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 		foreach ($fields as $key => $value) {
 			$params = array();
-			if (!empty($related['belongsTo'][$key])) {
+			//pr($related);
+			if (isset($related['belongsTo'][$key])) {
 				$params = array('type' => 'select', 'options' => $related['belongsTo'][$key]);
 				if ($schema[$key]['null']) {
 					$params['empty'] = '- ' . __d('brownie', 'None', true);
@@ -84,6 +85,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 			}
 
 			$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
+			//pr($params);
 			echo $form->input($model . '.' . $key, $params);
 			if (in_array($key, $fckFields)){
 				echo $fck->load($model . '.' . Inflector::camelize($key), 'Brownie');
