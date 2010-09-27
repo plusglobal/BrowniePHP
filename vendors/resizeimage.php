@@ -1,11 +1,31 @@
-<?
-function resizeImage($cType = 'resize', $id, $imgFolder, $newName = false, $newWidth=false, $newHeight=false, $quality = 95)
-{
-	$img = $imgFolder . $id;
-	list($oldWidth, $oldHeight, $type) = getimagesize($img);
+<?php
+/**
+* helped by http://mediumexposure.com/smart-image-resizing-while-preserving-transparency-php-and-gd-library/
+*/
+function resizeImage($file, $sizes, $quality = 95) {
+	if (!is_file($file)) {
+		return false;
+	}
+
+	$s = explode('x', $sizes);
+	if(count($s == 2) and ctype_digit($s[0]) and ctype_digit($s[1])) {
+		$newWidth = $s[0];
+		$newHeight = $s[1];
+		$crop = 'resizeCrop';
+	} else {
+		$s = explode('_', $sizes);
+		if (count($s == 2) and ctype_digit($s[0]) and ctype_digit($s[1])) {
+			$newWidth = $s[0];
+			$newHeight = $s[1];
+			$crop = 'resize';
+		} else {
+			return false;
+		}
+	}
+	list($oldWidth, $oldHeight, $type) = getimagesize($file);
 	$ext = image_type_to_extension($type, false);
 
-	if ($cType == 'resize') {
+	if ($crop == 'resize') {
 		if ($oldWidth < $newWidth) {
 			$newWidth = $oldWidth;
 		}
@@ -14,159 +34,145 @@ function resizeImage($cType = 'resize', $id, $imgFolder, $newName = false, $newW
 		}
 	}
 
-	//check to make sure that the file is writeable, if so, create destination image (temp image)
-	if (is_writeable($imgFolder)) {
-		if ($newName) {
-			$dest = $imgFolder . $newName;
-		} else {
-			$dest = $imgFolder . 'tmp_' . $id;
-		}
-	} else {
-		//if not let developer know
-		$imgFolder = substr($imgFolder, 0, strlen($imgFolder) -1);
-		$imgFolder = substr($imgFolder, strrpos($imgFolder, '\\') + 1, 20);
-		debug("You must allow proper permissions for image processing. And the folder has to be writable.");
-		debug("Run \"chmod 777 on '$imgFolder' folder\"");
-		exit();
+	switch ($crop) {
+		case 'resize':
+			//Maintains the aspect ratio of the image and makes sure that it fits
+			//within the maxW(newWidth) and maxH(newHeight) (thus some side will be smaller)
+			$widthScale = $heightScale = 2;
+			if ($newWidth) {
+				$widthScale = $newWidth / $oldWidth;
+			}
+
+			if ($newHeight) {
+				$heightScale = $newHeight / $oldHeight;
+			}
+
+			if ($widthScale < $heightScale) {
+				$maxWidth = $newWidth;
+				$maxHeight = false;
+			} elseif ($widthScale > $heightScale ) {
+				$maxHeight = $newHeight;
+				$maxWidth = false;
+			} else {
+				$maxHeight = $newHeight;
+				$maxWidth = $newWidth;
+			}
+
+			if ($maxWidth > $maxHeight) {
+				$applyWidth = $maxWidth;
+				$applyHeight = ($oldHeight*$applyWidth)/$oldWidth;
+			} elseif ($maxHeight > $maxWidth) {
+				$applyHeight = $maxHeight;
+				$applyWidth = ($applyHeight*$oldWidth)/$oldHeight;
+			} else {
+				$applyWidth = $maxWidth;
+				$applyHeight = $maxHeight;
+			}
+
+			$startX = $startY = 0;
+		break;
+
+		case 'resizeCrop':
+			//resize to max, then crop to center
+			$ratioX = $newWidth / $oldWidth;
+			$ratioY = $newHeight / $oldHeight;
+			if ($ratioX < $ratioY) {
+				$startX = round(($oldWidth - ($newWidth / $ratioY))/2);
+				$startY = 0;
+				$oldWidth = round($newWidth / $ratioY);
+				$oldHeight = $oldHeight;
+			} else {
+				$startX = 0;
+				$startY = round(($oldHeight - ($newHeight / $ratioX))/2);
+				$oldWidth = $oldWidth;
+				$oldHeight = round($newHeight / $ratioX);
+			}
+			$applyWidth = $newWidth;
+			$applyHeight = $newHeight;
+		break;
+
+		/*case 'crop':
+			//a straight centered crop
+			$startY = ($oldHeight - $newHeight)/2;
+			$startX = ($oldWidth - $newWidth)/2;
+			$oldHeight = $newHeight;
+			$applyHeight = $newHeight;
+			$oldWidth = $newWidth;
+			$applyWidth = $newWidth;
+		break;*/
 	}
 
-	//check to make sure that something is requested, otherwise there is nothing to resize.
-	//although, could create option for quality only
-	if ($newWidth OR $newHeight) {
-		 // check to make sure temp file doesn't exist from a mistake or system hang up.
-		 // If so delete.
-		if (file_exists($dest)) {
-			unlink($dest);
-		} else {
-			switch ($cType) {
-				case 'resize':
-					//Maintains the aspect ratio of the image and makes sure that it fits
-					//within the maxW(newWidth) and maxH(newHeight) (thus some side will be smaller)
-					$widthScale = $heightScale = 2;
-					if ($newWidth) {
-						$widthScale = 	$newWidth / $oldWidth;
-					}
+	switch ($ext) {
+		case 'gif':
+			$oldImage = imagecreatefromgif($file);
+		break;
+		case 'png' :
+			$oldImage = imagecreatefrompng($file);
+		break;
+		case 'jpg': case 'jpeg':
+			$oldImage = imagecreatefromjpeg($file);
+		break;
+		default:
+			return false;
+		break;
+	}
 
-					if ($newHeight) {
-						$heightScale = $newHeight / $oldHeight;
-					}
-
-					if ($widthScale < $heightScale) {
-						$maxWidth = $newWidth;
-						$maxHeight = false;
-					} elseif ($widthScale > $heightScale ) {
-						$maxHeight = $newHeight;
-						$maxWidth = false;
-					} else {
-						$maxHeight = $newHeight;
-						$maxWidth = $newWidth;
-					}
-
-					if ($maxWidth > $maxHeight) {
-						$applyWidth = $maxWidth;
-						$applyHeight = ($oldHeight*$applyWidth)/$oldWidth;
-					} elseif ($maxHeight > $maxWidth) {
-						$applyHeight = $maxHeight;
-						$applyWidth = ($applyHeight*$oldWidth)/$oldHeight;
-					} else {
-						$applyWidth = $maxWidth;
-						$applyHeight = $maxHeight;
-					}
-
-					$startX = $startY = 0;
-				break;
-
-				case 'resizeCrop':
-					//resize to max, then crop to center
-					$ratioX = $newWidth / $oldWidth;
-					$ratioY = $newHeight / $oldHeight;
-					if ($ratioX < $ratioY) {
-						$startX = round(($oldWidth - ($newWidth / $ratioY))/2);
-						$startY = 0;
-						$oldWidth = round($newWidth / $ratioY);
-						$oldHeight = $oldHeight;
-					} else {
-						$startX = 0;
-						$startY = round(($oldHeight - ($newHeight / $ratioX))/2);
-						$oldWidth = $oldWidth;
-						$oldHeight = round($newHeight / $ratioX);
-					}
-					$applyWidth = $newWidth;
-					$applyHeight = $newHeight;
-				break;
-
-				case 'crop':
-					//a straight centered crop
-					$startY = ($oldHeight - $newHeight)/2;
-					$startX = ($oldWidth - $newWidth)/2;
-					$oldHeight = $newHeight;
-					$applyHeight = $newHeight;
-					$oldWidth = $newWidth;
-					$applyWidth = $newWidth;
-				break;
-			}
-
-			switch ($ext) {
-				case 'gif':
-					$oldImage = imagecreatefromgif($img);
-				break;
-				case 'png' :
-					$oldImage = imagecreatefrompng($img);
-				break;
-				case 'jpg': case 'jpeg':
-					$oldImage = imagecreatefromjpeg($img);
-				break;
-				default:
-					return false;
-				break;
-			}
-
-			//create new image
-			$newImage = imagecreatetruecolor($applyWidth, $applyHeight);
-
-			//maintain transparency to gif and png
-			if ($ext=='gif' or $ext=='png') {
-				imagealphablending($newImage, false);
-				imagesavealpha($newImage, true);
-				imagefilledrectangle($newImage, 0, 0, $applyWidth, $applyHeight, imagecolorallocatealpha($newImage, 255, 255, 255, 127));
-			}
-
-			//put old image on top of new image
-			imagecopyresampled($newImage, $oldImage, 0,0 , $startX, $startY, $applyWidth, $applyHeight, $oldWidth, $oldHeight);
-
-			//save the image to disk
-			switch ($ext) {
-				case 'gif':
-					imagegif($newImage, $dest, $quality);
-				break;
-				case 'png':
-					imagepng($newImage, $dest, 9);
-				break;
-				case 'jpg': case 'jpeg':
-					imagejpeg($newImage, $dest, $quality);
-				break;
-				default:
-					return false;
-				break;
-			}
-
-			chmod($dest, 0777);
-
-			imagedestroy($newImage);
-			imagedestroy($oldImage);
-
-			if (!$newName) {
-				unlink($img);
-				rename($dest, $img);
-			}
-
-			return true;
-		}
-
+	//create new image
+	if($ext == 'gif') {
+		$newImage = imagecreate($applyWidth, $applyHeight);
+		imagetruecolortopalette($newImage, true, imagecolorstotal($oldImage));
 	} else {
+		$newImage = imagecreatetruecolor($applyWidth, $applyHeight);
+	}
+
+	//maintain transparency to gif and png
+	/*
+	if ($ext == 'gif' or $ext == 'png') {
+		imagealphablending($newImage, false);
+		imagesavealpha($newImage, true);
+		imagefilledrectangle($newImage, 0, 0, $applyWidth, $applyHeight, imagecolorallocatealpha($newImage, 255, 255, 255, 127));
+	}*/
+
+	if ($ext == 'gif' and $trnprt_indx = imagecolortransparent($oldImage)) {
+		$trnprt_color = imagecolorsforindex($oldImage, $trnprt_indx); // Get the original image's transparent color's RGB values
+		$trnprt_indx = imagecolorallocate($newImage, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']); // Allocate the same color in the new image resource
+		imagefill($newImage, 0, 0, $trnprt_indx); // Completely fill the background of the new image with allocated color.
+		imagecolortransparent($newImage, $trnprt_indx); // Set the background color for new image to transparent
+	} elseif ($ext == 'png') {
+		imagealphablending($newImage, false);
+		$color = imagecolorallocatealpha($newImage, 0, 0, 0, 127); // Create a new transparent color for image
+		imagefill($newImage, 0, 0, $color); // Completely fill the background of the new image with allocated color.
+		imagesavealpha($newImage, true); // Restore transparency blending
+	}
+
+	//put old image on top of new image
+	imagecopyresampled($newImage, $oldImage, 0, 0, $startX, $startY, $applyWidth, $applyHeight, $oldWidth, $oldHeight);
+
+	//save the image to disk
+	$saved = false;
+	switch ($ext) {
+		case 'gif':
+			$saved = imagegif($newImage, $file, $quality);
+		break;
+		case 'png':
+			$saved = imagepng($newImage, $file, 9);
+		break;
+		case 'jpg': case 'jpeg':
+			$saved = imagejpeg($newImage, $file, $quality);
+		break;
+		default:
+			return false;
+		break;
+	}
+
+	imagedestroy($newImage);
+	imagedestroy($oldImage);
+
+	if (!$saved) {
 		return false;
 	}
 
+	return true;
 }
 
 
