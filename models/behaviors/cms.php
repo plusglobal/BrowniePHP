@@ -121,6 +121,37 @@ class CmsBehavior extends ModelBehavior {
 		return $Model->data;
 	}
 
+	function beforeDelete($Model) {
+		$toNullModels = array();
+		foreach($Model->hasMany as $related) {
+			if ($related['className'] != 'BrwImage' and  $related['className'] != 'BrwFile') {
+				if (!$related['dependent']) {
+					$rel = ClassRegistry::getObject($related['className']);
+					if ($rel->_schema[$related['foreignKey']]['null']) {
+						$toNullModels[] = array('model' => $rel, 'foreignKey' => $related['foreignKey']);
+					} else {
+						$hasAny = $rel->find('first', array(
+							'conditions' => array($rel->alias . '.' . $related['foreignKey'] => $Model->id),
+							'fields' => array('id'),
+						));
+						if ($hasAny) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+
+		foreach($toNullModels as $toNullModel) {
+			$toNullModel['model']->updateAll(
+				array($toNullModel['model']->alias . '.' . $toNullModel['foreignKey'] => null),
+				array($toNullModel['model']->alias . '.' . $toNullModel['foreignKey'] => $Model->id)
+			);
+		}
+
+		return true;
+
+	}
 
 	function afterDelete($Model) {
 		if (!empty($Model->BrwImage)) {
@@ -465,5 +496,6 @@ class CmsBehavior extends ModelBehavior {
 			))), false);
 		}
 	}
+
 
 }

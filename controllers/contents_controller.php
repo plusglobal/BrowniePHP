@@ -308,7 +308,7 @@ class ContentsController extends BrownieAppController {
 		//foreach ($this->Model->hasMany as $key => $Model) {	}
 
 
-		if ($this->Model->delete($id, false)) {
+		if ($this->Model->delete($id)) {
 			$this->Session->setFlash(__d('brownie', 'Successful delete', true));
 		} else {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true));
