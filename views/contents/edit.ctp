@@ -170,11 +170,30 @@ foreach($uploads as $upload){
 		}
 	}
 }
+
+
 if ($referer = env('HTTP_REFERER')) {
 	if (!empty($this->data['Content']['backto'])) {
 		$referer = $this->data['Content']['backto'];
 	}
 	echo $form->input('backto', array('value' => $referer, 'type' => 'hidden'));
 }
+
+/*echo $form->input('after_save', array(
+	'type' => 'select',
+	'label' => __d('brownie', 'After save', true),
+	'options' => array(
+		'continue_editing' => ($brwConfig['names']['gender'] == 1) ?
+			sprintf(__d('brownie', 'Continue editing this %s [male]', true), $brwConfig['names']['singular']):
+			sprintf(__d('brownie', 'Continue editing this %s [female]', true), $brwConfig['names']['singular'])
+		,
+		'add_new' =>  ($brwConfig['names']['gender'] == 1) ?
+			sprintf(__d('brownie', 'Add another %s [male]', true), $brwConfig['names']['singular']):
+			sprintf(__d('brownie', 'Add another %s [female]', true), $brwConfig['names']['singular'])
+		,
+		'back_home' => __d('brownie', 'Back to home', true),
+	),
+));*/
+
 echo $form->end(__d('brownie', 'Save', true)); ?>
 </div>
