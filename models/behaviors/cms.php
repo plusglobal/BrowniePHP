@@ -7,6 +7,7 @@ class CmsBehavior extends ModelBehavior {
 			'section' => false,
 			'plural' => false,
 			'singular' => false,
+			'gender' => 1 //1 for male, 2 for female, according to http://en.wikipedia.org/wiki/ISO_5218
 		),
 
 		'paginate' => array(

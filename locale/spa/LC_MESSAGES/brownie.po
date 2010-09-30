@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-09-20 11:53-0300\n"
-"PO-Revision-Date: 2010-09-20 11:53-0300\n"
+"POT-Creation-Date: 2010-09-30 17:26-0300\n"
+"PO-Revision-Date: 2010-09-30 17:28-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -37,43 +37,43 @@ msgstr "La información ha sido guardada"
 msgid "The information could not be saved. Please, check the error messages."
 msgstr "La información no ha podido guardarse. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:311
+#: \controllers\contents_controller.php:312
 msgid "Successful delete"
 msgstr "Eliminación exitosa"
 
-#: \controllers\contents_controller.php:313
+#: \controllers\contents_controller.php:314
 msgid "Unable to delete"
 msgstr "No se ha podido eliminar"
 
-#: \controllers\contents_controller.php:352
+#: \controllers\contents_controller.php:353
 msgid "The image was Successfully edited"
 msgstr "La imagen fue modificada con éxito"
 
-#: \controllers\contents_controller.php:354
+#: \controllers\contents_controller.php:355
 msgid "The image was Successfully added"
 msgstr "La imagen fue agregada con éxito"
 
-#: \controllers\contents_controller.php:380
+#: \controllers\contents_controller.php:381
 msgid "%d images successfully added"
 msgstr "%d imágenes agregadas exitosamente"
 
-#: \controllers\contents_controller.php:383
+#: \controllers\contents_controller.php:384
 msgid "None images uploaded. Please try again."
 msgstr "No se han subido imágenes. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:405
+#: \controllers\contents_controller.php:406
 msgid "The file was Successfully edited"
 msgstr "El archivo fue modificado con éxito"
 
-#: \controllers\contents_controller.php:407
+#: \controllers\contents_controller.php:408
 msgid "The file was Successfully added"
 msgstr "El archivo fue agregado con éxito"
 
-#: \controllers\contents_controller.php:432
+#: \controllers\contents_controller.php:433
 msgid "The import could not be done. Please try again"
 msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:440
+#: \controllers\contents_controller.php:441
 msgid "Warning: %s::brwImport() must be defined"
 msgstr "Atención: %s::brwImport() debe estar definida"
 
@@ -259,7 +259,31 @@ msgstr "Archivo %s"
 msgid "Description %d"
 msgstr "Descripción %d"
 
-#: \views\contents\edit.ctp:179
+#: \views\contents\edit.ctp:184
+msgid "After save"
+msgstr "Después de guardar"
+
+#: \views\contents\edit.ctp:187
+msgid "Continue editing this %s [male]"
+msgstr "Continuar editando este %s"
+
+#: \views\contents\edit.ctp:188
+msgid "Continue editing this %s [female]"
+msgstr "Continuar editando esta %s"
+
+#: \views\contents\edit.ctp:191
+msgid "Add another %s [male]"
+msgstr "Agregar otro %s"
+
+#: \views\contents\edit.ctp:192
+msgid "Add another %s [female]"
+msgstr "Agregar otra %s"
+
+#: \views\contents\edit.ctp:194
+msgid "Back to home"
+msgstr "Volver a home"
+
+#: \views\contents\edit.ctp:198
 msgid "Save"
 msgstr "Guardar"
 
