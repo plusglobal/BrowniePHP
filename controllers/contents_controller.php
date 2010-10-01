@@ -219,10 +219,21 @@ class ContentsController extends BrownieAppController {
 			$this->Model->create();
 			if ($this->Model->saveAll($this->data, array('validate' => 'first', 'model' => $this->Model->name))) {
 				$this->Session->setFlash(__d('brownie', 'The information has been saved', true));
-				if (!empty($this->data['Content']['backto'])){
-					$this->redirect($this->data['Content']['backto']);
-				} else {
-					$this->redirect(array('action'=>'view', $this->Model->name, $this->Model->id));
+				if (!empty($this->data['Content']['after_save'])) {
+					switch ($this->data['Content']['after_save']) {
+						case 'add_new':
+							$this->redirect(array('action' => 'edit', $this->Model->name, 'after_save' => 'add_new'));
+						break;
+						case 'view':
+							$this->redirect(array('action' => 'view', $this->Model->name, $this->Model->id));
+						break;
+						case 'back_home':
+							$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
+						break;
+						case 'continue_editing':
+							$this->redirect(array('action'=>'edit', $this->Model->name, $this->Model->id, 'after_save' => 'continue_editing'));
+						break;
+					}
 				}
 			} else {
 				$this->Session->setFlash(__d('brownie', 'The information could not be saved. Please, check the error messages.', true));

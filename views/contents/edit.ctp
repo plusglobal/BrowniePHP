@@ -172,14 +172,18 @@ foreach($uploads as $upload){
 }
 
 
-if ($referer = env('HTTP_REFERER')) {
-	if (!empty($this->data['Content']['backto'])) {
-		$referer = $this->data['Content']['backto'];
-	}
-	echo $form->input('backto', array('value' => $referer, 'type' => 'hidden'));
+?>
+
+<fieldset>
+<?php
+
+if(!empty($this->params['named']['after_save'])) {
+	$default = $this->params['named']['after_save'];
+} else {
+	$default = 'view';
 }
 
-/*echo $form->input('after_save', array(
+echo $form->input('after_save', array(
 	'type' => 'select',
 	'label' => __d('brownie', 'After save', true),
 	'options' => array(
@@ -192,8 +196,14 @@ if ($referer = env('HTTP_REFERER')) {
 			sprintf(__d('brownie', 'Add another %s [female]', true), $brwConfig['names']['singular'])
 		,
 		'back_home' => __d('brownie', 'Back to home', true),
+		'view' => __d('brownie', 'View saved information', true),
 	),
-));*/
+	'default' => $default,
+));
+?>
 
+</fieldset>
+
+<?php
 echo $form->end(__d('brownie', 'Save', true)); ?>
 </div>
