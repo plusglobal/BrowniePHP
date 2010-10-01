@@ -1,3 +1,3 @@
 <?php
-__('Done');
+__d('brownie', 'Done');
 ?>

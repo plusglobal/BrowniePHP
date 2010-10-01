@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-09-30 17:26-0300\n"
+"POT-Creation-Date: 2010-10-01 17:10-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -34,47 +34,47 @@ msgstr ""
 msgid "The information has been saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:228
+#: \controllers\contents_controller.php:239
 msgid "The information could not be saved. Please, check the error messages."
 msgstr ""
 
-#: \controllers\contents_controller.php:312
+#: \controllers\contents_controller.php:323
 msgid "Successful delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:314
+#: \controllers\contents_controller.php:325
 msgid "Unable to delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:353
+#: \controllers\contents_controller.php:364
 msgid "The image was Successfully edited"
 msgstr ""
 
-#: \controllers\contents_controller.php:355
+#: \controllers\contents_controller.php:366
 msgid "The image was Successfully added"
 msgstr ""
 
-#: \controllers\contents_controller.php:381
+#: \controllers\contents_controller.php:392
 msgid "%d images successfully added"
 msgstr ""
 
-#: \controllers\contents_controller.php:384
+#: \controllers\contents_controller.php:395
 msgid "None images uploaded. Please try again."
 msgstr ""
 
-#: \controllers\contents_controller.php:406
+#: \controllers\contents_controller.php:417
 msgid "The file was Successfully edited"
 msgstr ""
 
-#: \controllers\contents_controller.php:408
+#: \controllers\contents_controller.php:419
 msgid "The file was Successfully added"
 msgstr ""
 
-#: \controllers\contents_controller.php:433
+#: \controllers\contents_controller.php:444
 msgid "The import could not be done. Please try again"
 msgstr ""
 
-#: \controllers\contents_controller.php:441
+#: \controllers\contents_controller.php:452
 msgid "Warning: %s::brwImport() must be defined"
 msgstr ""
 
@@ -201,6 +201,11 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: \views\brownie\translations.ctp:2
+#: \views\elements\translations.ctp:2
+msgid "Done"
+msgstr ""
+
 #: \views\contents\add_images.ctp:11
 #: \views\contents\edit_image.ctp:6
 msgid "Add image"
@@ -260,31 +265,35 @@ msgstr ""
 msgid "Description %d"
 msgstr ""
 
-#: \views\contents\edit.ctp:184
+#: \views\contents\edit.ctp:188
 msgid "After save"
 msgstr ""
 
-#: \views\contents\edit.ctp:187
+#: \views\contents\edit.ctp:191
 msgid "Continue editing this %s [male]"
 msgstr ""
 
-#: \views\contents\edit.ctp:188
+#: \views\contents\edit.ctp:192
 msgid "Continue editing this %s [female]"
 msgstr ""
 
-#: \views\contents\edit.ctp:191
+#: \views\contents\edit.ctp:195
 msgid "Add another %s [male]"
 msgstr ""
 
-#: \views\contents\edit.ctp:192
+#: \views\contents\edit.ctp:196
 msgid "Add another %s [female]"
 msgstr ""
 
-#: \views\contents\edit.ctp:194
+#: \views\contents\edit.ctp:198
 msgid "Back to home"
 msgstr ""
 
-#: \views\contents\edit.ctp:198
+#: \views\contents\edit.ctp:199
+msgid "View saved information"
+msgstr ""
+
+#: \views\contents\edit.ctp:208
 msgid "Save"
 msgstr ""
 
@@ -389,10 +398,6 @@ msgstr ""
 
 #: \views\elements\menu.ctp:27
 msgid "Go"
-msgstr ""
-
-#: \views\elements\translations.ctp:2
-msgid "Done"
 msgstr ""
 
 #: \views\elements\translations.ctp:3
