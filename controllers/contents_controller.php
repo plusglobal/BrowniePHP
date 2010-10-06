@@ -316,10 +316,13 @@ class ContentsController extends BrownieAppController {
 			$this->cakeError('error404');
 		}
 
-		//foreach ($this->Model->hasMany as $key => $Model) {	}
+		if ($this->Content->isTree($this->Model)) {
+			$deleted = $this->Model->removeFromTree($id, true);
+		} else {
+			$deleted = $this->Model->delete($id);
+		}
 
-
-		if ($this->Model->delete($id)) {
+		if ($deleted) {
 			$this->Session->setFlash(__d('brownie', 'Successful delete', true));
 		} else {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true));
