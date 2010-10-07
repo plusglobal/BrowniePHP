@@ -2,14 +2,14 @@
 $options = array('url' => Set::merge($this->passedArgs, array('model'=>$model)));
 $paginator->options($options);
 $i = 0;
-if($records):
+if ($records):
 	echo '<table cellpadding="0" cellspacing="0">';
 	foreach ($records as $record):
-		if($i == 0){
+		if ($i == 0) {
 			echo '
 			<tr>';
 			foreach($record[$model] as $field_name => $field_value) {
-				if(!empty($schema[$field_name])){
+				if (!empty($schema[$field_name])) {
 					echo '
 					<th class="'.$field_name.'">' . $paginator->sort($field_name, null, array('model' => $model)) . '</th>';
 				}
@@ -27,23 +27,23 @@ if($records):
 		<tr class="'.$class.' list">';
 
 		foreach($record[$model] as $field_name => $field_value) {
-			if(!empty($schema[$field_name])){
+			if (!empty($schema[$field_name])) {
 				echo '
 				<td class="'.$field_name.' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
 			}
 		}
 
 		echo '<td class="actions"><ul>';
-		if($permissions[$model]['view']) {
-			echo '<li class="view">'.$html->link(__d('brownie', 'View', true),
-			array('action'=>'view', $model, $record[$model]['id'])).'</li>';
+		if ($permissions[$model]['view']) {
+			echo '<li class="view">' . $html->link(__d('brownie', 'View', true),
+			array('action'=>'view', $model, $record[$model]['id'])) . '</li>';
 		}
-		if($permissions[$model]['edit']) {
-			echo '<li class="edit">'.$html->link(__d('brownie', 'Edit', true),
-			array('action'=>'edit', $model, $record[$model]['id'])).'</li>';
+		if ($permissions[$model]['edit']) {
+			echo '<li class="edit">' . $html->link(__d('brownie', 'Edit', true),
+			array('action'=>'edit', $model, $record[$model]['id'], 'after_save' => 'index')) . '</li>';
 		}
-		if($permissions[$model]['delete']) {
-			echo '<li class="delete">'.$html->link(__d('brownie', 'Delete', true),
+		if ($permissions[$model]['delete']) {
+			echo '<li class="delete">' . $html->link(__d('brownie', 'Delete', true),
 			array('action'=>'delete', $model, $record[$model]['id']), null,
 			sprintf(__d('brownie', 'Are you sure you want to delete # %s?', true), $record[$model]['id'])) . '</li>';
 		}
@@ -55,9 +55,9 @@ else:
 	echo '<p class="norecords">' . __d('brownie', 'No records', true) . '</p>';
 endif;
 
-if($records){
+if ($records) {
 	echo '<div class="pagination">';
-	if($numbers = $paginator->numbers(array('model' => $model, 'separator' => ''))){
+	if ($numbers = $paginator->numbers(array('model' => $model, 'separator' => ''))) {
 		echo '
 		<div class="paging clearfix">
 		<span class="prev">' . $paginator->prev('<< ' . __d('brownie', 'previous', true), array('model' => $model), null, array('class'=>'disabled')) . '</span>
