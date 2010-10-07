@@ -13,7 +13,7 @@ if($permissions[$modelName]['view']){
 }
 if($permissions[$modelName]['edit']){
 	echo $html->link(__d('brownie', 'Edit', true),
-	array('action' => 'edit', $modelName, $model['id']),
+	array('action' => 'edit', $modelName, $model['id'], 'after_save' => 'index'),
 	array('class' => 'edit'));
 }
 if($permissions[$modelName]['delete']){
