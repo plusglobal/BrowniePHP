@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-01 17:10-0300\n"
-"PO-Revision-Date: 2010-10-01 17:10-0300\n"
+"POT-Creation-Date: 2010-10-07 10:55-0300\n"
+"PO-Revision-Date: 2010-10-07 10:56-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com> <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -32,47 +32,47 @@ msgstr ""
 msgid "The information has been saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:239
+#: \controllers\contents_controller.php:242
 msgid "The information could not be saved. Please, check the error messages."
 msgstr ""
 
-#: \controllers\contents_controller.php:323
+#: \controllers\contents_controller.php:329
 msgid "Successful delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:325
+#: \controllers\contents_controller.php:331
 msgid "Unable to delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:364
+#: \controllers\contents_controller.php:370
 msgid "The image was Successfully edited"
 msgstr ""
 
-#: \controllers\contents_controller.php:366
+#: \controllers\contents_controller.php:372
 msgid "The image was Successfully added"
 msgstr ""
 
-#: \controllers\contents_controller.php:392
+#: \controllers\contents_controller.php:398
 msgid "%d images successfully added"
 msgstr ""
 
-#: \controllers\contents_controller.php:395
+#: \controllers\contents_controller.php:401
 msgid "None images uploaded. Please try again."
 msgstr ""
 
-#: \controllers\contents_controller.php:417
+#: \controllers\contents_controller.php:423
 msgid "The file was Successfully edited"
 msgstr ""
 
-#: \controllers\contents_controller.php:419
+#: \controllers\contents_controller.php:425
 msgid "The file was Successfully added"
 msgstr ""
 
-#: \controllers\contents_controller.php:444
+#: \controllers\contents_controller.php:450
 msgid "The import could not be done. Please try again"
 msgstr ""
 
-#: \controllers\contents_controller.php:452
+#: \controllers\contents_controller.php:458
 msgid "Warning: %s::brwImport() must be defined"
 msgstr ""
 
@@ -284,14 +284,18 @@ msgid "Add another %s [female]"
 msgstr "Add another %s"
 
 #: \views\contents\edit.ctp:198
-msgid "Back to home"
+msgid "Go to index"
 msgstr ""
 
 #: \views\contents\edit.ctp:199
 msgid "View saved information"
 msgstr ""
 
-#: \views\contents\edit.ctp:208
+#: \views\contents\edit.ctp:200
+msgid "Go home"
+msgstr ""
+
+#: \views\contents\edit.ctp:209
 msgid "Save"
 msgstr ""
 
