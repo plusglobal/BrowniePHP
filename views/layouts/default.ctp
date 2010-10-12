@@ -60,7 +60,7 @@ echo $scripts_for_layout;
 		</div>
 	<?php
 	} else {
-		echo $session->flash();
+		echo $this->Session->flash();
 		echo $content_for_layout;
 	} ?>
 	</div>

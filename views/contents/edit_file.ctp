@@ -5,8 +5,6 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit_file', '
 ?>
 <h1><?php __d('brownie', 'Add file'); ?></h1>
 <?php
-$session->flash();
-
 echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 
 if(!empty($brwConfig['files'][$categoryCode])){

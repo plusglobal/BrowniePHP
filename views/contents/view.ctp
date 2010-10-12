@@ -1,7 +1,6 @@
 <div class="view <?php echo $model;?>">
 	<div class="clearfix">
 	<h1><?php  __d('brownie', $brwConfig['names']['singular']);?></h1>
-	<?php $session->flash(); ?>
 	<div class="actions-view">
 		<ul>
 			<?php

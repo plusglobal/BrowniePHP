@@ -9,7 +9,6 @@ echo $form->create('Content', array('type' => 'file', 'url' => $url));
 	echo String::insert(__d('brownie', 'Import :name_plural', true), array('name_plural' => $brwConfig['names']['plural']));
 	?></legend>
 	<?php
-	$session->flash();
 	echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 	echo $form->input('file', array('type' => 'file'));
 	?>

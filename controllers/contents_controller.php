@@ -327,9 +327,9 @@ class ContentsController extends BrownieAppController {
 		}
 
 		if ($deleted) {
-			$this->Session->setFlash(__d('brownie', 'Successful delete', true));
+			$this->Session->setFlash(__d('brownie', 'Successful delete', true), 'flash_success');
 		} else {
-			$this->Session->setFlash(__d('brownie', 'Unable to delete', true));
+			$this->Session->setFlash(__d('brownie', 'Unable to delete', true), 'flash_error');
 		}
 
 		if (env('HTTP_REFERER')) {
@@ -368,9 +368,9 @@ class ContentsController extends BrownieAppController {
 
 			if ($this->Model->BrwImage->save($this->data)) {
 				if ($imageId){
-					$this->Session->setFlash(__d('brownie', 'The image was Successfully edited', true));
+					$this->Session->setFlash(__d('brownie', 'The image was Successfully edited', true), 'flash_success');
 				} else {
-					$this->Session->setFlash(__d('brownie', 'The image was Successfully added', true));
+					$this->Session->setFlash(__d('brownie', 'The image was Successfully added', true), 'flash_success');
 				}
 				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
 			}
@@ -396,10 +396,10 @@ class ContentsController extends BrownieAppController {
 				}
 			}
 			if ($saved) {
-				$this->Session->setFlash(sprintf(__d('brownie', '%d images successfully added', true), $saved));
+				$this->Session->setFlash(sprintf(__d('brownie', '%d images successfully added', true), $saved), 'flash_success');
 				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
 			} else {
-				$this->Session->setFlash(__d('brownie', 'None images uploaded. Please try again.', true), $saved);
+				$this->Session->setFlash(__d('brownie', 'None images uploaded. Please try again.', true), 'flash_notice');
 			}
 		}
 		$this->set(compact('categoryCode', 'recordId', 'imageId'));
@@ -421,9 +421,9 @@ class ContentsController extends BrownieAppController {
 
 			if ($this->Model->BrwFile->save($this->data)) {
 				if ($fileId){
-					$this->Session->setFlash(__d('brownie', 'The file was Successfully edited', true));
+					$this->Session->setFlash(__d('brownie', 'The file was Successfully edited', true), 'flash_success');
 				} else {
-					$this->Session->setFlash(__d('brownie', 'The file was Successfully added', true));
+					$this->Session->setFlash(__d('brownie', 'The file was Successfully added', true), 'flash_success');
 				}
 				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
 			}
@@ -448,15 +448,16 @@ class ContentsController extends BrownieAppController {
 		if (!empty($this->data)) {
 			$result = $this->Model->brwImport($this->data);
 			if (!$result) {
-				$this->Session->setFlash(__d('brownie', 'The import could not be done. Please try again', true));
+				$this->Session->setFlash(__d('brownie', 'The import could not be done. Please try again', true), 'flash_error');
 			} else {
-				$this->Session->setFlash($result);
+				$this->Session->setFlash($result, 'flash_success');
 				$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
 			}
 		}
 
 		if (Configure::read('debug') and !method_exists($this->Model, 'brwImport')) {
-			$this->Session->setFlash(sprintf(__d('brownie', 'Warning: %s::brwImport() must be defined', true), $model));
+			$msg = sprintf(__d('brownie', 'Warning: %s::brwImport() must be defined', true), $model);
+			$this->Session->setFlash($msg, 'flash_error');
 		}
 	}
 

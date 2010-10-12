@@ -10,7 +10,6 @@ echo $form->create('Content', array('url' => $url, 'type' => 'file'));
 ?>
 <h1><?php __d('brownie', 'Add image'); ?></h1>
 <?php
-$session->flash();
 
 echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 
