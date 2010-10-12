@@ -224,4 +224,3 @@ class Content extends BrownieAppModel{
 	}
 
 }
-?>

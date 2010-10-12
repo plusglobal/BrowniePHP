@@ -24,8 +24,6 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 		?>
 		</legend>
 		<?php
-		$session->flash();
-
 		echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 		foreach ($fields as $key => $value) {
 			$params = array();

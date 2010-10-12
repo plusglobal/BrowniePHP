@@ -54,7 +54,7 @@ echo $scripts_for_layout;
 		<div id="menu"><?php echo $this->element('menu') ?></div>
 		<div id="content">
 			<?php
-			echo $session->flash();
+			echo $this->Session->flash();
 			echo $content_for_layout;
 			?>
 		</div>

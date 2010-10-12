@@ -218,7 +218,7 @@ class ContentsController extends BrownieAppController {
 
 			$this->Model->create();
 			if ($this->Model->saveAll($this->data, array('validate' => 'first', 'model' => $this->Model->name))) {
-				$this->Session->setFlash(__d('brownie', 'The information has been saved', true));
+				$this->Session->setFlash(__d('brownie', 'The information has been saved', true), 'flash_success');
 				if (!empty($this->data['Content']['after_save'])) {
 					switch ($this->data['Content']['after_save']) {
 						case 'add':
@@ -239,7 +239,8 @@ class ContentsController extends BrownieAppController {
 					}
 				}
 			} else {
-				$this->Session->setFlash(__d('brownie', 'The information could not be saved. Please, check the error messages.', true));
+				$msg = __d('brownie', 'The information could not be saved. Please, check the error messages.', true);
+				$this->Session->setFlash($msg, 'flash_error');
 			}
 		}
 
