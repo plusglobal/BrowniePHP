@@ -1,6 +1,6 @@
 <?php
 
-class BrwImageBehavior extends ModelBehavior {
+class BrwUploadBehavior extends ModelBehavior {
 
 	var $max_upload_size = 0;
 	var $extensions = array('png', 'jpg', 'gif', 'jpeg');
