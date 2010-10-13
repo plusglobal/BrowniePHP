@@ -30,6 +30,9 @@ class BrownieAppController extends AppController {
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('isUserRoot', $this->Session->read('Auth.BrwUser.root'));
+		if (method_exists('AppModel', 'currentUser')) {
+			AppModel::currentUser($this->Session->read('Auth.BrwUser'));
+		}
 	}
 
 	function _multiSiteSettings() {
