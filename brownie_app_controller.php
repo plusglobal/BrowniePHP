@@ -5,7 +5,7 @@ class BrownieAppController extends AppController {
 	var $components = array('Auth', 'Session');
 	var $helpers = array('Html', 'Session', 'Javascript');
 	var $uses = array('BrwUser');
-
+	static $currentUser;
 
 	function beforeFilter() {
 		$this->_authSettings();
@@ -30,9 +30,7 @@ class BrownieAppController extends AppController {
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('isUserRoot', $this->Session->read('Auth.BrwUser.root'));
-		if (method_exists('AppModel', 'currentUser')) {
-			AppModel::currentUser($this->Session->read('Auth.BrwUser'));
-		}
+		self::$currentUser= $this->Session->read('Auth.BrwUser');
 	}
 
 	function _multiSiteSettings() {
