@@ -1,6 +1,6 @@
 <?php
 
-class FileBehavior extends ModelBehavior {
+class BrwFileBehavior extends ModelBehavior {
 
 	var $max_upload_size = 0;
 	var $excluded_extensions = array('php');
@@ -38,17 +38,15 @@ class FileBehavior extends ModelBehavior {
 	function beforeSave($Model) {
 		$data = $Model->data['BrwFile'];
 
-		if($data['file']['error'] == 4){
-			if(empty($data['id'])){
+		if ($data['file']['error'] == 4) {
+			if (empty($data['id'])) {
 				return false;
 			} else {
 				return true;
 			}
 		}
 
-		$add_data = array(
-			'name' => $data['file']['name'],
-		);
+		$add_data = array('name' => $data['file']['name']);
 
 		$data = Set::merge($data, $add_data);
 
@@ -65,20 +63,20 @@ class FileBehavior extends ModelBehavior {
 		/**/
 		$Model->data['BrwFile'] = $data;
 
-		return $Model->beforeSave();
+		//return $Model->beforeSave();
 	}
 
 	function afterSave($Model, $created) {
 
-		if(!empty($Model->data['BrwFile']['file']['tmp_name'])){
+		if (!empty($Model->data['BrwFile']['file']['tmp_name'])) {
 
 			$model = $Model->data['BrwFile']['model'];
 			$source = $Model->data['BrwFile']['file']['tmp_name'];
 
 			$dest_model_dir = 'uploads/' . $model;
 
-			if(!is_dir($dest_model_dir)){
-				if(!mkdir($dest_model_dir, 0777)) {
+			if (!is_dir($dest_model_dir)) {
+				if (!mkdir($dest_model_dir, 0777, true)) {
 					$Model->log('Brownie CMS: unable to create dir ' . $dest_model_dir);
 				} else {
 					chmod($dest_model_dir, 0777);

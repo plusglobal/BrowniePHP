@@ -24,7 +24,7 @@ class CmsComponent extends Object{
 
 	function _attachAllUploads() {
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwImage');
-		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.File');
+		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.BrwImage');
 		/*$models = App::objects('model');
 		foreach ($models as $model) {
 			if ($Model = ClassRegistry::getObject($model)) {

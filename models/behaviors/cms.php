@@ -106,7 +106,7 @@ class CmsBehavior extends ModelBehavior {
 		if (!empty($Model->brownieCmsConfig['images'])) {
 			$results = $this->_addImagePaths($results, $Model);
 		}
-		if (!empty($Model->brownieCmsConfig['images'])) {
+		if (!empty($Model->brownieCmsConfig['files'])) {
 			$results = $this->_addFilePaths($results, $Model);
 		}
 		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {

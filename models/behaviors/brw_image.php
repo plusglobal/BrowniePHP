@@ -6,76 +6,80 @@ class BrwImageBehavior extends ModelBehavior {
 	var $extensions = array('png', 'jpg', 'gif', 'jpeg');
 	var $excluded_extensions = array('php');
 
-	function setup($BrwImage, $config = array()) {
+	function setup($Model, $config = array()) {
 		$this->max_upload_size = 5 * 1024 * 1024;
 	}
 
 
-	function beforeValidate($BrwImage) {
+	function beforeValidate($Model) {
 		$kB = round($this->max_upload_size / 1024, 2);
 		$mB = round($this->max_upload_size / (1024 * 1024), 2);
-		$BrwImage->validate = array (
+		$Model->validate = array (
 			'file' => array (
 				'valid_size' => array(
 					'rule' => array('validateSizeFile'),
 					'message' => sprintf(__d('brownie', 'File too heavy. Maximum allowed: %s KB (%s MB)', true), $kB, $mB)
 				),
-				'valid_image' => array(
-					'rule' => array('validateImageFile'),
-					'message' => __d('brownie', 'Invalid image. Only jpg, gif and png are allowed.', true),
-				),
 			),
 		);
-		$BrwImage->data['BrwImage']['name'] = null;
-		if (!empty($BrwImage->data['BrwImage']['file'])) {
-			if (is_array($BrwImage->data['BrwImage']['file'])) {
+
+		if ($Model->alias == 'BrwImage') {
+			$Model->validate['file']['valid_image'] = array(
+				'rule' => array('validateImageFile'),
+				'message' => __d('brownie', 'Invalid image. Only jpg, gif and png are allowed.', true),
+			);
+		}
+
+		$Model->data[$Model->alias]['name'] = null;
+		if (!empty($Model->data[$Model->alias]['file'])) {
+			if (is_array($Model->data[$Model->alias]['file'])) {
 				//the image was uploaded
-				switch ($BrwImage->data['BrwImage']['file']['error']) {
+				switch ($Model->data[$Model->alias]['file']['error']) {
 					case 0:
-						$BrwImage->data['BrwImage']['name'] = $BrwImage->data['BrwImage']['file']['name'];
-						$BrwImage->data['BrwImage']['file'] = $BrwImage->data['BrwImage']['file']['tmp_name'];
+						$Model->data[$Model->alias]['name'] = $Model->data[$Model->alias]['file']['name'];
+						$Model->data[$Model->alias]['file'] = $Model->data[$Model->alias]['file']['tmp_name'];
 					break;
 					case 4:
-						$BrwImage->data['BrwImage']['file'] = '';
+						$Model->data[$Model->alias]['file'] = '';
 					break;
 				}
-			} elseif(is_string($BrwImage->data['BrwImage']['file'])) {
-				$BrwImage->data['BrwImage']['name'] = end(explode(DS, $BrwImage->data['BrwImage']['file']));
-				if ($BrwImage->data['BrwImage']['file'][0] == '/') {
-					$BrwImage->data['BrwImage']['file'] = substr($BrwImage->data['BrwImage']['file'], 1);
+			} elseif(is_string($Model->data[$Model->alias]['file'])) {
+				$Model->data[$Model->alias]['name'] = end(explode(DS, $Model->data[$Model->alias]['file']));
+				if ($Model->data[$Model->alias]['file'][0] == '/') {
+					$Model->data[$Model->alias]['file'] = substr($Model->data[$Model->alias]['file'], 1);
 				}
 			}
 		}
 	}
 
-	function beforeSave($BrwImage) {
-		$updating = !empty($BrwImage->data['BrwImage']['id']);
-		$file_changed = !empty($BrwImage->data['BrwImage']['file']);
+	function beforeSave($Model) {
+		$updating = !empty($Model->data[$Model->alias]['id']);
+		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($updating) {
 			if($file_changed) {
-				$image = array_shift($BrwImage->findById($BrwImage->id));
-				$BrwImage->data['name_prev'] = $image['name'];
+				$image = array_shift($Model->findById($Model->id));
+				$Model->data['name_prev'] = $image['name'];
 			} else {
-				unset($BrwImage->data['BrwImage']['name']);
+				unset($Model->data[$Model->alias]['name']);
 				return true;
 			}
 		}
-		if (empty($BrwImage->data['BrwImage']['name'])) {
+		if (empty($Model->data[$Model->alias]['name'])) {
 			return false;
 		}
 		return true;
 	}
 
-	function afterSave($BrwImage, $created) {
-		$file_changed = !empty($BrwImage->data['BrwImage']['file']);
+	function afterSave($Model, $created) {
+		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($file_changed) {
-			$model = $BrwImage->data['BrwImage']['model'];
-			$source = $BrwImage->data['BrwImage']['file'];
-			$dest_dir = WWW_ROOT . 'uploads' . DS . $model . DS . $BrwImage->data['BrwImage']['record_id'];
-			$dest =  $dest_dir . DS . $BrwImage->data['BrwImage']['name'];
-			$updating = !empty($BrwImage->data['BrwImage']['id']);
+			$model = $Model->data[$Model->alias]['model'];
+			$source = $Model->data[$Model->alias]['file'];
+			$dest_dir = WWW_ROOT . 'uploads' . DS . $model . DS . $Model->data[$Model->alias]['record_id'];
+			$dest =  $dest_dir . DS . $Model->data[$Model->alias]['name'];
+			$updating = !empty($Model->data[$Model->alias]['id']);
 			if ($updating and $file_changed) {
-				$this->_deleteFiles($model, $BrwImage->data['BrwImage']['record_id'], $BrwImage->data['name_prev']);
+				$this->_deleteFiles($model, $Model->data[$Model->alias]['record_id'], $Model->data['name_prev']);
 			}
 			if (!is_dir($dest_dir)) {
 				if (!mkdir($dest_dir, 0777, true)) {
@@ -84,13 +88,13 @@ class BrwImageBehavior extends ModelBehavior {
 					chmod($dest_dir, 0777);
 				}
 			}
-			if ($this->_copy($BrwImage, $source, $dest)) {
+			if ($this->_copy($Model, $source, $dest)) {
 				chmod($dest, 0777);
 			}
 		}
 	}
 
-	function _copy($BrwImage, $source, $dest) {
+	function _copy($Model, $source, $dest) {
 		$newDest = $dest;
 		while (is_file($newDest)) {
 			$parts = explode(DS, $newDest);
@@ -99,7 +103,7 @@ class BrwImageBehavior extends ModelBehavior {
 		}
 		if (copy($source, $newDest)) {
 			if($newDest != $dest) {
-				return $BrwImage->save(array('id' => $BrwImage->id, 'name' => $file), array('callbacks' => false, 'validate' => false));
+				return $Model->save(array('id' => $Model->id, 'name' => $file), array('callbacks' => false, 'validate' => false));
 			} else {
 				return true;
 			}
@@ -108,8 +112,8 @@ class BrwImageBehavior extends ModelBehavior {
 		}
 	}
 
-	function beforeDelete($BrwImage) {
-		$image = $BrwImage->read();
+	function beforeDelete($Model) {
+		$image = $Model->read();
 		$image = array_shift($image);
 		$this->_deleteFiles($image['model'], $image['record_id'], $image['name']);
 	}
@@ -143,15 +147,15 @@ class BrwImageBehavior extends ModelBehavior {
 	}
 
 
-	function validateSizeFile($BrwImage, $data) {
-		if (empty($BrwImage->data['BrwImage']['file'])) {
+	function validateSizeFile($Model, $data) {
+		if (empty($Model->data[$Model->alias]['file'])) {
 			return true;
 		}
 
-		if (substr($BrwImage->data['BrwImage']['file'], 0, 7) == 'http://') {
+		if (substr($Model->data[$Model->alias]['file'], 0, 7) == 'http://') {
 			$filesize = 0;
 		} else {
-			$filesize = filesize($BrwImage->data['BrwImage']['file']);
+			$filesize = filesize($Model->data[$Model->alias]['file']);
 		}
 
 		if ($filesize > $this->max_upload_size) {
@@ -162,11 +166,11 @@ class BrwImageBehavior extends ModelBehavior {
 	}
 
 
-	function validateImageFile($BrwImage, $data) {
-		if (empty($BrwImage->data['BrwImage']['file'])) {
+	function validateImageFile($Model, $data) {
+		if (empty($Model->data[$Model->alias]['file'])) {
 			return true;
 		}
-		return getimagesize($BrwImage->data['BrwImage']['file']);
+		return getimagesize($Model->data[$Model->alias]['file']);
 	}
 
 
