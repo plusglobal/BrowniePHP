@@ -223,4 +223,18 @@ class Content extends BrownieAppModel{
 		return $out;
 	}
 
+
+	function defaults($Model) {
+		$data = array();
+		foreach ($Model->_schema as $field => $value) {
+			if (array_key_exists($field, $Model->brownieCmsConfig['default'])) {
+				$data[$field] = $Model->brownieCmsConfig['default'][$field];
+			} elseif (!empty($value['default'])) {
+				 $data[$field] = $value['default'];
+			}
+		}
+		return array($Model->alias => $data);
+	}
+
+
 }

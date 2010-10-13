@@ -194,7 +194,7 @@ class ContentsController extends BrownieAppController {
 
 
 		if (!empty($id)) {
-			if (!$this->Model->read(null, $id)){
+			if (!$this->Model->read(null, $id)) {
 				$this->cakeError('error404');
 			}
 			$action = 'edit';
@@ -294,7 +294,9 @@ class ContentsController extends BrownieAppController {
 				);
 				$this->data = array_shift($data);
 			} else {
-				$this->data = array($this->Model->name => $this->Model->brownieCmsConfig['default']);
+				//$this->data = array($this->Model->name => $this->Model->brownieCmsConfig['default']);
+				$this->data = $this->Content->defaults($this->Model);
+				pr($this->data);
 			}
 		}
 
