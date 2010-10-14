@@ -152,10 +152,11 @@ class ContentsController extends BrownieAppController {
 
 		$permissions[$model] = $this->arrayPermissions($model);
 
+		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);
 		$assoc_models = $pages = $names = array();
 		if (!empty($this->Model->hasMany) and $this->Model->brownieCmsConfig['show_children']){
-			foreach($this->Model->hasMany as $key_model => $related_model){
-				if (!in_array($key_model, $this->Model->brownieCmsConfig['hide_children'])){
+			foreach ($assocs as $key_model => $related_model) {
+				if (!in_array($key_model, $this->Model->brownieCmsConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
 					//$this->paginate[$AssocModel->name] = Set::merge($related_model, $AssocModel->brownieCmsConfig['paginate']);
@@ -273,30 +274,15 @@ class ContentsController extends BrownieAppController {
 		}
 		$this->set('related', $related);
 
-		/*if ($this->Model->brownieCmsConfig['images']) {
-			$contain[] = 'BrwImage';
-		}
-
-		if ($this->Model->brownieCmsConfig['files']) {
-			$contain[] = 'BrwFile';
-		}*/
-
-
 		if (empty($this->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
-				$data = $this->Model->find(
-					'all',
-					array(
-						'conditions' => array($this->Model->name . '.id' => $id),
-						'contain' => $contain
-					)
-				);
-				$this->data = array_shift($data);
+				$this->data = $this->Model->find('first', array(
+					'conditions' => array($this->Model->name . '.id' => $id),
+					'contain' => $contain
+				));
 			} else {
-				//$this->data = array($this->Model->name => $this->Model->brownieCmsConfig['default']);
 				$this->data = $this->Content->defaults($this->Model);
-				pr($this->data);
 			}
 		}
 
@@ -311,24 +297,16 @@ class ContentsController extends BrownieAppController {
 			$fields = $this->Content->fieldsAdd($this->Model);
 		}
 		$this->set('fields', $fields);
-
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
 	}
 
 
 	function delete($model, $id) {
-		$record = $this->Model->read(null, $id);
-		if (empty($record)) {
+		if (!$this->Model->read(null, $id)) {
 			$this->cakeError('error404');
 		}
 
-		if ($this->Content->isTree($this->Model)) {
-			$deleted = $this->Model->removeFromTree($id, true);
-		} else {
-			$deleted = $this->Model->delete($id);
-		}
-
-		if ($deleted) {
+		if ($this->Content->delete($this->Model, $id)) {
 			$this->Session->setFlash(__d('brownie', 'Successful delete', true), 'flash_success');
 		} else {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true), 'flash_error');

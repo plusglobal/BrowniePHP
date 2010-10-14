@@ -124,7 +124,8 @@ class CmsBehavior extends ModelBehavior {
 
 	function beforeDelete($Model) {
 		$toNullModels = array();
-		foreach($Model->hasMany as $related) {
+		$assoc = array_merge($Model->hasMany, $Model->hasOne);
+		foreach($assoc as $related) {
 			if ($related['className'] != 'BrwImage' and  $related['className'] != 'BrwFile') {
 				if (!$related['dependent']) {
 					$rel = ClassRegistry::getObject($related['className']);
@@ -154,7 +155,7 @@ class CmsBehavior extends ModelBehavior {
 
 	}
 
-	function afterDelete($Model) {
+	/*function afterDelete($Model) {
 		if (!empty($Model->BrwImage)) {
 			$Model->BrwImage->deleteAll(
 				array('model' => $Model->alias, 'record_id' => $Model->data[$Model->alias]['id']), false, true
@@ -165,7 +166,7 @@ class CmsBehavior extends ModelBehavior {
 				array('model' => $Model->alias, 'record_id' => $Model->data[$Model->alias]['id']), false, true
 			);
 		}
-	}
+	}*/
 
 	function _isSiteDependant($Model) {
 		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]);

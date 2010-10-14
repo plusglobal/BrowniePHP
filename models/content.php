@@ -3,7 +3,6 @@ class Content extends BrownieAppModel{
 
 	var $name = 'Content';
 	var $useTable = false;
-
 	var $cmsConfig = array();
 
 	function modelExists($model) {
@@ -12,10 +11,10 @@ class Content extends BrownieAppModel{
 
 	function formatForView($data, $Model) {
 		$out = array();
-		if(!empty($data[$Model->name])){
+		if (!empty($data[$Model->name])) {
 			$out = $this->formatSingleForView($data, $Model);
 		} else {
-			foreach($data as $dataset){
+			foreach ($data as $dataset) {
 				$out[] = $this->formatSingleForView($dataset, $Model);
 			}
 		}
@@ -26,18 +25,18 @@ class Content extends BrownieAppModel{
 		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
 		$foreignKeys = $this->getForeignKeys($Model);
-		foreach($data[$Model->name] as $key => $value) {
-			if(in_array($key, $fieldsHide)){
+		foreach ($data[$Model->name] as $key => $value) {
+			if (in_array($key, $fieldsHide)) {
 				unset($data[$Model->name][$key]);
-			} elseif(in_array($key, $fieldsConfig['code'])) {
+			} elseif (in_array($key, $fieldsConfig['code'])) {
 				$data[$Model->name][$key] = '<pre>' . htmlspecialchars($data[$Model->name][$key]) . '</pre>';
-			} elseif(isset($foreignKeys[$key])) {
-				$read = $Model->{$foreignKeys[$key]}->read(null, $data[$Model->name][$key]);
+			} elseif (isset($foreignKeys[$key])) {
+				$read = $Model->{$foreignKeys[$key]}->findById($data[$Model->name][$key]);
 				$data[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
-			} elseif(!empty($Model->_schema[$key]['type'])) {
-				switch($Model->_schema[$key]['type']){
+			} elseif (!empty($Model->_schema[$key]['type'])) {
+				switch($Model->_schema[$key]['type']) {
 					case 'boolean':
-						$data[$Model->name][$key] = ife($data[$Model->name][$key], __d('brownie', 'Yes', true), __d('brownie', 'No', true));
+						$data[$Model->name][$key] = $data[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
 					break;
 					case 'datetime':
 						$data[$Model->name][$key] = $this->formatDateTime($data[$Model->name][$key]);
@@ -54,8 +53,8 @@ class Content extends BrownieAppModel{
 
 	function getForeignKeys($Model) {
 		$out = array();
-		if(!empty($Model->belongsTo)) {
-			foreach($Model->belongsTo as $assocModel){
+		if (!empty($Model->belongsTo)) {
+			foreach ($Model->belongsTo as $assocModel) {
 				$out[$assocModel['foreignKey']] = $assocModel['className'];
 			}
 		}
@@ -75,7 +74,7 @@ class Content extends BrownieAppModel{
 		$schema = $Model->_schema;
 		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
-		foreach($fieldsNotUsed as $field){
+		foreach ($fieldsNotUsed as $field) {
 			if (isset($schema[$field])) {
 				unset($schema[$field]);
 			}
@@ -91,7 +90,7 @@ class Content extends BrownieAppModel{
 			'type' => array('type' => 'string', 'null' => true, 'length' => 255),
 			'after' => null,
 		);
-		foreach($virtuals as $virtualField => $options) {
+		foreach ($virtuals as $virtualField => $options) {
 			if (empty($options)) {
 				$options = array();
 			}
@@ -113,19 +112,19 @@ class Content extends BrownieAppModel{
 	}
 
 	function addValidationsRules($Model, $edit) {
-		if($edit){
+		if ($edit) {
 			$fields = $this->fieldsEdit($Model);
 		} else {
 			$fields = $this->fieldsAdd($Model);
-			if(isset($fields['id'])){
+			if (isset($fields['id'])) {
 				unset($fields['id']);
 			}
 		}
 		$rules = $fields;
-		foreach($fields as $key => $value) {
+		foreach ($fields as $key => $value) {
 			$rules[$key] = array();
 
-			if(!$value['null']) {
+			if (!$value['null']) {
 				$allowEmpty = false;
 				$rules[$key][] = array(
 					'rule' => array('minLength', '1'),
@@ -136,8 +135,8 @@ class Content extends BrownieAppModel{
 				$allowEmpty = true;
 			}
 
-			if($value['type'] == 'integer' or $value['type'] == 'float') {
-				if( !($this->isTree($Model) and $key =='parent_id') ){
+			if ($value['type'] == 'integer' or $value['type'] == 'float') {
+				if ( !($this->isTree($Model) and $key =='parent_id') ) {
 					$rules[$key][] = array(
 						'rule' => 'numeric',
 						'allowEmpty' => $allowEmpty,
@@ -146,7 +145,7 @@ class Content extends BrownieAppModel{
 				}
 			}
 
-			if($key == 'email' or strstr($key, '_email')) {
+			if ($key == 'email' or strstr($key, '_email')) {
 				$rules[$key][] = array(
 					'rule' => 'email',
 					'allowEmpty' => $allowEmpty,
@@ -154,10 +153,23 @@ class Content extends BrownieAppModel{
 				);
 			}
 
-			if($value['type'] == 'boolean') {
+			if ($value['type'] == 'boolean') {
 				$rules[$key][] = array(
 					'rule' => 'boolean',
 					'message' => __d('brownie', 'Incorrect value', true)
+				);
+			}
+
+			if ($this->fieldUnique($Model, $key)) {
+				$rules[$key][] = array(
+					'rule' => 'isUnique',
+					'message' => sprintf(
+						($Model->brownieCmsConfig['names']['gender']==1) ?
+							__d('brownie', "This value must be unique and it's already in use by another %s [male]", true):
+							__d('brownie', "This value must be unique and it's already in use by another %s [female]", true),
+						$Model->brownieCmsConfig['names']['singular']
+					),
+					'allowEmpty' => true,
 				);
 			}
 
@@ -198,15 +210,21 @@ class Content extends BrownieAppModel{
 
 
 	function brownieBeforeSave($data, $Model) {
-		if($this->isTree($Model)){
+		if ($this->isTree($Model)) {
 			$data = $this->treeBeforeSave($data, $Model);
 		}
+		foreach ($Model->_schema as $field => $value) {
+			if ($value['null'] and empty($data[$Model->name][$field])) {
+				$data[$Model->name][$field] = null;
+			}
+		}
+
 		return $data;
 	}
 
 
 	function treeBeforeSave($data, $Model) {
-		if(!empty($data[$Model->name]['parent_id_NULL']) and $data[$Model->name]['parent_id_NULL']){
+		if (!empty($data[$Model->name]['parent_id_NULL']) and $data[$Model->name]['parent_id_NULL']) {
 			$data[$Model->name]['parent_id'] = NULL;
 		}
 		return $data;
@@ -215,8 +233,8 @@ class Content extends BrownieAppModel{
 
 	function fckFields($Model) {
 		$out = array();
-		foreach($Model->_schema as $field => $metadata){
-			if($metadata['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_editor'])) {
+		foreach ($Model->_schema as $field => $metadata) {
+			if ($metadata['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_editor'])) {
 				$out[] = $field;
 			}
 		}
@@ -236,5 +254,24 @@ class Content extends BrownieAppModel{
 		return array($Model->alias => $data);
 	}
 
+
+	function delete($Model, $id) {
+		if ($this->isTree($Model)) {
+			$deleted = $Model->removeFromTree($id, true);
+		} else {
+			$deleted = $Model->delete($id);
+		}
+		return $deleted;
+	}
+
+	function fieldUnique($Model, $field) {
+		$indexes = $Model->getDataSource()->index($Model->table);
+		foreach ($indexes as $index) {
+			if ($index['column'] == $field and !empty($index['unique'])) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
