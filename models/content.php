@@ -218,7 +218,6 @@ class Content extends BrownieAppModel{
 				$data[$Model->name][$field] = null;
 			}
 		}
-
 		return $data;
 	}
 
@@ -273,5 +272,13 @@ class Content extends BrownieAppModel{
 		}
 		return false;
 	}
+
+	/*function treeList($Model, $conditions) {
+		return treeListRecursive($Model->find('threaded', compact('conditions')), 0);
+	}
+
+	function treeListRecursive($) {
+
+	}*/
 
 }

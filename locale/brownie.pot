@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-14 12:18-0300\n"
+"POT-Creation-Date: 2010-10-18 11:24-0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -18,7 +18,15 @@ msgstr ""
 msgid "Control panel"
 msgstr ""
 
-#: \brownie_app_controller.php:100
+#: \brownie_app_controller.php:29
+msgid "Login failed. Invalid username or password."
+msgstr ""
+
+#: \brownie_app_controller.php:30
+msgid "Please login."
+msgstr ""
+
+#: \brownie_app_controller.php:102
 msgid "Menu"
 msgstr ""
 
@@ -118,19 +126,19 @@ msgstr ""
 msgid "This value must be unique and it's already in use by another %s [female]"
 msgstr ""
 
-#: \models\content.php:187
+#: \models\content.php:188
 msgid "Date not set"
 msgstr ""
 
-#: \models\content.php:191
+#: \models\content.php:192
 msgid "Invalid date"
 msgstr ""
 
-#: \models\content.php:197
+#: \models\content.php:198
 msgid "Datetime not set"
 msgstr ""
 
-#: \models\content.php:201
+#: \models\content.php:202
 msgid "Invalid datetime"
 msgstr ""
 

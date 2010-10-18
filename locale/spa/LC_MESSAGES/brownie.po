@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-14 12:18-0300\n"
-"PO-Revision-Date: 2010-10-14 12:19-0300\n"
+"POT-Creation-Date: 2010-10-18 11:24-0200\n"
+"PO-Revision-Date: 2010-10-18 10:25-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,15 @@ msgstr ""
 msgid "Control panel"
 msgstr "Panel de control"
 
-#: \brownie_app_controller.php:100
+#: \brownie_app_controller.php:29
+msgid "Login failed. Invalid username or password."
+msgstr "Nombre de usuario o contraseña incorrectos."
+
+#: \brownie_app_controller.php:30
+msgid "Please login."
+msgstr "Ingresar datos de acceso"
+
+#: \brownie_app_controller.php:102
 msgid "Menu"
 msgstr "Menú"
 
@@ -117,19 +125,19 @@ msgstr "Este valor debe ser único y ya está siendo usado por otro %s"
 msgid "This value must be unique and it's already in use by another %s [female]"
 msgstr "Este valor debe ser único y ya está siendo usado por otra %s"
 
-#: \models\content.php:187
+#: \models\content.php:188
 msgid "Date not set"
 msgstr "Fecha no establecida"
 
-#: \models\content.php:191
+#: \models\content.php:192
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
-#: \models\content.php:197
+#: \models\content.php:198
 msgid "Datetime not set"
 msgstr "Fecha/hora no establecida"
 
-#: \models\content.php:201
+#: \models\content.php:202
 msgid "Invalid datetime"
 msgstr "Fecha/hora no válida"
 
@@ -559,9 +567,6 @@ msgstr "Cerrar sesión"
 
 #~ msgid "Orden"
 #~ msgstr "Orden"
-
-#~ msgid "Last Login"
-#~ msgstr "Último acceso"
 
 #~ msgid "Country"
 #~ msgstr "País"

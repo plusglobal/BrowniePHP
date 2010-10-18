@@ -26,6 +26,8 @@ class BrownieAppController extends AppController {
 		$this->Auth->fields = array('username'  => 'email', 'password'  => 'password');
 		$this->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
+		$this->Auth->loginError = __d('brownie', 'Login failed. Invalid username or password.', true);
+		$this->Auth->authError = __d('brownie', 'Please login.', true);
 		Configure::write('Auth.BrwUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
 		$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
@@ -167,7 +169,6 @@ class BrownieAppController extends AppController {
 		}
 
 		if ($this->Session->read('Auth.BrwUser.root')) {
-
 			return true;
 		} else {
 			if ($model == 'BrwUser') {
