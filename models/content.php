@@ -210,13 +210,13 @@ class Content extends BrownieAppModel{
 
 
 	function brownieBeforeSave($data, $Model) {
-		if ($this->isTree($Model)) {
-			$data = $this->treeBeforeSave($data, $Model);
-		}
 		foreach ($Model->_schema as $field => $value) {
 			if ($value['null'] and empty($data[$Model->name][$field])) {
 				$data[$Model->name][$field] = null;
 			}
+		}
+		if ($this->isTree($Model)) {
+			$data = $this->treeBeforeSave($data, $Model);
 		}
 		return $data;
 	}
@@ -226,6 +226,13 @@ class Content extends BrownieAppModel{
 		if (!empty($data[$Model->name]['parent_id_NULL']) and $data[$Model->name]['parent_id_NULL']) {
 			$data[$Model->name]['parent_id'] = NULL;
 		}
+		if (array_key_exists('lft', $data[$Model->name])) {
+			unset($data[$Model->name]['lft']);
+		}
+		if (array_key_exists('rght', $data[$Model->name])) {
+			unset($data[$Model->name]['rght']);
+		}
+		//$this->log('tree beforeSave panel');		$this->log($data);
 		return $data;
 	}
 

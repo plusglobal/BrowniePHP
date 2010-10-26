@@ -88,6 +88,8 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function beforeFind($Model, $query) {
+		$this->_treeMultiSites($Model);
+
 		if ($site = Configure::read('currentSite') and !in_array($Model->name, array('BrwImage', 'BrwFile'))) {
 			if($this->_isSiteDependant($Model)) {
 				if (empty($query['conditions'])) {
@@ -116,6 +118,8 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function beforeSave($Model) {
+		$this->_treeMultiSites($Model);
+
 		if ($site = Configure::read('currentSite') and $this->_isSiteDependant($Model)) {
 			$Model->data[$Model->alias]['site_id'] = $site['id'];
 		}
@@ -499,5 +503,14 @@ class CmsBehavior extends ModelBehavior {
 		}
 	}
 
+
+	function _treeMultiSites($Model) {
+
+		if (Configure::read('multiSitesModel') and in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
+			if ($site = Configure::read('currentSite')) {
+				$Model->Behaviors->attach('Tree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
+			}
+		}
+	}
 
 }
