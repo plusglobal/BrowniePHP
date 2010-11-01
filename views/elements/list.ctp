@@ -11,7 +11,7 @@ if ($records):
 			foreach($record[$model] as $field_name => $field_value) {
 				if (!empty($schema[$field_name])) {
 					echo '
-					<th class="'.$field_name.'">' . $paginator->sort($field_name, null, array('model' => $model)) . '</th>';
+					<th class="'.$field_name.' '.$schema[$field_name]['type'].'">' . $paginator->sort($field_name, null, array('model' => $model)) . '</th>';
 				}
 			}
 			echo '
@@ -29,7 +29,7 @@ if ($records):
 		foreach($record[$model] as $field_name => $field_value) {
 			if (!empty($schema[$field_name])) {
 				echo '
-				<td class="'.$field_name.' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
+				<td class="'.$field_name.' '.$schema[$field_name]['type'].' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
 			}
 		}
 

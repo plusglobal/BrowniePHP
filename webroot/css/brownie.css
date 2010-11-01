@@ -575,6 +575,18 @@ div.view td, td.field, p.norecords{
 	padding: 7px;
 }
 
+td.boolean, td.id, td.integer, td.float{
+	width: 1px;
+}
+
+td.float, td.integer, th.float, th.integer{
+	text-align: right;
+}
+
+td.boolean, th.boolean, td.date, th.date{
+	text-align: center;
+}
+
 th.actions{
 	text-align: center;
 	color: #fff;
