@@ -174,14 +174,7 @@ foreach($uploads as $upload){
 
 <fieldset>
 <?php
-
-if(!empty($this->params['named']['after_save'])) {
-	$default = $this->params['named']['after_save'];
-} else {
-	$default = 'view';
-}
-
-echo $form->input('after_save', array(
+$params = array(
 	'type' => 'select',
 	'label' => __d('brownie', 'After save', true),
 	'options' => array(
@@ -197,8 +190,13 @@ echo $form->input('after_save', array(
 		'view' => __d('brownie', 'View saved information', true),
 		'home' => __d('brownie', 'Go home', true),
 	),
-	'default' => $default,
-));
+	'default' => (empty($this->params['named']['after_save']))? 'view':$this->params['named']['after_save'],
+);
+if (!$brwConfig['actions']['add']) {
+	unset($params['options']['add']);
+}
+
+echo $form->input('after_save', $params);
 ?>
 
 </fieldset>
