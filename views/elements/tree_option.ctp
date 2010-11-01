@@ -2,9 +2,9 @@
 
 <span class="name">
 <?php echo $model[$displayField] ?>
-&nbsp;
-d: <?php echo $model['display'] ?>&nbsp;
-e: <?php echo $model['enabled'] ?>&nbsp;
+
+<?php /*&nbsp;d: <?php echo $model['display'] ?>&nbsp;
+e: <?php echo $model['enabled'] ?>&nbsp; */ ?>
 
 
 </span>

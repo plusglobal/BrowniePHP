@@ -85,6 +85,7 @@ class CmsBehavior extends ModelBehavior {
 	function setup($Model, $config = array()) {
 		$this->cmsConfigInit($Model);
 		$this->_attachUploads($Model);
+		$this->_treeMultiSites($Model);
 	}
 
 	function beforeFind($Model, $query) {
