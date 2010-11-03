@@ -126,14 +126,7 @@ function resizeImage($file, $sizes, $quality = 95) {
 	}
 
 	//maintain transparency to gif and png
-	/*
-	if ($ext == 'gif' or $ext == 'png') {
-		imagealphablending($newImage, false);
-		imagesavealpha($newImage, true);
-		imagefilledrectangle($newImage, 0, 0, $applyWidth, $applyHeight, imagecolorallocatealpha($newImage, 255, 255, 255, 127));
-	}*/
-
-	if ($ext == 'gif' and $trnprt_indx = imagecolortransparent($oldImage)) {
+	if ($ext == 'gif' and $trnprt_indx = imagecolortransparent($oldImage) and $trnprt_indx != -1) {
 		$trnprt_color = imagecolorsforindex($oldImage, $trnprt_indx); // Get the original image's transparent color's RGB values
 		$trnprt_indx = imagecolorallocate($newImage, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']); // Allocate the same color in the new image resource
 		imagefill($newImage, 0, 0, $trnprt_indx); // Completely fill the background of the new image with allocated color.
@@ -168,11 +161,7 @@ function resizeImage($file, $sizes, $quality = 95) {
 	imagedestroy($newImage);
 	imagedestroy($oldImage);
 
-	if (!$saved) {
-		return false;
-	}
-
-	return true;
+	return $saved;
 }
 
 
