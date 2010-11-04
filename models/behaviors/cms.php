@@ -66,6 +66,8 @@ class CmsBehavior extends ModelBehavior {
 
 		'hide_children' => array('BrwImage', 'BrwFile'),
 
+		'site_dependent' => true,
+
 	);
 
 	var $cmsConfigDefaultImage = array(
@@ -92,7 +94,7 @@ class CmsBehavior extends ModelBehavior {
 		$this->_treeMultiSites($Model);
 
 		if ($site = Configure::read('currentSite') and !in_array($Model->name, array('BrwImage', 'BrwFile'))) {
-			if($this->_isSiteDependant($Model)) {
+			if($this->_isSiteDependent($Model)) {
 				if (empty($query['conditions'])) {
 					$query['conditions'] = array();
 				}
@@ -121,7 +123,7 @@ class CmsBehavior extends ModelBehavior {
 	function beforeSave($Model) {
 		$this->_treeMultiSites($Model);
 
-		if ($site = Configure::read('currentSite') and $this->_isSiteDependant($Model)) {
+		if ($site = Configure::read('currentSite') and $this->_isSiteDependent($Model)) {
 			$Model->data[$Model->alias]['site_id'] = $site['id'];
 		}
 		return $Model->data;
@@ -173,8 +175,8 @@ class CmsBehavior extends ModelBehavior {
 		}
 	}*/
 
-	function _isSiteDependant($Model) {
-		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]);
+	function _isSiteDependent($Model) {
+		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brownieCmsConfig['site_dependent'];
 	}
 
 
@@ -196,47 +198,49 @@ class CmsBehavior extends ModelBehavior {
 		}
 
 		if (!empty($Model->brownieCmsConfig)) {
-			$config = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
+			$Model->brownieCmsConfig = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
 		} else {
-			$config = $this->cmsConfig;
+			$Model->brownieCmsConfig = $this->cmsConfig;
 		}
-		$config['paginate']['order'] = str_replace('{model}', $Model->alias, $config['paginate']['order']);
+
+		$Model->brownieCmsConfig['paginate']['order'] = str_replace(
+			'{model}', $Model->alias, $Model->brownieCmsConfig['paginate']['order']
+		);
 
 		if (empty($Model->order)) {
-			$Model->order = $config['paginate']['order'];
+			$Model->order = $Model->brownieCmsConfig['paginate']['order'];
 		}
 
-		$config['names'] = $this->cmsConfigNames($config['names'], $Model);
+		$Model->brownieCmsConfig['names'] = $this->cmsConfigNames($Model->brownieCmsConfig['names'], $Model);
 
-		if ($config['images']) {
+		if ($Model->brownieCmsConfig['images']) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwImage.model' => $Model->name)
 			))), false);
-			foreach($config['images'] as $key => $value) {
-				$config['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
+			foreach($Model->brownieCmsConfig['images'] as $key => $value) {
+				$Model->brownieCmsConfig['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
 			}
 		}
 
-		if ($config['files']) {
+		if ($Model->brownieCmsConfig['files']) {
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwFile.model' => $Model->name)
 			))), false);
-			foreach($config['files'] as $key => $value) {
-				$config['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
+			foreach($Model->brownieCmsConfig['files'] as $key => $value) {
+				$Model->brownieCmsConfig['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
 			}
 		}
 
-		if ($this->_isSiteDependant($Model) and Configure::read('multiSitesModel')) {
-			$config['fields']['hide'][] = 'site_id';
+		if ($this->_isSiteDependent($Model) and Configure::read('multiSitesModel')) {
+			$Model->brownieCmsConfig['fields']['hide'][] = 'site_id';
 		}
 
-		if (!empty($config['fields']['conditional'])) {
-			$config['fields']['conditional'] = $this->_camelize($config['fields']['conditional']);
+		if (!empty($Model->brownieCmsConfig['fields']['conditional'])) {
+			$Model->brownieCmsConfig['fields']['conditional'] = $this->_camelize($Model->brownieCmsConfig['fields']['conditional']);
 		}
-
-		$Model->brownieCmsConfig = $config;
+		$Model->brownieCmsConfig = $Model->brownieCmsConfig;
 	}
 
 
