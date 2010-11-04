@@ -94,7 +94,7 @@ class CmsBehavior extends ModelBehavior {
 		$this->_treeMultiSites($Model);
 
 		if ($site = Configure::read('currentSite') and !in_array($Model->name, array('BrwImage', 'BrwFile'))) {
-			if($this->_isSiteDependent($Model)) {
+			if($this->isSiteDependent($Model)) {
 				if (empty($query['conditions'])) {
 					$query['conditions'] = array();
 				}
@@ -123,7 +123,7 @@ class CmsBehavior extends ModelBehavior {
 	function beforeSave($Model) {
 		$this->_treeMultiSites($Model);
 
-		if ($site = Configure::read('currentSite') and $this->_isSiteDependent($Model)) {
+		if ($site = Configure::read('currentSite') and $this->isSiteDependent($Model)) {
 			$Model->data[$Model->alias]['site_id'] = $site['id'];
 		}
 		return $Model->data;
@@ -175,7 +175,7 @@ class CmsBehavior extends ModelBehavior {
 		}
 	}*/
 
-	function _isSiteDependent($Model) {
+	function isSiteDependent($Model) {
 		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brownieCmsConfig['site_dependent'];
 	}
 
@@ -233,7 +233,7 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 
-		if ($this->_isSiteDependent($Model) and Configure::read('multiSitesModel')) {
+		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
 			$Model->brownieCmsConfig['fields']['hide'][] = 'site_id';
 		}
 
