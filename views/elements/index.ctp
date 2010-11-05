@@ -26,12 +26,4 @@
 		</div>
 	</div>
 </div>
-<?php
-$passed = array('model' => $model, 'records' => $records, 'schema' => $schema);
-
-if (empty($isTree)) {
-	echo $this->element('list', $passed);
-} else {
-	echo $this->element('tree', $passed);
-}
-?>
+<?php echo $this->element('list', array('model' => $model, 'records' => $records, 'schema' => $schema)) ?>

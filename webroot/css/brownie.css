@@ -393,56 +393,62 @@ div.tree ul li div.actions a.delete{
 	background-image: url(img/func_borrar_ico.png);
 }
 
-
-
-/* Paging */
-div.pagination p{
-	margin: 10px 0 35px 0;
-}
-
-div.paging{
-	margin: 10px 0;
-}
-
-div.paging span{
+.tree_prepend{
+	width: 22px;
 	display: block;
 	float: left;
-	width: 31px;
-	height: 23px;
-	background: url(img/page.png) 0 0 no-repeat;
-	margin: 2px;
-	font: bold 12px Verdana;
-	color: #000;
-	line-height: 23px;
-	text-align: center;
-	overflow: hidden;
+	height: 4px;
 }
 
-div.paging a{
+.tree_arrow{
+	width: 8px;
+	margin-right: 7px;
 	display: block;
-	height: 23px;
-	color: #fff;
+	float: left;
+	height: 1.1em;
+	background: url(img/level.png) 0 2px no-repeat;
 }
 
-div.paging span.prev, div.paging span.next{
-	text-indent: 100px;
+/* Paging */
+
+div.pagination {
+	clear: both;
+	
+}
+div.pagination span{
+	display: block;
+	float: left;
+}
+div.pagination a, div.pagination span.current, div.pagination a.prev, div.pagination a.next{
+	display: block;
+	float: left;
+	text-align: center;
+	margin: 20px 4px 12px 0;
+	font-size: 13px;
+	font-weight: bold;
+	color: #757E82;
+	border: 1px solid #ccc;
+	padding: 4px 6px 4px 6px;
+	text-decoration: none;
+	background: #fff;
+}
+div.pagination span.current{
+	border: 1px solid #ccc;
+	color: #444;
+}
+div.pagination a:hover{
+	background: #E1EBF5;
+	color: #000;
 }
 
-div.paging span.prev{
-	background-image: url(img/anterior2_ico.png);
+div.pagination span.prev span.disabled, div.pagination span.next span.disabled{
+	display: none;
 }
 
-div.paging span.next{
-	background-image: url(img/siguiente2_ico.png);
+.pagination p{
+	margin: 20px 4px 12px 0;
 }
 
-div.paging span.prev div.disabled{
-	background-image: url(img/anterior2_ico_disabled.png);
-}
-
-div.paging span.next div.disabled{
-	background-image: url(img/siguiente2_ico_disabled.png);
-}
 
 /* flash messages */
 

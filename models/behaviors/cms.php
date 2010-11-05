@@ -129,6 +129,14 @@ class CmsBehavior extends ModelBehavior {
 		return $Model->data;
 	}
 
+	/*
+	function afterSave($Model) {
+		if (in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
+			$Model->id = null;
+			$Model->reorder(array('id' => $Model->data[$Model->alias]['parent_id'], 'sort' => $Model->order));
+		}
+	}*/
+
 	function beforeDelete($Model) {
 		$toNullModels = array();
 		$assoc = array_merge($Model->hasMany, $Model->hasOne);
@@ -238,11 +246,11 @@ class CmsBehavior extends ModelBehavior {
 		$i = 0;
 		$schema = (array)$Model->_schema;
 		foreach($schema as $key => $values) {
-			if (in_array($values['type'], $listableTypes)) {
+			if (in_array($values['type'], $listableTypes) and !in_array($key, array('lft', 'rght', 'parent_id'))) {
 				$fields[] = $key;
-			}
-			if ($i++ > 5) {
-				return $fields;
+				if ($i++ > 5) {
+					return $fields;
+				}
 			}
 		}
 		return $fields;

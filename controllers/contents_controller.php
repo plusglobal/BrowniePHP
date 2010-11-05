@@ -78,27 +78,23 @@ class ContentsController extends BrownieAppController {
 			$this->Model->brownieCmsConfig['actions']['delete'] = false;
 		}
 
-		if (!$this->Content->isTree($this->Model)) {
-			$this->paginate = $this->Model->brownieCmsConfig['paginate'];
-			$records = $this->paginate($this->Model);
-			$isUniqueRecord = (
-				count($records) == 1
-				and !$this->Model->brownieCmsConfig['actions']['add']
-				and !$this->Model->brownieCmsConfig['actions']['delete']
-			);
-			if ($isUniqueRecord) {
-				$this->redirect(array(
-					'controller' => 'contents', 'action' => 'view',
-					$this->Model->alias, $records[0][$this->Model->alias]['id']
-				));
-			}
-			$this->set('records', $this->Content->formatForView($records, $this->Model));
-		} else {
-			$this->helpers[] = 'Brownie.Tree';
-			$this->set('records', $this->Model->find('threaded'));
-			$this->set('isTree', true);
-			$this->set('displayField', $this->Model->displayField);
+		$this->paginate = $this->Model->brownieCmsConfig['paginate'];
+		if ($this->Content->isTree($this->Model)) {
+			$this->paginate['order'] = 'lft';
 		}
+		$records = $this->paginate($this->Model);
+		$isUniqueRecord = (
+			count($records) == 1
+			and !$this->Model->brownieCmsConfig['actions']['add']
+			and !$this->Model->brownieCmsConfig['actions']['delete']
+		);
+		if ($isUniqueRecord) {
+			$this->redirect(array(
+				'controller' => 'contents', 'action' => 'view',
+				$this->Model->alias, $records[0][$this->Model->alias]['id']
+			));
+		}
+		$this->set('records', $this->Content->formatForView($records, $this->Model));
 		$this->set('foreignKeyValue', '');
 		$this->set('permissions', array($this->Model->alias => $this->Model->brownieCmsConfig['actions']));
 	}
@@ -245,8 +241,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		$related = array();
-		$contain = array();
+		$contain = $related = array();
 		if (!empty($this->Model->belongsTo)) {
 			foreach($this->Model->belongsTo as $key_model => $related_model){
 				$AssocModel = $this->Model->$key_model;

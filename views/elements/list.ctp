@@ -60,9 +60,13 @@ if ($records) {
 	if ($numbers = $paginator->numbers(array('model' => $model, 'separator' => ''))) {
 		echo '
 		<div class="paging clearfix">
-		<span class="prev">' . $paginator->prev('<< ' . __d('brownie', 'previous', true), array('model' => $model), null, array('class'=>'disabled')) . '</span>
-		' . $numbers . '
-		<span class="next">' . $paginator->next(__d('brownie', 'next', true).' >>', array('model' => $model), null, array('class'=>'disabled')) . '</span>
+			<span class="prev">' . $paginator->prev(
+				'&laquo; ' . __d('brownie', 'previous', true), array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
+			) . '</span>
+			' . $numbers . '
+			<span class="next">' . $paginator->next(
+				__d('brownie', 'next', true).' &raquo;', array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
+			) . '</span>
 		</div>';
 	}
 

@@ -41,14 +41,6 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 					$params = array(
 						'type' => 'select',
 						'options' => $related['tree'][$key],
-						/*
-						'after' => $form->input(
-							$model . '.' . $key . '_NULL',
-							array(
-								'label' => __d('brownie', 'No parent', true),
-								'type' => 'checkbox'
-							)
-						),*/
 						'empty' => __d('brownie', '(No parent)', true),
 					);
 					if (!empty($this->params['named'][$key])) {

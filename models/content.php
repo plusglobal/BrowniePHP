@@ -10,10 +10,14 @@ class Content extends BrownieAppModel{
 	}
 
 	function formatForView($data, $Model) {
+
 		$out = array();
 		if (!empty($data[$Model->name])) {
 			$out = $this->formatSingleForView($data, $Model);
 		} else {
+			if ($this->isTree($Model)) {
+				$data = $this->formatTree($data, $Model);
+			}
 			foreach ($data as $dataset) {
 				$out[] = $this->formatSingleForView($dataset, $Model);
 			}
@@ -50,6 +54,17 @@ class Content extends BrownieAppModel{
 		return $data;
 	}
 
+
+	function formatTree($data, $Model) {
+		$treeList = $Model->generateTreeList(null, null, null, '<span class="tree_prepend"></span>');
+		foreach ($data as $i => $value) {
+			$displayValue = $data[$i][$Model->alias][$Model->displayField];
+			$data[$i][$Model->alias][$Model->displayField] =
+				str_replace($displayValue, '', $treeList[$value[$Model->alias]['id']])
+				. '<span class="tree_arrow"></span>' . $displayValue;
+		}
+		return $data;
+	}
 
 	function getForeignKeys($Model) {
 		$out = array();
@@ -232,7 +247,6 @@ class Content extends BrownieAppModel{
 		if (array_key_exists('rght', $data[$Model->name])) {
 			unset($data[$Model->name]['rght']);
 		}
-		//$this->log('tree beforeSave panel');		$this->log($data);
 		return $data;
 	}
 
@@ -279,13 +293,5 @@ class Content extends BrownieAppModel{
 		}
 		return false;
 	}
-
-	/*function treeList($Model, $conditions) {
-		return treeListRecursive($Model->find('threaded', compact('conditions')), 0);
-	}
-
-	function treeListRecursive($) {
-
-	}*/
 
 }
