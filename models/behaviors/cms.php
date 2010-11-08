@@ -132,13 +132,18 @@ class CmsBehavior extends ModelBehavior {
 		return $Model->data;
 	}
 
-	/*
+
 	function afterSave($Model) {
 		if (in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
+			$Model->Behaviors->detach('Tree');
+			$Model->Behaviors->attach('Brownie.BrwTree');
+			if ($site = Configure::read('currentSite')) {
+				$Model->Behaviors->attach('Brownie.BrwTree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
+			}
 			$Model->id = null;
 			$Model->reorder(array('id' => $Model->data[$Model->alias]['parent_id'], 'sort' => $Model->order));
 		}
-	}*/
+	}
 
 	function beforeDelete($Model) {
 		$toNullModels = array();
