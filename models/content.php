@@ -36,7 +36,12 @@ class Content extends BrownieAppModel{
 				$data[$Model->name][$key] = '<pre>' . htmlspecialchars($data[$Model->name][$key]) . '</pre>';
 			} elseif (isset($foreignKeys[$key])) {
 				$read = $Model->{$foreignKeys[$key]}->findById($data[$Model->name][$key]);
-				$data[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
+				$relatedURL = Router::url(array(
+					'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
+					$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
+				));
+				$data[$Model->name][$key] = '<a href="'.$relatedURL.'">'
+					. $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField] . '</a>';
 			} elseif (!empty($Model->_schema[$key]['type'])) {
 				switch($Model->_schema[$key]['type']) {
 					case 'boolean':
