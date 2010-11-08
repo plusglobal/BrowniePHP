@@ -442,4 +442,21 @@ class ContentsController extends BrownieAppController {
 	}
 
 
+	function reorder($model, $direction, $id) {
+		if (!in_array($direction, array('up', 'down'))) {
+			$this->CakeError('error404');
+		}
+		if ($this->Content->reorder($this->Model, $direction, $id)) {
+			$this->Session->setFlash(__d('brownie', 'Sucessfully reordered', true), 'flash_success');
+		} else {
+			$this->Session->setFlash(__d('brownie', 'Reordered failed', true), 'flash_error');
+		}
+
+		if ($ref = env('HTTP_REFERER')) {
+			$this->redirect($ref);
+		} else {
+			$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
+		}/**/
+	}
+
 }

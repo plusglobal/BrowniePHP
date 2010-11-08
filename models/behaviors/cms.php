@@ -12,7 +12,6 @@ class CmsBehavior extends ModelBehavior {
 
 		'paginate' => array(
 			'limit' => 20,
-			'order' => '{model}.id desc',
 			'fields' => array()
 		),
 
@@ -68,6 +67,8 @@ class CmsBehavior extends ModelBehavior {
 		'hide_children' => array('BrwImage', 'BrwFile'),
 
 		'site_dependent' => true,
+
+		'sortable' => null //i.e. 'sortable' => array('field' => 'order', 'sort' => 'ASC')
 
 	);
 
@@ -133,7 +134,7 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 
-	function afterSave($Model) {
+	function afterSave($Model, $created) {
 		if (in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
 			$Model->Behaviors->detach('Tree');
 			$Model->Behaviors->attach('Brownie.BrwTree');
@@ -142,6 +143,11 @@ class CmsBehavior extends ModelBehavior {
 			}
 			$Model->id = null;
 			$Model->reorder(array('id' => $Model->data[$Model->alias]['parent_id'], 'sort' => $Model->order));
+		} elseif ($Model->brownieCmsConfig['sortable'] and $created) {
+			$Model->save(
+				array('id' => $Model->id, $Model->brownieCmsConfig['sortable']['field'] => $Model->id),
+				array('callbacks' => false)
+			);
 		}
 	}
 
@@ -185,6 +191,19 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function cmsConfigInit($Model) {
+		if (empty($Model->brownieCmsConfig)) {
+			$Model->brownieCmsConfig = array();
+		}
+		$Model->brownieCmsConfig = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
+
+		if ($Model->brownieCmsConfig['sortable']) {
+			if (empty($Model->brownieCmsConfig['sortable']['direction'])) {
+				$Model->brownieCmsConfig['sortable']['direction'] = 'ASC';
+			}
+			$Model->order = array($Model->brownieCmsConfig['sortable']['field'] => $Model->brownieCmsConfig['sortable']['direction']);
+			$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
+		}
+
 
 		if (empty($Model->brownieCmsConfig['paginate']['fields'])) {
 			$Model->brownieCmsConfig['paginate']['fields'] = $this->listableFields($Model);
@@ -201,18 +220,9 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 
-		if (!empty($Model->brownieCmsConfig)) {
-			$Model->brownieCmsConfig = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
-		} else {
-			$Model->brownieCmsConfig = $this->cmsConfig;
-		}
 
-		$Model->brownieCmsConfig['paginate']['order'] = str_replace(
-			'{model}', $Model->alias, $Model->brownieCmsConfig['paginate']['order']
-		);
-
-		if (empty($Model->order)) {
-			$Model->order = $Model->brownieCmsConfig['paginate']['order'];
+		if (!empty($Model->order)) {
+			$Model->brownieCmsConfig['paginate']['order'] = $Model->order;
 		}
 
 		$Model->brownieCmsConfig['names'] = $this->cmsConfigNames($Model->brownieCmsConfig['names'], $Model);

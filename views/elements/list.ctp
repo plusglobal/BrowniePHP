@@ -11,8 +11,13 @@ if ($records):
 			foreach($record[$model] as $field_name => $field_value) {
 				if (!empty($schema[$field_name])) {
 					echo '
-					<th class="'.$field_name.' '.$schema[$field_name]['type'].'">' . $paginator->sort($field_name, null, array('model' => $model)) . '</th>';
+					<th class="'.$field_name.' '.$schema[$field_name]['type'];
+					//poner otro class si el campo es foreign_key de otra tabla
+					echo '">' . $paginator->sort($field_name, null, array('model' => $model)) . '</th>';
 				}
+			}
+			if ($brwConfig['sortable'] and empty($this->params['named']['sort'])) {
+				echo '<th>' . $paginator->sort($brwConfig['sortable']['field'], null, array('model' => $model)) . '</th>';
 			}
 			echo '
 			<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
@@ -31,6 +36,17 @@ if ($records):
 				echo '
 				<td class="'.$field_name.' '.$schema[$field_name]['type'].' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
 			}
+		}
+
+		if ($brwConfig['sortable'] and empty($this->params['named']['sort'])) {
+			echo '<td class="sortable">
+			<a href="' . Router::url(array(
+				'controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']
+			)) . '">' . __d('brownie', 'Up', true) . '</a>
+			<a href="' . Router::url(array(
+				'controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']
+			)) . '">'.__d('brownie', 'Down', true).'</a>
+			</td>';
 		}
 
 		echo '<td class="actions"><ul>';
@@ -77,8 +93,9 @@ if ($records) {
 			array('name_plural' => $brwConfig['names']['plural'])
 		),
 		'model' => $model
-	)) . '</p>
-	</div>';
+	)) . '</p>';
+
+	echo '</div>';
 }
 
 unset($paginator);

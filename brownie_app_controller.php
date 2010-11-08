@@ -155,6 +155,9 @@ class BrownieAppController extends AppController {
 		if ($action == 'js_edit') {
 			return true;
 		}
+		if (in_array($action, array('reorder'))) {
+			$action = 'edit';
+		}
 
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'add_images', 'edit_image', 'edit_file', 'import'))) {
 			return false;

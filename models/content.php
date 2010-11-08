@@ -231,7 +231,10 @@ class Content extends BrownieAppModel{
 
 	function brownieBeforeSave($data, $Model) {
 		foreach ($Model->_schema as $field => $value) {
-			if ($value['null'] and empty($data[$Model->name][$field])) {
+			if (
+				$value['null'] and empty($data[$Model->name][$field])
+				and !in_array($field, $Model->brownieCmsConfig['fields']['hide'])
+			) {
 				$data[$Model->name][$field] = null;
 			}
 		}
@@ -297,6 +300,31 @@ class Content extends BrownieAppModel{
 			}
 		}
 		return false;
+	}
+
+	function reorder($Model, $direction, $id) {
+		$sortField = $Model->brownieCmsConfig['sortable']['field'];
+		$record = $Model->findById($id);
+		$params = array(
+			'field' => $sortField,
+			'value' => $record[$Model->alias][$sortField],
+		);
+		$neighbors = $Model->find('neighbors', $params);
+		if ($Model->brownieCmsConfig['sortable']['direction'] == 'DESC') {
+			$prev = 'prev'; $next = 'next';
+		} else {
+			$prev = 'next'; $next = 'prev';
+		}
+		$cual = ($direction == 'down')? $prev:$next;
+		if (empty($neighbors[$cual])) {
+			return false;
+		}
+		//pr($neighbors[$cual]);
+		$swap = $neighbors[$cual];
+		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => 0));
+		$saved2 = $Model->save(array('id' => $swap[$Model->alias]['id'], $sortField => $record[$Model->alias][$sortField]));
+		$saved3 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => $swap[$Model->alias][$sortField]));
+		return ($saved1 and $saved2 and $saved3);
 	}
 
 }
