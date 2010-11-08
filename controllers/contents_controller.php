@@ -191,7 +191,7 @@ class ContentsController extends BrownieAppController {
 
 
 		if (!empty($id)) {
-			if (!$this->Model->read(null, $id)) {
+			if (!$this->Model->read(array('id'), $id)) {
 				$this->cakeError('error404');
 			}
 			$action = 'edit';
@@ -274,7 +274,7 @@ class ContentsController extends BrownieAppController {
 				$this->Model->Behaviors->attach('Containable');
 				$this->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),
-					'contain' => $contain
+					'contain' => $contain, 'callbacks' => false,
 				));
 			} else {
 				$this->data = $this->Content->defaults($this->Model);

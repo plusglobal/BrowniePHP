@@ -33,6 +33,7 @@ class CmsBehavior extends ModelBehavior {
 			'virtual' => array(),
 			'conditional' => array(),
 			'code' => array(),
+			'no_sanitize_html' => array(),
 		),
 
 		'fields_no_root' => array(),
@@ -117,6 +118,8 @@ class CmsBehavior extends ModelBehavior {
 		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {
 			$results = $this->_addUrlView($results, $Model);
 		}
+		$results = $this->sanitizeHtml($Model, $results);
+
 		return $results;
 	}
 
@@ -236,7 +239,9 @@ class CmsBehavior extends ModelBehavior {
 		if (!empty($Model->brownieCmsConfig['fields']['conditional'])) {
 			$Model->brownieCmsConfig['fields']['conditional'] = $this->_camelize($Model->brownieCmsConfig['fields']['conditional']);
 		}
-		$Model->brownieCmsConfig = $Model->brownieCmsConfig;
+
+		$this->_noSanitizeFields($Model);
+
 	}
 
 
@@ -512,6 +517,34 @@ class CmsBehavior extends ModelBehavior {
 				$Model->Behaviors->attach('Tree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
 			}
 		}
+	}
+
+
+	function _noSanitizeFields($Model) {
+		$no_sanitize = array();
+		if ($Model->_schema) {
+			foreach ($Model->_schema as $field => $type) {
+				if ($type['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_sanitize_html'])) {
+					$Model->brownieCmsConfig['fields']['no_sanitize_html'][] = $field;
+				}
+			}
+		}
+		return true;
+	}
+
+
+	function sanitizeHtml($Model, $results) {
+		App::import('Brownie.BrwSanitize');
+		foreach ($results as $i => $result) {
+			if (!empty($result[$Model->alias])) {
+				foreach ($result[$Model->alias] as $key => $value) {
+					if (!in_array($key, $Model->brownieCmsConfig['fields']['no_sanitize_html'])) {
+						$results[$i][$Model->alias][$key] = BrwSanitize::html($results[$i][$Model->alias][$key]);
+					}
+				}
+			}
+		}
+		return $results;
 	}
 
 }

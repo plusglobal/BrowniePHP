@@ -40,8 +40,8 @@ class Content extends BrownieAppModel{
 					'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
 					$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
 				));
-				$data[$Model->name][$key] = '<a href="'.$relatedURL.'">'
-					. $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField] . '</a>';
+				$relatedDisplay = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
+				$data[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $relatedDisplay . '</a>';
 			} elseif (!empty($Model->_schema[$key]['type'])) {
 				switch($Model->_schema[$key]['type']) {
 					case 'boolean':
