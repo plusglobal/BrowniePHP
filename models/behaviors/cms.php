@@ -135,25 +135,17 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function afterSave($Model, $created) {
-		if (in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
-			$Model->Behaviors->detach('Tree');
-			$Model->Behaviors->attach('Brownie.BrwTree');
-			if ($site = Configure::read('currentSite')) {
-				$Model->Behaviors->attach('Brownie.BrwTree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
-			}
-			if (!empty($Model->data[$Model->alias]['parent_id'])) {
-				$parentId = $Model->data[$Model->alias]['parent_id'];
-			} else {
-				$record = $Model->findById($Model->id, array('fields' => array('parent_id')));
-				$parentId = $record[$Model->alias]['parent_id'];
-			}
-			$Model->id = null;
-			$Model->reorder(array('id' => $parentId, 'sort' => $Model->order));
-		} elseif ($Model->brownieCmsConfig['sortable'] and $created) {
+		if (
+			$Model->brownieCmsConfig['sortable']
+			and $created
+			and !in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))
+		) {
+			$data = $Model->data;
 			$Model->save(
 				array('id' => $Model->id, $Model->brownieCmsConfig['sortable']['field'] => $Model->id),
 				array('callbacks' => false)
 			);
+			$Model->data = $data;
 		}
 	}
 
@@ -163,22 +155,25 @@ class CmsBehavior extends ModelBehavior {
 		foreach($assoc as $related) {
 			if ($related['className'] != 'BrwImage' and  $related['className'] != 'BrwFile') {
 				if (!$related['dependent']) {
-					$rel = ClassRegistry::getObject($related['className']);
-					if ($rel->_schema[$related['foreignKey']]['null']) {
-						$toNullModels[] = array('model' => $rel, 'foreignKey' => $related['foreignKey']);
-					} else {
-						$hasAny = $rel->find('first', array(
-							'conditions' => array($rel->alias . '.' . $related['foreignKey'] => $Model->id),
-							'fields' => array('id'),
-						));
-						if ($hasAny) {
-							return false;
+					if($rel = ClassRegistry::getObject($related['className'])) {
+						if ($rel->_schema[$related['foreignKey']]['null']) {
+							$toNullModels[] = array('model' => $rel, 'foreignKey' => $related['foreignKey']);
+						} else {
+							$hasAny = $rel->find('first', array(
+								'conditions' => array_merge(
+									array($rel->alias . '.' . $related['foreignKey'] => $Model->id),
+									$related['conditions']
+								),
+								'fields' => array('id'),
+							));
+							if ($hasAny) {
+								return false;
+							}
 						}
 					}
 				}
 			}
 		}
-
 		foreach($toNullModels as $toNullModel) {
 			$toNullModel['model']->updateAll(
 				array($toNullModel['model']->alias . '.' . $toNullModel['foreignKey'] => null),

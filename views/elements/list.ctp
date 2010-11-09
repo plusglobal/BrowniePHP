@@ -11,13 +11,12 @@ if ($records):
 			foreach($record[$model] as $field_name => $field_value) {
 				if (!empty($schema[$field_name])) {
 					echo '
-					<th class="'.$field_name.' '.$schema[$field_name]['type'];
-					//poner otro class si el campo es foreign_key de otra tabla
-					echo '">' . $paginator->sort($field_name, null, array('model' => $model)) . '</th>';
+					<th class="' . $field_name . ' ' . $schema[$field_name]['class']
+					. '">' . $paginator->sort($field_name, null, array('model' => $model, 'escape' => false)) . '</th>';
 				}
 			}
-			if ($brwConfig['sortable'] and empty($this->params['named']['sort'])) {
-				echo '<th>' . $paginator->sort($brwConfig['sortable']['field'], null, array('model' => $model)) . '</th>';
+			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
+				echo '<th class="actions">' . __d('brownie', 'Reorder', true) . '</th>';
 			}
 			echo '
 			<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
@@ -34,16 +33,16 @@ if ($records):
 		foreach($record[$model] as $field_name => $field_value) {
 			if (!empty($schema[$field_name])) {
 				echo '
-				<td class="'.$field_name.' '.$schema[$field_name]['type'].' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
+				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
 			}
 		}
 
-		if ($brwConfig['sortable'] and empty($this->params['named']['sort'])) {
-			echo '<td class="sortable">
-			<a href="' . Router::url(array(
+		if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
+			echo '<td class="sortable actions">
+			<a class="up" href="' . Router::url(array(
 				'controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']
 			)) . '">' . __d('brownie', 'Up', true) . '</a>
-			<a href="' . Router::url(array(
+			<a class="down" href="' . Router::url(array(
 				'controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']
 			)) . '">'.__d('brownie', 'Down', true).'</a>
 			</td>';

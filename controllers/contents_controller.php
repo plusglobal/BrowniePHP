@@ -57,7 +57,7 @@ class ContentsController extends BrownieAppController {
 
 	function beforeRender() {
 		$brwConfig = $this->Model->brownieCmsConfig;
-		$schema = $this->Model->_schema;
+		$schema = $this->Content->schemaForView($this->Model);
 		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
 		//$this->log($this->Model);
@@ -80,6 +80,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->paginate = $this->Model->brownieCmsConfig['paginate'];
 		if ($this->Content->isTree($this->Model)) {
+			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
 		$records = $this->paginate($this->Model);
@@ -164,18 +165,21 @@ class ContentsController extends BrownieAppController {
 				if (!in_array($key_model, $this->Model->brownieCmsConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
-					$this->paginate[$AssocModel->name] = $AssocModel->brownieCmsConfig['paginate'];
 					if ($this->_checkPermissions($key_model)) {
+						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brownieCmsConfig['paginate']['fields'])) {
+							unset($AssocModel->brownieCmsConfig['paginate']['fields'][$indx]);
+						}
+						$this->paginate[$AssocModel->name] = $AssocModel->brownieCmsConfig['paginate'];
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brownieCmsConfig,
 							'model' => $key_model,
 							'records' => $this->Content->formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
 							'foreignKeyValue' => $related_model['foreignKey'] . ':' . $id,
-							'schema' => $this->Model->$key_model->_schema,
+							'schema' => $this->Content->schemaForView($this->Model->$key_model),
 						);
 						$permissions[$key_model] = $this->arrayPermissions($key_model);
 					}
-				 }
+				}
 			}
 		}
 
@@ -294,7 +298,7 @@ class ContentsController extends BrownieAppController {
 
 		if (method_exists($this->Model, 'brwBeforeEdit')) {
 			$this->data = $this->Model->brwBeforeEdit($this->data);
-			$this->set('schema', $this->Model->_schema);
+			$this->set('schema', $this->Content->schemaForView($this->Model));
 		}
 
 		if ($id) {
@@ -454,9 +458,14 @@ class ContentsController extends BrownieAppController {
 
 
 	function reorder($model, $direction, $id) {
-		if (!in_array($direction, array('up', 'down'))) {
+		if (
+			!in_array($direction, array('up', 'down'))
+			and !$this->Content->isTree($this->Model)
+			and empty($this->Model->brownieCmsConfig['sortable'])
+		) {
 			$this->CakeError('error404');
 		}
+
 		if ($this->Content->reorder($this->Model, $direction, $id)) {
 			$this->Session->setFlash(__d('brownie', 'Successfully reordered', true), 'flash_success');
 		} else {

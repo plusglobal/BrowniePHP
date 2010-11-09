@@ -303,13 +303,13 @@ class Content extends BrownieAppModel{
 	}
 
 	function reorder($Model, $direction, $id) {
+		if ($this->isTree($Model)) {
+			return ($direction == 'down') ? $Model->moveDown($id, 1) : $Model->moveUp($id, 1);
+		}
+
 		$sortField = $Model->brownieCmsConfig['sortable']['field'];
 		$record = $Model->findById($id);
-		$params = array(
-			'field' => $sortField,
-			'value' => $record[$Model->alias][$sortField],
-		);
-		$neighbors = $Model->find('neighbors', $params);
+		$neighbors = $Model->find('neighbors', array('field' => $sortField, 'value' => $record[$Model->alias][$sortField]));
 		if ($Model->brownieCmsConfig['sortable']['direction'] == 'desc') {
 			$prev = 'prev'; $next = 'next';
 		} else {
@@ -319,12 +319,42 @@ class Content extends BrownieAppModel{
 		if (empty($neighbors[$cual])) {
 			return false;
 		}
-		//pr($neighbors[$cual]);
 		$swap = $neighbors[$cual];
 		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => 0));
 		$saved2 = $Model->save(array('id' => $swap[$Model->alias]['id'], $sortField => $record[$Model->alias][$sortField]));
 		$saved3 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => $swap[$Model->alias][$sortField]));
 		return ($saved1 and $saved2 and $saved3);
+	}
+
+	function schemaForView($Model) {
+		$schema = $Model->_schema;
+		foreach ($schema as $field => $extra) {
+			switch ($extra['type']) {
+				case 'float':
+					$class = 'number';
+				break;
+				case 'integer':
+					$class = ($this->isForeignKey($Model, $field)) ? 'string' : 'number';
+				break;
+				case 'date': case 'datetime':
+					$class = 'date';
+				break;
+				default:
+					$class = $extra['type'];
+				break;
+			}
+			$schema[$field]['class'] = $class;
+		}
+		return $schema;
+	}
+
+	function isForeignKey($Model, $field) {
+		foreach ($Model->belongsTo as $belongsTo) {
+			if ($belongsTo['foreignKey'] == $field) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -564,7 +564,6 @@ th, td, div.view td{
 th{
 	background: #777;
 	font-weight: bold;
-	white-space: nowrap;
 }
 
 th a{
@@ -581,11 +580,11 @@ div.view td, td.field, p.norecords{
 	padding: 7px;
 }
 
-td.boolean, td.id, td.integer, td.float{
+td.boolean, td.id, td.number{
 	width: 1px;
 }
 
-td.float, td.integer, th.float, th.integer{
+td.number, th.number{
 	text-align: right;
 }
 
@@ -661,15 +660,6 @@ div.view td.label{
     margin: 0 0 15px 0;
     font-size: 12px;
     line-height: 16px;
-}
-
-.fcktxt a{
-    color: #FB7E00;
-}
-
-.fcktxt a:hover{
-    color: #fff;
-    background: #7B7B7B;
 }
 
 .fcktxt ul, .fcktxt ul li{
@@ -1091,4 +1081,41 @@ div#content fieldset.comboselect select option {
 
 .cake-sql-log{
 	*display: none;
+}
+
+/* sortable */
+
+table td.sortable{
+	text-align: center;
+	padding: 0;
+	width: 66px;
+}
+
+table td.sortable a{
+	width: 33px;
+	height: 33px;
+	display: block;
+	float: left;
+	background: center center no-repeat;
+	overflow: hidden;
+	text-indent: -500px;
+}
+
+.sortable a.up{
+	background-image: url(img/go-up.png);
+}
+.sortable a.down{
+	background-image: url(img/go-down.png);
+}
+
+.sortable a:hover{
+	background-color: #268AFC;
+}
+
+td a{
+	color: #B62441;
+}
+
+td a:hover{
+	text-decoration: underline;
 }
