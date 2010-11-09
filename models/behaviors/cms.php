@@ -141,8 +141,14 @@ class CmsBehavior extends ModelBehavior {
 			if ($site = Configure::read('currentSite')) {
 				$Model->Behaviors->attach('Brownie.BrwTree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
 			}
+			if (!empty($Model->data[$Model->alias]['parent_id'])) {
+				$parentId = $Model->data[$Model->alias]['parent_id'];
+			} else {
+				$record = $Model->findById($Model->id, array('fields' => array('parent_id')));
+				$parentId = $record[$Model->alias]['parent_id'];
+			}
 			$Model->id = null;
-			$Model->reorder(array('id' => $Model->data[$Model->alias]['parent_id'], 'sort' => $Model->order));
+			$Model->reorder(array('id' => $parentId, 'sort' => $Model->order));
 		} elseif ($Model->brownieCmsConfig['sortable'] and $created) {
 			$Model->save(
 				array('id' => $Model->id, $Model->brownieCmsConfig['sortable']['field'] => $Model->id),
@@ -196,37 +202,79 @@ class CmsBehavior extends ModelBehavior {
 		}
 		$Model->brownieCmsConfig = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
 
+		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
+			$Model->brownieCmsConfig['fields']['hide'][] = 'site_id';
+		}
+
+		$this->_sortableConfig($Model);
+		$this->_paginateConfig($Model);
+		$this->_parentConfig($Model);
+		$this->_namesConfig($Model);
+		$this->_filesAndImagesConfig($Model);
+		$this->_conditionalConfig($Model);
+		$this->_sanitizeConfig($Model);
+	}
+
+
+	function _sortableConfig($Model) {
 		if ($Model->brownieCmsConfig['sortable']) {
-			if (empty($Model->brownieCmsConfig['sortable']['direction'])) {
-				$Model->brownieCmsConfig['sortable']['direction'] = 'ASC';
+			$sortField = $Model->brownieCmsConfig['sortable']['field'];
+			if ($Model->_schema[$sortField]['type'] == 'integer' and $Model->_schema['id']['type'] == 'integer') {
+				if (empty($Model->brownieCmsConfig['sortable']['direction'])) {
+					$Model->brownieCmsConfig['sortable']['direction'] = 'asc';
+				}
+				$Model->brownieCmsConfig['sortable']['direction'] = strtolower($Model->brownieCmsConfig['sortable']['direction']);
+				$Model->order = array($sortField => $Model->brownieCmsConfig['sortable']['direction']);
+				$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
 			}
-			$Model->order = array($Model->brownieCmsConfig['sortable']['field'] => $Model->brownieCmsConfig['sortable']['direction']);
-			$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
 		}
+	}
 
-
+	function _paginateConfig($Model) {
 		if (empty($Model->brownieCmsConfig['paginate']['fields'])) {
-			$Model->brownieCmsConfig['paginate']['fields'] = $this->listableFields($Model);
+			$listableTypes = array('integer', 'float', 'string', 'boolean', 'date', 'datetime', 'time', 'timestamp');
+			$fields = array();
+			$i = 0;
+			$schema = (array)$Model->_schema;
+			foreach($schema as $key => $values) {
+				if (in_array($values['type'], $listableTypes) and !in_array($key, array('lft', 'rght', 'parent_id'))) {
+					$fields[] = $key;
+					if ($i++ > 5) {
+						break;
+					}
+				}
+			}
+			$Model->brownieCmsConfig['paginate']['fields'] = $fields;
 		}
-
-		if (empty($Model->brownieCmsConfig['paginate']['order']) and !empty($Model->order)) {
+		if (!empty($Model->order)) {
 			$Model->brownieCmsConfig['paginate']['order'] = $Model->order;
 		}
+	}
 
+	function _parentConfig($Model) {
 		if (!isset($Model->brownieCmsConfig['parent'])) {
 			$keys = array_keys($Model->belongsTo);
 			if (!empty($keys[0])) {
 				$Model->brownieCmsConfig['parent'] = $keys[0];
 			}
 		}
+	}
 
 
-		if (!empty($Model->order)) {
-			$Model->brownieCmsConfig['paginate']['order'] = $Model->order;
+	function _namesConfig($Model) {
+		$modelName = Inflector::underscore($Model->alias);
+		if (empty($Model->brownieCmsConfig['names']['singular'])) {
+			$Model->brownieCmsConfig['names']['singular'] = Inflector::humanize($modelName);
 		}
+		if (empty($Model->brownieCmsConfig['names']['plural'])) {
+			$Model->brownieCmsConfig['names']['plural'] = Inflector::humanize(Inflector::pluralize($modelName));
+		}
+		if (empty($Model->brownieCmsConfig['names']['section'])) {
+			$Model->brownieCmsConfig['names']['section'] = $Model->brownieCmsConfig['names']['plural'];
+		}
+	}
 
-		$Model->brownieCmsConfig['names'] = $this->cmsConfigNames($Model->brownieCmsConfig['names'], $Model);
-
+	function _filesAndImagesConfig($Model) {
 		if ($Model->brownieCmsConfig['images']) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
@@ -246,49 +294,24 @@ class CmsBehavior extends ModelBehavior {
 				$Model->brownieCmsConfig['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
 			}
 		}
+	}
 
-		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
-			$Model->brownieCmsConfig['fields']['hide'][] = 'site_id';
-		}
-
+	function _conditionalConfig($Model) {
 		if (!empty($Model->brownieCmsConfig['fields']['conditional'])) {
 			$Model->brownieCmsConfig['fields']['conditional'] = $this->_camelize($Model->brownieCmsConfig['fields']['conditional']);
 		}
-
-		$this->_noSanitizeFields($Model);
-
 	}
 
-
-	function listableFields($Model) {
-		$listableTypes = array('integer', 'float', 'string', 'boolean', 'date', 'datetime', 'time', 'timestamp');
-		$fields = array();
-		$i = 0;
-		$schema = (array)$Model->_schema;
-		foreach($schema as $key => $values) {
-			if (in_array($values['type'], $listableTypes) and !in_array($key, array('lft', 'rght', 'parent_id'))) {
-				$fields[] = $key;
-				if ($i++ > 5) {
-					return $fields;
+	function _sanitizeConfig($Model) {
+		$no_sanitize = array();
+		if ($Model->_schema) {
+			foreach ($Model->_schema as $field => $type) {
+				if ($type['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_sanitize_html'])) {
+					$Model->brownieCmsConfig['fields']['no_sanitize_html'][] = $field;
 				}
 			}
 		}
-		return $fields;
-	}
-
-
-	function cmsConfigNames($names, $Model) {
-		$modelName = Inflector::underscore($Model->name);
-		if (empty($names['singular']) or !$names['singular']) {
-			$names['singular'] = Inflector::humanize($modelName);
-		}
-		if (empty($names['plural']) or !$names['plural']) {
-			$names['plural'] = Inflector::humanize(Inflector::pluralize($modelName));
-		}
-		if (empty($names['section']) or !$names['section']) {
-			$names['section'] = $names['plural'];
-		}
-		return $names;
+		return true;
 	}
 
 
@@ -484,7 +507,7 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function _camelize($array) {
-		foreach($array as $key => $value) {
+		foreach ($array as $key => $value) {
 			if (is_array($value)) {
 				$array[Inflector::camelize($key)] = $this->_camelize($value);
 			} else {
@@ -526,25 +549,11 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _treeMultiSites($Model) {
-
 		if (Configure::read('multiSitesModel') and in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
 			if ($site = Configure::read('currentSite')) {
 				$Model->Behaviors->attach('Tree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
 			}
 		}
-	}
-
-
-	function _noSanitizeFields($Model) {
-		$no_sanitize = array();
-		if ($Model->_schema) {
-			foreach ($Model->_schema as $field => $type) {
-				if ($type['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_sanitize_html'])) {
-					$Model->brownieCmsConfig['fields']['no_sanitize_html'][] = $field;
-				}
-			}
-		}
-		return true;
 	}
 
 

@@ -310,7 +310,7 @@ class Content extends BrownieAppModel{
 			'value' => $record[$Model->alias][$sortField],
 		);
 		$neighbors = $Model->find('neighbors', $params);
-		if ($Model->brownieCmsConfig['sortable']['direction'] == 'DESC') {
+		if ($Model->brownieCmsConfig['sortable']['direction'] == 'desc') {
 			$prev = 'prev'; $next = 'next';
 		} else {
 			$prev = 'next'; $next = 'prev';

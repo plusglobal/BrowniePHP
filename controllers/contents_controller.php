@@ -105,7 +105,6 @@ class ContentsController extends BrownieAppController {
 			$siteModel = Configure::read('multiSitesModel')
 			and !Configure::read('Auth.BrwUser.root')
 			and $this->Model->name == $siteModel
-
 		);
 		if ($restricted) {
 			if($id != Configure::read('currentSite.id')) {
@@ -127,7 +126,7 @@ class ContentsController extends BrownieAppController {
 		}
 
 		$this->Model->Behaviors->attach('Containable');
-		$record = $this->Model->find( 'first', array(
+		$record = $this->Model->find('first', array(
 			'conditions' => array($this->Model->name . '.id' => $id),
 			'contain' => $contain
 		));
@@ -137,25 +136,34 @@ class ContentsController extends BrownieAppController {
 			$this->redirect(array('action' => 'index', $model));
 		}
 
-		$this->set('record', $this->Content->formatForView($record, $this->Model));
-
-		if(!$restricted){
-			$neighbors = $this->Model->find('neighbors', array('field' => 'id', 'value' => $id));
+		if (!$restricted) {
+			if (is_array($this->Model->order)) {
+				list($keyOrder) = each($this->Model->order);
+				$neighbors = $this->Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$model][$keyOrder]));
+				if (
+					!empty($this->Model->brownieCmsConfig['sortable']['direction'])
+					and $this->Model->brownieCmsConfig['sortable']['direction'] == 'desc'
+				) {
+					$tmp = $neighbors['prev'];
+					$neighbors['prev'] = $neighbors['next'];
+					$neighbors['next'] = $tmp;
+				}
+			} else {
+				$neighbors = $this->Model->find('neighbors', array('field' => 'id', 'value' => $id));
+			}
 		} else {
 			$neighbors = array();
 		}
-		$this->set('neighbors', $neighbors);
 
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);
-		$assoc_models = $pages = $names = array();
+		$assoc_models = array();
 		if (!empty($this->Model->hasMany) and $this->Model->brownieCmsConfig['show_children']){
 			foreach ($assocs as $key_model => $related_model) {
 				if (!in_array($key_model, $this->Model->brownieCmsConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Cms');
-					//$this->paginate[$AssocModel->name] = Set::merge($related_model, $AssocModel->brownieCmsConfig['paginate']);
 					$this->paginate[$AssocModel->name] = $AssocModel->brownieCmsConfig['paginate'];
 					if ($this->_checkPermissions($key_model)) {
 						$assoc_models[] = array(
@@ -170,6 +178,9 @@ class ContentsController extends BrownieAppController {
 				 }
 			}
 		}
+
+		$this->set('record', $this->Content->formatForView($record, $this->Model));
+		$this->set('neighbors', $neighbors);
 		$this->set('assoc_models', $assoc_models);
 		$this->set('permissions', $permissions);
 	}
@@ -447,9 +458,9 @@ class ContentsController extends BrownieAppController {
 			$this->CakeError('error404');
 		}
 		if ($this->Content->reorder($this->Model, $direction, $id)) {
-			$this->Session->setFlash(__d('brownie', 'Sucessfully reordered', true), 'flash_success');
+			$this->Session->setFlash(__d('brownie', 'Successfully reordered', true), 'flash_success');
 		} else {
-			$this->Session->setFlash(__d('brownie', 'Reordered failed', true), 'flash_error');
+			$this->Session->setFlash(__d('brownie', 'Failed to reorder', true), 'flash_error');
 		}
 
 		if ($ref = env('HTTP_REFERER')) {
