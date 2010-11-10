@@ -26,4 +26,6 @@
 		</div>
 	</div>
 </div>
-<?php echo $this->element('list', array('model' => $model, 'records' => $records, 'schema' => $schema)) ?>
+<?php echo $this->element('list', array(
+	'model' => $model, 'records' => $records, 'schema' => $schema, 'brwConfig' => $brwConfig
+)) ?>
