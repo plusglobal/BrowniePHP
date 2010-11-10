@@ -1087,8 +1087,8 @@ div#content fieldset.comboselect select option {
 
 table td.sortable{
 	text-align: center;
-	padding: 0;
 	width: 66px;
+	padding: 1px 5px;
 }
 
 table td.sortable a{

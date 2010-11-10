@@ -151,18 +151,28 @@ class BrownieAppController extends AppController {
 	}*/
 
 	function _checkPermissions($model, $action = 'view', $id = null) {
-		//static $user, $User;
+		$Model = ClassRegistry::getObject($model);
+
+		$noPermission = (
+			$siteModel = Configure::read('multiSitesModel')
+			and $model != $siteModel
+			and $model != 'BrwUser'
+			and !Configure::read('Auth.BrwUser.root')
+			and empty($this->Model->belongsTo[Configure::read('multiSitesModel')])
+		);
+		if ($noPermission) {
+			return false;
+		}
+
 		if ($action == 'js_edit') {
 			return true;
 		}
 		if (in_array($action, array('reorder'))) {
 			$action = 'edit';
 		}
-
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'add_images', 'edit_image', 'edit_file', 'import'))) {
 			return false;
 		}
-		$Model = ClassRegistry::init($model);
 		$Model->Behaviors->attach('Brownie.Cms');
 		if (!empty($this->Content)) {
 			$actions = $Model->brownieCmsConfig['actions'];

@@ -163,6 +163,7 @@ if (!empty($brwConfig['files'])) {
 <?php
 
 foreach ($assoc_models as $key => $assoc) {
+	//pr($assoc);
 	echo $this->element('index', $assoc);
 }
 ?>

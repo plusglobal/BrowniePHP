@@ -8,6 +8,9 @@ class ContentsController extends BrownieAppController {
 
 
 	function beforeFilter() {
+
+		parent::beforeFilter();
+
 		if (!empty($this->params['pass'][0])) {
 			$model = $this->params['pass'][0];
 		} elseif (!empty($this->data['Content']['model'])) {
@@ -18,30 +21,20 @@ class ContentsController extends BrownieAppController {
 			$this->cakeError('error404');
 		}
 
-		if (!$this->_checkPermissions($model, $this->params['action'])) {
-			$this->cakeError('error404');
-		}
-
 		$this->Model = ClassRegistry::init($model);
 		$this->Model->recursive = -1;
 		$this->Model->Behaviors->attach('Brownie.Cms');
 
-		$this->Model->brownieCmsConfig['actions'] = array_merge(
-			$this->Model->brownieCmsConfig['actions'], $this->arrayPermissions($this->Model->alias)
-		);
 
-		parent::beforeFilter();
-
-		$noPermission = (
-			$siteModel = Configure::read('multiSitesModel')
-			and $this->Model->name != $siteModel
-			and $this->Model->name != 'BrwUser'
-			and !Configure::read('Auth.BrwUser.root')
-			and empty($this->Model->belongsTo[Configure::read('multiSitesModel')])
-		);
-		if ($noPermission) {
+		if (!$this->_checkPermissions($model, $this->params['action'])) {
 			$this->cakeError('error404');
 		}
+
+
+		$this->Model->brownieCmsConfig['actions'] = array_merge(
+			$this->Model->brownieCmsConfig['actions'],
+			$this->arrayPermissions($this->Model->alias)
+		);
 
 		if (!Configure::read('Auth.BrwUser.root')) {
 			$this->Model->brownieCmsConfig['actions'] = Set::merge(
@@ -95,7 +88,7 @@ class ContentsController extends BrownieAppController {
 				$this->Model->alias, $records[0][$this->Model->alias]['id']
 			));
 		}
-		$this->set('records', $this->Content->formatForView($records, $this->Model));
+		$this->set('records', $this->_formatForView($records, $this->Model));
 		$this->set('foreignKeyValue', '');
 		$this->set('permissions', array($this->Model->alias => $this->Model->brownieCmsConfig['actions']));
 	}
@@ -173,7 +166,7 @@ class ContentsController extends BrownieAppController {
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brownieCmsConfig,
 							'model' => $key_model,
-							'records' => $this->Content->formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
+							'records' => $this->_formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
 							'foreignKeyValue' => $related_model['foreignKey'] . ':' . $id,
 							'schema' => $this->Content->schemaForView($this->Model->$key_model),
 						);
@@ -183,7 +176,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		$this->set('record', $this->Content->formatForView($record, $this->Model));
+		$this->set('record', $this->_formatForView($record, $this->Model));
 		$this->set('neighbors', $neighbors);
 		$this->set('assoc_models', $assoc_models);
 		$this->set('permissions', $permissions);
@@ -478,5 +471,91 @@ class ContentsController extends BrownieAppController {
 			$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
 		}/**/
 	}
+
+
+	function _formatForView($data, $Model) {
+		$out = array();
+		if (!empty($data[$Model->name])) {
+			$out = $this->_formatSingleForView($data, $Model);
+		} else {
+			if ($this->Content->isTree($Model)) {
+				$data = $this->_formatTree($data, $Model);
+			}
+			foreach ($data as $dataset) {
+				$out[] = $this->_formatSingleForView($dataset, $Model);
+			}
+		}
+		return $out;
+	}
+
+	function _formatSingleForView($data, $Model) {
+		$fieldsConfig = $Model->brownieCmsConfig['fields'];
+		$fieldsHide = $fieldsConfig['hide'];
+		$foreignKeys = $this->Content->getForeignKeys($Model);
+		foreach ($data[$Model->name] as $key => $value) {
+			if (in_array($key, $fieldsHide)) {
+				unset($data[$Model->name][$key]);
+			} elseif (in_array($key, $fieldsConfig['code'])) {
+				$data[$Model->name][$key] = '<pre>' . htmlspecialchars($data[$Model->name][$key]) . '</pre>';
+			} elseif (isset($foreignKeys[$key])) {
+				$read = $Model->{$foreignKeys[$key]}->findById($data[$Model->name][$key]);
+				$data[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
+				if ($this->_checkPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
+					$relatedURL = Router::url(array(
+						'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
+						$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
+					));
+					$data[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $data[$Model->name][$key] . '</a>';
+				}
+
+			} elseif (!empty($Model->_schema[$key]['type'])) {
+				switch($Model->_schema[$key]['type']) {
+					case 'boolean':
+						$data[$Model->name][$key] = $data[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
+					break;
+					case 'datetime':
+						$data[$Model->name][$key] = $this->_formatDateTime($data[$Model->name][$key]);
+					break;
+					case 'date':
+						$data[$Model->name][$key] = $this->_formatDate($data[$Model->name][$key]);
+					break;
+				}
+			}
+		}
+		return $data;
+	}
+
+
+	function _formatTree($data, $Model) {
+		$treeList = $Model->generateTreeList(null, null, null, '<span class="tree_prepend"></span>');
+		foreach ($data as $i => $value) {
+			$displayValue = $data[$i][$Model->alias][$Model->displayField];
+			$data[$i][$Model->alias][$Model->displayField] =
+				str_replace($displayValue, '', $treeList[$value[$Model->alias]['id']])
+				. '<span class="tree_arrow"></span>' . $displayValue;
+		}
+		return $data;
+	}
+
+	function _formatDate($date) {
+		if (empty($date) or $date == '0000-00-00') {
+			return __d('brownie', 'Date not set', true);
+		} else {
+			App::Import('Helper', 'Time');
+			$time = new TimeHelper();
+			return $time->format('d/m/Y', $date, __d('brownie', 'Invalid date', true));
+		}
+	}
+
+	function _formatDateTime($datetime) {
+		if (empty($datetime) or $datetime == '0000-00-00 00:00:00') {
+			return __d('brownie', 'Datetime not set', true);
+		} else {
+			App::Import('Helper', 'Time');
+			$time = new TimeHelper();
+			return $time->format('d/m/Y H:i:s', $datetime, __d('brownie', 'Invalid datetime', true));
+		}
+	}
+
 
 }
