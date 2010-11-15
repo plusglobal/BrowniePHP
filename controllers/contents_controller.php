@@ -212,6 +212,13 @@ class ContentsController extends BrownieAppController {
 		}
 
 
+		if ($id) {
+			$fields = $this->Content->fieldsEdit($this->Model);
+		} else {
+			$fields = $this->Content->fieldsAdd($this->Model);
+		}
+
+
 		if (!empty($this->data)) {
 
 			if (!empty($this->data[$this->Model->alias]['id']) and $this->data[$this->Model->alias]['id'] != $id) {
@@ -221,8 +228,12 @@ class ContentsController extends BrownieAppController {
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model);
 
-			$this->Model->create();
-			if ($this->Model->saveAll($this->data, array('validate' => 'first', 'model' => $this->Model->name))) {
+			$fieldList = array_merge(array_keys($fields), array('name', 'model', 'category_code', 'description', 'record_id'));
+			if (Configure::read('multiSitesModel')) {
+				$fieldList[] = 'site_id';
+			}
+			//$this->Model->create();
+			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$this->Session->setFlash(__d('brownie', 'The information has been saved', true), 'flash_success');
 				if (!empty($this->data['Content']['after_save'])) {
 					switch ($this->data['Content']['after_save']) {
@@ -294,11 +305,6 @@ class ContentsController extends BrownieAppController {
 			$this->set('schema', $this->Content->schemaForView($this->Model));
 		}
 
-		if ($id) {
-			$fields = $this->Content->fieldsEdit($this->Model);
-		} else {
-			$fields = $this->Content->fieldsAdd($this->Model);
-		}
 		$this->set('fields', $fields);
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
 	}

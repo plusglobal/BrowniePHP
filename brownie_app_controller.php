@@ -13,6 +13,11 @@ class BrownieAppController extends AppController {
 		//$this->_modelsToDb();
 		$this->_menuConfig();
 		$this->pageTitle = __d('brownie', 'Control panel', true);
+
+		if (!$this->Session->read('Auth.BrwUser')) {
+			$this->Session->delete('BrwSite');
+		}
+
 		parent::beforeFilter();
 	}
 
@@ -36,7 +41,7 @@ class BrownieAppController extends AppController {
 	}
 
 	function _multiSiteSettings() {
-		if ($multiSitesModel = Configure::read('multiSitesModel')) {
+		if ($multiSitesModel = Configure::read('multiSitesModel') and $this->Session->read('Auth.BrwUser')) {
 			Controller::loadModel($multiSitesModel);
 			$sitesOptions = $this->BrwUser->sites($this->Session->read('Auth.BrwUser'));
 			if ($this->Session->read('Auth.BrwUser.root')) {

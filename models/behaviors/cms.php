@@ -110,12 +110,8 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function afterFind($Model, $results, $primary) {
-		if (!empty($Model->brownieCmsConfig['images'])) {
-			$results = $this->_addImagePaths($results, $Model);
-		}
-		if (!empty($Model->brownieCmsConfig['files'])) {
-			$results = $this->_addFilePaths($results, $Model);
-		}
+		$results = $this->_addImagePaths($results, $Model);
+		$results = $this->_addFilePaths($results, $Model);
 		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {
 			$results = $this->_addUrlView($results, $Model);
 		}
@@ -124,7 +120,7 @@ class CmsBehavior extends ModelBehavior {
 		return $results;
 	}
 
-	function beforeSave($Model) {
+	function beforeValidate($Model) {
 		$this->_treeMultiSites($Model);
 
 		if ($site = Configure::read('currentSite') and $this->isSiteDependent($Model)) {
@@ -132,7 +128,6 @@ class CmsBehavior extends ModelBehavior {
 		}
 		return $Model->data;
 	}
-
 
 	function afterSave($Model, $created) {
 		if (
@@ -373,18 +368,6 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _addBrwImagePaths($r, $Model) {
-	/* this funcion expects an array like
-	[BrwImage] => Array(
-	    [0] => Array(
-	    	[id] => 4a6a23a8-837c-4485-834f-0fa816fac25f
-			etc...
-	    )
-	    [1] => Array(
-			[id] => 4a6a23a8-cd5c-4ae9-b69b-0fa816fac25f
-			etc...
-	    )
-	)*/
-
 		$ret = array();
 		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
