@@ -110,8 +110,12 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function afterFind($Model, $results, $primary) {
-		$results = $this->_addImagePaths($results, $Model);
-		$results = $this->_addFilePaths($results, $Model);
+		if ($Model->name != 'BrwImage') {
+			$results = $this->_addImagePaths($results, $Model);
+		}
+		if ($Model->name != 'BrwFile') {
+			$results = $this->_addFilePaths($results, $Model);
+		}
 		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {
 			$results = $this->_addUrlView($results, $Model);
 		}
@@ -127,6 +131,10 @@ class CmsBehavior extends ModelBehavior {
 			$Model->data[$Model->alias]['site_id'] = $site['id'];
 		}
 		return $Model->data;
+	}
+
+	function beforeSave($Model) {
+		return $this->beforeValidate($Model);
 	}
 
 	function afterSave($Model, $created) {
@@ -182,7 +190,11 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function isSiteDependent($Model) {
-		return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brownieCmsConfig['site_dependent'];
+		if (in_array($Model->name, array('BrwImage', 'BrwFile'))) {
+			return false;
+		} else {
+			return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brownieCmsConfig['site_dependent'];
+		}
 	}
 
 
