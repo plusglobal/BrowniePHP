@@ -165,7 +165,7 @@ class CmsBehavior extends ModelBehavior {
 							$hasAny = $rel->find('first', array(
 								'conditions' => array_merge(
 									array($rel->alias . '.' . $related['foreignKey'] => $Model->id),
-									$related['conditions']
+									(array)$related['conditions']
 								),
 								'fields' => array('id'),
 							));
