@@ -232,7 +232,9 @@ class ContentsController extends BrownieAppController {
 			if (Configure::read('multiSitesModel')) {
 				$fieldList[] = 'site_id';
 			}
-			//$this->Model->create();
+			if ($this->Model->brownieCmsConfig['sortable']) {
+				$fieldList[] = $this->Model->brownieCmsConfig['sortable']['field'];
+			}
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$this->Session->setFlash(__d('brownie', 'The information has been saved', true), 'flash_success');
 				if (!empty($this->data['Content']['after_save'])) {
