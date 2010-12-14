@@ -226,7 +226,7 @@ class CmsBehavior extends ModelBehavior {
 					$Model->brownieCmsConfig['sortable']['direction'] = 'asc';
 				}
 				$Model->brownieCmsConfig['sortable']['direction'] = strtolower($Model->brownieCmsConfig['sortable']['direction']);
-				$Model->order = array($sortField => $Model->brownieCmsConfig['sortable']['direction']);
+				$Model->order = array($Model->alias . '.' . $sortField => $Model->brownieCmsConfig['sortable']['direction']);
 				$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
 			}
 		}
