@@ -3,9 +3,13 @@
 	<li>
 		<h2><?php echo $section ?></h2>
 		<ul>
-		<?php foreach($items as $label => $model) : ?>
+		<?php foreach($items as $label => $url) : ?>
 			<li>
-				<?php echo $html->link($label, array('plugin'=>'brownie', 'controller' => 'contents', 'action'=> 'index', $model)); ?>
+				<?php
+				if (!is_array($url)) {
+					$url = array('plugin' => 'brownie', 'controller' => 'contents', 'action'=> 'index', $url);
+				}
+				echo $html->link($label, $url); ?>
 			</li>
 		<?php endforeach ?>
 		</ul>
