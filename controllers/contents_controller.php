@@ -275,13 +275,15 @@ class ContentsController extends BrownieAppController {
 					$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
 				}
 			}
-			$contain[] = $key_model;
+			//$contain[] = $key_model;
 		}
 
 		if (!empty($this->Model->hasAndBelongsToMany)) {
 			foreach ($this->Model->hasAndBelongsToMany as $key_model => $related_model) {
 				$related['hasAndBelongsToMany'][$key_model] = $this->Model->$key_model->find('list', $related_model);
-				$contain[] = $key_model;
+				if (!in_array($key_model, $contain)) {
+					$contain[] = $key_model;
+				}
 			}
 		}
 
@@ -293,9 +295,10 @@ class ContentsController extends BrownieAppController {
 		if (empty($this->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
+				$this->Model->Behaviors->detach('Brownie.Cms');
 				$this->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),
-					'contain' => $contain, 'callbacks' => false,
+					'contain' => $contain,
 				));
 			} else {
 				$this->data = $this->Content->defaults($this->Model);
