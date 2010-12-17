@@ -275,7 +275,6 @@ class ContentsController extends BrownieAppController {
 					$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
 				}
 			}
-			//$contain[] = $key_model;
 		}
 
 		if (!empty($this->Model->hasAndBelongsToMany)) {
