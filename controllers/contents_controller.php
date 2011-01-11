@@ -89,7 +89,7 @@ class ContentsController extends BrownieAppController {
 			));
 		}
 		if (method_exists($this->Model, 'brwAfterFind')) {
-			$record = $this->Model->brwAfterFind($record);
+			$records = $this->Model->brwAfterFind($records);
 		}
 
 		$this->set('records', $this->_formatForView($records, $this->Model));
@@ -138,6 +138,7 @@ class ContentsController extends BrownieAppController {
 		}
 		$record = $record[0];
 
+		//ejecutar brwAfterFind en los modelos relacionados que estan en $contain
 
 		if (!$restricted) {
 			if (is_array($this->Model->order)) {
