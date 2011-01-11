@@ -88,6 +88,10 @@ class ContentsController extends BrownieAppController {
 				$this->Model->alias, $records[0][$this->Model->alias]['id']
 			));
 		}
+		if (method_exists($this->Model, 'brwAfterFind')) {
+			$record = $this->Model->brwAfterFind($record);
+		}
+
 		$this->set('records', $this->_formatForView($records, $this->Model));
 		$this->set('foreignKeyValue', '');
 		$this->set('permissions', array($this->Model->alias => $this->Model->brownieCmsConfig['actions']));
@@ -120,15 +124,20 @@ class ContentsController extends BrownieAppController {
 		}
 
 		$this->Model->Behaviors->attach('Containable');
-		$record = $this->Model->find('first', array(
+		$record = $this->Model->find('all', array(
 			'conditions' => array($this->Model->name . '.id' => $id),
 			'contain' => $contain
 		));
 
-
 		if (empty($record)) {
 			$this->redirect(array('action' => 'index', $model));
 		}
+
+		if (method_exists($this->Model, 'brwAfterFind')) {
+			$record = $this->Model->brwAfterFind($record);
+		}
+		$record = $record[0];
+
 
 		if (!$restricted) {
 			if (is_array($this->Model->order)) {
