@@ -640,6 +640,10 @@ li.url_view a{
 	background-image: url(ico/16x16/applications-internet.png);
 }
 
+li.custom a{
+	background-image: url(ico/16x16/applications-system.png);
+}
+
 table.view{
 	margin-bottom: 35px;
 }

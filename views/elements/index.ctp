@@ -95,6 +95,12 @@ if ($records):
 			array('title' => __d('brownie', 'View on line', true), 'target' => 'view_' . $model . '_' . $record[$model]['id'],
 			)) . '</li> ';
 		}
+		if (!empty($brwConfig['actions']['custom'])) {
+			foreach ($brwConfig['actions']['custom'] as $name => $url) {
+				echo '<li class="custom ' . Inflector::slug($name) . '">'
+				. $html->link(__d('brownie', $name, true), $url) . '</li> ';
+			}
+		}
 		echo '</ul></td>
 		</tr>';
 	endforeach;
