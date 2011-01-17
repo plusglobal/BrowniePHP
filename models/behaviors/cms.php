@@ -482,9 +482,9 @@ class CmsBehavior extends ModelBehavior {
 
 	function _addUrlView($results, $Model) {
 		if ($Model->brownieCmsConfig['actions']['url_view'] and !empty($results[0][$Model->name])) {
-			$url = $Model->brownieCmsConfig['actions']['url_view'];
 			foreach ($results as $i => $record) {
 				if (!empty($results[$i][$Model->name]['id'])) {
+					$url = $Model->brownieCmsConfig['actions']['url_view'];
 					if (is_array($url)) {
 						$url[0] = $results[$i][$Model->name]['id'];
 						$url['plugin'] = null;

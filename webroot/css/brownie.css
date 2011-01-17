@@ -641,7 +641,8 @@ li.url_view a{
 }
 
 li.custom a{
-	background-image: url(ico/16x16/applications-system.png);
+	background-image: url(ico/16x16/system-software-update.png);
+	background-image: url(ico/16x16/system-software-update.png);
 }
 
 table.view{

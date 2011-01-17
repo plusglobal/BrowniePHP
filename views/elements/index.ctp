@@ -97,6 +97,7 @@ if ($records):
 		}
 		if (!empty($brwConfig['actions']['custom'])) {
 			foreach ($brwConfig['actions']['custom'] as $name => $url) {
+				$url[0] = $record[$model]['id'];
 				echo '<li class="custom ' . Inflector::slug($name) . '">'
 				. $html->link(__d('brownie', $name, true), $url) . '</li> ';
 			}
