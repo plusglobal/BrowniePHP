@@ -78,16 +78,22 @@ if ($records):
 		echo '<td class="actions"><ul>';
 		if ($permissions[$model]['view']) {
 			echo '<li class="view">' . $html->link(__d('brownie', 'View', true),
-			array('action'=>'view', $model, $record[$model]['id'])) . '</li>';
+			array('action' => 'view', $model, $record[$model]['id'])) . '</li> ';
 		}
 		if ($permissions[$model]['edit']) {
 			echo '<li class="edit">' . $html->link(__d('brownie', 'Edit', true),
-			array('action'=>'edit', $model, $record[$model]['id'], 'after_save' => 'index')) . '</li>';
+			array('action' => 'edit', $model, $record[$model]['id'], 'after_save' => 'index')) . '</li> ';
 		}
 		if ($permissions[$model]['delete']) {
 			echo '<li class="delete">' . $html->link(__d('brownie', 'Delete', true),
-			array('action'=>'delete', $model, $record[$model]['id']), null,
-			sprintf(__d('brownie', 'Are you sure you want to delete # %s?', true), $record[$model]['id'])) . '</li>';
+			array('action' => 'delete', $model, $record[$model]['id']), null,
+			sprintf(__d('brownie', 'Are you sure you want to delete # %s?', true), $record[$model]['id'])) . '</li> ';
+		}
+		if (!empty($record[$model]['brw_url_view'])) {
+			echo '<li class="url_view">' . $html->link(__d('brownie', 'View on line', true),
+			$record[$model]['brw_url_view'],
+			array('title' => __d('brownie', 'View on line', true), 'target' => 'view_' . $model . '_' . $record[$model]['id'],
+			)) . '</li> ';
 		}
 		echo '</ul></td>
 		</tr>';

@@ -275,7 +275,7 @@ class ContentsController extends BrownieAppController {
 
 		$contain = $related = array();
 		if (!empty($this->Model->belongsTo)) {
-			foreach($this->Model->belongsTo as $key_model => $related_model){
+			foreach($this->Model->belongsTo as $key_model => $related_model) {
 				$AssocModel = $this->Model->$key_model;
 				if(!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
 					if ($this->Content->isTree($AssocModel)){
