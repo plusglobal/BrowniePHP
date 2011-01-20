@@ -57,6 +57,7 @@ class ContentsController extends BrownieAppController {
 		parent::beforeRender();
 	}
 
+
 	function index() {
 		$filterSites = (
 			$siteModel = Configure::read('multiSitesModel')
@@ -259,6 +260,12 @@ class ContentsController extends BrownieAppController {
 							$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
 						break;
 						case 'index':
+							if ($parent = $this->Model->brownieCmsConfig['parent']) {
+								$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
+								if (!empty($this->data[$this->Model->alias][$foreignKey])) {
+									$this->redirect(array('action' => 'view', $parent, $this->data[$this->Model->alias][$foreignKey]));
+								}
+							}
 							$this->redirect(array('action' => 'index', $this->Model->name));
 						break;
 						case 'edit':

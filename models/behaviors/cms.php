@@ -60,7 +60,7 @@ class CmsBehavior extends ModelBehavior {
 
 		'default' => array(),
 
-		'parent' => false,
+		'parent' => null,
 
 		'show_children' => true,
 
@@ -254,8 +254,13 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function _parentConfig($Model) {
+		$siteModel = Configure::read('multiSitesModel');
 		if (!isset($Model->brownieCmsConfig['parent'])) {
-			$keys = array_keys($Model->belongsTo);
+			$belongsTo = $Model->belongsTo;
+			if(isset($belongsTo[$siteModel])) {
+				unset($belongsTo[$siteModel]);
+			}
+			$keys = array_keys($belongsTo);
 			if (!empty($keys[0])) {
 				$Model->brownieCmsConfig['parent'] = $keys[0];
 			}
