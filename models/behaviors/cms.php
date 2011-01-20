@@ -50,6 +50,7 @@ class CmsBehavior extends ModelBehavior {
 			'print' => false,
 			'empty' => false,
 			'url_view' => array(),
+			'custom' => array(),
 		),
 
 		'actions_no_root' => array(),
@@ -215,6 +216,7 @@ class CmsBehavior extends ModelBehavior {
 		$this->_filesAndImagesConfig($Model);
 		$this->_conditionalConfig($Model);
 		$this->_sanitizeConfig($Model);
+		$this->_customActionsConfig($Model);
 	}
 
 
@@ -485,9 +487,9 @@ class CmsBehavior extends ModelBehavior {
 
 	function _addUrlView($results, $Model) {
 		if ($Model->brownieCmsConfig['actions']['url_view'] and !empty($results[0][$Model->name])) {
-			$url = $Model->brownieCmsConfig['actions']['url_view'];
 			foreach ($results as $i => $record) {
 				if (!empty($results[$i][$Model->name]['id'])) {
+					$url = $Model->brownieCmsConfig['actions']['url_view'];
 					if (is_array($url)) {
 						$url[0] = $results[$i][$Model->name]['id'];
 						$url['plugin'] = null;
@@ -564,6 +566,19 @@ class CmsBehavior extends ModelBehavior {
 			}
 		}
 		return $results;
+	}
+
+
+	function _customActionsConfig($Model) {
+		foreach ($Model->brownieCmsConfig['actions']['custom'] as $name => $url) {
+			if (is_array($url)) {
+				$url = array_merge($url, array('brw' => true));
+				if (empty($url['plugin']) or $url['plugin'] == 'brownie') {
+					$url['plugin'] = false;
+				}
+				$Model->brownieCmsConfig['actions']['custom'][$name] = $url;
+			}
+		}
 	}
 
 }

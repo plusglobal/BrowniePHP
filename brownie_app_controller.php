@@ -5,6 +5,7 @@ class BrownieAppController extends AppController {
 	var $components = array('Auth', 'Session');
 	var $helpers = array('Html', 'Session', 'Javascript');
 	var $uses = array('BrwUser');
+	var $layout = 'brownie_default';
 	static $currentUser;
 
 	function beforeFilter() {

@@ -144,6 +144,7 @@ class ContentsController extends BrownieAppController {
 		if (!$restricted) {
 			if (is_array($this->Model->order)) {
 				list($keyOrder) = each($this->Model->order);
+				$keyOrder = str_replace($this->Model->alias . '.', '', $keyOrder);
 				$neighbors = $this->Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$model][$keyOrder]));
 				if (
 					!empty($this->Model->brownieCmsConfig['sortable']['direction'])
@@ -281,7 +282,7 @@ class ContentsController extends BrownieAppController {
 
 		$contain = $related = array();
 		if (!empty($this->Model->belongsTo)) {
-			foreach($this->Model->belongsTo as $key_model => $related_model){
+			foreach($this->Model->belongsTo as $key_model => $related_model) {
 				$AssocModel = $this->Model->$key_model;
 				if(!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
 					if ($this->Content->isTree($AssocModel)){

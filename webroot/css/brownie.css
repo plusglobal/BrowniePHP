@@ -602,46 +602,47 @@ th.actions{
 }
 
 table td.actions{
-	padding: 0;
-	width: 130px;
-	line-height: 1px;
-	vertical-align: top;
+	vertical-align: middle;
+	line-height: 1.9em;
+	text-align: center;
 }
 
 td.actions ul{
+	display: inline;
 }
 
 td.actions li{
-	width: 41px;
-	height: 33px;
-	float: left;
-	margin: 1px;
+	display: inline;
 }
 
 td.actions a{
-	width: 41px;
-	height: 33px;
-	float: left;
-	overflow: hidden;
-	background: 2px center no-repeat;
-	line-height: 10px;
-	text-indent: 100px;
-}
-
-td.actions a:hover{
-	background-color: #268AFC;
+	background: 4px center no-repeat;
+	padding-left: 26px;
+	padding-right: 10px;
+	color: #444;
+	font-weight: bold;
+	white-space: nowrap;
 }
 
 li.view a{
-	background-image: url(img/func_ver_ico.png);
+	background-image: url(ico/16x16/edit-find.png);
 }
 
 li.edit a{
-	background-image: url(img/func_editar_ico.png);
+	background-image: url(ico/16x16/accessories-text-editor.png);
 }
 
 li.delete a{
-	background-image: url(img/func_borrar_ico.png);
+	background-image: url(ico/16x16/edit-delete.png);
+}
+
+li.url_view a{
+	background-image: url(ico/16x16/applications-internet.png);
+}
+
+li.custom a{
+	background-image: url(ico/16x16/system-software-update.png);
+	background-image: url(ico/16x16/system-software-update.png);
 }
 
 table.view{
