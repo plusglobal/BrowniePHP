@@ -1092,7 +1092,9 @@ table td.sortable{
 }
 
 table td.sortable a{
-	width: 33px;
+	width: 25px;
+	padding: 4px;
+	margin: 0;
 	height: 33px;
 	display: block;
 	float: left;
