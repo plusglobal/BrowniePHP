@@ -942,7 +942,7 @@ div.files-gallery ul.file-actions li a:hover {
 }
 
 
-div.files-gallery a.BrwFile{
+div.files-gallery a.brw-file{
 	display: block;
 	float: left;
 	line-height: 32px;

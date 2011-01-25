@@ -423,7 +423,7 @@ class CmsBehavior extends ModelBehavior {
 				$r[$key]['description'] = $value['description'];
 				if (!empty($sizes[0])) {
 					if ($sizes[0] != end($sizes)) {
-						$paths['tag'] = '<a title="' . htmlspecialchars($value['description']) .
+						$paths['tag'] = '<a class="brw-image" title="' . htmlspecialchars($value['description']) .
 							'" href="' . $paths['sizes'][end($sizes)] . '" rel="brw_image_' . $value['record_id'] .
 							'"><img alt="' . htmlspecialchars($value['description']) . '" src="' . $paths['sizes'][$sizes[0]] . '" /></a>';
 					} else {
@@ -469,13 +469,13 @@ class CmsBehavior extends ModelBehavior {
 				'real_path' => WWW_ROOT . str_replace('/', DS, $relativePath),
 				'tag' => '
 					<a title="' . htmlspecialchars($value['description']) . '" href="' . $completePath .
-						'" class="BrwFile '.$extension.'">
+						'" class="brw-file '.$extension.'">
 						' . $value['description'] . '
 					</a>',
 				'force_download' => $forceDownloadUrl,
 				'tag_force_download' =>'
 					<a title="' . htmlspecialchars($value['description']) . '" href="' . $forceDownloadUrl .
-						'" class="BrwFile '.$extension.'">
+						'" class="brw-file '.$extension.'">
 						' . $value['description'] . '
 					</a>',
 			);
