@@ -473,6 +473,11 @@ class CmsBehavior extends ModelBehavior {
 						' . $value['description'] . '
 					</a>',
 				'force_download' => $forceDownloadUrl,
+				'tag_force_download' =>'
+					<a title="' . htmlspecialchars($value['description']) . '" href="' . $forceDownloadUrl .
+						'" class="BrwFile '.$extension.'">
+						' . $value['description'] . '
+					</a>',
 			);
 			$merged = am($r[$key], $paths);
 			if (!empty($Model->brownieCmsConfig['files'][$value['category_code']]['index'])) {

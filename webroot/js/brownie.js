@@ -12,9 +12,7 @@ function multipleComboSelect() {
 }
 
 function bindFancyBox() {
-	$("a[href$=.jpg],a[href$=.jpeg],a[href$=.png],a[href$=.gif]").fancybox({
-		'titlePosition'	:	'inside'
-	});
+	$(".images-gallery a").fancybox({'titlePosition': 'inside'});
 }
 
 $(document).ready(function(){
