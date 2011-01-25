@@ -49,6 +49,7 @@ class BrwUploadBehavior extends ModelBehavior {
 					$Model->data[$Model->alias]['file'] = substr($Model->data[$Model->alias]['file'], 1);
 				}
 			}
+			$Model->data[$Model->alias]['name'] = $this->_cleanFileName($Model->data[$Model->alias]['name']);
 		}
 	}
 
@@ -173,5 +174,13 @@ class BrwUploadBehavior extends ModelBehavior {
 		return getimagesize($Model->data[$Model->alias]['file']);
 	}
 
+
+	function _cleanFileName($filename) {
+		$parts = explode('.', $filename);
+		foreach ($parts as $key => $part) {
+			$parts[$key] = Inflector::slug($part, '-');
+		}
+		return join('.', $parts);
+	}
 
 }
