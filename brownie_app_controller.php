@@ -158,7 +158,9 @@ class BrownieAppController extends AppController {
 
 	function _checkPermissions($model, $action = 'view', $id = null) {
 		$Model = ClassRegistry::getObject($model);
-
+		if (!$Model) {
+			return false;
+		}
 		$noPermission = (
 			$siteModel = Configure::read('multiSitesModel')
 			and $model != $siteModel
