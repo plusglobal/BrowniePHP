@@ -50,10 +50,11 @@ class CmsBehavior extends ModelBehavior {
 			'print' => false,
 			'empty' => false,
 			'url_view' => array(),
-			'custom' => array(),
 		),
 
 		'actions_no_root' => array(),
+
+		'custom_actions' => array(),
 
 		'images' => array(),
 
@@ -84,6 +85,13 @@ class CmsBehavior extends ModelBehavior {
 		'name_category' => 'Files',
 		'index' => false,
 		'description' => true,
+	);
+
+	var $cmsConfigDefaultCustomActions = array(
+		'title' => '',
+		'url' => array('plugin' => false),
+		'options' => array('target' => '_blank'),
+		'confirmMessage' => false,
 	);
 
 
@@ -575,15 +583,17 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _customActionsConfig($Model) {
-		foreach ($Model->brownieCmsConfig['actions']['custom'] as $name => $url) {
-			if (is_array($url)) {
-				$url = array_merge($url, array('brw' => true));
-				if (empty($url['plugin']) or $url['plugin'] == 'brownie') {
-					$url['plugin'] = false;
-				}
-				$Model->brownieCmsConfig['actions']['custom'][$name] = $url;
+		$customActions = array();
+		foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $config) {
+			$customActions[$action] = Set::merge($this->cmsConfigDefaultCustomActions, $config);
+			if (empty($customActions[$action]['title'])) {
+				$customActions[$action]['title'] = Inflector::humanize($action);
+			}
+			if (empty($customActions[$action]['options']['class'])) {
+				$customActions[$action]['options']['class'] = $action;
 			}
 		}
+		$Model->brownieCmsConfig['custom_actions'] = $customActions;
 	}
 
 }

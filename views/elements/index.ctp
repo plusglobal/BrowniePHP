@@ -95,12 +95,13 @@ if ($records):
 			array('title' => __d('brownie', 'View on line', true), 'target' => 'view_' . $model . '_' . $record[$model]['id'],
 			)) . '</li> ';
 		}
-		if (!empty($brwConfig['actions']['custom'])) {
-			foreach ($brwConfig['actions']['custom'] as $name => $url) {
+		if (!empty($brwConfig['custom_actions'])) {
+			foreach ($brwConfig['custom_actions'] as $name => $custom) {
 				//esto de poner el id en la vista está mal, pasalo al modelo
-				$url[0] = $record[$model]['id'];
-				echo '<li class="custom ' . Inflector::slug($name) . '">'
-				. $html->link(__d('brownie', $name, true), $url) . '</li> ';
+				$custom['url'][] = $record[$model]['id'];
+				echo '<li class="custom_action">'
+				. $html->link(__($custom['title'], true), $custom['url'], $custom['options'], $custom['confirmMessage'])
+				. '</li> ';
 			}
 		}
 		echo '</ul></td>

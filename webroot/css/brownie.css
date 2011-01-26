@@ -640,8 +640,7 @@ li.url_view a{
 	background-image: url(ico/16x16/applications-internet.png);
 }
 
-li.custom a{
-	background-image: url(ico/16x16/system-software-update.png);
+li.custom_action a{
 	background-image: url(ico/16x16/system-software-update.png);
 }
 
