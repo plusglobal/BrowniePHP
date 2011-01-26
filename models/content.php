@@ -12,8 +12,8 @@ class Content extends BrownieAppModel{
 	function getForeignKeys($Model) {
 		$out = array();
 		if (!empty($Model->belongsTo)) {
-			foreach ($Model->belongsTo as $assocModel) {
-				$out[$assocModel['foreignKey']] = $assocModel['className'];
+			foreach ($Model->belongsTo as $alias => $assocModel) {
+				$out[$assocModel['foreignKey']] = $alias;
 			}
 		}
 		return $out;
