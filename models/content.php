@@ -227,7 +227,12 @@ class Content extends BrownieAppModel{
 
 		$sortField = $Model->brownieCmsConfig['sortable']['field'];
 		$record = $Model->findById($id);
-		$neighbors = $Model->find('neighbors', array('field' => $sortField, 'value' => $record[$Model->alias][$sortField]));
+		$params = array('field' => $sortField, 'value' => $record[$Model->alias][$sortField]);
+		if ($parent = $Model->brownieCmsConfig['parent']) {
+			$foreignKey = $Model->belongsTo[$parent]['foreignKey'];
+			$params['conditions'] = array($Model->alias . '.' . $foreignKey => $record[$Model->alias][$foreignKey]);
+		}
+		$neighbors = $Model->find('neighbors', $params);
 		if ($Model->brownieCmsConfig['sortable']['direction'] == 'desc') {
 			$prev = 'prev'; $next = 'next';
 		} else {
