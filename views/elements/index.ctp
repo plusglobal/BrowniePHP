@@ -76,7 +76,7 @@ if ($records):
 		}
 
 		echo '<td class="actions">';
-		echo $this->element('actions', array('record' => $record));
+		echo $this->element('actions', array('record' => $record, 'model' => $model, 'inView' => false));
 		echo '</td>
 		</tr>';
 	endforeach;

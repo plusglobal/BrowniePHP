@@ -2,44 +2,9 @@
 	<div class="clearfix">
 	<h1><?php  __d('brownie', $brwConfig['names']['singular']);?></h1>
 	<div class="actions-view">
-		<ul>
+		<ul class="actions neighbors">
 			<?php
-			if ($permissions[$model]['add']) {
-				echo '
-				<li class="add">
-					' . $html->link(__d('brownie', 'Add', true),
-					array('action'=>'edit', $model),
-					array('title' => __d('brownie', 'Add', true))) . '
-				</li>';
-			}
-			if ($permissions[$model]['edit']) {
-				echo '
-				<li class="edit">
-					' . $html->link(__d('brownie', 'Edit', true),
-					array('action'=>'edit', $model, $record[$model]['id']),
-					array('title' => __d('brownie', 'Edit', true))) . '
-				</li>';
-			}
-			if ($permissions[$model]['delete']) {
-				echo '
-				<li class="delete">
-					' . $html->link(__d('brownie', 'Delete', true),
-					array('action'=>'delete', $model, $record[$model]['id']),
-					array('title' => __d('brownie', 'Delete', true)),
-					sprintf(__d('brownie', 'Are you sure you want to delete # %s?', true), $record[$model]['id'])) . '
-				</li>';
-			}
-			if (!empty($record[$model]['brw_url_view'])) {
-				echo '
-				<li class="url_view">
-					' . $html->link(__d('brownie', 'View on line', true),
-					$record[$model]['brw_url_view'],
-					array(
-						'title' => __d('brownie', 'View on line', true),
-						'target' => 'view_' . $model . '_' . $record[$model]['id'],
-					)) . '
-				</li>';
-			}
+
 			if (!empty($neighbors['prev'])) {
 				echo '
 				<li class="prev">
@@ -58,9 +23,8 @@
 			}
 			?>
 			<?php // echo $html->link(__d('brownie', 'List', true), array('action'=>'index', $model)); ?>
-
 		</ul>
-	</div>
+		<?php echo $this->element('actions', array('record' => $record, 'inView' => true)) ?>
 	</div>
 
 	<table class="view">

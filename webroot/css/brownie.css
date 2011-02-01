@@ -270,145 +270,7 @@ a{
 }
 
 
-/* desprolijo revisar despues */
-
-/*  Actions  */
-div.actions-view{
-	float: right;
-	margin: 0 0 5px 0;
-}
-
-div.actions-view ul {
-	margin: 0;
-	padding: 0;
-}
-div.actions-view li {
-	float: left;
-}
-
-div.actions-view ul li a {
-	background:#fff;
-	display: block;
-	background: center center no-repeat;
-	text-indent: -500px;
-	overflow: hidden;
-	width: 42px;
-	height: 42px;
-	margin: 2px;
-}
-
-div.actions-view ul li a:hover {
-	background-color: #268AFC;
-}
-
-div.actions-view li.add a{
-	background-image: url(img/agregar2_ico.png);
-}
-
-div.actions-view li.edit a{
-	background-image: url(img/editar_ico.png);
-}
-
-div.actions-view li.delete a{
-	background-image: url(img/eliminar_ico.png);
-}
-
-div.actions-view li.url_view a{
-	background-image: url(img/applications-internet.png);
-}
-
-div.actions-view li.prev a{
-	background-image: url(img/anterior_ico.png);
-}
-
-div.actions-view li.next a{
-	background-image: url(img/siguiente_ico.png);
-}
-
-
-/* tree */
-
-div.tree{
-	width: 650px;
-}
-
-div.tree ul{
-	margin: 0;
-	clear: both;
-}
-
-div.tree ul li{
-	padding: 0 0 0 10px;
-	background: url(img/1level.png) 0 0 repeat-x;
-	line-height: 32px;
-	border-top: 2px solid #e6e6e6;
-}
-
-div.tree ul li li{
-	background: url(img/2level.png) 13px 0 no-repeat;
-	padding-left: 42px;
-	margin-left: 17px;
-}
-
-div.tree ul li div.actions{
-	position: absolute;
-	margin-left: 10px;
-	float: right;
-	margin-top: -32px;
-	left: 786px;
-}
-
-div.tree ul li div.actions a{
-	width: 41px;
-	height: 31px;
-	float: left;
-	overflow: hidden;
-	background: center center no-repeat;
-	margin: 1px;
-	line-height: 10px;
-	text-indent: 100px;
-}
-
-div.tree ul li div.actions a:hover{
-	background-color: #268AFC;
-}
-
-div.tree a{
-	background: center center no-repeat;
-	display: block;
-	float: left;
-}
-
-
-div.tree ul li div.actions a.view{
-	background-image: url(img/func_ver_ico.png);
-}
-
-div.tree ul li div.actions a.edit{
-	background-image: url(img/func_editar_ico.png);
-}
-
-div.tree ul li div.actions a.delete{
-	background-image: url(img/func_borrar_ico.png);
-}
-
-.tree_prepend{
-	width: 22px;
-	display: block;
-	float: left;
-	height: 4px;
-}
-
-.tree_arrow{
-	width: 8px;
-	margin-right: 7px;
-	display: block;
-	float: left;
-	height: 1.1em;
-	background: url(img/level.png) 0 2px no-repeat;
-}
-
-/* Paging */
+/* pagination */
 
 div.pagination {
 	clear: both;
@@ -545,6 +407,25 @@ p.error em {
 	font-size: 16px;
 }
 
+/* tree */
+
+.tree_prepend{
+	width: 22px;
+	display: block;
+	float: left;
+	height: 4px;
+}
+
+.tree_arrow{
+	width: 8px;
+	margin-right: 7px;
+	display: block;
+	float: left;
+	height: 1.1em;
+	background: url(img/level.png) 0 2px no-repeat;
+}
+
+
 /* tables */
 
 table{
@@ -606,16 +487,25 @@ table td.actions{
 	line-height: 1.9em;
 	text-align: center;
 }
-
-td.actions ul{
+ul.actions{
+	vertical-align: middle;
+	line-height: 1.9em;
+	text-align: center;
 	display: inline;
 }
 
-td.actions li{
+div.actions-view ul.actions{
+	height: 4em;
+	line-height: 4em;
+	display: block;
+	float: right;
+}
+
+ul.actions li{
 	display: inline;
 }
 
-td.actions a{
+ul.actions a{
 	background: 4px center no-repeat;
 	padding-left: 26px;
 	padding-right: 10px;
@@ -626,6 +516,10 @@ td.actions a{
 
 li.view a{
 	background-image: url(ico/16x16/edit-find.png);
+}
+
+li.add a{
+	background-image: url(ico/16x16/list-add.png);
 }
 
 li.edit a{
@@ -640,12 +534,25 @@ li.url_view a{
 	background-image: url(ico/16x16/applications-internet.png);
 }
 
+li.prev a{
+	background-image: url(ico/16x16/go-previous.png);
+}
+
+li.next a{
+	background-image: url(ico/16x16/go-next.png);
+}
+
 li.custom_action a{
 	background-image: url(ico/16x16/system-software-update.png);
 }
 
+li.custom_action a.view_online{
+	background-image: url(ico/16x16/applications-internet.png);
+}
+
 table.view{
 	margin-bottom: 35px;
+	clear: both;
 }
 
 div.view td.label{
@@ -1103,10 +1010,10 @@ table td.sortable a{
 }
 
 .sortable a.up{
-	background-image: url(img/go-up.png);
+	background-image: url(ico/16x16/go-up.png);
 }
 .sortable a.down{
-	background-image: url(img/go-down.png);
+	background-image: url(ico/16x16/go-down.png);
 }
 
 .sortable a:hover{

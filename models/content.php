@@ -281,8 +281,9 @@ class Content extends BrownieAppModel{
 	}
 
 
-	function singleActions($Model, $record, $permissions) {
+	function actions($Model, $record, $permissions) {
 		$actionsTitles = array(
+			'add' => __d('brownie', 'Add', true),
 			'view' => __d('brownie', 'View', true),
 			'edit' => __d('brownie', 'Edit', true),
 			'delete' => __d('brownie', 'Delete', true),
@@ -297,9 +298,15 @@ class Content extends BrownieAppModel{
 		$actions = array();
 		foreach ($actionsTitles as $action => $title) {
 			if ($permissions[$action]) {
+				$url = array('controller' => 'contents', 'action' => $action, $Model->alias);
+				if ($action == 'add') {
+					$url['action'] = 'edit';
+				} else {
+					$url[] = $record[$Model->alias]['id'];
+				}
 				$actions[$action] = Set::merge($defaultAction, array(
 					'title' => $title,
-					'url' => array('controller' => 'contents', 'action' => $action, $Model->alias, $record[$Model->alias]['id']),
+					'url' => $url,
 					'confirmMessage' => ($action == 'delete') ?
 						sprintf(
 							($Model->brownieCmsConfig['names']['gender'] == 1) ?

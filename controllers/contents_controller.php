@@ -1,4 +1,5 @@
 <?php
+
 class ContentsController extends BrownieAppController {
 
 	var $name = 'Contents';
@@ -516,7 +517,7 @@ class ContentsController extends BrownieAppController {
 		return $out;
 	}
 
-	function _formatSingleForView($data, $Model) {
+	function _formatSingleForView($data, $Model, $inView = false) {
 		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
 		$foreignKeys = $this->Content->getForeignKeys($Model);
@@ -552,7 +553,7 @@ class ContentsController extends BrownieAppController {
 				}
 			}
 		}
-		$retData[$Model->name]['brw_actions'] = $this->Content->singleActions($Model, $data, $permissions);
+		$retData[$Model->name]['brw_actions'] = $this->Content->actions($Model, $data, $permissions);
 		return $retData;
 	}
 
