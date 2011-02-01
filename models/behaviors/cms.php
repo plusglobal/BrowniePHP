@@ -92,6 +92,8 @@ class CmsBehavior extends ModelBehavior {
 		'url' => array('plugin' => false),
 		'options' => array('target' => '_blank'),
 		'confirmMessage' => false,
+		'conditions' => array(),
+		'class' => 'custom_action',
 	);
 
 

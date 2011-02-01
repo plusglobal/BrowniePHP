@@ -520,37 +520,40 @@ class ContentsController extends BrownieAppController {
 		$fieldsConfig = $Model->brownieCmsConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
 		$foreignKeys = $this->Content->getForeignKeys($Model);
-		foreach ($data[$Model->name] as $key => $value) {
+		$permissions = $this->arrayPermissions($Model->name);
+		$retData = $data;
+		foreach ($retData[$Model->name] as $key => $value) {
 			if (in_array($key, $fieldsHide)) {
-				unset($data[$Model->name][$key]);
+				unset($retData[$Model->name][$key]);
 			} elseif (in_array($key, $fieldsConfig['code'])) {
-				$data[$Model->name][$key] = '<pre>' . htmlspecialchars($data[$Model->name][$key]) . '</pre>';
+				$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
 			} elseif (isset($foreignKeys[$key])) {
-				$read = $Model->{$foreignKeys[$key]}->findById($data[$Model->name][$key]);
-				$data[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
+				$read = $Model->{$foreignKeys[$key]}->findById($retData[$Model->name][$key]);
+				$retData[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
 				if ($this->_checkPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
 					$relatedURL = Router::url(array(
 						'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
 						$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
 					));
-					$data[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $data[$Model->name][$key] . '</a>';
+					$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 				}
 
 			} elseif (!empty($Model->_schema[$key]['type'])) {
 				switch($Model->_schema[$key]['type']) {
 					case 'boolean':
-						$data[$Model->name][$key] = $data[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
+						$retData[$Model->name][$key] = $retData[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
 					break;
 					case 'datetime':
-						$data[$Model->name][$key] = $this->_formatDateTime($data[$Model->name][$key]);
+						$retData[$Model->name][$key] = $this->_formatDateTime($retData[$Model->name][$key]);
 					break;
 					case 'date':
-						$data[$Model->name][$key] = $this->_formatDate($data[$Model->name][$key]);
+						$retData[$Model->name][$key] = $this->_formatDate($retData[$Model->name][$key]);
 					break;
 				}
 			}
 		}
-		return $data;
+		$retData[$Model->name]['brw_actions'] = $this->Content->singleActions($Model, $data, $permissions);
+		return $retData;
 	}
 
 

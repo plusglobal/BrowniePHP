@@ -280,4 +280,46 @@ class Content extends BrownieAppModel{
 		return false;
 	}
 
+
+	function singleActions($Model, $record, $permissions) {
+		$actionsTitles = array(
+			'view' => __d('brownie', 'View', true),
+			'edit' => __d('brownie', 'Edit', true),
+			'delete' => __d('brownie', 'Delete', true),
+		);
+		$defaultAction = array(
+			'title' => false,
+			'url' => array(),
+			'target' => '_self',
+			'options' => array(),
+			'confirmMessage' => false,
+		);
+		$actions = array();
+		foreach ($actionsTitles as $action => $title) {
+			if ($permissions[$action]) {
+				$actions[$action] = Set::merge($defaultAction, array(
+					'title' => $title,
+					'url' => array('controller' => 'contents', 'action' => $action, $Model->alias, $record[$Model->alias]['id']),
+					'confirmMessage' => ($action == 'delete') ?
+						sprintf(
+							($Model->brownieCmsConfig['names']['gender'] == 1) ?
+								__d('brownie', 'Are you sure you want to delete this %s?[male]', true):
+								__d('brownie', 'Are you sure you want to delete this %s?[female]', true)
+							,
+							$Model->brownieCmsConfig['names']['singular']
+						):
+						false,
+					'class' => $action,
+				));
+			}
+		}
+		foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $custom) {
+			if (Set::matches($custom['conditions'], $record)) {
+				$custom['url'][] = $record[$Model->alias]['id'];
+				$actions[$action] = Set::merge($defaultAction, $custom);
+			}
+		}
+		return $actions;
+	}
+
 }
