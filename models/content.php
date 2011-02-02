@@ -243,11 +243,12 @@ class Content extends BrownieAppModel{
 			return false;
 		}
 		$swap = $neighbors[$cual];
-		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => 0));
+		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => null));
 		$saved2 = $Model->save(array('id' => $swap[$Model->alias]['id'], $sortField => $record[$Model->alias][$sortField]));
 		$saved3 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => $swap[$Model->alias][$sortField]));
 		return ($saved1 and $saved2 and $saved3);
 	}
+
 
 	function schemaForView($Model) {
 		$schema = $Model->_schema;
@@ -282,12 +283,7 @@ class Content extends BrownieAppModel{
 
 
 	function actions($Model, $record, $permissions) {
-		$actionsTitles = array(
-			'add' => __d('brownie', 'Add', true),
-			'view' => __d('brownie', 'View', true),
-			'edit' => __d('brownie', 'Edit', true),
-			'delete' => __d('brownie', 'Delete', true),
-		);
+		$actions = $actionsTitles = array();
 		$defaultAction = array(
 			'title' => false,
 			'url' => array(),
@@ -295,18 +291,42 @@ class Content extends BrownieAppModel{
 			'options' => array(),
 			'confirmMessage' => false,
 		);
-		$actions = array();
+		if ($Model->brownieCmsConfig['sortable'] or $this->isTree($Model)) {
+			$actionsTitles = array(
+				'down' => __d('brownie', 'Down', true),
+				'up' => __d('brownie', 'Up', true)
+			);
+		}
+		$actionsTitles = array_merge($actionsTitles, array(
+			'add' => __d('brownie', 'Add', true),
+			'view' => __d('brownie', 'View', true),
+			'edit' => __d('brownie', 'Edit', true),
+			'delete' => __d('brownie', 'Delete', true),
+		));
 		foreach ($actionsTitles as $action => $title) {
-			if ($permissions[$action]) {
+			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
 				$url = array('controller' => 'contents', 'action' => $action, $Model->alias);
-				if ($action == 'add') {
-					$url['action'] = 'edit';
-				} else {
-					$url[] = $record[$Model->alias]['id'];
+				$options = array('title' => $title);
+				switch ($action) {
+					case 'add':
+						$url['action'] = 'edit';
+					break;
+					case 'up':
+						$url = array('controller' => 'contents', 'action' => 'reorder', $Model->alias, 'up', $record[$Model->alias]['id']);
+						$options['title'] = __d('brownie', 'Sort up', true);
+					break;
+					case 'down':
+						$url = array('controller' => 'contents', 'action' => 'reorder', $Model->alias, 'down', $record[$Model->alias]['id']);
+						$options['title'] = __d('brownie', 'Sort down', true);
+					break;
+					default:
+						$url[] = $record[$Model->alias]['id'];
+					break;
 				}
 				$actions[$action] = Set::merge($defaultAction, array(
 					'title' => $title,
 					'url' => $url,
+					'options' => $options,
 					'confirmMessage' => ($action == 'delete') ?
 						sprintf(
 							($Model->brownieCmsConfig['names']['gender'] == 1) ?
@@ -328,5 +348,7 @@ class Content extends BrownieAppModel{
 		}
 		return $actions;
 	}
+
+
 
 }

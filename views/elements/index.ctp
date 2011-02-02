@@ -42,9 +42,9 @@ if ($records):
 					. '">' . $paginator->sort($field_name, null, array('model' => $model, 'escape' => false)) . '</th>';
 				}
 			}
-			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
+			/*if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
 				echo '<th class="actions">' . __d('brownie', 'Reorder', true) . '</th>';
-			}
+			}*/
 			echo '
 			<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
 			reset($record[$model]);
@@ -64,7 +64,7 @@ if ($records):
 			}
 		}
 
-		if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
+		/*if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
 			echo '<td class="sortable actions">
 			<a class="up" href="' . Router::url(array(
 				'controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']
@@ -73,7 +73,7 @@ if ($records):
 				'controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']
 			)) . '">'.__d('brownie', 'Down', true).'</a>
 			</td>';
-		}
+		}*/
 
 		echo '<td class="actions">';
 		echo $this->element('actions', array('record' => $record, 'model' => $model, 'inView' => false));

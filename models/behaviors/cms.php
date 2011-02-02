@@ -588,11 +588,13 @@ class CmsBehavior extends ModelBehavior {
 		$customActions = array();
 		foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $config) {
 			$customActions[$action] = Set::merge($this->cmsConfigDefaultCustomActions, $config);
+			$title = Inflector::humanize($action);
 			if (empty($customActions[$action]['title'])) {
-				$customActions[$action]['title'] = Inflector::humanize($action);
+				$customActions[$action]['title'] = $title;
 			}
 			if (empty($customActions[$action]['options']['class'])) {
 				$customActions[$action]['options']['class'] = $action;
+				$customActions[$action]['options']['title'] = $title;
 			}
 		}
 		$Model->brownieCmsConfig['custom_actions'] = $customActions;

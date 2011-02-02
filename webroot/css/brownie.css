@@ -486,12 +486,17 @@ th.actions{
 
 th.actions{
 	overflow: hidden;
+	text-align: left;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 table td.actions{
 	vertical-align: middle;
 	line-height: 1.9em;
-	text-align: center;
+	/*text-align: center;*/
+	text-align: left;
+	padding: 0 8px;
 }
 ul.actions{
 	vertical-align: middle;
@@ -510,6 +515,20 @@ div.actions-view ul.actions{
 ul.actions li{
 	display: inline;
 }
+
+/*ul.actions li{
+	display: block;
+	float: left;
+	width: 26px;
+	overflow: hidden;
+	margin-right: 2px;
+}
+ul.actions li a{
+	display: block;
+}
+ul.actions li a:hover{
+	background-color: #444;
+}*/
 
 ul.actions a{
 	background: 4px center no-repeat;
@@ -547,6 +566,21 @@ li.prev a{
 li.next a{
 	background-image: url(ico/16x16/go-next.png);
 }
+
+li.down a{
+	background-image: url(ico/16x16/go-down.png);
+}
+
+li.up a{
+	background-image: url(ico/16x16/go-up.png);
+}
+
+/*li.up, li.down {
+	width: 26px;
+	overflow: hidden;
+	display: block;
+	float: left;
+}*/
 
 li.custom_action a{
 	background-image: url(ico/16x16/system-software-update.png);
