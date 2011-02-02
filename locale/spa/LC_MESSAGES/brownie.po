@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2011-02-01 17:46-0200\n"
-"PO-Revision-Date: 2011-02-01 16:50-0300\n"
+"PO-Revision-Date: 2011-02-02 15:31-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -407,11 +407,11 @@ msgstr "Acciones"
 
 #: \views\elements\index.ctp:71
 msgid "Up"
-msgstr "Arriba"
+msgstr "Subir"
 
 #: \views\elements\index.ctp:74
 msgid "Down"
-msgstr "Abajo"
+msgstr "Bajar"
 
 #: \views\elements\index.ctp:118
 msgid "No records"
