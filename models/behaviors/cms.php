@@ -90,7 +90,7 @@ class CmsBehavior extends ModelBehavior {
 	var $cmsConfigDefaultCustomActions = array(
 		'title' => '',
 		'url' => array('plugin' => false),
-		'options' => array('target' => '_blank'),
+		'options' => array('target' => '_self'),
 		'confirmMessage' => false,
 		'conditions' => array(),
 		'class' => 'custom_action',
