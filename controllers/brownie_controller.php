@@ -33,21 +33,31 @@ class BrownieController extends BrownieAppController {
 
 	function translations() {
 		$models = Configure::listObjects('model');
-		$out = '<?php ';
+		$translations = array();
+		$out = "<?php\n";
 		foreach ($models as $model) {
 			$Model = ClassRegistry::init($model);
-			$out .= ' __("' . Inflector::humanize(Inflector::underscore($Model->name)) . '"); ';
+			$translations[Inflector::humanize(Inflector::underscore($Model->name))] = true;
 			$schema = (array)$Model->_schema;
 			foreach ($schema as $key => $value) {
 				if (strstr($value['type'], 'enum(')) {
 					$options = enum2array($value['type']);
 					foreach ($options as $option) {
-						$out .= '__("' . $option . '");';
+						$translations[$option] = true;
 					}
 				}
-				$out .= ' __("' . Inflector::humanize(str_replace('_id', '', $key)) . '"); ';
+				$translations[Inflector::humanize(str_replace('_id', '', $key))] = true;
+			}
+			foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $config) {
+				$translations[$config['title']] = true;
 			}
 		}
+
+		$translations = array_keys($translations);
+		foreach ($translations as $translation) {
+			$out .= "__('" . $translation . "');\n";
+		}
+
 		$forTranslate = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . '4translate.php';
 		fwrite(fopen($forTranslate, 'w'), $out);
 	}
