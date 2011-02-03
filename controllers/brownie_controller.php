@@ -51,7 +51,7 @@ class BrownieController extends BrownieAppController {
 			foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $config) {
 				$translations[$config['title']] = true;
 				if ($config['confirmMessage']) {
-					$translations[$config['confirmMessage']];
+					$translations[$config['confirmMessage']] = true;
 				}
 			}
 		}
