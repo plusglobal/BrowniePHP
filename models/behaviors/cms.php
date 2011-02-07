@@ -38,6 +38,7 @@ class CmsBehavior extends ModelBehavior {
 		'fields_no_root' => array(),
 
 		'actions' => array(
+			'view' => true,
 			'add' => true,
 			'edit' => true,
 			'add_images' => true,
@@ -49,7 +50,6 @@ class CmsBehavior extends ModelBehavior {
 			'search' => false,
 			'print' => false,
 			'empty' => false,
-			'url_view' => array(),
 		),
 
 		'actions_no_root' => array(),
@@ -126,9 +126,6 @@ class CmsBehavior extends ModelBehavior {
 		}
 		if ($Model->name != 'BrwFile') {
 			$results = $this->_addFilePaths($results, $Model);
-		}
-		if (!empty($Model->brownieCmsConfig['actions']['url_view'])) {
-			$results = $this->_addUrlView($results, $Model);
 		}
 		$results = $this->sanitizeHtml($Model, $results);
 
@@ -499,24 +496,6 @@ class CmsBehavior extends ModelBehavior {
 		return $ret;
 	}
 
-
-	function _addUrlView($results, $Model) {
-		if ($Model->brownieCmsConfig['actions']['url_view'] and !empty($results[0][$Model->name])) {
-			foreach ($results as $i => $record) {
-				if (!empty($results[$i][$Model->name]['id'])) {
-					$url = $Model->brownieCmsConfig['actions']['url_view'];
-					if (is_array($url)) {
-						$url[0] = $results[$i][$Model->name]['id'];
-						$url['plugin'] = null;
-					} else {
-						$url .= '/' . $results[$i][$Model->name]['id'];
-					}
-					$results[$i][$Model->name]['brw_url_view'] = $url;
-				}
-			}
-		}
-		return $results;
-	}
 
 	function _camelize($array) {
 		foreach ($array as $key => $value) {

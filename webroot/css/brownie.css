@@ -555,10 +555,6 @@ li.delete a{
 	background-image: url(ico/16x16/edit-delete.png);
 }
 
-li.url_view a{
-	background-image: url(ico/16x16/applications-internet.png);
-}
-
 li.prev a{
 	background-image: url(ico/16x16/go-previous.png);
 }
