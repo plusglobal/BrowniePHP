@@ -418,6 +418,30 @@ class ContentsController extends BrownieAppController {
 	}
 
 
+	function delete_upload($model, $uploadType, $recordId) {
+		if (!in_array($uploadType, array('BrwFile', 'BrwImage'))) {
+			$this->cakeError('error404');
+		}
+		if ($this->Model->{$uploadType}->delete($recordId)) {
+			$msg = ($uploadType == 'BrwFile') ?
+				__d('brownie', 'The file was deleted', true):
+				__d('brownie', 'The image was deleted', true);
+			$this->Session->setFlash($msg, 'flash_success');
+		} else {
+			$msg = ($uploadType == 'BrwFile') ?
+				__d('brownie', 'The file could not be deleted', true):
+				__d('brownie', 'The image could not be deleted', true);
+			$this->Session->setFlash($msg, 'flash_error');
+		}
+
+		$redirecTo = env('HTTP_REFERER');
+		if (!$redirecTo) {
+			$redirecTo = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
+		}
+		$this->redirect($redirecTo);
+	}
+
+
 	function edit_file($model = null, $recordId = null, $categoryCode = null, $fileId = null) {
 
 		if (!empty($this->data)) {

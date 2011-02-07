@@ -42,7 +42,6 @@ class CmsBehavior extends ModelBehavior {
 			'view' => true,
 			'add' => true,
 			'edit' => true,
-			'add_images' => true,
 			'edit_image' => true,
 			'edit_file' => true,
 			'delete' => true,
