@@ -22,7 +22,7 @@ $h = $brwConfig['images'][$image['category_code']]['array_sizes'][0]['h'];
 	</ul>
 	<table>
 		<tr>
-			<td style="width: <?php echo $w ?>px; height: <?php echo $h ?>px"><?php echo $image['tag']; ?></td>
+			<td style="width: <?php echo $w ?>px;"><?php echo $image['tag']; ?></td>
 		</tr>
 	</table>
 	<?php if ($brwConfig['images'][$image['category_code']]['description']): ?>
