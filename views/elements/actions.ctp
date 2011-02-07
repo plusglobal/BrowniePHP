@@ -5,7 +5,7 @@ if (!empty($record[$model]['brw_actions'])): ?>
 <?php foreach ($record[$model]['brw_actions'] as $action => $params): ?>
 	<?php if( (in_array($action, array('view', 'up', 'down')) and !empty($inView)) or ($action == 'add' and empty($inView))) continue ?>
 	<li class="<?php echo $params['class'] ?>">
-	<?php echo $html->link(__($params['title'], true), $params['url'], $params['options'], $params['confirmMessage']) ?>
+	<?php echo $html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) ?>
 	</li>
 <?php endforeach ?>
 </ul>
