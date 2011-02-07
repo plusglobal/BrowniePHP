@@ -298,6 +298,14 @@ class CmsBehavior extends ModelBehavior {
 			))), false);
 			foreach($Model->brownieCmsConfig['images'] as $key => $value) {
 				$Model->brownieCmsConfig['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
+				foreach ($Model->brownieCmsConfig['images'][$key]['sizes'] as $i => $sizes) {
+					if (strstr($sizes, 'x')) {
+						list($w, $h) = explode('x', $sizes);
+					} else {
+						list($w, $h) = explode('_', $sizes);
+					}
+					$Model->brownieCmsConfig['images'][$key]['array_sizes'][$i] = array('w' => $w, 'h' => $h);
+				}
 			}
 		}
 

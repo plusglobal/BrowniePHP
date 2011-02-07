@@ -44,90 +44,55 @@
 
 	</table>
 </div>
-<div class="brw-images index">
-<?php
-if (!empty($brwConfig['images'])) {
-	foreach ($brwConfig['images'] as $catCode => $imgCat) {
-		echo '<h2>' . $imgCat['name_category'] . '</h2>';
-		if (!empty($record['BrwImage'][$catCode])) {
-			if ($imgCat['index']) {
-				echo '<div class="images-gallery clearfix">';
-				echo $this->element('image', array('image' => $record['BrwImage'][$catCode]));
-			} else {
-				if ($permissions[$model]['edit']) {
-					echo '<div class="actions"><ul><li class="add-image">
-					' . $html->link(__d('brownie', 'Add', true), array(
-						'controller' => 'contents', 'action' => 'add_images',
-						$model, $record[$model]['id'], $catCode
-					)) . '</li></ul></div>';
-				}
-				echo '<div class="images-gallery clearfix">';
-				foreach ($record['BrwImage'][$catCode] as $image) {
-					echo $this->element('image', array('image' => $image));
-				}
-			}
-		} else {
-			if ($permissions[$model]['edit']) {
-				echo '
-				<div class="actions"><ul><li class="add-image">'
-				.  $html->link(__d('brownie', 'Add', true), array(
-					'controller' => 'contents',
-					'action' => 'add_images',
-					$model,	$record[$model]['id'],
-					$catCode
-				)) . '</li></ul></div>';
-			}
-			echo '<div class="images-gallery clearfix">';
-		}
-		echo '</div>';
-	}
-}
-?>
-</div>
-<div class="brw-files index">
-<?php
-if (!empty($brwConfig['files'])) {
-	foreach ($brwConfig['files'] as $catCode => $fileCat) {
-		echo '<h2>' . $fileCat['name_category'] . '</h2>';
-		if (!empty($record['BrwFile'][$catCode])) {
-			if ($fileCat['index']) {
-				echo '<div class="files-gallery clearfix">';
-				echo $this->element('file', array('file' => $record['BrwFile'][$catCode]));
-			} else {
-				if ($permissions[$model]['edit']) {
-					echo '<div class="actions"><ul><li class="add-file">
-					' . $html->link(__d('brownie', 'Add', true), array(
-						'controller' => 'contents', 'action' => 'edit_file',
-						$model, $record[$model]['id'], $catCode
-					)) . '</li></ul></div>';
-				}
-				echo '<div class="files-gallery clearfix">';
-				foreach ($record['BrwFile'][$catCode] as $file) {
-					echo $this->element('file', array('file' => $file));
-				}
-			}
-		} else {
-			if ($permissions[$model]['edit']) {
-				echo '
-				<div class="actions"><ul><li class="add-file">'
-				.  $html->link(__d('brownie', 'Add', true), array(
-					'controller' => 'contents',
-					'action' => 'edit_file',
-					$model,	$record[$model]['id'],
-					$catCode
-				)) . '</li></ul></div>';
-			}
-			echo '<div class="files-gallery clearfix">';
-		}
-		echo '</div>';
-	}
-}
-?>
-</div>
-<?php
 
+<?php
+$uploadModels = array('images' => 'BrwImage', 'files' => 'BrwFile');
+foreach ($uploadModels as $uploadKey => $uploadModel): ?>
+<div class="brw-<?php echo $uploadKey ?> index">
+	<?php foreach ($brwConfig[$uploadKey] as $catCode => $fileCat): ?>
+	<div class="<?php echo $uploadKey . '-' . $catCode ?>">
+		<h2><?php echo $fileCat['name_category'] ?></h2>
+		<?php
+		$canAdd = $permissions[$model]['edit'];
+		if ($fileCat['index'] and !empty($record[$uploadModel][$catCode])) {
+			$canAdd = false;
+		}
+		if ($canAdd) {
+			echo '<div class="actions ' . $uploadKey . '-actions"><ul class="actions"><li class="add-' . $uploadKey . '">
+			' . $html->link(__d('brownie', 'Add', true), array(
+				'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
+				$model, $uploadModel, $record[$model]['id'], $catCode
+			)) . '</li></ul></div>';
+		}
+		?>
+		<div class="<?php echo $uploadKey ?>-gallery clearfix">
+		<?php
+		if (!empty($record[$uploadModel][$catCode])) {
+			if ($fileCat['index']) {
+				if ($uploadKey == 'files') {
+					echo $this->element('file', array('file' => $record[$uploadModel][$catCode]));
+				} else {
+					echo $this->element('image', array('image' => $record[$uploadModel][$catCode]));
+				}
+			} else {
+				foreach ($record[$uploadModel][$catCode] as $upload) {
+					if ($uploadKey == 'files') {
+						echo $this->element('file', array('file' => $upload));
+					} else {
+						echo $this->element('image', array('image' => $upload));
+					}
+				}
+			}
+		}
+		?>
+		</div>
+	</div>
+	<?php endforeach ?>
+</div>
+<?php endforeach ?>
+
+<?php
 foreach ($assoc_models as $key => $assoc) {
-	//pr($assoc);
 	echo $this->element('index', $assoc);
 }
 ?>

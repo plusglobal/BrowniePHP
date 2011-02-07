@@ -173,7 +173,7 @@ a{
 }
 
 #content{
-	padding: 20px 5px; /*20px 20px 40px 20px;*/
+	padding: 20px 5px;
 	overflow: auto;
 	margin: 0 10px 10px 15px;	
 }
@@ -341,7 +341,7 @@ div.pagination span.prev span.disabled, div.pagination span.next span.disabled{
 }
 
 
-/* Notices and Errors */
+/* notices and errors */
 
 .error a {
 	color:#8a1f11;
@@ -358,9 +358,6 @@ div.pagination span.prev span.disabled, div.pagination span.next span.disabled{
 	padding-right: 0;
 	font-weight: normal;
 }
-
-
-
 
 div.message {
 	clear: both;
@@ -440,6 +437,14 @@ table{
 	background: #fff;
 }
 
+td a{
+	color: #B62441;
+}
+
+td a:hover{
+	text-decoration: underline;
+}
+
 th, td, div.view td{
 	border-collapse: collapse;
 	font: normal 13px Arial;
@@ -494,10 +499,10 @@ th.actions{
 table td.actions{
 	vertical-align: middle;
 	line-height: 1.9em;
-	/*text-align: center;*/
 	text-align: left;
 	padding: 0 8px;
 }
+
 ul.actions{
 	vertical-align: middle;
 	line-height: 1.9em;
@@ -548,11 +553,11 @@ li.add a{
 }
 
 li.edit a{
-	background-image: url(ico/16x16/accessories-text-editor.png);
+	background-image: url(ico/16x16/edit.png);
 }
 
 li.delete a{
-	background-image: url(ico/16x16/edit-delete.png);
+	background-image: url(ico/16x16/delete.png);
 }
 
 li.prev a{
@@ -569,6 +574,10 @@ li.down a{
 
 li.up a{
 	background-image: url(ico/16x16/go-up.png);
+}
+
+li.download a{
+	background-image: url(ico/16x16/download.png);
 }
 
 /*li.up, li.down {
@@ -687,8 +696,8 @@ div.index div.actions ul li.import a{
 	background-image: url(img/import.png);
 }
 
-div.index div.actions ul li.add-image a{
-	background-image: url(img/imagen_ico.png);
+div.index div.actions ul li.add-images a{
+	background-image: url(ico/32x32/insert-image.png);
 }
 
 p.norecords{
@@ -803,39 +812,41 @@ div.checkbox label{
 	height: 40px;
 }
 
+/* uploads */
+
 div.image{
 	float: left;
 	margin: 10px 10px 0 0;
+	background: #fff;
+	padding: 5px;
+	text-align: center;
+	background: #fff;
 }
 
-ul.image-actions{
-	background: url(img/action_image.png);
+div.with-description {
+	background: url(img/img_description.jpg) left bottom repeat-x #fff;
 }
 
-ul.image-actions li{
+div.image ul.actions a{
+	display: block;
 	float: left;
 }
 
-ul.image-actions li a {
-	display: block;
-	background: center center no-repeat;
-	text-indent: 100px;
+div.image p.description{
+	margin-top: 5px;
+	float: left;
+	line-height: 1.1em;
+	height: 2.2em;
 	overflow: hidden;
-	width: 32px;
-	height: 32px;
-	margin: 0px;
+	text-align: left;
 }
 
-ul.image-actions li a:hover {
-	background-color: #268AFC;
-}
-
-ul.image-actions li.edit a{
-	background-image: url(img/edit_foto.png);
-}
-
-ul.image-actions li.delete a{
-	background-image: url(img/delete_foto.png);
+div.image td{
+	border: 0;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	vertical-align: middle;
 }
 
 div.files-gallery{
@@ -843,54 +854,38 @@ div.files-gallery{
 	margin-bottom: 15px;
 }
 
-div.brw-files div.actions li.add-file a{
-	background: url(img/agregar_ico.png) left center no-repeat;
+div.brw-files div.actions li.add-files a{
+	background: url(ico/32x32/insert-file.png) left center no-repeat;
 }
 
-div.files-gallery div.file{
+div.files-gallery div.files{
 	background: #fff;
-	padding-left: 15px;
 	margin-bottom: 2px;
 }
 
-div.files-gallery ul.file-actions{
+div.files-gallery ul.files-actions{
 	float: right;
 }
 
-div.files-gallery ul.file-actions li{
+div.files-gallery ul a{
+	float: left;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+div.files-gallery ul.files-actions li{
 	float: left;
 }
-
-div.files-gallery ul.file-actions li a{
-	display: block;
-	background: 0 0 no-repeat;
-	text-indent: 100px;
-	overflow: hidden;
-	width: 32px;
-	height: 32px;
-	margin: 0px;
-}
-
-div.files-gallery ul.file-actions li.edit a{
-	background-image: url(img/edit_foto.png);
-}
-
-div.files-gallery ul.file-actions li.delete a{
-	background-image: url(img/delete_foto.png);
-}
-
-div.files-gallery ul.file-actions li a:hover {
-	background-color: #268AFC;
-}
-
 
 div.files-gallery a.brw-file{
 	display: block;
 	float: left;
-	line-height: 32px;
-	height: 32px;
+	padding: 10px;
 	color: #444;
+	line-height: 1.1em;
 }
+
+/* home */
 
 #home h2{
 	font: normal 18px Arial;
@@ -1056,10 +1051,3 @@ table td.sortable a{
 	background-color: #268AFC;
 }
 
-td a{
-	color: #B62441;
-}
-
-td a:hover{
-	text-decoration: underline;
-}
