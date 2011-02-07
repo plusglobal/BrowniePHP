@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-02-01 17:46-0200\n"
-"PO-Revision-Date: 2011-02-02 15:31-0300\n"
+"POT-Creation-Date: 2011-02-07 16:30-0200\n"
+"PO-Revision-Date: 2011-02-07 15:41-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -29,101 +29,117 @@ msgstr "Ingresar datos de acceso"
 msgid "Menu"
 msgstr "Menú"
 
-#: \controllers\archivos_controller.php:8
-msgid "The file was deleted"
-msgstr "El archivo fue eliminado"
-
-#: \controllers\archivos_controller.php:10
-msgid "The file couldn't be deleted"
-msgstr "El archivo no ha podido eliminarse"
-
-#: \controllers\contents_controller.php:251
+#: \controllers\contents_controller.php:252
 msgid "The information has been saved"
 msgstr "La información ha sido guardada"
 
-#: \controllers\contents_controller.php:278
+#: \controllers\contents_controller.php:279
 msgid "The information could not be saved. Please, check the error messages."
 msgstr "La información no ha podido guardarse. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:341
+#: \controllers\contents_controller.php:342
 msgid "Successful delete"
 msgstr "Eliminación exitosa"
 
-#: \controllers\contents_controller.php:343
+#: \controllers\contents_controller.php:344
 msgid "Unable to delete"
 msgstr "No se ha podido eliminar"
 
-#: \controllers\contents_controller.php:382
+#: \controllers\contents_controller.php:383
 msgid "The image was Successfully edited"
 msgstr "La imagen fue modificada con éxito"
 
-#: \controllers\contents_controller.php:384
+#: \controllers\contents_controller.php:385
 msgid "The image was Successfully added"
 msgstr "La imagen fue agregada con éxito"
 
-#: \controllers\contents_controller.php:410
+#: \controllers\contents_controller.php:411
 msgid "%d images successfully added"
 msgstr "%d imágenes agregadas exitosamente"
 
-#: \controllers\contents_controller.php:413
+#: \controllers\contents_controller.php:414
 msgid "None images uploaded. Please try again."
 msgstr "No se han subido imágenes. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:435
-msgid "The file was Successfully edited"
-msgstr "El archivo fue modificado con éxito"
+#: \controllers\contents_controller.php:427
+msgid "The file was deleted"
+msgstr "El archivo fue eliminado"
 
-#: \controllers\contents_controller.php:437
-msgid "The file was Successfully added"
-msgstr "El archivo fue agregado con éxito"
-
-#: \controllers\contents_controller.php:462
-msgid "The import could not be done. Please try again"
-msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
-
-#: \controllers\contents_controller.php:470
-msgid "Warning: %s::brwImport() must be defined"
-msgstr "Atención: %s::brwImport() debe estar definida"
-
-#: \controllers\contents_controller.php:491
-msgid "Successfully reordered"
-msgstr "Reordenado exitosamente"
-
-#: \controllers\contents_controller.php:493
-msgid "Failed to reorder"
-msgstr "No se pudo reordenar"
-
-#: \controllers\contents_controller.php:544
-msgid "Yes"
-msgstr "Sí"
-
-#: \controllers\contents_controller.php:544
-msgid "No"
-msgstr "No"
-
-#: \controllers\contents_controller.php:573
-msgid "Date not set"
-msgstr "Fecha no establecida"
-
-#: \controllers\contents_controller.php:577
-msgid "Invalid date"
-msgstr "Fecha no válida"
-
-#: \controllers\contents_controller.php:583
-msgid "Datetime not set"
-msgstr "Fecha/hora no establecida"
-
-#: \controllers\contents_controller.php:587
-msgid "Invalid datetime"
-msgstr "Fecha/hora no válida"
-
-#: \controllers\images_controller.php:9
+#: \controllers\contents_controller.php:428
 msgid "The image was deleted"
 msgstr "La imagen fue eliminada"
 
-#: \controllers\images_controller.php:11
-msgid "The image couldn't be deleted"
+#: \controllers\contents_controller.php:432
+msgid "The file could not be deleted"
+msgstr "El archivo no ha podido eliminarse"
+
+#: \controllers\contents_controller.php:433
+msgid "The image could not be deleted"
 msgstr "La imagen no ha podido eliminarse"
+
+#: \controllers\contents_controller.php:456
+msgid "The file has been edited"
+msgstr "El archivo fue eliminado"
+
+#: \controllers\contents_controller.php:457
+msgid "The image has been edited"
+msgstr "La imagen fue eliminada"
+
+#: \controllers\contents_controller.php:465
+msgid "The file could not be edited"
+msgstr "El archivo no ha podido modificarse"
+
+#: \controllers\contents_controller.php:466
+msgid "The image could not be edited"
+msgstr "La imagen no ha podido modificarse"
+
+#: \controllers\contents_controller.php:491
+msgid "The file was Successfully edited"
+msgstr "El archivo fue modificado con éxito"
+
+#: \controllers\contents_controller.php:493
+msgid "The file was Successfully added"
+msgstr "El archivo fue agregado con éxito"
+
+#: \controllers\contents_controller.php:518
+msgid "The import could not be done. Please try again"
+msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
+
+#: \controllers\contents_controller.php:526
+msgid "Warning: %s::brwImport() must be defined"
+msgstr "Atención: %s::brwImport() debe estar definida"
+
+#: \controllers\contents_controller.php:547
+msgid "Successfully reordered"
+msgstr "Reordenado exitosamente"
+
+#: \controllers\contents_controller.php:549
+msgid "Failed to reorder"
+msgstr "No se pudo reordenar"
+
+#: \controllers\contents_controller.php:600
+msgid "Yes"
+msgstr "Sí"
+
+#: \controllers\contents_controller.php:600
+msgid "No"
+msgstr "No"
+
+#: \controllers\contents_controller.php:629
+msgid "Date not set"
+msgstr "Fecha no establecida"
+
+#: \controllers\contents_controller.php:633
+msgid "Invalid date"
+msgstr "Fecha no válida"
+
+#: \controllers\contents_controller.php:639
+msgid "Datetime not set"
+msgstr "Fecha/hora no establecida"
+
+#: \controllers\contents_controller.php:643
+msgid "Invalid datetime"
+msgstr "Fecha/hora no válida"
 
 #: \models\content.php:90
 msgid "This field is required"
@@ -149,29 +165,49 @@ msgstr "Este valor debe ser único y ya está siendo usado por otro %s"
 msgid "This value must be unique and it's already in use by another %s [female]"
 msgstr "Este valor debe ser único y ya está siendo usado por otra %s"
 
-#: \models\content.php:286
+#: \models\content.php:296
+msgid "Down"
+msgstr "Bajar"
+
+#: \models\content.php:297
+msgid "Up"
+msgstr "Subir"
+
+#: \models\content.php:301
+#: \views\brownie\index.ctp:13
+#: \views\contents\view.ctp:62
+msgid "Add"
+msgstr "Agregar"
+
+#: \models\content.php:302
 msgid "View"
 msgstr "Ver"
 
-#: \models\content.php:287
-#: \views\contents\view.ctp:18;20
-#: \views\elements\file.ctp:6
-#: \views\elements\image.ctp:5
+#: \models\content.php:303
+#: \views\elements\file.ctp:10
+#: \views\elements\image.ctp:12
 msgid "Edit"
-msgstr "Editar"
+msgstr "Modificar"
 
-#: \models\content.php:288
-#: \views\contents\view.ctp:26;28
-#: \views\elements\file.ctp:13
-#: \views\elements\image.ctp:11
+#: \models\content.php:304
+#: \views\elements\file.ctp:15
+#: \views\elements\image.ctp:16
 msgid "Delete"
 msgstr "Eliminar"
 
-#: \models\content.php:306
+#: \models\content.php:316
+msgid "Sort up"
+msgstr "Reordenar hacia arriba"
+
+#: \models\content.php:320
+msgid "Sort down"
+msgstr "Reordenar hacia abajo"
+
+#: \models\content.php:333
 msgid "Are you sure you want to delete this %s?[male]"
 msgstr "¿Confirma que desea eliminar este %s?"
 
-#: \models\content.php:307
+#: \models\content.php:334
 msgid "Are you sure you want to delete this %s?[female]"
 msgstr "¿Confirma que desea eliminar esta %s?"
 
@@ -216,11 +252,6 @@ msgstr "Contraseña no puede estar vacía"
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: \views\brownie\index.ctp:13
-#: \views\contents\view.ctp:10;12;95;109;135;149
-msgid "Add"
-msgstr "Agregar"
-
 #: \views\brownie\index.ctp:18
 msgid "Index"
 msgstr "Listado"
@@ -257,6 +288,7 @@ msgstr "Agregar imagen"
 
 #: \views\contents\add_images.ctp:32
 #: \views\contents\edit_image.ctp:19
+#: \views\contents\edit_upload.ctp:31
 msgid "Image"
 msgstr "Imagen"
 
@@ -268,6 +300,7 @@ msgstr "Descripción de la imagen"
 #: \views\contents\add_images.ctp:50
 #: \views\contents\edit_file.ctp:42
 #: \views\contents\edit_image.ctp:39
+#: \views\contents\edit_upload.ctp:44
 #: \views\contents\import.ctp:16
 msgid "Submit"
 msgstr "Enviar"
@@ -290,6 +323,7 @@ msgid "(No parent)"
 msgstr "(Sin padre)"
 
 #: \views\contents\edit.ctp:130
+#: \views\contents\edit_upload.ctp:40
 msgid "Description"
 msgstr "Descripción"
 
@@ -346,14 +380,17 @@ msgid "Save"
 msgstr "Guardar"
 
 #: \views\contents\edit_file.ctp:6
+#: \views\contents\edit_upload.ctp:12
 msgid "Add file"
 msgstr "Agregar archivo"
 
 #: \views\contents\edit_file.ctp:19
+#: \views\contents\edit_upload.ctp:31
 msgid "File"
 msgstr "Archivo"
 
 #: \views\contents\edit_file.ctp:23
+#: \views\contents\edit_upload.ctp:35
 msgid "You can leave the file field blank if you don't want to change the file"
 msgstr "Puedes dejar en blanco el campo Archivo si no deseas modificarlo"
 
@@ -369,27 +406,23 @@ msgstr "Puedes dejar en blanco el campo Imagen si no deseas modificarla"
 msgid "Import :name_plural"
 msgstr "Importar :name_plural"
 
-#: \views\contents\view.ctp:29
-msgid "Are you sure you want to delete # %s?"
-msgstr "¿Confirma que desea eliminar # %s?"
-
-#: \views\contents\view.ctp:35;38
-msgid "View on line"
-msgstr "Ver on line"
-
-#: \views\contents\view.ctp:46;48
+#: \views\contents\view.ctp:11;13
 msgid "Previous"
 msgstr "Anterior"
 
-#: \views\contents\view.ctp:54;56
+#: \views\contents\view.ctp:19;21
 msgid "Next"
 msgstr "Siguiente"
+
+#: \views\elements\file.ctp:8
+msgid "Download"
+msgstr "Descargar"
 
 #: \views\elements\file.ctp:18
 msgid "Are you sure you want to delete this file?"
 msgstr "¿Confirma que desea eliminar este archivo?"
 
-#: \views\elements\image.ctp:16
+#: \views\elements\image.ctp:19
 msgid "Are you sure you want to delete this image?"
 msgstr "¿Confirma que desea eliminar esta imagen?"
 
@@ -397,35 +430,23 @@ msgstr "¿Confirma que desea eliminar esta imagen?"
 msgid "Import"
 msgstr "Importar"
 
-#: \views\elements\index.ctp:46
-msgid "Reorder"
-msgstr "Reordenar"
-
 #: \views\elements\index.ctp:49
 msgid "Actions"
 msgstr "Acciones"
 
-#: \views\elements\index.ctp:71
-msgid "Up"
-msgstr "Subir"
-
-#: \views\elements\index.ctp:74
-msgid "Down"
-msgstr "Bajar"
-
-#: \views\elements\index.ctp:118
+#: \views\elements\index.ctp:85
 msgid "No records"
 msgstr "No hay registros"
 
-#: \views\elements\index.ctp:127
+#: \views\elements\index.ctp:94
 msgid "previous"
 msgstr "anterior"
 
-#: \views\elements\index.ctp:131
+#: \views\elements\index.ctp:98
 msgid "next"
 msgstr "siguiente"
 
-#: \views\elements\index.ctp:139
+#: \views\elements\index.ctp:106
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr "Página %page% de %pages%, mostrando %current% :name_plural de un total de %count%"
 
@@ -529,6 +550,15 @@ msgstr "Sitio"
 msgid "Logout"
 msgstr "Cerrar sesión"
 
+#~ msgid "Are you sure you want to delete # %s?"
+#~ msgstr "¿Confirma que desea eliminar # %s?"
+
+#~ msgid "View on line"
+#~ msgstr "Ver on line"
+
+#~ msgid "Reorder"
+#~ msgstr "Reordenar"
+
 #~ msgid "Error in the upload, please try again."
 #~ msgstr "Error en la subida, por favor intenta nuevamente."
 
@@ -546,9 +576,6 @@ msgstr "Cerrar sesión"
 
 #~ msgid "Users groups"
 #~ msgstr "Grupos de usuarios"
-
-#~ msgid "Download file"
-#~ msgstr "Descargar archivo"
 
 #~ msgid ""
 #~ "These images are optional. You will be able to add more images later."

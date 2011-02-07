@@ -352,54 +352,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 	/*
-	function pageForPagination($model) {
-		$page = 1;
-		$sameModel = isset($this->params['named']['model']) && $this->params['named']['model'] == $model;
-		$pageInUrl = isset($this->params['named']['page']);
-		if ($sameModel && $pageInUrl) {
-			$page = $this->params['named']['page'];
-			unset($this->params['named']['page']);
-		}
-
-		$this->passedArgs['page'] = $page;
-		return $page;
-	}
-	*/
-
-	function edit_image($model = null, $recordId = null, $categoryCode = null, $imageId = null) {
-		if (!empty($this->data)) {
-			if (!$categoryCode){
-				$categoryCode = $this->data['BrwImage']['category_code'];
-			}
-			if (!$recordId){
-				$recordId = $this->data['BrwImage']['record_id'];
-			}
-			if (!$imageId){
-				$imageId = $this->data['BrwImage']['id'];
-			}
-
-			if ($this->Model->BrwImage->save($this->data)) {
-				if ($imageId){
-					$this->Session->setFlash(__d('brownie', 'The image was Successfully edited', true), 'flash_success');
-				} else {
-					$this->Session->setFlash(__d('brownie', 'The image was Successfully added', true), 'flash_success');
-				}
-				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
-			}
-		}
-
-		if ($imageId and empty($this->data)) {
-			$this->data = $this->Model->BrwImage->find('first',
-				array('conditions' => array('BrwImage.id' => $imageId))
-			);
-		}
-
-		$this->set(compact('categoryCode', 'recordId', 'imageId'));
-
-	}
-
-
-	function add_images($model, $recordId, $categoryCode) {
+	function _add_images($model, $recordId, $categoryCode) {
 		if (!empty($this->data)) {
 			$saved = 0;
 			foreach ($this->data['BrwImage'] as $image) {
@@ -415,40 +368,62 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 		$this->set(compact('categoryCode', 'recordId', 'imageId'));
+	}*/
+
+
+	function edit_upload($model, $uploadType, $recordId, $categoryCode, $uploadId = null) {
+		if (
+			!in_array($uploadType, array('BrwFile', 'BrwImage'))
+			or empty($this->Model->brownieCmsConfig[($uploadType == 'BrwFile') ? 'files' : 'images'][$categoryCode])
+		) {
+			$this->cakeError('error404');
+		}
+
+		if (!empty($this->data)) {
+			if($this->Model->{$uploadType}->save($this->data)) {
+				$msg = ($uploadType == 'BrwFile') ?
+					__d('brownie', 'The file has been edited', true) :
+					__d('brownie', 'The image has been edited', true);
+				$this->Session->setFlash($msg, 'flash_success');
+				$this->redirect(array(
+					'plugin' => 'brownie', 'controller' => 'contents',
+					'action' => 'view', $model, $recordId
+				));
+			} else {
+				$msg = ($uploadType == 'BrwFile') ?
+					__d('brownie', 'The file could not be edited', true) :
+					__d('brownie', 'The image could not be edited', true);
+				$this->Session->setFlash($msg, 'flash_error');
+			}
+		}
+		if (empty($this->data) and $uploadId) {
+			$this->data = $this->Model->{$uploadType}->findById($uploadId);
+		}
+		$this->set(compact('model', 'uploadType', 'recordId', 'categoryCode', 'uploadId'));
 	}
 
 
-	function edit_file($model = null, $recordId = null, $categoryCode = null, $fileId = null) {
-
-		if (!empty($this->data)) {
-			if (!$categoryCode){
-				$categoryCode = $this->data['BrwFile']['category_code'];
-			}
-			if (!$recordId){
-				$recordId = $this->data['BrwFile']['record_id'];
-			}
-			if (!$fileId){
-				$fileId = $this->data['BrwFile']['id'];
-			}
-
-			if ($this->Model->BrwFile->save($this->data)) {
-				if ($fileId){
-					$this->Session->setFlash(__d('brownie', 'The file was Successfully edited', true), 'flash_success');
-				} else {
-					$this->Session->setFlash(__d('brownie', 'The file was Successfully added', true), 'flash_success');
-				}
-				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
-			}
+	function delete_upload($model, $uploadType, $recordId) {
+		if (!in_array($uploadType, array('BrwFile', 'BrwImage'))) {
+			$this->cakeError('error404');
+		}
+		if ($this->Model->{$uploadType}->delete($recordId)) {
+			$msg = ($uploadType == 'BrwFile') ?
+				__d('brownie', 'The file was deleted', true) :
+				__d('brownie', 'The image was deleted', true);
+			$this->Session->setFlash($msg, 'flash_success');
+		} else {
+			$msg = ($uploadType == 'BrwFile') ?
+				__d('brownie', 'The file could not be deleted', true) :
+				__d('brownie', 'The image could not be deleted', true);
+			$this->Session->setFlash($msg, 'flash_error');
 		}
 
-		if ($fileId and empty($this->data)) {
-			$this->data = $this->Model->BrwFile->find('first',
-				array('conditions' => array('BrwFile.id' => $fileId))
-			);
+		$redirecTo = env('HTTP_REFERER');
+		if (!$redirecTo) {
+			$redirecTo = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		}
-
-		$this->set(compact('categoryCode', 'recordId', 'fileId'));
-
+		$this->redirect($redirecTo);
 	}
 
 
