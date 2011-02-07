@@ -38,6 +38,7 @@ class CmsBehavior extends ModelBehavior {
 		'fields_no_root' => array(),
 
 		'actions' => array(
+			'index' => true,
 			'view' => true,
 			'add' => true,
 			'edit' => true,

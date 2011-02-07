@@ -184,7 +184,7 @@ class BrownieAppController extends AppController {
 		$Model->Behaviors->attach('Brownie.Cms');
 		if (!empty($this->Content)) {
 			$actions = $Model->brownieCmsConfig['actions'];
-			if (!in_array($action, array('index', 'view')) and !$actions[$action]) {
+			if (!$actions[$action]) {
 				return false;
 			}
 		}
@@ -237,6 +237,7 @@ class BrownieAppController extends AppController {
 
 	function arrayPermissions($model) {
 		$ret = array(
+			'view' => false,
 			'add' => false,
 			'view' => false,
 			'edit' => false,
