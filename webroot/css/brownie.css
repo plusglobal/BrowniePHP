@@ -823,10 +823,6 @@ div.image{
 	background: #fff;
 }
 
-div.with-description {
-	background: url(img/img_description.jpg) left bottom repeat-x #fff;
-}
-
 div.image ul.actions a{
 	display: block;
 	float: left;
@@ -835,10 +831,10 @@ div.image ul.actions a{
 div.image p.description{
 	margin-top: 5px;
 	float: left;
-	line-height: 1.1em;
-	height: 2.2em;
-	overflow: hidden;
+	line-height: 1.15em;
 	text-align: left;
+	width: 100%;
+	overflow: hidden;
 }
 
 div.image td{

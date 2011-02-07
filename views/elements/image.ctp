@@ -2,9 +2,7 @@
 $w = $brwConfig['images'][$image['category_code']]['array_sizes'][0]['w'];
 $h = $brwConfig['images'][$image['category_code']]['array_sizes'][0]['h'];
 ?>
-<div class="image <?php if ($brwConfig['images'][$image['category_code']]['description']) {
-	echo 'with-description';
-} ?>" style="width: <?php echo $w ?>px;">
+<div class="image" style="width: <?php echo $w ?>px;">
 	<ul class="image-actions clearfix actions">
 		<?php
 		if($permissions[$model]['edit']){
@@ -20,12 +18,8 @@ $h = $brwConfig['images'][$image['category_code']]['array_sizes'][0]['h'];
 		}
 		?>
 	</ul>
-	<table>
-		<tr>
-			<td style="width: <?php echo $w ?>px;"><?php echo $image['tag']; ?></td>
-		</tr>
-	</table>
-	<?php if ($brwConfig['images'][$image['category_code']]['description']): ?>
+	<?php echo $image['tag']; ?>
+	<?php if ($image['description']): ?>
 		<p class="description"><?php echo $image['description'] ?></p>
 	<?php endif ?>
 </div>

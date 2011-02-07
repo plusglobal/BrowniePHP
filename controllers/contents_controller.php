@@ -380,26 +380,40 @@ class ContentsController extends BrownieAppController {
 		}
 
 		if (!empty($this->data)) {
-			if($this->Model->{$uploadType}->save($this->data)) {
+			$cantSaved = 0;
+			foreach ($this->data[$uploadType] as $data) {
+				if ($this->Model->{$uploadType}->save($data)) {
+					$cantSaved++;
+				}
+			}
+			if ($cantSaved) {
 				$msg = ($uploadType == 'BrwFile') ?
-					__d('brownie', 'The file has been edited', true) :
-					__d('brownie', 'The image has been edited', true);
-				$this->Session->setFlash($msg, 'flash_success');
-				$this->redirect(array(
-					'plugin' => 'brownie', 'controller' => 'contents',
-					'action' => 'view', $model, $recordId
-				));
+					sprintf(__d('brownie', '%s files saved', true), $cantSaved):
+					sprintf(__d('brownie', '%s images saved', true), $cantSaved);
+				$msgType = 'flash_success';
 			} else {
 				$msg = ($uploadType == 'BrwFile') ?
-					__d('brownie', 'The file could not be edited', true) :
-					__d('brownie', 'The image could not be edited', true);
-				$this->Session->setFlash($msg, 'flash_error');
+					sprintf(__d('brownie', 'No files saved', true), $cantSaved):
+					sprintf(__d('brownie', 'No images saved', true), $cantSaved);
+				$msgType = 'flash_notice';
 			}
+			$this->Session->setFlash($msg, $msgType);
+
+			$this->redirect(array(
+				'plugin' => 'brownie', 'controller' => 'contents',
+				'action' => 'view', $model, $recordId
+			));
+
 		}
 		if (empty($this->data) and $uploadId) {
-			$this->data = $this->Model->{$uploadType}->findById($uploadId);
+			$data = $this->Model->{$uploadType}->findById($uploadId);
+			$this->data[$uploadType][0] = $data[$uploadType];
+			$max = 1;
+		} else {
+			$uploadKey = ($uploadType == 'BrwFile') ? 'files' : 'images';
+			$max = ($this->Model->brownieCmsConfig[$uploadKey][$categoryCode]['index'])? 1:10;
 		}
-		$this->set(compact('model', 'uploadType', 'recordId', 'categoryCode', 'uploadId'));
+		$this->set(compact('model', 'uploadType', 'recordId', 'categoryCode', 'uploadId', 'max'));
 	}
 
 
