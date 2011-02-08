@@ -291,12 +291,6 @@ class Content extends BrownieAppModel{
 			'options' => array(),
 			'confirmMessage' => false,
 		);
-		if ($Model->brownieCmsConfig['sortable'] or $this->isTree($Model)) {
-			$actionsTitles = array(
-				'down' => __d('brownie', 'Down', true),
-				'up' => __d('brownie', 'Up', true)
-			);
-		}
 		$actionsTitles = array_merge($actionsTitles, array(
 			'add' => __d('brownie', 'Add', true),
 			'view' => __d('brownie', 'View', true),
@@ -307,21 +301,10 @@ class Content extends BrownieAppModel{
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
 				$url = array('controller' => 'contents', 'action' => $action, $Model->alias);
 				$options = array('title' => $title);
-				switch ($action) {
-					case 'add':
-						$url['action'] = 'edit';
-					break;
-					case 'up':
-						$url = array('controller' => 'contents', 'action' => 'reorder', $Model->alias, 'up', $record[$Model->alias]['id']);
-						$options['title'] = __d('brownie', 'Sort up', true);
-					break;
-					case 'down':
-						$url = array('controller' => 'contents', 'action' => 'reorder', $Model->alias, 'down', $record[$Model->alias]['id']);
-						$options['title'] = __d('brownie', 'Sort down', true);
-					break;
-					default:
-						$url[] = $record[$Model->alias]['id'];
-					break;
+				if($action == 'add') {
+					$url['action'] = 'edit';
+				} else {
+					$url[] = $record[$Model->alias]['id'];
 				}
 				$actions[$action] = Set::merge($defaultAction, array(
 					'title' => $title,

@@ -156,7 +156,7 @@ class BrownieAppController extends AppController {
 		return $menu;
 	}*/
 
-	function _checkPermissions($model, $action = 'view', $id = null) {
+	function _checkPermissions($model, $action = 'read', $id = null) {
 		$Model = ClassRegistry::getObject($model);
 		if (!$Model) {
 			return false;
@@ -170,6 +170,11 @@ class BrownieAppController extends AppController {
 		);
 		if ($noPermission) {
 			return false;
+		}
+
+		//really bad patch, solucionar con permisos reales
+		if ($action == 'read') {
+			return true;
 		}
 
 		if ($action == 'js_edit') {

@@ -249,19 +249,23 @@ class ContentsController extends BrownieAppController {
 				$fieldList[] = $this->Model->brownieCmsConfig['sortable']['field'];
 			}
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
-				$this->Session->setFlash(__d('brownie', 'The information has been saved', true), 'flash_success');
+				$msg =	($this->Model->brownieCmsConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brownieCmsConfig['names']['singular']):
+					sprintf(__d('brownie', 'The %s has been saved [female]', true), $this->Model->brownieCmsConfig['names']['singular']);
+				$this->Session->setFlash($msg, 'flash_success');
+
 				if (!empty($this->data['Content']['after_save'])) {
 					switch ($this->data['Content']['after_save']) {
+						case 'edit':
+							$this->redirect(array('action'=>'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
+						break;
 						case 'add':
 							$this->redirect(array('action' => 'edit', $this->Model->name, 'after_save' => 'add'));
 						break;
-						case 'view':
-							$this->redirect(array('action' => 'view', $this->Model->name, $this->Model->id));
-						break;
-						case 'home':
-							$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
-						break;
 						case 'index':
+							$this->redirect(array('action' => 'index', $this->Model->name));
+						break;
+						case 'parent':
 							if ($parent = $this->Model->brownieCmsConfig['parent']) {
 								$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
 								if (!empty($this->data[$this->Model->alias][$foreignKey])) {
@@ -270,13 +274,18 @@ class ContentsController extends BrownieAppController {
 							}
 							$this->redirect(array('action' => 'index', $this->Model->name));
 						break;
-						case 'edit':
-							$this->redirect(array('action'=>'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
+						case 'view':
+							$this->redirect(array('action' => 'view', $this->Model->name, $this->Model->id));
+						break;
+						case 'home':
+							$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
 						break;
 					}
 				}
 			} else {
-				$msg = __d('brownie', 'The information could not be saved. Please, check the error messages.', true);
+				$msg =	($this->Model->brownieCmsConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', true), $this->Model->brownieCmsConfig['names']['singular']):
+					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', true), $this->Model->brownieCmsConfig['names']['singular']);
 				$this->Session->setFlash($msg, 'flash_error');
 			}
 		}
@@ -330,6 +339,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->set('fields', $fields);
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
+		$this->_setAfterSaveOptionsParams($this->Model);
 	}
 
 
@@ -576,6 +586,47 @@ class ContentsController extends BrownieAppController {
 			$time = new TimeHelper();
 			return $time->format('d/m/Y H:i:s', $datetime, __d('brownie', 'Invalid datetime', true));
 		}
+	}
+
+	function _setAfterSaveOptionsParams($Model) {
+		$params = array(
+			'type' => 'select',
+			'label' => __d('brownie', 'After save', true),
+			'options' => array(
+				'edit' => ($Model->brownieCmsConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Continue editing this %s [male]', true), $Model->brownieCmsConfig['names']['singular']):
+					sprintf(__d('brownie', 'Continue editing this %s [female]', true), $Model->brownieCmsConfig['names']['singular'])
+				,
+				'add' =>  ($Model->brownieCmsConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Add another %s [male]', true), $Model->brownieCmsConfig['names']['singular']):
+					sprintf(__d('brownie', 'Add another %s [female]', true), $Model->brownieCmsConfig['names']['singular'])
+				,
+				'index' => ($Model->brownieCmsConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Go to to index of all %s [male]', true), $Model->brownieCmsConfig['names']['plural']):
+					sprintf(__d('brownie', 'Go to to index of all %s [female]', true), $Model->brownieCmsConfig['names']['plural'])
+				,
+				'view' => ($Model->brownieCmsConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brownieCmsConfig['names']['singular']):
+					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brownieCmsConfig['names']['singular'])
+				,
+				'home' => __d('brownie', 'Go home', true),
+			),
+			'default' => (empty($this->params['named']['after_save']))? 'view':$this->params['named']['after_save'],
+		);
+		foreach (array('add', 'view', 'index') as $action) {
+			if (!$Model->brownieCmsConfig['actions'][$action]) {
+				unset($params['options'][$action]);
+			}
+		}
+
+		if ($Model->brownieCmsConfig['parent']) {
+			$parentModel = $Model->{$Model->brownieCmsConfig['parent']};
+			$params['options']['parent'] =	($parentModel->brownieCmsConfig['names']['gender'] == 1) ?
+				sprintf(__d('brownie', 'Go to the %s [male]', true), $parentModel->brownieCmsConfig['names']['singular']):
+				sprintf(__d('brownie', 'Go to the %s [female]', true), $parentModel->brownieCmsConfig['names']['singular']);
+		}
+
+		$this->set('afterSaveOptionsParams', $params);
 	}
 
 

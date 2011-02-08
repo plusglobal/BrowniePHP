@@ -165,31 +165,7 @@ foreach($uploads as $upload){
 ?>
 
 <fieldset>
-<?php
-$params = array(
-	'type' => 'select',
-	'label' => __d('brownie', 'After save', true),
-	'options' => array(
-		'edit' => ($brwConfig['names']['gender'] == 1) ?
-			sprintf(__d('brownie', 'Continue editing this %s [male]', true), $brwConfig['names']['singular']):
-			sprintf(__d('brownie', 'Continue editing this %s [female]', true), $brwConfig['names']['singular'])
-		,
-		'add' =>  ($brwConfig['names']['gender'] == 1) ?
-			sprintf(__d('brownie', 'Add another %s [male]', true), $brwConfig['names']['singular']):
-			sprintf(__d('brownie', 'Add another %s [female]', true), $brwConfig['names']['singular'])
-		,
-		'index' => __d('brownie', 'Go to index', true),
-		'view' => __d('brownie', 'View saved information', true),
-		'home' => __d('brownie', 'Go home', true),
-	),
-	'default' => (empty($this->params['named']['after_save']))? 'view':$this->params['named']['after_save'],
-);
-if (!$brwConfig['actions']['add']) {
-	unset($params['options']['add']);
-}
-
-echo $form->input('after_save', $params);
-?>
+<?php echo $form->input('after_save', $afterSaveOptionsParams) ?>
 
 </fieldset>
 

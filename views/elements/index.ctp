@@ -42,9 +42,9 @@ if ($records):
 					. '">' . $paginator->sort($field_name, null, array('model' => $model, 'escape' => false)) . '</th>';
 				}
 			}
-			/*if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
-				echo '<th class="actions">' . __d('brownie', 'Reorder', true) . '</th>';
-			}*/
+			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
+				echo '<th class="actions">' . __d('brownie', 'Sort', true) . '</th>';
+			}
 			echo '
 			<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
 			reset($record[$model]);
@@ -64,22 +64,26 @@ if ($records):
 			}
 		}
 
-		/*if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
-			echo '<td class="sortable actions">
-			<a class="up" href="' . Router::url(array(
-				'controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']
-			)) . '">' . __d('brownie', 'Up', true) . '</a>
-			<a class="down" href="' . Router::url(array(
-				'controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']
-			)) . '">'.__d('brownie', 'Down', true).'</a>
-			</td>';
-		}*/
+		if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)): ?>
+			<td class="sortable actions">
+			<?php
+			echo $html->link(__d('brownie', 'Sort up', true),
+				array('controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']),
+				array('class' => 'up', 'title' => __d('brownie', 'Sort up', true))
+			);
+			echo $html->link(__d('brownie', 'Sort down', true),
+				array('controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']),
+				array('class' => 'up', 'title' => __d('brownie', 'Sort down', true))
+			);
+			?>
+			</td>
+		<?php endif ?>
 
-		echo '<td class="actions">';
-		echo $this->element('actions', array('record' => $record, 'model' => $model, 'inView' => false));
-		echo '</td>
-		</tr>';
-	endforeach;
+			<td class="actions">
+			<?php echo $this->element('actions', array('record' => $record, 'model' => $model, 'calledFrom' => $calledFrom)) ?>
+			</td>
+		</tr>
+	<?php endforeach;
 	echo '</table>';
 else:
 	echo '<p class="norecords">' . __d('brownie', 'No records', true) . '</p>';

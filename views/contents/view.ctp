@@ -24,7 +24,7 @@
 			?>
 			<?php // echo $html->link(__d('brownie', 'List', true), array('action'=>'index', $model)); ?>
 		</ul>
-		<?php echo $this->element('actions', array('record' => $record, 'inView' => true)) ?>
+		<?php echo $this->element('actions', array('record' => $record, 'calledFrom' => 'view', 'inView' => true)) ?>
 	</div>
 
 	<table class="view">
@@ -93,6 +93,7 @@ foreach ($uploadModels as $uploadKey => $uploadModel): ?>
 
 <?php
 foreach ($assoc_models as $key => $assoc) {
+	$assoc['calledFrom'] = 'parent';
 	echo $this->element('index', $assoc);
 }
 ?>
