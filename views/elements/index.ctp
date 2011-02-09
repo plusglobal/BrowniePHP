@@ -73,7 +73,7 @@ if ($records):
 			);
 			echo $html->link(__d('brownie', 'Sort down', true),
 				array('controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']),
-				array('class' => 'up', 'title' => __d('brownie', 'Sort down', true))
+				array('class' => 'down', 'title' => __d('brownie', 'Sort down', true))
 			);
 			?>
 			</td>
