@@ -13,6 +13,7 @@ function multipleComboSelect() {
 
 function bindFancyBox() {
 	$(".images-gallery a.brw-image").fancybox({'titlePosition': 'inside'});
+	$('a[target=modal]').fancybox({'titleShow': false});
 }
 
 $(document).ready(function(){
