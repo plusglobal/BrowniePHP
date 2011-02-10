@@ -70,7 +70,7 @@ class CmsBehavior extends ModelBehavior {
 
 		'site_dependent' => true,
 
-		'sortable' => null //i.e. 'sortable' => array('field' => 'order', 'sort' => 'ASC')
+		'sortable' => array('field' => 'sort', 'sort' => 'ASC')
 
 	);
 
@@ -230,16 +230,21 @@ class CmsBehavior extends ModelBehavior {
 	function _sortableConfig($Model) {
 		if ($Model->brownieCmsConfig['sortable']) {
 			$sortField = $Model->brownieCmsConfig['sortable']['field'];
-			if ($Model->_schema[$sortField]['type'] == 'integer' and $Model->_schema['id']['type'] == 'integer') {
-				if (empty($Model->brownieCmsConfig['sortable']['direction'])) {
-					$Model->brownieCmsConfig['sortable']['direction'] = 'asc';
+			if (empty($Model->_schema[$sortField])) {
+				$Model->brownieCmsConfig['sortable'] = false;
+			} else {
+				if ($Model->_schema[$sortField]['type'] == 'integer' and $Model->_schema['id']['type'] == 'integer') {
+					if (empty($Model->brownieCmsConfig['sortable']['direction'])) {
+						$Model->brownieCmsConfig['sortable']['direction'] = 'asc';
+					}
+					$Model->brownieCmsConfig['sortable']['direction'] = strtolower($Model->brownieCmsConfig['sortable']['direction']);
+					$Model->order = array($Model->alias . '.' . $sortField => $Model->brownieCmsConfig['sortable']['direction']);
+					$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
 				}
-				$Model->brownieCmsConfig['sortable']['direction'] = strtolower($Model->brownieCmsConfig['sortable']['direction']);
-				$Model->order = array($Model->alias . '.' . $sortField => $Model->brownieCmsConfig['sortable']['direction']);
-				$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
 			}
 		}
 	}
+
 
 	function _paginateConfig($Model) {
 		if (empty($Model->brownieCmsConfig['paginate']['fields'])) {
@@ -247,7 +252,7 @@ class CmsBehavior extends ModelBehavior {
 			$fields = array();
 			$i = 0;
 			$schema = (array)$Model->_schema;
-			foreach($schema as $key => $values) {
+			foreach ($schema as $key => $values) {
 				if (in_array($values['type'], $listableTypes) and !in_array($key, array('lft', 'rght', 'parent_id'))) {
 					$fields[] = $key;
 					if ($i++ > 5) {

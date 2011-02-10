@@ -656,6 +656,10 @@ div.view h1, div.view #flashMessage{
 	float: left;
 }
 
+div.model-index{
+	margin-bottom: 40px;
+}
+
 div.index div.actions, div.brw-images div.actions{
 	margin-left: 15px;
 	padding-left: 15px;
