@@ -2,12 +2,38 @@
 
 class CmsComponent extends Object{
 
-	function initialize(&$Controller, $settings) {
-		$multiSitesModel = false;
-		if (!empty($settings['multiSitesModel'])) {
-			$multiSitesModel = $settings['multiSitesModel'];
+	function initialize(&$Controller, $settings = array()) {
+		$defaultSettings = array(
+			'multiSitesModel' => false,
+			'css' => array(
+				'/brownie/css/brownie',
+				'/brownie/css/fancybox/jquery.fancybox-1.3.1'
+			),
+			'js' => array(
+				'/brownie/js/jquery-1.3.2.min',
+				'/brownie/js/jquery.fancybox-1.3.1.pack',
+				'/brownie/js/jquery.selso',
+				'/brownie/js/jquery.comboselect',
+				'/brownie/js/brownie'
+			),
+		);
+		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
+			$defaultSettings['css'][] = 'brownie';
 		}
-		Configure::write('multiSitesModel', $multiSitesModel);
+		if (file_exists(WWW_ROOT . 'js' . DS . 'brownie.js')) {
+			$defaultSettings['js'][] = 'brownie';
+		}
+		if (!empty($settings['js']) and !is_array($settings['js'])) {
+			$settings['js'] = (array)$settings['js'];
+		}
+		if (!empty($settings['css']) and !is_array($settings['css'])) {
+			$settings['css'] = (array)$settings['css'];
+		}
+		$settings = Set::merge($defaultSettings, $settings);
+
+		Configure::write('multiSitesModel', $settings['multiSitesModel']);
+		Configure::write('brwSettings', $settings);
+
 
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');
@@ -26,7 +52,6 @@ class CmsComponent extends Object{
 			}
 			$Controller->layout = 'ajax';
 		}
-
 	}
 
 }

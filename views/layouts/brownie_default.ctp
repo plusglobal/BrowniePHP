@@ -4,19 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex,nofollow" />
 <?php
-echo $html->meta('favicon.ico', $html->url('/favicon.ico'), array('type' => 'icon'));
-echo $html->css(array(
-	'/brownie/css/brownie',
-	'/brownie/css/fancybox/jquery.fancybox-1.3.1'
-));
-echo $javascript->link(array(
-	'/brownie/js/jquery-1.3.2.min',
-	'/brownie/js/jquery.fancybox-1.3.1.pack',
-	'/brownie/js/jquery.selso',
-	'/brownie/js/jquery.comboselect',
-	'/brownie/js/brownie'
-));
-echo $scripts_for_layout;
+echo $html->meta('favicon.ico', Router::url('/favicon.ico'), array('type' => 'icon'));
+echo $html->css(Configure::read('brwSettings.css'));
+echo $javascript->link(Configure::read('brwSettings.js'));
+
 ?>
 <title><?php echo $title_for_layout; ?></title>
 </head>
