@@ -7,14 +7,15 @@ class CmsComponent extends Object{
 			'multiSitesModel' => false,
 			'css' => array(
 				'/brownie/css/brownie',
-				'/brownie/css/fancybox/jquery.fancybox-1.3.1'
+				'/brownie/css/fancybox/jquery.fancybox-1.3.1',
 			),
 			'js' => array(
 				'/brownie/js/jquery-1.3.2.min',
 				'/brownie/js/jquery.fancybox-1.3.1.pack',
 				'/brownie/js/jquery.selso',
 				'/brownie/js/jquery.comboselect',
-				'/brownie/js/brownie'
+				'/brownie/js/brownie',
+				'fckeditor/fckeditor',
 			),
 		);
 		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
