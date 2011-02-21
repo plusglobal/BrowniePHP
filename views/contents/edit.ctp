@@ -33,9 +33,6 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 				if ($schema[$key]['null']) {
 					$params['empty'] = '- ' . __d('brownie', 'None', true);
 				}
-				if (!empty($this->params['named'][$key])) {
-					$params['selected'] = $this->params['named'][$key];
-				}
 			} elseif (isset($related['tree'][$key])) {
 				if (!empty($related['tree'][$key])) {
 					$params = array(

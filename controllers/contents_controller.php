@@ -78,7 +78,8 @@ class ContentsController extends BrownieAppController {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
-		$this->paginate['conditions'] = $this->_filterConditions();
+		$filters = $this->_filterConditions($this->Model);
+		$this->paginate['conditions'] = $filters;
 
 
 		$records = $this->paginate($this->Model);
@@ -97,10 +98,11 @@ class ContentsController extends BrownieAppController {
 			$records = $this->Model->brwAfterFind($records);
 		}
 
-		$this->set('records', $this->_formatForView($records, $this->Model));
-		$this->set('foreignKeyValue', '');
-		$this->set('permissions', array($this->Model->alias => $this->Model->brownieCmsConfig['actions']));
-		$this->set('filters', $this->_filterConditions());
+		$this->set(array(
+			'records' => $this->_formatForView($records, $this->Model),
+			'permissions' => array($this->Model->alias => $this->Model->brownieCmsConfig['actions']),
+			'filters' => $filters,
+		));
 	}
 
 
@@ -179,13 +181,20 @@ class ContentsController extends BrownieAppController {
 						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brownieCmsConfig['paginate']['fields'])) {
 							unset($AssocModel->brownieCmsConfig['paginate']['fields'][$indx]);
 						}
-						$this->paginate[$AssocModel->name] = $AssocModel->brownieCmsConfig['paginate'];
+						$filters = $this->_filterConditions($AssocModel);
+						$this->paginate[$AssocModel->name] = Set::merge(
+							$AssocModel->brownieCmsConfig['paginate'],
+							array('conditions' => $filters)
+						);
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brownieCmsConfig,
 							'model' => $key_model,
 							'records' => $this->_formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
-							'foreignKeyValue' => $related_model['foreignKey'] . ':' . $id,
 							'schema' => $this->Content->schemaForView($this->Model->$key_model),
+							'filters' => array_merge(
+								$this->_filterConditions($AssocModel),
+								array($AssocModel->alias . '.' . $related_model['foreignKey'] => $id)
+							),
 						);
 						$permissions[$key_model] = $this->arrayPermissions($key_model);
 					}
@@ -332,7 +341,10 @@ class ContentsController extends BrownieAppController {
 					'contain' => $contain,
 				));
 			} else {
-				$this->data = $this->Content->defaults($this->Model);
+				$this->data = Set::merge(
+					$this->Content->defaults($this->Model),
+					$this->_filterConditions($this->Model, true)
+				);
 			}
 		}
 
@@ -634,15 +646,20 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _filterConditions($forView = false) {
+	function _filterConditions($Model, $forData = false) {
 		$filter = array();
-		foreach ($this->Model->_schema as $field => $value) {
-			$key = ($forView)? 'filter_' . $field : $field;
-			if (!empty($this->params['named']['filter_' . $field])) {
-				$filter[$key] = $this->params['named']['filter_' . $field];
+		foreach ($Model->_schema as $field => $value) {
+			$keyNamed = $Model->alias . '.' . $field;
+			if (array_key_exists($keyNamed, $this->params['named'])) {
+				if ($forData) {
+					$filter[$Model->alias][$field] = $this->params['named'][$keyNamed];
+				} else {
+					$filter[$keyNamed] = $this->params['named'][$keyNamed];
+				}
 			}
 		}
 		return $filter;
 	}
+
 
 }

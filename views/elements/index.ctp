@@ -13,7 +13,7 @@
 					array('name_singular' => $brwConfig['names']['singular'])
 				),
 				array_merge(
-					array('action' => 'edit', $model, $foreignKeyValue, 'after_save' => ($this->params['action'] == 'view') ? 'parent':'index'),
+					array('action' => 'edit', $model, 'after_save' => ($this->params['action'] == 'view') ? 'parent':'index'),
 					$filters
 				)
 			) . '</li>';
