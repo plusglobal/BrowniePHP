@@ -12,7 +12,10 @@
 					__d('brownie', 'Add :name_singular', true),
 					array('name_singular' => $brwConfig['names']['singular'])
 				),
-				array('action' => 'edit', $model, $foreignKeyValue, 'after_save' => ($this->params['action'] == 'view') ? 'parent':'index')
+				array_merge(
+					array('action' => 'edit', $model, $foreignKeyValue, 'after_save' => ($this->params['action'] == 'view') ? 'parent':'index'),
+					$filters
+				)
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['import']) {

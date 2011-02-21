@@ -78,6 +78,9 @@ class ContentsController extends BrownieAppController {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
+		$this->paginate['conditions'] = $this->_filterConditions();
+
+
 		$records = $this->paginate($this->Model);
 		$isUniqueRecord = (
 			count($records) == 1
@@ -97,6 +100,7 @@ class ContentsController extends BrownieAppController {
 		$this->set('records', $this->_formatForView($records, $this->Model));
 		$this->set('foreignKeyValue', '');
 		$this->set('permissions', array($this->Model->alias => $this->Model->brownieCmsConfig['actions']));
+		$this->set('filters', $this->_filterConditions());
 	}
 
 
@@ -629,5 +633,16 @@ class ContentsController extends BrownieAppController {
 		$this->set('afterSaveOptionsParams', $params);
 	}
 
+
+	function _filterConditions($forView = false) {
+		$filter = array();
+		foreach ($this->Model->_schema as $field => $value) {
+			$key = ($forView)? 'filter_' . $field : $field;
+			if (!empty($this->params['named']['filter_' . $field])) {
+				$filter[$key] = $this->params['named']['filter_' . $field];
+			}
+		}
+		return $filter;
+	}
 
 }
