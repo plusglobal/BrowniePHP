@@ -649,6 +649,7 @@ class ContentsController extends BrownieAppController {
 	function _filterConditions($Model, $forData = false) {
 		$filter = array();
 		foreach ($Model->_schema as $field => $value) {
+			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
 			if (array_key_exists($keyNamed, $this->params['named'])) {
 				if ($forData) {
