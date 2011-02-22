@@ -1,10 +1,10 @@
 BrowniePHP
 ==========
 
-Admin panel • meta-framework • CMS
+Admin panel · meta-framework · CMS
 ----------------------------------
 
-### ¿What is BrowniePHP?
+### What is BrowniePHP?
 
 BrowniePHP is a plugin for the [CakePHP framework](http://cakephp.org) that saves you the work to create a back-end for your app. With minimal configuration, the plugin adapts itself to any CakePHP application and automatically provides you a very intuitive and easy to use admin panel.
 
