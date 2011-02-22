@@ -1,7 +1,7 @@
-BrowniePHP
+ï»¿BrowniePHP
 ==========
 
-Admin panel · meta-framework · CMS
+Admin panel Â· meta-framework Â· CMS
 ----------------------------------
 
 ### What is BrowniePHP?
