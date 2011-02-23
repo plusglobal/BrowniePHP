@@ -103,7 +103,8 @@ class BrownieAppController extends AppController {
 				$menu = array();
 				$models = App::objects('model');
 				foreach($models as $model) {
-					$menu[$model] = $model;
+					$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
+					$menu[$button] = $model;
 				}
 				$menu = array(__d('brownie', 'Menu', true) => $menu);
 			}
