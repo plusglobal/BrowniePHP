@@ -24,7 +24,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->Model = ClassRegistry::init($model);
 		$this->Model->recursive = -1;
-		$this->Model->Behaviors->attach('Brownie.Cms');
+		$this->Model->Behaviors->attach('Brownie.Panel');
 
 
 		if (!$this->_checkPermissions($model, $this->params['action'])) {
@@ -176,7 +176,7 @@ class ContentsController extends BrownieAppController {
 			foreach ($assocs as $key_model => $related_model) {
 				if (!in_array($key_model, $this->Model->brwConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
-					$AssocModel->Behaviors->attach('Brownie.Cms');
+					$AssocModel->Behaviors->attach('Brownie.Panel');
 					if ($this->_checkPermissions($key_model)) {
 						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brwConfig['paginate']['fields'])) {
 							unset($AssocModel->brwConfig['paginate']['fields'][$indx]);
@@ -335,7 +335,7 @@ class ContentsController extends BrownieAppController {
 		if (empty($this->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
-				$this->Model->Behaviors->detach('Brownie.Cms');
+				$this->Model->Behaviors->detach('Brownie.Panel');
 				$this->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),
 					'contain' => $contain,

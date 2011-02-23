@@ -1,8 +1,8 @@
 <?php
 
-class CmsBehavior extends ModelBehavior {
+class PanelBehavior extends ModelBehavior {
 
-	var $cmsConfigDefault = array(
+	var $brwConfigDefault = array(
 		'names' => array(
 			'section' => false,
 			'plural' => false,
@@ -74,20 +74,20 @@ class CmsBehavior extends ModelBehavior {
 
 	);
 
-	var $cmsConfigDefaultImage = array(
+	var $brwConfigDefaultImage = array(
 		'name_category' => 'Images',
 		'sizes' => array(),
 		'index' => false,
 		'description' => true,
 	);
 
-	var $cmsConfigDefaultFile = array(
+	var $brwConfigDefaultFile = array(
 		'name_category' => 'Files',
 		'index' => false,
 		'description' => true,
 	);
 
-	var $cmsConfigDefaultCustomActions = array(
+	var $brwConfigDefaultCustomActions = array(
 		'title' => '',
 		'url' => array('plugin' => false),
 		'options' => array('target' => '_self'),
@@ -98,7 +98,7 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function setup($Model, $config = array()) {
-		$this->cmsConfigInit($Model);
+		$this->brwConfigInit($Model);
 		$this->_attachUploads($Model);
 		$this->_treeMultiSites($Model);
 	}
@@ -206,11 +206,11 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 
-	function cmsConfigInit($Model) {
+	function brwConfigInit($Model) {
 		if (empty($Model->brwConfig)) {
 			$Model->brwConfig = array();
 		}
-		$Model->brwConfig = Set::merge($this->cmsConfigDefault, $Model->brwConfig);
+		$Model->brwConfig = Set::merge($this->brwConfigDefault, $Model->brwConfig);
 
 		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
 			$Model->brwConfig['fields']['hide'][] = 'site_id';
@@ -303,7 +303,7 @@ class CmsBehavior extends ModelBehavior {
 				'conditions' => array('BrwImage.model' => $Model->name)
 			))), false);
 			foreach($Model->brwConfig['images'] as $key => $value) {
-				$Model->brwConfig['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
+				$Model->brwConfig['images'][$key] = Set::merge($this->brwConfigDefaultImage, $value);
 				foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
 					if (strstr($sizes, 'x')) {
 						list($w, $h) = explode('x', $sizes);
@@ -321,7 +321,7 @@ class CmsBehavior extends ModelBehavior {
 				'conditions' => array('BrwFile.model' => $Model->name)
 			))), false);
 			foreach($Model->brwConfig['files'] as $key => $value) {
-				$Model->brwConfig['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
+				$Model->brwConfig['files'][$key] = Set::merge($this->brwConfigDefaultFile, $value);
 			}
 		}
 	}
@@ -580,7 +580,7 @@ class CmsBehavior extends ModelBehavior {
 	function _customActionsConfig($Model) {
 		$customActions = array();
 		foreach ($Model->brwConfig['custom_actions'] as $action => $config) {
-			$customActions[$action] = Set::merge($this->cmsConfigDefaultCustomActions, $config);
+			$customActions[$action] = Set::merge($this->brwConfigDefaultCustomActions, $config);
 			$title = Inflector::humanize($action);
 			if (empty($customActions[$action]['title'])) {
 				$customActions[$action]['title'] = $title;

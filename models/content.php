@@ -3,7 +3,7 @@ class Content extends BrownieAppModel{
 
 	var $name = 'Content';
 	var $useTable = false;
-	var $cmsConfig = array();
+	var $brwConfig = array();
 
 	function modelExists($model) {
 		return in_array($model, Configure::listObjects('model'));

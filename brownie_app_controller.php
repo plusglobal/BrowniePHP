@@ -186,7 +186,7 @@ class BrownieAppController extends AppController {
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'import'))) {
 			return false;
 		}
-		$Model->Behaviors->attach('Brownie.Cms');
+		$Model->Behaviors->attach('Brownie.Panel');
 		if (!empty($this->Content)) {
 			$actions = $Model->brwConfig['actions'];
 			if (!$actions[$action]) {

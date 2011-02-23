@@ -1,6 +1,6 @@
 <?php
 
-class CmsComponent extends Object{
+class PanelComponent extends Object{
 
 	function initialize(&$Controller, $settings = array()) {
 		$defaultSettings = array(
