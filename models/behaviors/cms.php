@@ -252,10 +252,11 @@ class CmsBehavior extends ModelBehavior {
 			$fields = array();
 			$i = 0;
 			$schema = (array)$Model->_schema;
+			$blacklist = array('lft', 'rght', 'parent_id', 'created', 'modified');
 			foreach ($schema as $key => $values) {
-				if (in_array($values['type'], $listableTypes) and !in_array($key, array('lft', 'rght', 'parent_id'))) {
+				if (in_array($values['type'], $listableTypes) and !in_array($key, $blacklist)) {
 					$fields[] = $key;
-					if ($i++ > 5) {
+					if ($i++ > 4) {
 						break;
 					}
 				}
