@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2011-02-08 19:56-0200\n"
-"PO-Revision-Date: 2011-02-08 18:59-0300\n"
+"PO-Revision-Date: 2011-02-23 18:35-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com> <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -146,11 +146,11 @@ msgstr "Add another %s"
 
 #: \controllers\contents_controller.php:605
 msgid "Go to to index of all %s [male]"
-msgstr "Go to to index of all %s"
+msgstr "Go to the index of all %s"
 
 #: \controllers\contents_controller.php:606
 msgid "Go to to index of all %s [female]"
-msgstr "Go to to index of all %s"
+msgstr "Go to the index of all %s"
 
 #: \controllers\contents_controller.php:609
 msgid "View saved %s [male]"
