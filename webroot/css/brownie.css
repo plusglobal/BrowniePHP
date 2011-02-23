@@ -652,6 +652,23 @@ div.view td.label{
     font-style: italic;
 }
 
+.fcktxt h1{
+	font-size: 2em;
+}
+
+.fcktxt h2{
+	font-size: 1.7em;
+}
+
+.fcktxt h3{
+	font-size: 1.4em;
+	margin-bottom: 0.5em;
+}
+
+.fcktxt h4{
+	font-size: 1.2em;
+}
+
 div.view h1, div.view #flashMessage{
 	float: left;
 }
@@ -1059,3 +1076,6 @@ table td.sortable a{
 	background-color: #268AFC;
 }
 
+table td.fcktxt h1{
+	float: none;
+}
