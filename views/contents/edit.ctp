@@ -3,10 +3,9 @@
 if (!empty($brwConfig['fields']['conditional'])) {
 	$javascript->link(Router::url(array('controller' => 'contents', 'action' => 'js_edit', $model, 'js_edit.js')), false);
 }
-$javascript->link('/js/fckeditor/fckeditor', false);
 $url = array('controller' => 'contents', 'action' => 'edit', $model);
 $adding = empty($this->data[$model]['id']);
-if(!$adding){
+if (!$adding) {
 	$url[] = $this->data[$model]['id'];
 }
 echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url));
@@ -14,7 +13,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 	<fieldset>
  		<legend>
 		<?php
-		if ($adding){
+		if ($adding) {
 			$action = __d('brownie', 'Add :name_singular', true);
 		} else {
 			$action = __d('brownie', 'Edit :name_singular', true);
@@ -74,13 +73,13 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 			$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
 			//pr($params);
 			echo $form->input($model . '.' . $key, $params);
-			if (in_array($key, $fckFields)){
+			if (in_array($key, $fckFields)) {
 				echo $fck->load($model . '.' . Inflector::camelize($key), 'Brownie');
 			}
 		}
 
 		if (!empty($related['hasAndBelongsToMany'])) {
-			foreach($related['hasAndBelongsToMany'] as $key => $list){
+			foreach ($related['hasAndBelongsToMany'] as $key => $list) {
 				if (!empty($list)) {
 					$params = array('multiple' => 'checkbox', 'options' => $list);
 					if(count($list) > 5) {
@@ -99,10 +98,10 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 	</fieldset>
 <?php
 $uploads = array('Image', 'File');
-foreach($uploads as $upload){
+foreach ($uploads as $upload) {
 
 	$continue = false;
-	if ($upload == 'Image' and !empty($brwConfig['images'])){
+	if ($upload == 'Image' and !empty($brwConfig['images'])) {
 		$continue = true;
 		$uploadConfig = $brwConfig['images'];
 	} elseif (!empty($filesConfig)) {
@@ -112,7 +111,7 @@ foreach($uploads as $upload){
 
 	if ($continue and $adding) {
 		$i=0;
-		foreach($uploadConfig as $categoryCode => $uploadCat){
+		foreach ($uploadConfig as $categoryCode => $uploadCat) {
 			//pr($image);
 			echo '
 			<fieldset>
@@ -123,30 +122,30 @@ foreach($uploads as $upload){
 					' . $form->input('Brw' . $upload . '.' . $i . '.file', array('type' => 'file', 'label' => __d('brownie', $upload, true))) . '
 					' .	$form->input('Brw' . $upload . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden')) . '
 					' .	$form->input('Brw' . $upload . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
-					if ($uploadCat['description']){
+					if ($uploadCat['description']) {
 						echo $form->input('Brw' . $upload . '.' . $i . '.description', array('label' => __d('brownie', 'Description', true)));
 					}
-					if (!$adding){
+					if (!$adding) {
 						echo $form->input('Brw' . $upload . '.' . $i . '.record_id', array('value' => $this->data[$model]['id'], 'type' => 'hidden'));
 					}
 					$i++;
 				} elseif ($adding) {
 					echo '
 					<div class="comment">' ;
-					if ($adding){
+					if ($adding) {
 						__d('brownie', 'These files are optional. You will be able to add more images later.');
 					} else {
 						__d('brownie', 'These files will be added among to the rest. If you want to replace images click the "Images" button at the top');
 					}
 					echo '</div>';
-					for($n = 1; $n <= 10; $n++){
+					for($n = 1; $n <= 10; $n++) {
 						echo $form->input('Brw' . $upload . '.' . $i . '.file', array('type' => 'file', 'label' => sprintf(__d('brownie', 'File %s', true), $n)));
 						echo $form->input('Brw' . $upload . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden'));
 						echo $form->input('Brw' . $upload . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
-						if ($uploadCat['description']){
+						if ($uploadCat['description']) {
 							echo $form->input('Brw' . $upload . '.' . $i . '.description', array('label' => sprintf(__d('brownie', 'Description %d', true), $n)));
 						}
-						if (!$adding){
+						if (!$adding) {
 							echo $form->input('Brw' . $upload . '.' . $i . '.record_id', array('value' => $this->data[$model]['id'], 'type' => 'hidden'));
 						}
 						$i++;
@@ -163,9 +162,7 @@ foreach($uploads as $upload){
 
 <fieldset>
 <?php echo $form->input('after_save', $afterSaveOptionsParams) ?>
-
 </fieldset>
 
-<?php
-echo $form->end(__d('brownie', 'Save', true)); ?>
+<?php echo $form->end(__d('brownie', 'Save', true)); ?>
 </div>
