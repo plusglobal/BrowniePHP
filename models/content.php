@@ -6,6 +6,9 @@ class Content extends BrownieAppModel{
 	var $brwConfig = array();
 
 	function modelExists($model) {
+		if ($model == 'BrwUser') {
+			return true;
+		}
 		return in_array($model, Configure::listObjects('model'));
 	}
 
