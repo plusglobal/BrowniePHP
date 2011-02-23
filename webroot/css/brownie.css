@@ -78,17 +78,17 @@ a{
 }
 
 #header{
-	background: url(img/header.jpg) 0 0 no-repeat #2f2f2f;
-	height: 109px;
-	line-height: 109px;
-	padding-left: 317px;
+	background: url(img/header.jpg) -10px -5px no-repeat #474747;
+	height: 80px;
+	line-height: 80px;
+	padding-left: 107px;
 	border: 1px solid #fff;
 }
 
 #header a{
 	color: #fff;
-	font: bold 16px/109px verdana;
-	letter-spacing: -0.3px;
+	font-weight: bold;
+	font-size: 26px;
 }
 
 #login {
