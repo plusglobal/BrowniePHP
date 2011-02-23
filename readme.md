@@ -38,7 +38,7 @@ Same as any open source project: you can [open a ticket](http://codaset.com/plus
 
 ### Requirements
 
-Check out http://codaset.com/plusglobal/browniephp/wiki/Requirements
+Check out [the Requirements page](http://codaset.com/plusglobal/browniephp/wiki/Requirements)
 
 ### License
 
