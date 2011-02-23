@@ -6,7 +6,7 @@ Admin panel · meta-framework · CMS
 
 ### What is BrowniePHP?
 
-BrowniePHP is a plugin for the [CakePHP framework](http://cakephp.org) that saves you the work to create a back-end for your app. With minimal configuration, the plugin adapts itself to any CakePHP application and automatically provides you a very intuitive and easy to use admin panel.
+[BrowniePHP](http://browniephp.org) is a plugin for the [CakePHP framework](http://cakephp.org) that saves you the work to create a back-end for your app. With minimal configuration, the plugin adapts itself to any CakePHP application and automatically provides you a very intuitive and easy to use admin panel.
 
 Developers familiarized with CakePHP might see it as an advanced ready-to-deploy [scaffolding](http://book.cakephp.org/view/1103/Scaffolding) system.
 
@@ -22,6 +22,10 @@ Most CMS in the market can be deployed and used turnkey, you only have to run th
 
 BrowniePHP is a plugin for the CakePHP framework, therefore, you have to know how to develop websites and webapps with CakePHP in order to use it.
 
+### How do I use it?
+
+Follow the [setup instructions](http://codaset.com/plusglobal/browniephp/wiki/Setup)
+
 ### Where can I find help?
 
 The documentation is under development and unfortunately we cannot predict when it is going to see the light. In the meantime, you can grab the demo app that will give you a pretty good idea of how to use it.
@@ -32,8 +36,10 @@ You can ask a question at [stackoverflow](http://stackoverflow.com/) and [CakePH
 
 Same as any open source project: you can [open a ticket](http://codaset.com/plusglobal/browniephp/tickets) or fork the project, change the code and then make a pull request.
 
+### Requirements
+
+Check out http://codaset.com/plusglobal/browniephp/wiki/Requirements
+
 ### License
 
 BrowniePHP is released under the [MIT license](http://www.opensource.org/licenses/mit-license.php)
-
-
