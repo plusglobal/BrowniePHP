@@ -188,7 +188,7 @@ class BrownieAppController extends AppController {
 		}
 		$Model->Behaviors->attach('Brownie.Cms');
 		if (!empty($this->Content)) {
-			$actions = $Model->brownieCmsConfig['actions'];
+			$actions = $Model->brwConfig['actions'];
 			if (!$actions[$action]) {
 				return false;
 			}

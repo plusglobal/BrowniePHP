@@ -147,13 +147,13 @@ class CmsBehavior extends ModelBehavior {
 
 	function afterSave($Model, $created) {
 		if (
-			$Model->brownieCmsConfig['sortable']
+			$Model->brwConfig['sortable']
 			and $created
 			and !in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))
 		) {
 			$data = $Model->data;
 			$Model->save(
-				array('id' => $Model->id, $Model->brownieCmsConfig['sortable']['field'] => $Model->id),
+				array('id' => $Model->id, $Model->brwConfig['sortable']['field'] => $Model->id),
 				array('callbacks' => false)
 			);
 			$Model->data = $data;
@@ -201,19 +201,19 @@ class CmsBehavior extends ModelBehavior {
 		if (in_array($Model->name, array('BrwImage', 'BrwFile'))) {
 			return false;
 		} else {
-			return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brownieCmsConfig['site_dependent'];
+			return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brwConfig['site_dependent'];
 		}
 	}
 
 
 	function cmsConfigInit($Model) {
-		if (empty($Model->brownieCmsConfig)) {
-			$Model->brownieCmsConfig = array();
+		if (empty($Model->brwConfig)) {
+			$Model->brwConfig = array();
 		}
-		$Model->brownieCmsConfig = Set::merge($this->cmsConfigDefault, $Model->brownieCmsConfig);
+		$Model->brwConfig = Set::merge($this->cmsConfigDefault, $Model->brwConfig);
 
 		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
-			$Model->brownieCmsConfig['fields']['hide'][] = 'site_id';
+			$Model->brwConfig['fields']['hide'][] = 'site_id';
 		}
 
 		$this->_sortableConfig($Model);
@@ -228,18 +228,18 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _sortableConfig($Model) {
-		if ($Model->brownieCmsConfig['sortable']) {
-			$sortField = $Model->brownieCmsConfig['sortable']['field'];
+		if ($Model->brwConfig['sortable']) {
+			$sortField = $Model->brwConfig['sortable']['field'];
 			if (empty($Model->_schema[$sortField])) {
-				$Model->brownieCmsConfig['sortable'] = false;
+				$Model->brwConfig['sortable'] = false;
 			} else {
 				if ($Model->_schema[$sortField]['type'] == 'integer' and $Model->_schema['id']['type'] == 'integer') {
-					if (empty($Model->brownieCmsConfig['sortable']['direction'])) {
-						$Model->brownieCmsConfig['sortable']['direction'] = 'asc';
+					if (empty($Model->brwConfig['sortable']['direction'])) {
+						$Model->brwConfig['sortable']['direction'] = 'asc';
 					}
-					$Model->brownieCmsConfig['sortable']['direction'] = strtolower($Model->brownieCmsConfig['sortable']['direction']);
-					$Model->order = array($Model->alias . '.' . $sortField => $Model->brownieCmsConfig['sortable']['direction']);
-					$Model->brownieCmsConfig['fields']['hide'][] = $Model->brownieCmsConfig['sortable']['field'];
+					$Model->brwConfig['sortable']['direction'] = strtolower($Model->brwConfig['sortable']['direction']);
+					$Model->order = array($Model->alias . '.' . $sortField => $Model->brwConfig['sortable']['direction']);
+					$Model->brwConfig['fields']['hide'][] = $Model->brwConfig['sortable']['field'];
 				}
 			}
 		}
@@ -247,7 +247,7 @@ class CmsBehavior extends ModelBehavior {
 
 
 	function _paginateConfig($Model) {
-		if (empty($Model->brownieCmsConfig['paginate']['fields'])) {
+		if (empty($Model->brwConfig['paginate']['fields'])) {
 			$listableTypes = array('integer', 'float', 'string', 'boolean', 'date', 'datetime', 'time', 'timestamp');
 			$fields = array();
 			$i = 0;
@@ -261,23 +261,23 @@ class CmsBehavior extends ModelBehavior {
 					}
 				}
 			}
-			$Model->brownieCmsConfig['paginate']['fields'] = $fields;
+			$Model->brwConfig['paginate']['fields'] = $fields;
 		}
 		if (!empty($Model->order)) {
-			$Model->brownieCmsConfig['paginate']['order'] = $Model->order;
+			$Model->brwConfig['paginate']['order'] = $Model->order;
 		}
 	}
 
 	function _parentConfig($Model) {
 		$siteModel = Configure::read('multiSitesModel');
-		if (!isset($Model->brownieCmsConfig['parent'])) {
+		if (!isset($Model->brwConfig['parent'])) {
 			$belongsTo = $Model->belongsTo;
 			if(isset($belongsTo[$siteModel])) {
 				unset($belongsTo[$siteModel]);
 			}
 			$keys = array_keys($belongsTo);
 			if (!empty($keys[0])) {
-				$Model->brownieCmsConfig['parent'] = $keys[0];
+				$Model->brwConfig['parent'] = $keys[0];
 			}
 		}
 	}
@@ -285,50 +285,50 @@ class CmsBehavior extends ModelBehavior {
 
 	function _namesConfig($Model) {
 		$modelName = Inflector::underscore($Model->alias);
-		if (empty($Model->brownieCmsConfig['names']['singular'])) {
-			$Model->brownieCmsConfig['names']['singular'] = Inflector::humanize($modelName);
+		if (empty($Model->brwConfig['names']['singular'])) {
+			$Model->brwConfig['names']['singular'] = Inflector::humanize($modelName);
 		}
-		if (empty($Model->brownieCmsConfig['names']['plural'])) {
-			$Model->brownieCmsConfig['names']['plural'] = Inflector::humanize(Inflector::pluralize($modelName));
+		if (empty($Model->brwConfig['names']['plural'])) {
+			$Model->brwConfig['names']['plural'] = Inflector::humanize(Inflector::pluralize($modelName));
 		}
-		if (empty($Model->brownieCmsConfig['names']['section'])) {
-			$Model->brownieCmsConfig['names']['section'] = $Model->brownieCmsConfig['names']['plural'];
+		if (empty($Model->brwConfig['names']['section'])) {
+			$Model->brwConfig['names']['section'] = $Model->brwConfig['names']['plural'];
 		}
 	}
 
 	function _filesAndImagesConfig($Model) {
-		if ($Model->brownieCmsConfig['images']) {
+		if ($Model->brwConfig['images']) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwImage.model' => $Model->name)
 			))), false);
-			foreach($Model->brownieCmsConfig['images'] as $key => $value) {
-				$Model->brownieCmsConfig['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
-				foreach ($Model->brownieCmsConfig['images'][$key]['sizes'] as $i => $sizes) {
+			foreach($Model->brwConfig['images'] as $key => $value) {
+				$Model->brwConfig['images'][$key] = Set::merge($this->cmsConfigDefaultImage, $value);
+				foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
 					if (strstr($sizes, 'x')) {
 						list($w, $h) = explode('x', $sizes);
 					} else {
 						list($w, $h) = explode('_', $sizes);
 					}
-					$Model->brownieCmsConfig['images'][$key]['array_sizes'][$i] = array('w' => $w, 'h' => $h);
+					$Model->brwConfig['images'][$key]['array_sizes'][$i] = array('w' => $w, 'h' => $h);
 				}
 			}
 		}
 
-		if ($Model->brownieCmsConfig['files']) {
+		if ($Model->brwConfig['files']) {
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwFile.model' => $Model->name)
 			))), false);
-			foreach($Model->brownieCmsConfig['files'] as $key => $value) {
-				$Model->brownieCmsConfig['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
+			foreach($Model->brwConfig['files'] as $key => $value) {
+				$Model->brwConfig['files'][$key] = Set::merge($this->cmsConfigDefaultFile, $value);
 			}
 		}
 	}
 
 	function _conditionalConfig($Model) {
-		if (!empty($Model->brownieCmsConfig['fields']['conditional'])) {
-			$Model->brownieCmsConfig['fields']['conditional'] = $this->_camelize($Model->brownieCmsConfig['fields']['conditional']);
+		if (!empty($Model->brwConfig['fields']['conditional'])) {
+			$Model->brwConfig['fields']['conditional'] = $this->_camelize($Model->brwConfig['fields']['conditional']);
 		}
 	}
 
@@ -336,8 +336,8 @@ class CmsBehavior extends ModelBehavior {
 		$no_sanitize = array();
 		if ($Model->_schema) {
 			foreach ($Model->_schema as $field => $type) {
-				if ($type['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_sanitize_html'])) {
-					$Model->brownieCmsConfig['fields']['no_sanitize_html'][] = $field;
+				if ($type['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_sanitize_html'])) {
+					$Model->brwConfig['fields']['no_sanitize_html'][] = $field;
 				}
 			}
 		}
@@ -356,7 +356,7 @@ class CmsBehavior extends ModelBehavior {
 
 	function fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
-		$fieldsConfig = $Model->brownieCmsConfig['fields'];
+		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach($fieldsNotUsed as $field) {
 			if (!empty($schema[$field])) {
@@ -409,11 +409,11 @@ class CmsBehavior extends ModelBehavior {
 
 	function _addBrwImagePaths($r, $Model) {
 		$ret = array();
-		foreach ($Model->brownieCmsConfig['images'] as $catCode => $value) {
+		foreach ($Model->brwConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
 		}
 		foreach ($r as $key => $value) {
-			if (!isset($Model->brownieCmsConfig['images'][$value['category_code']])) {
+			if (!isset($Model->brwConfig['images'][$value['category_code']])) {
 				continue;
 			}
 			$relative_path = 'uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
@@ -421,9 +421,9 @@ class CmsBehavior extends ModelBehavior {
 				'path' => Router::url('/' . $relative_path),
 				'real_path' => WWW_ROOT . str_replace('/', DS, $relative_path),
 			);
-			if (!empty($Model->brownieCmsConfig['images'][$value['category_code']]['sizes'])) {
+			if (!empty($Model->brwConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
-				$sizes = $Model->brownieCmsConfig['images'][$value['category_code']]['sizes'];
+				$sizes = $Model->brwConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
 					$cachedPath = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $value['model'] . DS . $size
 						. DS . $value['record_id'] . DS . $value['name'];
@@ -454,7 +454,7 @@ class CmsBehavior extends ModelBehavior {
 				}
 			}
 			$merged = am($r[$key], $paths);
-			if (!empty($Model->brownieCmsConfig['images'][$value['category_code']]['index'])) {
+			if (!empty($Model->brwConfig['images'][$value['category_code']]['index'])) {
 				$ret[$value['category_code']] = $merged;
 			} else {
 				$ret[$value['category_code']][] = $merged;
@@ -467,11 +467,11 @@ class CmsBehavior extends ModelBehavior {
 
 	function _addBrwFilePaths($r, $Model) {
 		$ret = array();
-		foreach ($Model->brownieCmsConfig['files'] as $catCode => $value) {
+		foreach ($Model->brwConfig['files'] as $catCode => $value) {
 			$ret[$catCode] = array();
 		}
 		foreach ($r as $key => $value) {
-			if (!isset($Model->brownieCmsConfig['files'][$value['category_code']])) {
+			if (!isset($Model->brwConfig['files'][$value['category_code']])) {
 				continue;
 			}
 			if (empty($value['description'])) {
@@ -501,7 +501,7 @@ class CmsBehavior extends ModelBehavior {
 					</a>',
 			);
 			$merged = am($r[$key], $paths);
-			if (!empty($Model->brownieCmsConfig['files'][$value['category_code']]['index'])) {
+			if (!empty($Model->brwConfig['files'][$value['category_code']]['index'])) {
 				$ret[$value['category_code']] = $merged;
 			} else {
 				$ret[$value['category_code']][] = $merged;
@@ -526,7 +526,7 @@ class CmsBehavior extends ModelBehavior {
 	}
 
 	function _attachUploads($Model) {
-		if (!empty($Model->brownieCmsConfig['images'])) {
+		if (!empty($Model->brwConfig['images'])) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwImage.model' => $Model->alias),
@@ -538,7 +538,7 @@ class CmsBehavior extends ModelBehavior {
 				'dependent' => true,
 			))), false);
 		}
-		if (!empty($Model->brownieCmsConfig['files'])) {
+		if (!empty($Model->brwConfig['files'])) {
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwFile.model' => $Model->alias),
@@ -567,7 +567,7 @@ class CmsBehavior extends ModelBehavior {
 		foreach ($results as $i => $result) {
 			if (!empty($result[$Model->alias])) {
 				foreach ($result[$Model->alias] as $key => $value) {
-					if (!in_array($key, $Model->brownieCmsConfig['fields']['no_sanitize_html'])) {
+					if (!in_array($key, $Model->brwConfig['fields']['no_sanitize_html'])) {
 						$results[$i][$Model->alias][$key] = BrwSanitize::html($results[$i][$Model->alias][$key]);
 					}
 				}
@@ -579,7 +579,7 @@ class CmsBehavior extends ModelBehavior {
 
 	function _customActionsConfig($Model) {
 		$customActions = array();
-		foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $config) {
+		foreach ($Model->brwConfig['custom_actions'] as $action => $config) {
 			$customActions[$action] = Set::merge($this->cmsConfigDefaultCustomActions, $config);
 			$title = Inflector::humanize($action);
 			if (empty($customActions[$action]['title'])) {
@@ -590,7 +590,7 @@ class CmsBehavior extends ModelBehavior {
 				$customActions[$action]['options']['title'] = $title;
 			}
 		}
-		$Model->brownieCmsConfig['custom_actions'] = $customActions;
+		$Model->brwConfig['custom_actions'] = $customActions;
 	}
 
 }

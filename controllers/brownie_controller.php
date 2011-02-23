@@ -48,7 +48,7 @@ class BrownieController extends BrownieAppController {
 				}
 				$translations[Inflector::humanize(str_replace('_id', '', $key))] = true;
 			}
-			foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $config) {
+			foreach ($Model->brwConfig['custom_actions'] as $action => $config) {
 				$translations[$config['title']] = true;
 				if ($config['confirmMessage']) {
 					$translations[$config['confirmMessage']] = true;

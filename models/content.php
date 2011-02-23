@@ -30,7 +30,7 @@ class Content extends BrownieAppModel{
 
 	function _fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
-		$fieldsConfig = $Model->brownieCmsConfig['fields'];
+		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach ($fieldsNotUsed as $field) {
 			if (isset($schema[$field])) {
@@ -122,10 +122,10 @@ class Content extends BrownieAppModel{
 				$rules[$key][] = array(
 					'rule' => 'isUnique',
 					'message' => sprintf(
-						($Model->brownieCmsConfig['names']['gender']==1) ?
+						($Model->brwConfig['names']['gender']==1) ?
 							__d('brownie', "This value must be unique and it's already in use by another %s [male]", true):
 							__d('brownie', "This value must be unique and it's already in use by another %s [female]", true),
-						$Model->brownieCmsConfig['names']['singular']
+						$Model->brwConfig['names']['singular']
 					),
 					'allowEmpty' => true,
 				);
@@ -151,7 +151,7 @@ class Content extends BrownieAppModel{
 		foreach ($Model->_schema as $field => $value) {
 			if (
 				$value['null'] and empty($data[$Model->name][$field])
-				and !in_array($field, $Model->brownieCmsConfig['fields']['hide'])
+				and !in_array($field, $Model->brwConfig['fields']['hide'])
 			) {
 				$data[$Model->name][$field] = null;
 			}
@@ -180,7 +180,7 @@ class Content extends BrownieAppModel{
 	function fckFields($Model) {
 		$out = array();
 		foreach ($Model->_schema as $field => $metadata) {
-			if ($metadata['type'] == 'text' and !in_array($field, $Model->brownieCmsConfig['fields']['no_editor'])) {
+			if ($metadata['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_editor'])) {
 				$out[] = $field;
 			}
 		}
@@ -191,8 +191,8 @@ class Content extends BrownieAppModel{
 	function defaults($Model) {
 		$data = array();
 		foreach ($Model->_schema as $field => $value) {
-			if (array_key_exists($field, $Model->brownieCmsConfig['default'])) {
-				$data[$field] = $Model->brownieCmsConfig['default'][$field];
+			if (array_key_exists($field, $Model->brwConfig['default'])) {
+				$data[$field] = $Model->brwConfig['default'][$field];
 			} elseif (!empty($value['default'])) {
 				 $data[$field] = $value['default'];
 			}
@@ -225,15 +225,15 @@ class Content extends BrownieAppModel{
 			return ($direction == 'down') ? $Model->moveDown($id, 1) : $Model->moveUp($id, 1);
 		}
 
-		$sortField = $Model->brownieCmsConfig['sortable']['field'];
+		$sortField = $Model->brwConfig['sortable']['field'];
 		$record = $Model->findById($id);
 		$params = array('field' => $sortField, 'value' => $record[$Model->alias][$sortField]);
-		if ($parent = $Model->brownieCmsConfig['parent']) {
+		if ($parent = $Model->brwConfig['parent']) {
 			$foreignKey = $Model->belongsTo[$parent]['foreignKey'];
 			$params['conditions'] = array($Model->alias . '.' . $foreignKey => $record[$Model->alias][$foreignKey]);
 		}
 		$neighbors = $Model->find('neighbors', $params);
-		if ($Model->brownieCmsConfig['sortable']['direction'] == 'desc') {
+		if ($Model->brwConfig['sortable']['direction'] == 'desc') {
 			$prev = 'prev'; $next = 'next';
 		} else {
 			$prev = 'next'; $next = 'prev';
@@ -312,18 +312,18 @@ class Content extends BrownieAppModel{
 					'options' => $options,
 					'confirmMessage' => ($action == 'delete') ?
 						sprintf(
-							($Model->brownieCmsConfig['names']['gender'] == 1) ?
+							($Model->brwConfig['names']['gender'] == 1) ?
 								__d('brownie', 'Are you sure you want to delete this %s?[male]', true):
 								__d('brownie', 'Are you sure you want to delete this %s?[female]', true)
 							,
-							$Model->brownieCmsConfig['names']['singular']
+							$Model->brwConfig['names']['singular']
 						):
 						false,
 					'class' => $action,
 				));
 			}
 		}
-		foreach ($Model->brownieCmsConfig['custom_actions'] as $action => $custom) {
+		foreach ($Model->brwConfig['custom_actions'] as $action => $custom) {
 			if (Set::matches($custom['conditions'], $record)) {
 				$custom['url'][] = $record[$Model->alias]['id'];
 				$actions[$action] = Set::merge($defaultAction, $custom);
