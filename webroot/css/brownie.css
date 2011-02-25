@@ -77,18 +77,17 @@ a{
 	text-decoration: none;
 }
 
-#header{
-	background: url(img/header.jpg) -10px -5px no-repeat #474747;
+#header a{
+	background: url(img/header.jpg) -10px -5px no-repeat #434343;
 	height: 80px;
 	line-height: 80px;
 	padding-left: 107px;
 	border: 1px solid #fff;
-}
-
-#header a{
 	color: #fff;
 	font-weight: bold;
-	font-size: 26px;
+	font-size: 16px;
+	font-family: Verdana;
+	display: block;
 }
 
 #login {
