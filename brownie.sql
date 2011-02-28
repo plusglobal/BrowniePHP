@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS `brw_files`;
 CREATE TABLE IF NOT EXISTS `brw_files` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -11,10 +10,8 @@ CREATE TABLE IF NOT EXISTS `brw_files` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-
-DROP TABLE IF EXISTS `brw_images`;
 CREATE TABLE IF NOT EXISTS `brw_images` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `name` varchar(255) collate utf8_unicode_ci NOT NULL,
@@ -28,13 +25,11 @@ CREATE TABLE IF NOT EXISTS `brw_images` (
   KEY `category_code` (`category_code`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
-
-DROP TABLE IF EXISTS `brw_users`;
 CREATE TABLE IF NOT EXISTS `brw_users` (
   `id` int(5) unsigned NOT NULL auto_increment,
   `email` varchar(50) collate utf8_unicode_ci NOT NULL,
   `password` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `brw_group_id` int(10) NOT NULL,
+  `root` tinyint(1) NOT NULL,
   `last_login` datetime NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
