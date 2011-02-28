@@ -13,6 +13,7 @@ class BrownieController extends BrownieAppController {
 			$this->BrwUser->save(array(
 				'email' => $this->data['BrwUser']['email'],
 				'password' => $this->Auth->password($this->data['BrwUser']['password']),
+				'root' => 1,
 			));
 		}
 		parent::beforeFilter();
