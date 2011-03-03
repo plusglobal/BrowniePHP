@@ -105,9 +105,9 @@ foreach ($uploads as $upload) {
 	if ($upload == 'Image' and !empty($brwConfig['images'])) {
 		$continue = true;
 		$uploadConfig = $brwConfig['images'];
-	} elseif (!empty($filesConfig)) {
+	} elseif (!empty($brwConfig['files'])) {
 		$continue = true;
-		$uploadConfig = $filesConfig;
+		$uploadConfig = $brwConfig['files'];
 	}
 
 	if ($continue and $adding) {
