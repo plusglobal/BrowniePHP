@@ -99,7 +99,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 	</fieldset>
 <?php
 $uploads = array('Image', 'File');
-foreach ($uploads as $upload) {
+foreach ($uploads as $upload) :
 
 	$continue = false;
 	if ($upload == 'Image' and !empty($brwConfig['images'])) {
@@ -110,53 +110,41 @@ foreach ($uploads as $upload) {
 		$uploadConfig = $brwConfig['files'];
 	}
 
-	if ($continue and $adding) {
+	if ($continue and $adding) :
 		$i=0;
-		foreach ($uploadConfig as $categoryCode => $uploadCat) {
-			//pr($image);
-			echo '
-			<fieldset>
-				<legend>' . $uploadCat['name_category'] . '</legend>';
+		foreach ($uploadConfig as $categoryCode => $uploadCat) : ?>
+			<fieldset class="fieldsUploads">
+				<legend><?php echo $uploadCat['name_category'] ?></legend>
+				<?php $classes = array('fieldsetImages'); if (!$uploadCat['index']) $classes[] = 'hide'; ?>
+				<div id="fieldset<?php echo $i ?>" class="<?php echo  join(' ', $classes) ?>">
+					<input type="file" name="data[BrwImage][file][]" />
+					<input type="hidden" name="data[BrwImage][model][]" value="<?php echo $model ?>" />
+					<input type="hidden" name="data[BrwImage][category_code][]" value="<?php echo $categoryCode ?>" />
+					<?php
+					if ($uploadCat['description']) :
+						echo $form->input('Brw' . $upload . '.' . $i . '.description', array(
+							'label' => __d('brownie', 'Description', true),
+							'name' => 'data[BrwImage][description][]',
+						));
+					else : ?>
+						<input type="hidden" name="data[BrwImage][description][]" value="" />
+					<?php endif ?>
 
-				if ($uploadCat['index']) {
-					echo '
-					' . $form->input('Brw' . $upload . '.' . $i . '.file', array('type' => 'file', 'label' => __d('brownie', $upload, true))) . '
-					' .	$form->input('Brw' . $upload . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden')) . '
-					' .	$form->input('Brw' . $upload . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
-					if ($uploadCat['description']) {
-						echo $form->input('Brw' . $upload . '.' . $i . '.description', array('label' => __d('brownie', 'Description', true)));
-					}
-					if (!$adding) {
-						echo $form->input('Brw' . $upload . '.' . $i . '.record_id', array('value' => $this->data[$model]['id'], 'type' => 'hidden'));
-					}
-					$i++;
-				} elseif ($adding) {
-					echo '
-					<div class="comment">' ;
-					if ($adding) {
-						__d('brownie', 'These files are optional. You will be able to add more images later.');
-					} else {
-						__d('brownie', 'These files will be added among to the rest. If you want to replace images click the "Images" button at the top');
-					}
-					echo '</div>';
-					for($n = 1; $n <= 10; $n++) {
-						echo $form->input('Brw' . $upload . '.' . $i . '.file', array('type' => 'file', 'label' => sprintf(__d('brownie', 'File %s', true), $n)));
-						echo $form->input('Brw' . $upload . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden'));
-						echo $form->input('Brw' . $upload . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
-						if ($uploadCat['description']) {
-							echo $form->input('Brw' . $upload . '.' . $i . '.description', array('label' => sprintf(__d('brownie', 'Description %d', true), $n)));
-						}
-						if (!$adding) {
-							echo $form->input('Brw' . $upload . '.' . $i . '.record_id', array('value' => $this->data[$model]['id'], 'type' => 'hidden'));
-						}
-						$i++;
-					} // for
-				}
-			echo '
-			</fieldset>';
-		}
-	}
-}
+					<?php if (!$uploadCat['index']) : ?>
+						<a href="#" class="cloneRemove">Remove</a>
+					<?php endif ?>
+
+				</div>
+				<div id="cloneHoder<? echo $i ?>" class="cloneHolder"></div>
+				<?php if (!$uploadCat['index']) : ?>
+				<a href="#" class="cloneLink" id="clone_<?php echo $i ?>">Add another</a>
+				<?php endif ?>
+			</fieldset>
+		<?php
+		$i++;
+		endforeach;
+	endif;
+endforeach;
 
 
 ?>

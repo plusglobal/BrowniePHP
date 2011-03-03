@@ -251,6 +251,9 @@ class ContentsController extends BrownieAppController {
 				$this->cakeError('error404');
 			}
 
+			$this->data = $this->Content->convertToCakeArray($this->data);
+			//pr($this->data);
+
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model);
 

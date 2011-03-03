@@ -1078,3 +1078,8 @@ table td.sortable a{
 table td.fcktxt h1{
 	float: none;
 }
+
+fieldset.fieldsUploads div.cloneHolder{
+	padding: 0;
+}
+
