@@ -335,7 +335,13 @@ class ContentsController extends BrownieAppController {
 		if (empty($this->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
-				$this->Model->Behaviors->detach('Brownie.Panel');
+				//$this->Model->Behaviors->detach('Brownie.Panel');
+				if ($this->Model->brwConfig['images']) {
+					$contain[] = 'BrwImage';
+				}
+				if ($this->Model->brwConfig['files']) {
+					$contain[] = 'BrwFile';
+				}
 				$this->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),
 					'contain' => $contain,
