@@ -84,7 +84,7 @@ class BrwUploadBehavior extends ModelBehavior {
 			}
 			if (!is_dir($dest_dir)) {
 				if (!mkdir($dest_dir, 0777, true)) {
-					$this->log('Brownie CMS: unable to create dir ' . $dest_dir);
+					$this->log('BrowniePHP: unable to create dir ' . $dest_dir);
 				} else {
 					chmod($dest_dir, 0777);
 				}

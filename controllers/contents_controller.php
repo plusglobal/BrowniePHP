@@ -24,7 +24,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->Model = ClassRegistry::init($model);
 		$this->Model->recursive = -1;
-		$this->Model->Behaviors->attach('Brownie.Cms');
+		$this->Model->Behaviors->attach('Brownie.Panel');
 
 
 		if (!$this->_checkPermissions($model, $this->params['action'])) {
@@ -32,25 +32,25 @@ class ContentsController extends BrownieAppController {
 		}
 
 
-		$this->Model->brownieCmsConfig['actions'] = array_merge(
-			$this->Model->brownieCmsConfig['actions'],
+		$this->Model->brwConfig['actions'] = array_merge(
+			$this->Model->brwConfig['actions'],
 			$this->arrayPermissions($this->Model->alias)
 		);
 
 		if (!Configure::read('Auth.BrwUser.root')) {
-			$this->Model->brownieCmsConfig['actions'] = Set::merge(
-				$this->Model->brownieCmsConfig['actions'],
-				$this->Model->brownieCmsConfig['actions_no_root']
+			$this->Model->brwConfig['actions'] = Set::merge(
+				$this->Model->brwConfig['actions'],
+				$this->Model->brwConfig['actions_no_root']
 			);
-			$this->Model->brownieCmsConfig['fields'] = Set::merge(
-				$this->Model->brownieCmsConfig['fields'],
-				$this->Model->brownieCmsConfig['fields_no_root']
+			$this->Model->brwConfig['fields'] = Set::merge(
+				$this->Model->brwConfig['fields'],
+				$this->Model->brwConfig['fields_no_root']
 			);
 		}
 	}
 
 	function beforeRender() {
-		$brwConfig = $this->Model->brownieCmsConfig;
+		$brwConfig = $this->Model->brwConfig;
 		$schema = $this->Content->schemaForView($this->Model);
 		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
@@ -66,14 +66,14 @@ class ContentsController extends BrownieAppController {
 			and $this->Model->name == $siteModel
 		);
 		if ($filterSites) {
-			$this->Model->brownieCmsConfig['paginate']['conditions'][] = array(
+			$this->Model->brwConfig['paginate']['conditions'][] = array(
 				$this->Model->name . '.brw_user_id' => Configure::read('Auth.BrwUser.id')
 			);
-			$this->Model->brownieCmsConfig['actions']['add'] = false;
-			$this->Model->brownieCmsConfig['actions']['delete'] = false;
+			$this->Model->brwConfig['actions']['add'] = false;
+			$this->Model->brwConfig['actions']['delete'] = false;
 		}
 
-		$this->paginate = $this->Model->brownieCmsConfig['paginate'];
+		$this->paginate = $this->Model->brwConfig['paginate'];
 		if ($this->Content->isTree($this->Model)) {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
@@ -85,8 +85,8 @@ class ContentsController extends BrownieAppController {
 		$records = $this->paginate($this->Model);
 		$isUniqueRecord = (
 			count($records) == 1
-			and !$this->Model->brownieCmsConfig['actions']['add']
-			and !$this->Model->brownieCmsConfig['actions']['delete']
+			and !$this->Model->brwConfig['actions']['add']
+			and !$this->Model->brwConfig['actions']['delete']
 		);
 		if ($isUniqueRecord) {
 			$this->redirect(array(
@@ -100,7 +100,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->set(array(
 			'records' => $this->_formatForView($records, $this->Model),
-			'permissions' => array($this->Model->alias => $this->Model->brownieCmsConfig['actions']),
+			'permissions' => array($this->Model->alias => $this->Model->brwConfig['actions']),
 			'filters' => $filters,
 		));
 	}
@@ -116,18 +116,18 @@ class ContentsController extends BrownieAppController {
 			if($id != Configure::read('currentSite.id')) {
 				$this->cakeError('error404');
 			} else {
-				$this->Model->brownieCmsConfig['actions']['add'] = false;
-				$this->Model->brownieCmsConfig['actions']['delete'] = false;
+				$this->Model->brwConfig['actions']['add'] = false;
+				$this->Model->brwConfig['actions']['delete'] = false;
 			}
 		}
 
 		$contain = array();
 
-		if ($this->Model->brownieCmsConfig['images']) {
+		if ($this->Model->brwConfig['images']) {
 			$contain['BrwImage'] = array('order' => 'BrwImage.category_code, BrwImage.modified asc');
 		}
 
-		if ($this->Model->brownieCmsConfig['files']) {
+		if ($this->Model->brwConfig['files']) {
 			$contain['BrwFile'] = array('order' => 'BrwFile.category_code, BrwFile.modified asc');
 		}
 
@@ -154,8 +154,8 @@ class ContentsController extends BrownieAppController {
 				$keyOrder = str_replace($this->Model->alias . '.', '', $keyOrder);
 				$neighbors = $this->Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$model][$keyOrder]));
 				if (
-					!empty($this->Model->brownieCmsConfig['sortable']['direction'])
-					and $this->Model->brownieCmsConfig['sortable']['direction'] == 'desc'
+					!empty($this->Model->brwConfig['sortable']['direction'])
+					and $this->Model->brwConfig['sortable']['direction'] == 'desc'
 				) {
 					$tmp = $neighbors['prev'];
 					$neighbors['prev'] = $neighbors['next'];
@@ -172,22 +172,22 @@ class ContentsController extends BrownieAppController {
 
 		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);
 		$assoc_models = array();
-		if (!empty($this->Model->hasMany) and $this->Model->brownieCmsConfig['show_children']){
+		if (!empty($this->Model->hasMany) and $this->Model->brwConfig['show_children']){
 			foreach ($assocs as $key_model => $related_model) {
-				if (!in_array($key_model, $this->Model->brownieCmsConfig['hide_children'])) {
+				if (!in_array($key_model, $this->Model->brwConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
-					$AssocModel->Behaviors->attach('Brownie.Cms');
+					$AssocModel->Behaviors->attach('Brownie.Panel');
 					if ($this->_checkPermissions($key_model)) {
-						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brownieCmsConfig['paginate']['fields'])) {
-							unset($AssocModel->brownieCmsConfig['paginate']['fields'][$indx]);
+						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brwConfig['paginate']['fields'])) {
+							unset($AssocModel->brwConfig['paginate']['fields'][$indx]);
 						}
 						$filters = $this->_filterConditions($AssocModel);
 						$this->paginate[$AssocModel->name] = Set::merge(
-							$AssocModel->brownieCmsConfig['paginate'],
+							$AssocModel->brwConfig['paginate'],
 							array('conditions' => $filters)
 						);
 						$assoc_models[] = array(
-							'brwConfig' => $AssocModel->brownieCmsConfig,
+							'brwConfig' => $AssocModel->brwConfig,
 							'model' => $key_model,
 							'records' => $this->_formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
 							'schema' => $this->Content->schemaForView($this->Model->$key_model),
@@ -258,13 +258,13 @@ class ContentsController extends BrownieAppController {
 			if (Configure::read('multiSitesModel')) {
 				$fieldList[] = 'site_id';
 			}
-			if ($this->Model->brownieCmsConfig['sortable']) {
-				$fieldList[] = $this->Model->brownieCmsConfig['sortable']['field'];
+			if ($this->Model->brwConfig['sortable']) {
+				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
-				$msg =	($this->Model->brownieCmsConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brownieCmsConfig['names']['singular']):
-					sprintf(__d('brownie', 'The %s has been saved [female]', true), $this->Model->brownieCmsConfig['names']['singular']);
+				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'The %s has been saved [female]', true), $this->Model->brwConfig['names']['singular']);
 				$this->Session->setFlash($msg, 'flash_success');
 
 				if (!empty($this->data['Content']['after_save'])) {
@@ -279,7 +279,7 @@ class ContentsController extends BrownieAppController {
 							$this->redirect(array('action' => 'index', $this->Model->name));
 						break;
 						case 'parent':
-							if ($parent = $this->Model->brownieCmsConfig['parent']) {
+							if ($parent = $this->Model->brwConfig['parent']) {
 								$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
 								if (!empty($this->data[$this->Model->alias][$foreignKey])) {
 									$this->redirect(array('action' => 'view', $parent, $this->data[$this->Model->alias][$foreignKey]));
@@ -296,9 +296,9 @@ class ContentsController extends BrownieAppController {
 					}
 				}
 			} else {
-				$msg =	($this->Model->brownieCmsConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', true), $this->Model->brownieCmsConfig['names']['singular']):
-					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', true), $this->Model->brownieCmsConfig['names']['singular']);
+				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', true), $this->Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', true), $this->Model->brwConfig['names']['singular']);
 				$this->Session->setFlash($msg, 'flash_error');
 			}
 		}
@@ -335,7 +335,7 @@ class ContentsController extends BrownieAppController {
 		if (empty($this->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
-				$this->Model->Behaviors->detach('Brownie.Cms');
+				$this->Model->Behaviors->detach('Brownie.Panel');
 				$this->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),
 					'contain' => $contain,
@@ -400,7 +400,7 @@ class ContentsController extends BrownieAppController {
 	function edit_upload($model, $uploadType, $recordId, $categoryCode, $uploadId = null) {
 		if (
 			!in_array($uploadType, array('BrwFile', 'BrwImage'))
-			or empty($this->Model->brownieCmsConfig[($uploadType == 'BrwFile') ? 'files' : 'images'][$categoryCode])
+			or empty($this->Model->brwConfig[($uploadType == 'BrwFile') ? 'files' : 'images'][$categoryCode])
 		) {
 			$this->cakeError('error404');
 		}
@@ -437,7 +437,7 @@ class ContentsController extends BrownieAppController {
 			$max = 1;
 		} else {
 			$uploadKey = ($uploadType == 'BrwFile') ? 'files' : 'images';
-			$max = ($this->Model->brownieCmsConfig[$uploadKey][$categoryCode]['index'])? 1:10;
+			$max = ($this->Model->brwConfig[$uploadKey][$categoryCode]['index'])? 1:10;
 		}
 		$this->set(compact('model', 'uploadType', 'recordId', 'categoryCode', 'uploadId', 'max'));
 	}
@@ -468,7 +468,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function import($model) {
-		if (!$this->Model->brownieCmsConfig['actions']['import']) {
+		if (!$this->Model->brwConfig['actions']['import']) {
 			$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
 		}
 
@@ -498,7 +498,7 @@ class ContentsController extends BrownieAppController {
 		if (
 			!in_array($direction, array('up', 'down'))
 			and !$this->Content->isTree($this->Model)
-			and empty($this->Model->brownieCmsConfig['sortable'])
+			and empty($this->Model->brwConfig['sortable'])
 		) {
 			$this->CakeError('error404');
 		}
@@ -533,7 +533,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 	function _formatSingleForView($data, $Model, $inView = false) {
-		$fieldsConfig = $Model->brownieCmsConfig['fields'];
+		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
 		$foreignKeys = $this->Content->getForeignKeys($Model);
 		$permissions = $this->arrayPermissions($Model->name);
@@ -609,37 +609,37 @@ class ContentsController extends BrownieAppController {
 			'type' => 'select',
 			'label' => __d('brownie', 'After save', true),
 			'options' => array(
-				'edit' => ($Model->brownieCmsConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Continue editing this %s [male]', true), $Model->brownieCmsConfig['names']['singular']):
-					sprintf(__d('brownie', 'Continue editing this %s [female]', true), $Model->brownieCmsConfig['names']['singular'])
+				'edit' => ($Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Continue editing this %s [male]', true), $Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'Continue editing this %s [female]', true), $Model->brwConfig['names']['singular'])
 				,
-				'add' =>  ($Model->brownieCmsConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Add another %s [male]', true), $Model->brownieCmsConfig['names']['singular']):
-					sprintf(__d('brownie', 'Add another %s [female]', true), $Model->brownieCmsConfig['names']['singular'])
+				'add' =>  ($Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Add another %s [male]', true), $Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'Add another %s [female]', true), $Model->brwConfig['names']['singular'])
 				,
-				'index' => ($Model->brownieCmsConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Go to to index of all %s [male]', true), $Model->brownieCmsConfig['names']['plural']):
-					sprintf(__d('brownie', 'Go to to index of all %s [female]', true), $Model->brownieCmsConfig['names']['plural'])
+				'index' => ($Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Go to to index of all %s [male]', true), $Model->brwConfig['names']['plural']):
+					sprintf(__d('brownie', 'Go to to index of all %s [female]', true), $Model->brwConfig['names']['plural'])
 				,
-				'view' => ($Model->brownieCmsConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brownieCmsConfig['names']['singular']):
-					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brownieCmsConfig['names']['singular'])
+				'view' => ($Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brwConfig['names']['singular'])
 				,
 				'home' => __d('brownie', 'Go home', true),
 			),
 			'default' => (empty($this->params['named']['after_save']))? 'view':$this->params['named']['after_save'],
 		);
 		foreach (array('add', 'view', 'index') as $action) {
-			if (!$Model->brownieCmsConfig['actions'][$action]) {
+			if (!$Model->brwConfig['actions'][$action]) {
 				unset($params['options'][$action]);
 			}
 		}
 
-		if ($Model->brownieCmsConfig['parent']) {
-			$parentModel = $Model->{$Model->brownieCmsConfig['parent']};
-			$params['options']['parent'] =	($parentModel->brownieCmsConfig['names']['gender'] == 1) ?
-				sprintf(__d('brownie', 'Go to the %s [male]', true), $parentModel->brownieCmsConfig['names']['singular']):
-				sprintf(__d('brownie', 'Go to the %s [female]', true), $parentModel->brownieCmsConfig['names']['singular']);
+		if ($Model->brwConfig['parent']) {
+			$parentModel = $Model->{$Model->brwConfig['parent']};
+			$params['options']['parent'] =	($parentModel->brwConfig['names']['gender'] == 1) ?
+				sprintf(__d('brownie', 'Go to the %s [male]', true), $parentModel->brwConfig['names']['singular']):
+				sprintf(__d('brownie', 'Go to the %s [female]', true), $parentModel->brwConfig['names']['singular']);
 		}
 
 		$this->set('afterSaveOptionsParams', $params);

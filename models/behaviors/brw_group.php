@@ -3,7 +3,7 @@
 class BrwGroupBehavior extends ModelBehavior {
 
 	function setup($Model, $config = array()) {
-		$Model->brownieCmsConfig = $this-> _brwConfig($Model);
+		$Model->brwConfig = $this-> _brwConfig($Model);
 		$Model->validate = $this->_validate($Model);
 		$Model->bindModel(array('hasMany' => array('BrwUser')));
 		$Model->Behaviors->attach('Tree');
@@ -17,10 +17,10 @@ class BrwGroupBehavior extends ModelBehavior {
 				'singular' => 'Grupo de usuarios',
 			),
 		);
-		if(empty($Model->brownieCmsConfig)) {
-			$Model->brownieCmsConfig = array();
+		if(empty($Model->brwConfig)) {
+			$Model->brwConfig = array();
 		}
-		return Set::merge($defaultBrwConfig, $Model->brownieCmsConfig);
+		return Set::merge($defaultBrwConfig, $Model->brwConfig);
 	}
 
 	function _validate($Model) {

@@ -103,7 +103,8 @@ class BrownieAppController extends AppController {
 				$menu = array();
 				$models = App::objects('model');
 				foreach($models as $model) {
-					$menu[$model] = $model;
+					$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
+					$menu[$button] = $model;
 				}
 				$menu = array(__d('brownie', 'Menu', true) => $menu);
 			}
@@ -186,9 +187,9 @@ class BrownieAppController extends AppController {
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'import'))) {
 			return false;
 		}
-		$Model->Behaviors->attach('Brownie.Cms');
+		$Model->Behaviors->attach('Brownie.Panel');
 		if (!empty($this->Content)) {
-			$actions = $Model->brownieCmsConfig['actions'];
+			$actions = $Model->brwConfig['actions'];
 			if (!$actions[$action]) {
 				return false;
 			}
