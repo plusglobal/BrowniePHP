@@ -1,8 +1,9 @@
-<div class="form">
 <?php
 if (!empty($brwConfig['fields']['conditional'])) {
-	$javascript->link(Router::url(array('controller' => 'contents', 'action' => 'js_edit', $model, 'js_edit.js')), false);
+	echo $javascript->link(Router::url(array('controller' => 'contents', 'action' => 'js_edit', $model, 'js_edit.js')));
 }
+?><div class="form">
+<?php
 $url = array('controller' => 'contents', 'action' => 'edit', $model);
 $adding = empty($this->data[$model]['id']);
 if (!$adding) {
