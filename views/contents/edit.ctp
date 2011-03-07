@@ -99,45 +99,47 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 	</fieldset>
 <?php
 $uploads = array('Image', 'File');
+$i=0;
 foreach ($uploads as $upload) :
 
 	$continue = false;
 	if ($upload == 'Image' and !empty($brwConfig['images'])) {
 		$continue = true;
 		$uploadConfig = $brwConfig['images'];
-	} elseif (!empty($brwConfig['files'])) {
+	} elseif ($upload == 'File' and !empty($brwConfig['files'])) {
 		$continue = true;
 		$uploadConfig = $brwConfig['files'];
 	}
 
 	if ($continue and $adding) :
-		$i=0;
 		foreach ($uploadConfig as $categoryCode => $uploadCat) : ?>
 			<fieldset class="fieldsUploads">
 				<legend><?php echo $uploadCat['name_category'] ?></legend>
-				<?php $classes = array('fieldsetImages'); if (!$uploadCat['index']) $classes[] = 'hide'; ?>
+				<?php $classes = array('fieldsetUploads'); if (!$uploadCat['index']) $classes[] = 'hide'; ?>
 				<div id="fieldset<?php echo $i ?>" class="<?php echo  join(' ', $classes) ?>">
-					<input type="file" name="data[BrwImage][file][]" />
-					<input type="hidden" name="data[BrwImage][model][]" value="<?php echo $model ?>" />
-					<input type="hidden" name="data[BrwImage][category_code][]" value="<?php echo $categoryCode ?>" />
+					<input type="file" name="data[Brw<?php echo $upload ?>][file][]" size="100%" />
+					<input type="hidden" name="data[Brw<?php echo $upload ?>][model][]" value="<?php echo $model ?>" />
+					<input type="hidden" name="data[Brw<?php echo $upload ?>][category_code][]" value="<?php echo $categoryCode ?>" />
 					<?php
 					if ($uploadCat['description']) :
 						echo $form->input('Brw' . $upload . '.' . $i . '.description', array(
 							'label' => __d('brownie', 'Description', true),
-							'name' => 'data[BrwImage][description][]',
+							'name' => 'data[Brw' . $upload . '][description][]',
 						));
 					else : ?>
-						<input type="hidden" name="data[BrwImage][description][]" value="" />
+						<input type="hidden" name="data[Brw<?php echo $upload ?>][description][]" value="" />
 					<?php endif ?>
 
 					<?php if (!$uploadCat['index']) : ?>
-						<a href="#" class="cloneRemove">Remove</a>
+						<ul class="actions"><li class="delete"><a href="#" class="cloneRemove">Remove</a></li></ul>
 					<?php endif ?>
 
 				</div>
-				<div id="cloneHoder<? echo $i ?>" class="cloneHolder"></div>
 				<?php if (!$uploadCat['index']) : ?>
-				<a href="#" class="cloneLink" id="clone_<?php echo $i ?>">Add another</a>
+				<div id="cloneHoder<?php echo $i ?>" class="cloneHolder"></div>
+				<a href="#" class="cloneLink cloneLink_<?php echo $upload ?>" id="clone_<?php echo $i ?>"><?php
+				($upload == 'Image')? __d('brwonie', 'Add Image') : __d('brwonie', 'Add File')
+				?></a>
 				<?php endif ?>
 			</fieldset>
 		<?php

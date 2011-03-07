@@ -30,7 +30,7 @@ function toclone() {
 	$('.hide').css('display', 'none');
 	$('.cloneLink').click(function(){
 		parts = $(this).attr('id').split('_');
-		i = parts[1];
+		var i = parts[1];
 		$('#fieldset' + i).clone().css('display', 'none').removeClass('hide').appendTo('#cloneHoder' + i).fadeIn();
 		bindRemove();
 		return false;
@@ -39,7 +39,7 @@ function toclone() {
 
 function bindRemove() {
 	$('.cloneRemove').click(function(){
-		$(this).parent().fadeOut('fast', function() {
+		$(this).parents('div.fieldsetUploads').fadeOut('fast', function() {
 			$(this).remove();
 		});
 		return false;

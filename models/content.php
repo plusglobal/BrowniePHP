@@ -339,18 +339,19 @@ class Content extends BrownieAppModel{
 
 
 	function convertToCakeArray($data) {
-		if (empty($data['BrwImage']['model'])) {
-			return $data;
-		}
-		$retData = array();
-		$fields = array('model', 'category_code', 'description', 'file');
-		$count = count($data['BrwImage']['model']);
-		foreach ($fields as $field) {
-			for ($i = 0; $i < $count; $i++) {
-				$retData['BrwImage'][$i][$field] = $data['BrwImage'][$field][$i];
+		foreach (array('BrwImage', 'BrwFile') as $upload) {
+			if (!empty($data[$upload]['model'])) {
+				$retData = array();
+				$fields = array('model', 'category_code', 'description', 'file');
+				$count = count($data[$upload]['model']);
+				foreach ($fields as $field) {
+					for ($i = 0; $i < $count; $i++) {
+						$retData[$upload][$i][$field] = $data[$upload][$field][$i];
+					}
+				}
+				$data[$upload] = $retData[$upload];
 			}
 		}
-		$data['BrwImage'] = $retData['BrwImage'];
 		return $data;
 	}
 

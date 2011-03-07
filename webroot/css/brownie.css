@@ -784,7 +784,7 @@ p.norecords{
 	padding-bottom: 5px;
 	font-weight: bold;
 }
-#content input, #content textarea {
+#content input, #content textarea{
 	clear: both;
 	font-size: 12px;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
@@ -796,6 +796,10 @@ p.norecords{
 	font-size: 12px;
 	vertical-align: text-bottom;
 }
+#content input[type=file] {
+	width: 50%;
+}
+
 #content select[multiple=multiple] {
 	width: 100%;
 }
@@ -1079,7 +1083,43 @@ table td.fcktxt h1{
 	float: none;
 }
 
-fieldset.fieldsUploads div.cloneHolder{
-	padding: 0;
+#content .fieldsUploads div.input, #content  .fieldsUploads div.cloneHolder{
+	padding-left: 0;
+	margin-left: 0;
 }
 
+fieldset.fieldsUploads{
+	padding-bottom: 0px !important;
+}
+
+div#content form div.fieldsetUploads{
+	background: #fff;
+	margin-bottom: 20px;
+	padding: 10px;
+}
+
+#content a.cloneLink{
+	display: block;
+	float: left;
+	padding: 0px 10px 0px 45px;
+	height: 40px;
+	line-height: 40px;
+	background-position: left center;
+	background-repeat: no-repeat;
+	margin-bottom: 12px;
+	color: #444;
+	font-weight: bold;
+}
+
+a.cloneLink_Image{
+	background-image: url(ico/32x32/insert-image.png);
+}
+
+a.cloneLink_File{
+	background-image: url(ico/32x32/insert-file.png);
+}
+
+#content a.cloneLink:hover{
+	background-color: #268AFC;
+	color: #fff;
+}
