@@ -138,7 +138,7 @@ foreach ($uploads as $upload) :
 				<?php if (!$uploadCat['index']) : ?>
 				<div id="cloneHoder<?php echo $i ?>" class="cloneHolder"></div>
 				<a href="#" class="cloneLink cloneLink_<?php echo $upload ?>" id="clone_<?php echo $i ?>"><?php
-				($upload == 'Image')? __d('brwonie', 'Add Image') : __d('brwonie', 'Add File')
+				($upload == 'Image')? __d('brownie', 'Add Image') : __d('brownie', 'Add File')
 				?></a>
 				<?php endif ?>
 			</fieldset>
