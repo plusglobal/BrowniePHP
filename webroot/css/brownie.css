@@ -797,7 +797,7 @@ p.norecords{
 	vertical-align: text-bottom;
 }
 #content input[type=file] {
-	width: 50%;
+	display: block;
 }
 
 #content select[multiple=multiple] {
