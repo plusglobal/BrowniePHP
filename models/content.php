@@ -162,7 +162,7 @@ class Content extends BrownieAppModel{
 		if ($this->isTree($Model)) {
 			$data = $this->treeBeforeSave($data, $Model);
 		}
-		return $data;
+		return $this->convertUploadsArray($data);
 	}
 
 
@@ -338,7 +338,7 @@ class Content extends BrownieAppModel{
 	}
 
 
-	function convertToCakeArray($data) {
+	function convertUploadsArray($data) {
 		foreach (array('BrwImage', 'BrwFile') as $upload) {
 			if (!empty($data[$upload]['model'])) {
 				$retData = array();
@@ -350,6 +350,11 @@ class Content extends BrownieAppModel{
 					}
 				}
 				$data[$upload] = $retData[$upload];
+			}
+			foreach ($data[$upload] as $key => $value) {
+				if (empty($value['file']) or (!empty($value['file']['error']))) {
+					unset($data[$upload][$key]);
+				}
 			}
 		}
 		return $data;

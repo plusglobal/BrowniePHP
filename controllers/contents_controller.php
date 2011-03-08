@@ -250,13 +250,8 @@ class ContentsController extends BrownieAppController {
 			if (!empty($this->data[$this->Model->alias]['id']) and $this->data[$this->Model->alias]['id'] != $id) {
 				$this->cakeError('error404');
 			}
-
-			$this->data = $this->Content->convertToCakeArray($this->data);
-			//pr($this->data);
-
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model);
-
 			$fieldList = array_merge(array_keys($fields), array('name', 'model', 'category_code', 'description', 'record_id'));
 			if (Configure::read('multiSitesModel')) {
 				$fieldList[] = 'site_id';

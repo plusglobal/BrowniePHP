@@ -7,7 +7,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	var $excluded_extensions = array('php');
 
 	function setup($Model, $config = array()) {
-		$this->max_upload_size = 5 * 1024 * 1024;
+		$this->max_upload_size = 50 * 1024 * 1024;
 	}
 
 
@@ -51,7 +51,9 @@ class BrwUploadBehavior extends ModelBehavior {
 			}
 			$Model->data[$Model->alias]['name'] = $this->_cleanFileName($Model->data[$Model->alias]['name']);
 		}
+
 	}
+
 
 	function beforeSave($Model) {
 		$updating = !empty($Model->data[$Model->alias]['id']);
