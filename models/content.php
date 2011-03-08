@@ -350,10 +350,10 @@ class Content extends BrownieAppModel{
 					}
 				}
 				$data[$upload] = $retData[$upload];
-			}
-			foreach ($data[$upload] as $key => $value) {
-				if (empty($value['file']) or (!empty($value['file']['error']))) {
-					unset($data[$upload][$key]);
+				foreach ($data[$upload] as $key => $value) {
+					if (empty($value['file']) or (!empty($value['file']['error']))) {
+						unset($data[$upload][$key]);
+					}
 				}
 			}
 		}
