@@ -301,6 +301,8 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
+		$this->Model->brwConfig['fields']['no_sanitize_html'] = array_keys($this->Model->_schema);
+
 		$contain = $related = array();
 		if (!empty($this->Model->belongsTo)) {
 			foreach($this->Model->belongsTo as $key_model => $related_model) {
