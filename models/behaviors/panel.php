@@ -127,7 +127,9 @@ class PanelBehavior extends ModelBehavior {
 		if ($Model->name != 'BrwFile') {
 			$results = $this->_addFilePaths($results, $Model);
 		}
-		$results = $this->sanitizeHtml($Model, $results);
+		if (!in_array($Model->alias, array('BrwFile', 'BrwImage'))) {
+			$results = $this->sanitizeHtml($Model, $results);
+		}
 
 		return $results;
 	}
@@ -408,6 +410,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function _addBrwImagePaths($r, $Model) {
+		App::import('Brownie.BrwSanitize');
 		$ret = array();
 		foreach ($Model->brwConfig['images'] as $catCode => $value) {
 			$ret[$catCode] = array();
@@ -435,6 +438,7 @@ class PanelBehavior extends ModelBehavior {
 							'action' => 'view', $value['model'], $value['record_id'], $size, $value['name']));
 					}
 				}
+				$value['description'] = BrwSanitize::html($value['description']);
 				$value['alt'] = $value['description'];
 				if (empty($value['description'])) {
 					$value['alt'] = $value['name'];
@@ -466,6 +470,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function _addBrwFilePaths($r, $Model) {
+		App::import('Brownie.BrwSanitize');
 		$ret = array();
 		foreach ($Model->brwConfig['files'] as $catCode => $value) {
 			$ret[$catCode] = array();
@@ -477,10 +482,11 @@ class PanelBehavior extends ModelBehavior {
 			if (empty($value['description'])) {
 				$value['description'] = $r[$key]['description'] = $value['name'];
 			}
+			$value['description'] = BrwSanitize::html($value['description']);
 
 			$relativePath = 'uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name'];
 			$completePath = Router::url('/' . $relativePath);
-			$extension = end(explode(".", $value['name']));
+			$extension = end(explode('.', $value['name']));
 			$forceDownloadUrl = Router::url(array(
 				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
 				$Model->alias, $value['record_id'], $value['name']
