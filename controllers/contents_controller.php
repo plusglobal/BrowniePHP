@@ -366,7 +366,8 @@ class ContentsController extends BrownieAppController {
 
 
 	function delete($model, $id) {
-		if (!$this->Model->read(null, $id)) {
+		$record = $this->Model->findById($id);
+		if (!$record) {
 			$this->cakeError('error404');
 		}
 
@@ -376,11 +377,39 @@ class ContentsController extends BrownieAppController {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete', true), 'flash_error');
 		}
 
-		if (env('HTTP_REFERER')) {
-			$this->redirect(env('HTTP_REFERER'));
-		} else {
-			$this->redirect(array('action'=>'index'));
+		$afterDelete = empty($this->params['named']['after_delete'])? null : $this->params['named']['after_delete'];
+
+		if ($afterDelete == 'parent') {
+			$parentModel = $this->Model->brwConfig['parent'];
+			if (!$parentModel) {
+				$afterDelete = 'index';
+			} else {
+				$foreignKey = $this->Model->belongsTo[$parentModel]['foreignKey'];
+				$redirect = array(
+					'plugin' => 'brownie', 'controller' => 'contents',
+					'action' => 'view', $parentModel, $record[$model][$foreignKey]
+				);
+			}
 		}
+
+		if ($afterDelete == 'index') {
+			$redirect = array(
+				'plugin' => 'brownie', 'controller' => 'contents',
+				'action' => 'index', $model
+			);
+		}
+
+		if (!$afterDelete) {
+			$referer = env('HTTP_REFERER');
+			if ($referer) {
+				$redirect = $referer;
+			} else {
+				$redirect = array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index');
+			}
+		}
+
+		$this->redirect($redirect);
+
 	}
 
 	/*
