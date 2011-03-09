@@ -355,6 +355,9 @@ class Content extends BrownieAppModel{
 						unset($data[$upload][$key]);
 					}
 				}
+				if (empty($data[$upload])) {
+					unset($data[$upload]);
+				}
 			}
 		}
 		return $data;
