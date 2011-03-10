@@ -33,6 +33,7 @@ class PanelBehavior extends ModelBehavior {
 			'conditional' => array(),
 			'code' => array(),
 			'no_sanitize_html' => array(),
+			'names' => array(),
 		),
 
 		'fields_no_root' => array(),
@@ -226,6 +227,7 @@ class PanelBehavior extends ModelBehavior {
 		$this->_conditionalConfig($Model);
 		$this->_sanitizeConfig($Model);
 		$this->_customActionsConfig($Model);
+		$this->_fieldsNames($Model);
 	}
 
 
@@ -598,5 +600,16 @@ class PanelBehavior extends ModelBehavior {
 		}
 		$Model->brwConfig['custom_actions'] = $customActions;
 	}
+
+
+	function _fieldsNames($Model) {
+		$defaultNames = array();
+		foreach ((array)$Model->_schema as $field => $value) {
+			$defaultNames[$field] = Inflector::humanize(str_replace('_id', '', $field));
+		}
+		//pr($names);
+		$Model->brwConfig['fields']['names'] = Set::merge($defaultNames, $Model->brwConfig['fields']['names']);
+	}
+
 
 }

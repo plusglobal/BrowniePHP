@@ -42,7 +42,11 @@ if ($records):
 				if (!empty($schema[$field_name])) {
 					echo '
 					<th class="' . $field_name . ' ' . $schema[$field_name]['class']
-					. '">' . $paginator->sort($field_name, null, array('model' => $model, 'escape' => false)) . '</th>';
+					. '">' . $paginator->sort(
+						__($brwConfig['fields']['names'][$field_name], true),
+						$field_name,
+						array('model' => $model, 'escape' => false)
+					) . '</th>';
 				}
 			}
 			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
@@ -63,7 +67,9 @@ if ($records):
 		foreach($record[$model] as $field_name => $field_value) {
 			if (!empty($schema[$field_name])) {
 				echo '
-				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
+				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">'
+					. ife(!empty($field_value), $field_value, '&nbsp;')
+				. '</td>';
 			}
 		}
 

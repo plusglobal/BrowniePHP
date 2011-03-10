@@ -72,7 +72,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 			}
 
 			$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
-			//pr($params);
+			$params['label'] = __($brwConfig['fields']['names'][$key], true);
 			echo $form->input($model . '.' . $key, $params);
 			if (in_array($key, $fckFields)) {
 				echo $fck->load($model . '.' . Inflector::camelize($key), 'Brownie');

@@ -35,7 +35,7 @@
 			$class = ife(($i++ % 2 != 0), 'altrow', '');
 			echo '
 			<tr class="'.$class.'">
-				<td class="label">' . __(Inflector::humanize(str_replace('_id', '', $field_name)), true) . '</td>
+				<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>
 				<td class="fcktxt">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>
 			</tr>';
 		}
