@@ -367,10 +367,10 @@ class Content extends BrownieAppModel{
 	function findList($Model, $relationData) {
 		$parent = $Model->brwConfig['parent'];
 		$displayField = $Model->displayField;
-		$parentDisplayField = $Model->{$parent}->displayField;
 		if (!$parent) {
 			return $Model->find('list', $relationData);
 		} else {
+			$parentDisplayField = $Model->{$parent}->displayField;
 			$ret = array();
 			$data = $Model->{$parent}->find('all', array('contain' => $Model->name));
 			foreach ($data as $parentModel => $entry) {
