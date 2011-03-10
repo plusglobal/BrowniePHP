@@ -311,7 +311,7 @@ class ContentsController extends BrownieAppController {
 					if ($this->Content->isTree($AssocModel)){
 						$relatedData = $AssocModel->generatetreelist();
 					} else {
-						$relatedData = $AssocModel->find('list', $related_model);
+						$relatedData = $this->Content->findList($AssocModel, $related_model);
 					}
 					$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
 				}
