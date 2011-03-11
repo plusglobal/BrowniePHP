@@ -29,7 +29,7 @@ Follow the [setup instructions](http://codaset.com/plusglobal/browniephp/wiki/Se
 
 The documentation is under development and unfortunately we cannot predict when it is going to see the light. In the meantime, you can [grab the demo app](http://codaset.com/plusglobal/browniephp-demo-app) that will give you a pretty good idea of how to use it.
 
-You can ask a question at [stackoverflow](http://stackoverflow.com/) and [CakePHP Questions](http://ask.cakephp.org). Be sure to tag your question with 'browniephp'. We will try to answer you as soon as possible.
+You can ask a question at [twitter](http://twitter.com/#!/search?q=%23BrowniePHP), [stackoverflow](http://stackoverflow.com/questions/tagged/browniephp) and [CakePHP Questions](http://ask.cakephp.org/questions/tagged/brownie). Be sure to tag your question with 'browniephp' so we can find it. We will try to answer you as soon as possible.
 
 ## How can I contribute to BrowniePHP?
 
