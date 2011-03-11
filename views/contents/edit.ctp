@@ -73,7 +73,11 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 
 			$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
 			$params['label'] = __($brwConfig['fields']['names'][$key], true);
-			echo $form->input($model . '.' . $key, $params);
+			if (!in_array($key, $translatableFields)) {
+				echo $form->input($model . '.' . $key, $params);
+			} else {
+				echo $this->element('i18n_input', array('model' => $model, 'field' => $key, 'params' => $params));
+			}
 			if (in_array($key, $fckFields)) {
 				echo $fck->load($model . '.' . Inflector::camelize($key), 'Brownie');
 			}

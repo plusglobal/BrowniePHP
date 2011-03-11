@@ -259,6 +259,8 @@ class ContentsController extends BrownieAppController {
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}
+			$this->Model->locale = null;
+			pr($this->data);
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
 					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brwConfig['names']['singular']):
@@ -361,6 +363,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->set('fields', $fields);
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
+		$this->_setTranslationsParams($this->Model);
 		$this->_setAfterSaveOptionsParams($this->Model);
 	}
 
@@ -695,6 +698,20 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 		return $filter;
+	}
+
+
+	function _setTranslationsParams($Model) {
+		$langs3chars = $translatableFields = array();
+		if (in_array('Translate', $Model->Behaviors->_attached)) {
+			$translatableFields = $Model->Behaviors->Translate->settings[$Model->alias];
+			$l10n = new L10n();
+			$map = array_flip($l10n->__l10nMap);
+			foreach ((array)Configure::read('Config.languages') as $lang) {
+				$langs3chars[$lang] = $map[$lang];
+			}
+		}
+		$this->set(array('translatableFields' => $translatableFields, 'langs3chars' => $langs3chars));
 	}
 
 
