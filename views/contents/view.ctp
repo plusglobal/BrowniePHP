@@ -32,12 +32,17 @@
 	$i=0;
 	foreach ($record[$model] as $field_name => $field_value) {
 		if (!empty($schema[$field_name])) {
-			$class = ife(($i++ % 2 != 0), 'altrow', '');
-			echo '
-			<tr class="'.$class.'">
-				<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>
-				<td class="fcktxt">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>
-			</tr>';
+				echo '
+				<tr>
+					<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>
+					<td class="fcktxt">';
+					if (in_array($field_name, $i18nFields)) {
+						echo $this->element('i18n_view_field', array('data' => $record['BrwI18n_' . $field_name]));
+					} else {
+						echo ife(!empty($field_value), $field_value, '&nbsp;');
+					}
+					echo '</td>
+				</tr>';
 		}
 	}
 	?>

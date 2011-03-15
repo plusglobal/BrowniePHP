@@ -55,14 +55,14 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 				}
 			}
 
-			if (strstr($value['type'], 'enum(')) {
+			/*if (strstr($value['type'], 'enum(')) {
 				$options = enum2array($value['type']);
 				$translatedOptions = array();
 				foreach ($options as $field) {
 					$translatedOptions[$field] = __($field, true);
 				}
 				$params = array('type' => 'select', 'options' => $translatedOptions);
-			}
+			}*/
 			if (!empty($brwConfig['legends'][$key])) {
 				$params['after'] = $brwConfig['legends'][$key];
 			}
@@ -73,7 +73,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 
 			$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
 			$params['label'] = __($brwConfig['fields']['names'][$key], true);
-			if (!in_array($key, $translatableFields)) {
+			if (!in_array($key, $i18nFields)) {
 				echo $form->input($model . '.' . $key, $params);
 			} else {
 				echo $this->element('i18n_input', array('model' => $model, 'field' => $key, 'params' => $params));

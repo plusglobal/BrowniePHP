@@ -382,5 +382,80 @@ class Content extends BrownieAppModel{
 		}
 	}
 
+	function neighborsForView($Model, $record, $restricted) {
+		$isTanslatable = $Model->Behaviors->enabled('Translate');
+		if ($isTanslatable) {
+			$Model->Behaviors->disable('Translate');
+		}
+
+		$neighbors = array();
+		if (!$restricted) {
+			if (is_array($Model->order)) {
+				list($keyOrder) = each($Model->order);
+				$keyOrder = str_replace($Model->alias . '.', '', $keyOrder);
+				$neighbors = $Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$Model->alias][$keyOrder]));
+				if (
+					!empty($Model->brwConfig['sortable']['direction'])
+					and $Model->brwConfig['sortable']['direction'] == 'desc'
+				) {
+					$tmp = $neighbors['prev'];
+					$neighbors['prev'] = $neighbors['next'];
+					$neighbors['next'] = $tmp;
+				}
+			} else {
+				$neighbors = $Model->find('neighbors', array('field' => 'id', 'value' => $record[$Model->alias]['id']));
+			}
+		}
+
+		if ($isTanslatable) {
+			$Model->Behaviors->enable('Translate');
+		}
+
+		return $neighbors;
+	}
+
+
+	function i18nInit($Model) {
+		if ($Model->Behaviors->attached('Translate')) {
+			$i18nSettings = $Model->Behaviors->Translate->settings[$Model->alias];
+			$settings = array();
+			foreach ($i18nSettings as $key => $value) {
+				$field = is_string($key)? $key : $value;
+				$settings[$field] = 'BrwI18n_' . $field;
+			}
+			$Model->Behaviors->detach('Translate');
+			$Model->Behaviors->attach('Translate', $settings);
+		}
+	}
+
+
+	function addI18nValues($record, $Model) {
+		if ($Model->Behaviors->attached('Translate')) {
+			$translated = $Model->find('first', array(
+				'conditions' => array($Model->alias . '.id' => $record[$Model->alias]['id']),
+				'contain' => array_values($Model->Behaviors->Translate->settings[$Model->alias]),
+			));
+			unset($translated[$Model->alias]);
+			$record = array_merge($record, $translated);
+		}
+		return $record;
+	}
+
+
+	function i18nForEdit($data, $Model) {
+		if ($Model->Behaviors->attached('Translate')) {
+			$dataWithTranslations = $this->addI18nValues($data, $Model);
+			$settings = $Model->Behaviors->Translate->settings[$Model->alias];
+			foreach ($settings as $field => $i18nModelName) {
+				$dataWithTranslations[$Model->alias][$field] = array();
+				foreach($dataWithTranslations[$i18nModelName] as $value) {
+					$dataWithTranslations[$Model->alias][$field][$value['locale']] = $value['content'];
+				}
+				unset($dataWithTranslations[$i18nModelName]);
+			}
+			$data = array_merge($data, $dataWithTranslations);
+		}
+		return $data;
+	}
 
 }
