@@ -550,7 +550,7 @@ class ContentsController extends BrownieAppController {
 		if (!empty($data[$Model->name])) {
 			$out = $this->_formatSingleForView($data, $Model);
 		} else {
-			if ($this->Model->Behaviors->attached('Tree')) {
+			if ($Model->Behaviors->attached('Tree')) {
 				$data = $this->_formatTree($data, $Model);
 			}
 			foreach ($data as $dataset) {
