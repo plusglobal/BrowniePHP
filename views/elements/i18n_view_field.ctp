@@ -1,8 +1,13 @@
 <table>
 	<?php foreach ($data as $value): ?>
 	<tr>
-		<td width="1"><strong><?php echo $value['locale'] ?></strong></td>
-		<td><?php echo $value['content'] ?></td>
+		<td class="locale_<?php echo $value['locale'] ?>"><strong><?php
+		switch ($value['locale']) {
+			case 'eng': __d('brownie', 'English'); break;
+			case 'spa': __d('brownie', 'Spanish'); break;
+		}
+		?></strong></td>
+		<td class="fcktxt"><?php echo $value['content'] ?></td>
 	</tr>
 	<?php endforeach ?>
 </table>

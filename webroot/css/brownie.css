@@ -1123,3 +1123,23 @@ a.cloneLink_File{
 	background-color: #268AFC;
 	color: #fff;
 }
+
+table tr td.multiLang{
+	padding: 0;
+	border-collapse: collapse;
+	/*border-right: 0;
+	border-bottom: 0;*/
+}
+
+table tr td.multiLang table{
+	margin: -1px;
+}
+
+table tr td.multiLang table{
+	border-right: none;
+}
+
+td.multiLang td.fcktxt{
+	width: 100%;
+	border-right: none;
+}
