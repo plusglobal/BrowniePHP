@@ -97,7 +97,7 @@ class Content extends BrownieAppModel{
 			}
 
 			if ($value['type'] == 'integer' or $value['type'] == 'float') {
-				if ( !($this->isTree($Model) and $key =='parent_id') ) {
+				if ( !($Model->Behaviors->attached('Tree') and $key =='parent_id') ) {
 					$rules[$key][] = array(
 						'rule' => 'numeric',
 						'allowEmpty' => $allowEmpty,
@@ -145,9 +145,9 @@ class Content extends BrownieAppModel{
 
 
 
-	function isTree($Model) {
+	/*function isTree($Model) {
 		return in_array('tree', array_map('strtolower', $Model->Behaviors->_attached));
-	}
+	}*/
 
 
 	function brownieBeforeSave($data, $Model) {
@@ -159,7 +159,7 @@ class Content extends BrownieAppModel{
 				$data[$Model->name][$field] = null;
 			}
 		}
-		if ($this->isTree($Model)) {
+		if ($Model->Behaviors->attached('Tree')) {
 			$data = $this->treeBeforeSave($data, $Model);
 		}
 		return $this->convertUploadsArray($data);
@@ -207,7 +207,7 @@ class Content extends BrownieAppModel{
 
 
 	function delete($Model, $id) {
-		if ($this->isTree($Model)) {
+		if ($Model->Behaviors->attached('Tree')) {
 			$deleted = $Model->removeFromTree($id, true);
 		} else {
 			$deleted = $Model->delete($id);
@@ -226,7 +226,7 @@ class Content extends BrownieAppModel{
 	}
 
 	function reorder($Model, $direction, $id) {
-		if ($this->isTree($Model)) {
+		if ($Model->Behaviors->attached('Tree')) {
 			return ($direction == 'down') ? $Model->moveDown($id, 1) : $Model->moveUp($id, 1);
 		}
 

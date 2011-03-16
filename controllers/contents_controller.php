@@ -76,7 +76,7 @@ class ContentsController extends BrownieAppController {
 		}
 
 		$this->paginate = $this->Model->brwConfig['paginate'];
-		if ($this->Content->isTree($this->Model)) {
+		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
@@ -299,7 +299,7 @@ class ContentsController extends BrownieAppController {
 			foreach ($this->Model->belongsTo as $key_model => $related_model) {
 				$AssocModel = $this->Model->$key_model;
 				if (!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
-					if ($this->Content->isTree($AssocModel)) {
+					if ($AssocModel->Behaviors->attached('Tree')) {
 						$relatedData = $AssocModel->generatetreelist();
 					} else {
 						$relatedData = $this->Content->findList($AssocModel, $related_model);
@@ -525,7 +525,7 @@ class ContentsController extends BrownieAppController {
 	function reorder($model, $direction, $id) {
 		if (
 			!in_array($direction, array('up', 'down'))
-			and !$this->Content->isTree($this->Model)
+			and !$this->Model->Bheaviors->attached('Tree')
 			and empty($this->Model->brwConfig['sortable'])
 		) {
 			$this->CakeError('error404');
@@ -550,7 +550,7 @@ class ContentsController extends BrownieAppController {
 		if (!empty($data[$Model->name])) {
 			$out = $this->_formatSingleForView($data, $Model);
 		} else {
-			if ($this->Content->isTree($Model)) {
+			if ($this->Model->Behaviors->attached('Tree')) {
 				$data = $this->_formatTree($data, $Model);
 			}
 			foreach ($data as $dataset) {
