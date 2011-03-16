@@ -155,10 +155,7 @@ class PanelBehavior extends ModelBehavior {
 			and !in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))
 		) {
 			$data = $Model->data;
-			$Model->save(
-				array('id' => $Model->id, $Model->brwConfig['sortable']['field'] => $Model->id),
-				array('callbacks' => false)
-			);
+			$Model->saveField($Model->brwConfig['sortable']['field'], $Model->id);
 			$Model->data = $data;
 		}
 	}

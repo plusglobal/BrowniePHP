@@ -230,6 +230,11 @@ class Content extends BrownieAppModel{
 			return ($direction == 'down') ? $Model->moveDown($id, 1) : $Model->moveUp($id, 1);
 		}
 
+		$isTanslatable = $Model->Behaviors->enabled('Translate');
+		if ($isTanslatable) {
+			$Model->Behaviors->disable('Translate');
+		}
+
 		$sortField = $Model->brwConfig['sortable']['field'];
 		$record = $Model->findById($id);
 		$params = array('field' => $sortField, 'value' => $record[$Model->alias][$sortField]);
@@ -251,6 +256,11 @@ class Content extends BrownieAppModel{
 		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => null));
 		$saved2 = $Model->save(array('id' => $swap[$Model->alias]['id'], $sortField => $record[$Model->alias][$sortField]));
 		$saved3 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => $swap[$Model->alias][$sortField]));
+
+		if ($isTanslatable) {
+			$Model->Behaviors->enable('Translate');
+		}
+
 		return ($saved1 and $saved2 and $saved3);
 	}
 
