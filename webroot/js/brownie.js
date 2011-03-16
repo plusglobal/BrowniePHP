@@ -24,6 +24,7 @@ $(document).ready(function(){
 		$(this).fadeOut();
 	})
 	toclone();
+	bindRichEditor();
 });
 
 function toclone() {
@@ -46,3 +47,16 @@ function bindRemove() {
 	});
 }
 
+
+function bindRichEditor() {
+	$('.richEditor').each(function(){
+		var id = $(this).attr('id');
+		fckLoader_ProductDescription = function () {
+			var bFCKeditor_ProductDescription = new FCKeditor(id);
+			bFCKeditor_ProductDescription.BasePath = APP_BASE + "js/fckeditor/";
+			bFCKeditor_ProductDescription.ToolbarSet = "Brownie";
+			bFCKeditor_ProductDescription.ReplaceTextarea();
+		}
+		fckLoader_ProductDescription();
+	})
+}
