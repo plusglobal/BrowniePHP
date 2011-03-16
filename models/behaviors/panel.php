@@ -164,7 +164,7 @@ class PanelBehavior extends ModelBehavior {
 		$toNullModels = array();
 		$assoc = array_merge($Model->hasMany, $Model->hasOne);
 		foreach($assoc as $related) {
-			if ($related['className'] != 'BrwImage' and  $related['className'] != 'BrwFile') {
+			if (!in_array($related['className'], array('BrwImage', 'BrwFile', 'I18nModel'))) {
 				if (!$related['dependent']) {
 					if($rel = ClassRegistry::getObject($related['className'])) {
 						if ($rel->_schema[$related['foreignKey']]['null']) {
