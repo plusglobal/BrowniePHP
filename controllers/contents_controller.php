@@ -246,10 +246,10 @@ class ContentsController extends BrownieAppController {
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}
-			if (empty($this->data[$this->Model->alias]['id'])) {
+			/*if (empty($this->data[$this->Model->alias]['id'])) {
 				$this->Model->create();
 				$this->Model->data = $this->data[$this->Model->alias];
-			}
+			}*/
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
 					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brwConfig['names']['singular']):
