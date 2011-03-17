@@ -38,7 +38,7 @@ if ($records):
 		if ($i == 0) {
 			echo '
 			<tr>';
-			foreach($record[$model] as $field_name => $field_value) {
+			foreach($brwConfig['paginate']['fields'] as $field_name) {
 				if (!empty($schema[$field_name])) {
 					echo '
 					<th class="' . $field_name . ' ' . $schema[$field_name]['class']
@@ -53,9 +53,7 @@ if ($records):
 				echo '<th class="actions">' . __d('brownie', 'Sort', true) . '</th>';
 			}
 			echo '
-			<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
-			reset($record[$model]);
-			echo '
+				<th class="actions">' . __d('brownie', 'Actions', true) . '</th>
 			</tr>';
 		}
 
@@ -64,11 +62,11 @@ if ($records):
 		echo '
 		<tr class="'.$class.' list">';
 
-		foreach($record[$model] as $field_name => $field_value) {
+		foreach($brwConfig['paginate']['fields'] as $field_name) {
 			if (!empty($schema[$field_name])) {
 				echo '
 				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">'
-					. ife(!empty($field_value), $field_value, '&nbsp;')
+					. ( !empty($record[$model][$field_name]) ? $record[$model][$field_name] : '&nbsp;' )
 				. '</td>';
 			}
 		}

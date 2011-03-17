@@ -253,7 +253,10 @@ class PanelBehavior extends ModelBehavior {
 			$fields = array();
 			$i = 0;
 			$schema = (array)$Model->_schema;
-			$blacklist = array('lft', 'rght', 'parent_id', 'created', 'modified');
+			$blacklist = array_merge(
+				array('lft', 'rght', 'parent_id', 'created', 'modified'),
+				$Model->brwConfig['fields']['hide']
+			);
 			foreach ($schema as $key => $values) {
 				if (in_array($values['type'], $listableTypes) and !in_array($key, $blacklist)) {
 					$fields[] = $key;
