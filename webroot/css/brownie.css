@@ -608,6 +608,7 @@ div.view td.label{
 	background: #444;
 	color: #fff;
 	font-weight: bold;
+	text-align: right;
 }
 
 .fcktxt ul, .fcktxt ol, .fcktxt p, .fcktxt table{
@@ -786,9 +787,9 @@ p.norecords{
 }
 #content input, #content textarea{
 	clear: both;
-	font-size: 12px;
+	font-size: 13px;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-	padding: 2px;
+	padding: 3px;
 	width: 100%;
 }
 #content select {
@@ -1142,4 +1143,14 @@ table tr td.multiLang table{
 td.multiLang td.fcktxt{
 	width: 100%;
 	border-right: none;
+}
+
+td.multiLang td.locale{
+	background-color: #f4f4f4;
+	text-align: right;
+	font-weight: bold;
+}
+
+span.lang{
+	color: #676767;
 }

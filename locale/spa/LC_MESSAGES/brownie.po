@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-03-16 18:35-0300\n"
-"PO-Revision-Date: 2011-03-16 18:36-0300\n"
+"POT-Creation-Date: 2011-03-17 16:55-0300\n"
+"PO-Revision-Date: 2011-03-17 16:56-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -398,10 +398,12 @@ msgid "Are you sure you want to delete this file?"
 msgstr "¿Confirma que desea eliminar este archivo?"
 
 #: \views\elements\i18n_view_field.ctp:6
+#: \views\helpers\i18n.php:7
 msgid "English"
 msgstr "Inglés"
 
 #: \views\elements\i18n_view_field.ctp:7
+#: \views\helpers\i18n.php:8
 msgid "Spanish"
 msgstr "Español"
 
@@ -528,6 +530,10 @@ msgstr "Agregar usuario"
 #: \views\elements\translations.ctp:25
 msgid "Root"
 msgstr "Permisos totales"
+
+#: \views\helpers\i18n.php:9
+msgid "Italian"
+msgstr "Italiano"
 
 #: \views\layouts\brownie_default.ctp:23
 msgid "User: %s"

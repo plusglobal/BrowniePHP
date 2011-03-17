@@ -3,7 +3,7 @@
 class ContentsController extends BrownieAppController {
 
 	var $name = 'Contents';
-	var $helpers = array('Brownie.Fck');
+	var $helpers = array('Brownie.i18n');
 	var $Model;
 	var $uses = array('Brownie.Content');
 
