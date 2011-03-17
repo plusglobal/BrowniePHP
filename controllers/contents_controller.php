@@ -123,20 +123,10 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		$contain = array();
-
-		if ($this->Model->brwConfig['images']) {
-			$contain['BrwImage'] = array('order' => 'BrwImage.id desc');
-		}
-
-		if ($this->Model->brwConfig['files']) {
-			$contain['BrwFile'] = array('order' => 'BrwFile.id asc');
-		}
-
 		$this->Model->Behaviors->attach('Containable');
 		$record = $this->Model->find('all', array(
 			'conditions' => array($this->Model->name . '.id' => $id),
-			'contain' => $contain
+			'contain' => $this->Content->relatedModelsForView($this->Model)
 		));
 
 		if (empty($record)) {
@@ -186,6 +176,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
+		$record = $this->Content->formatHABTMforView($record, $this->Model);
 		$record = $this->_formatForView($record, $this->Model);
 		$record = $this->Content->addI18nValues($record, $this->Model);
 		$this->set('record', $record);

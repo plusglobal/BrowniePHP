@@ -468,4 +468,37 @@ class Content extends BrownieAppModel{
 		return $data;
 	}
 
+
+	function relatedModelsForView($Model) {
+		$contain = array_keys($Model->hasAndBelongsToMany);
+
+		if ($Model->brwConfig['images']) {
+			$contain['BrwImage'] = array('order' => 'BrwImage.id desc');
+		}
+		if ($Model->brwConfig['files']) {
+			$contain['BrwFile'] = array('order' => 'BrwFile.id asc');
+		}
+
+		return $contain;
+	}
+
+
+	function formatHABTMforView($record, $Model) {
+		$record['HABTM'] = array();
+		$i = 0;
+		foreach ($Model->hasAndBelongsToMany as $relModel => $settings) {
+			$record['HABTM'][$i] = array(
+				'model' => $relModel,
+				'name' => $Model->{$relModel}->brwConfig['names']['plural'],
+				'data' => array(),
+			);
+			foreach ($record[$relModel] as $value) {
+				$record['HABTM'][$i]['data'][$value['id']] = $value[$Model->{$relModel}->displayField];
+			}
+			unset($record[$relModel]);
+			$i++;
+		}
+		return $record;
+	}
+
 }

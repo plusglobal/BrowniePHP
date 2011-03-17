@@ -47,7 +47,19 @@
 		}
 	}
 	?>
-
+	<?php foreach ($record['HABTM'] as $rel) : ?>
+	<tr>
+		<td class="label"><?php echo $rel['name'] ?></td>
+		<td class="habtm">
+			<ul>
+			<?php foreach ($rel['data'] as $id => $name) : ?>
+				<li><?php echo $html->link($name, array('plugin' => 'brownie',
+				'controller' => 'contents', 'action' => 'view', $rel['model'], $id)) ?></li>
+			<?php endforeach ?>
+			</ul>
+		</td>
+	</tr>
+	<?php endforeach ?>
 	</table>
 </div>
 

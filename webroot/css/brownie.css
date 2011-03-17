@@ -609,6 +609,7 @@ div.view td.label{
 	color: #fff;
 	font-weight: bold;
 	text-align: right;
+	vertical-align: top;
 }
 
 .fcktxt ul, .fcktxt ol, .fcktxt p, .fcktxt table{
@@ -1153,4 +1154,33 @@ td.multiLang td.locale{
 
 span.lang{
 	color: #676767;
+}
+
+table tr td.habtm{
+	padding: 2px;
+	margin: 0;
+}
+
+td.habtm ul{
+	margin: 0;
+	padding: 0;
+}
+
+td.habtm li{
+	float: left;
+}
+
+td.habtm li a{
+	margin: 4px;
+	padding: 3px 7px 3px 7px;
+	display: block;
+	color: #444;
+	-moz-border-radius: 4px;
+	background: #ccc;
+}
+
+td.habtm li a:hover{
+	color: #fff;
+	background-color: #666;
+	text-decoration: none;
 }
