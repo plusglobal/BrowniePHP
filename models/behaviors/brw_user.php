@@ -4,42 +4,9 @@ class BrwUserBehavior extends ModelBehavior {
 
 	function setup($Model, $config = array()) {
 		$Model->displayField = 'email';
-		$Model->brwConfig = $this-> _brwConfig($Model);
 		$Model->validate = $this->_validate($Model);
 	}
 
-	function _brwConfig($Model) {
-		$defaultBrwConfig = array(
-			'fields' => array(
-				'no_edit' => array('last_login'),
-				'no_add' => array('last_login'),
-				'no_view' => array('password'),
-				'virtual' => array('repeat_password' => array('after' => 'password')),
-				'hide' => array('last_login'),
-			),
-			'names' => array(
-				'section' => __d('brownie', 'User', true),
-				'singular' => __d('brownie', 'User', true),
-				'plural' => __d('brownie', 'Users', true),
-			),
-			'paginate' => array(
-				'fields' => array('id', 'email', 'root'),
-			),
-			'legends' => array(
-				'password' => __d('brownie', 'Leave blank for no change', true),
-			),
-		);
-		pr(Configure::read('multiSitesModel'));
-		if (!Configure::read('multiSitesModel')) {
-			$defaultBrwConfig['fields']['hide'][] = 'root';
-		}
-		if(empty($Model->brwConfig)) {
-			$Model->brwConfig = array();
-		}
-		$config = array_merge($Model->brwConfig, $defaultBrwConfig);
-		pr($config);
-		return $config;
-	}
 
 	function _validate($Model) {
 		$defaultValidate = array(
@@ -71,7 +38,7 @@ class BrwUserBehavior extends ModelBehavior {
 				),
 			)
 		);
-		return Set::merge($defaultValidate, $Model->validate);
+		return Set::merge($defaultValidate, (array)$Model->validate);
 	}
 
 

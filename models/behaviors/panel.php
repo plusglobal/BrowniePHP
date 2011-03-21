@@ -23,6 +23,7 @@ class PanelBehavior extends ModelBehavior {
 		'fields' => array(
 			'no_add' => array(),
 			'no_edit' => array(),
+			'no_view' => array(),
 			'hide' => array('lft', 'rght'),
 			'export' => array(),
 			'no_export' => array(),
@@ -207,10 +208,15 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function brwConfigInit($Model) {
+		$defaults = $this->brwConfigDefault;
 		if (empty($Model->brwConfig)) {
 			$Model->brwConfig = array();
 		}
-		$Model->brwConfig = Set::merge($this->brwConfigDefault, $Model->brwConfig);
+		if ($Model->alias == 'BrwUser') {
+			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
+		}
+
+		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
 
 		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
 			$Model->brwConfig['fields']['hide'][] = 'site_id';
@@ -225,6 +231,7 @@ class PanelBehavior extends ModelBehavior {
 		$this->_sanitizeConfig($Model);
 		$this->_customActionsConfig($Model);
 		$this->_fieldsNames($Model);
+		$this->_removeDuplicates($Model);
 	}
 
 
@@ -249,10 +256,11 @@ class PanelBehavior extends ModelBehavior {
 
 	function _paginateConfig($Model) {
 		if (empty($Model->brwConfig['paginate']['fields'])) {
-			$listableTypes = array('integer', 'float', 'string', 'boolean', 'date', 'datetime', 'time', 'timestamp');
-			$fields = array();
-			$i = 0;
-			$schema = (array)$Model->_schema;
+			$listableTypes = array(
+				'integer', 'float', 'string', 'boolean',
+				'date', 'datetime', 'time', 'timestamp',
+			);
+			$fields = array(); $i = 0; $schema = (array)$Model->_schema;
 			$blacklist = array_merge(
 				array('lft', 'rght', 'parent_id', 'created', 'modified'),
 				$Model->brwConfig['fields']['hide']
@@ -271,6 +279,8 @@ class PanelBehavior extends ModelBehavior {
 			$Model->brwConfig['paginate']['order'] = $Model->order;
 		}
 	}
+
+
 
 	function _parentConfig($Model) {
 		$siteModel = Configure::read('multiSitesModel');
@@ -613,5 +623,47 @@ class PanelBehavior extends ModelBehavior {
 		$Model->brwConfig['fields']['names'] = Set::merge($defaultNames, $Model->brwConfig['fields']['names']);
 	}
 
+
+	function _brwConfigUserDefault($Model, $defaults) {
+		$brwUserDefaults = array(
+			'fields' => array(
+				'no_edit' => array('last_login'),
+				'no_add' => array('last_login'),
+				'no_view' => array('password'),
+				'virtual' => array('repeat_password' => array('after' => 'password')),
+				'hide' => array('last_login'),
+			),
+			'names' => array(
+				'section' => __d('brownie', 'User', true),
+				'singular' => __d('brownie', 'User', true),
+				'plural' => __d('brownie', 'Users', true),
+			),
+			'paginate' => array(
+				'fields' => array('id', 'email'),
+			),
+			'legends' => array(
+				'password' => __d('brownie', 'Leave blank for no change', true),
+			),
+		);
+		if (!Configure::read('multiSitesModel')) {
+			$brwUserDefault['fields']['hide'][] = 'root';
+		}
+		return Set::merge($defaults, $brwUserDefaults);
+	}
+
+
+	function _removeDuplicates($Model) {
+		$brwConfig = $Model->brwConfig;
+
+		$brwConfig['paginate']['fields'] = array_keys(array_flip($brwConfig['paginate']['fields']));
+		$brwConfig['fields']['no_add'] = array_keys(array_flip($brwConfig['fields']['no_add']));
+		$brwConfig['fields']['no_edit'] = array_keys(array_flip($brwConfig['fields']['no_edit']));
+		$brwConfig['fields']['hide'] = array_keys(array_flip($brwConfig['fields']['hide']));
+		$brwConfig['fields']['no_view'] = array_keys(array_flip($brwConfig['fields']['no_view']));
+		$brwConfig['fields']['no_sanitize_html'] = array_keys(array_flip($brwConfig['fields']['no_sanitize_html']));
+		$brwConfig['hide_children'] = array_keys(array_flip($brwConfig['hide_children']));
+
+		$Model->brwConfig = $brwConfig;
+	}
 
 }
