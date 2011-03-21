@@ -337,7 +337,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		if (method_exists($this->Model, 'brwBeforeEdit')) {
+		if (method_exists($this->Model, 'brwBeforeEdit') or !empty($this->Model->Behaviors->__methods['brwBeforeEdit'])) {
 			$this->data = $this->Model->brwBeforeEdit($this->data);
 			$this->set('schema', $this->Content->schemaForView($this->Model));
 		}

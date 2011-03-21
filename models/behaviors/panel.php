@@ -267,7 +267,7 @@ class PanelBehavior extends ModelBehavior {
 			}
 			$Model->brwConfig['paginate']['fields'] = $fields;
 		}
-		if (!empty($Model->order)) {
+		if (empty($Model->brwConfig['paginate']['order']) and !empty($Model->order)) {
 			$Model->brwConfig['paginate']['order'] = $Model->order;
 		}
 	}
@@ -607,7 +607,9 @@ class PanelBehavior extends ModelBehavior {
 		foreach ((array)$Model->_schema as $field => $value) {
 			$defaultNames[$field] = Inflector::humanize(str_replace('_id', '', $field));
 		}
-		//pr($names);
+		foreach ($Model->brwConfig['fields']['virtual'] as $field => $value) {
+			$defaultNames[$field] = Inflector::humanize(str_replace('_id', '', $field));
+		}
 		$Model->brwConfig['fields']['names'] = Set::merge($defaultNames, $Model->brwConfig['fields']['names']);
 	}
 
