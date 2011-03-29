@@ -49,7 +49,34 @@ function bindRemove() {
 
 
 function bindRichEditor() {
-	$('.richEditor').each(function(){
+	bindTinyMCE();
+
+	if (typeof FCKeditor != 'undefined') {
+		bindFckEditor();
+	}
+}
+
+
+function bindTinyMCE() {
+		$('textarea.richEditor').tinymce({
+			script_url : APP_BASE + 'js/tiny_mce/tiny_mce.js',
+			theme: 'advanced',
+			plugins: 'contextmenu,paste,table,inlinepopups',
+			theme_advanced_buttons1 : "bold,italic,underline,strikethrough,link,unlink,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,blockquote,|,undo,redo,|,code,removeformat,forecolor,table",
+			skin : "o2k7",
+			skin_variant : "silver",
+			theme_advanced_buttons2: '',
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_resizing : true,
+			paste_auto_cleanup_on_paste: true,
+			content_css: APP_BASE + 'brownie/css/tinymce.css'
+		});
+}
+
+function bindFckEditor(id) {
+	$('textarea.richEditor').each(function(){
 		var id = $(this).attr('id');
 		fckLoader_ProductDescription = function () {
 			var bFCKeditor_ProductDescription = new FCKeditor(id);
@@ -60,3 +87,4 @@ function bindRichEditor() {
 		fckLoader_ProductDescription();
 	})
 }
+

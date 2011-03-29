@@ -762,12 +762,10 @@ p.norecords{
 	clear: left;
 	margin: 0 20px;
 }
-#content form div {
+#content form div.input {
 	clear: both;
 	padding: .5em;
 	vertical-align: text-top;
-}
-#content form div.input {
 	color: #444;
 }
 #content form div.required {
