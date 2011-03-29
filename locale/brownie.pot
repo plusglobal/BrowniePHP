@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-03-17 16:55-0300\n"
+"POT-Creation-Date: 2011-03-29 14:29-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -30,147 +30,147 @@ msgstr ""
 msgid "Menu"
 msgstr ""
 
-#: \controllers\contents_controller.php:255
+#: \controllers\contents_controller.php:246
 msgid "The %s has been saved [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:256
+#: \controllers\contents_controller.php:247
 msgid "The %s has been saved [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:289
+#: \controllers\contents_controller.php:280
 msgid "The %s could not be saved. Please, check the error messages.[male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:290
+#: \controllers\contents_controller.php:281
 msgid "The %s could not be saved. Please, check the error messages.[female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:368
+#: \controllers\contents_controller.php:359
 msgid "Successful delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:370
+#: \controllers\contents_controller.php:361
 msgid "Unable to delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:445
+#: \controllers\contents_controller.php:436
 msgid "%s files saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:446
+#: \controllers\contents_controller.php:437
 msgid "%s images saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:450
+#: \controllers\contents_controller.php:441
 msgid "No files saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:451
+#: \controllers\contents_controller.php:442
 msgid "No images saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:480
+#: \controllers\contents_controller.php:471
 msgid "The file was deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:481
+#: \controllers\contents_controller.php:472
 msgid "The image was deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:485
+#: \controllers\contents_controller.php:476
 msgid "The file could not be deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:486
+#: \controllers\contents_controller.php:477
 msgid "The image could not be deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:506
+#: \controllers\contents_controller.php:497
 msgid "The import could not be done. Please try again"
 msgstr ""
 
-#: \controllers\contents_controller.php:514
+#: \controllers\contents_controller.php:505
 msgid "Warning: %s::brwImport() must be defined"
 msgstr ""
 
-#: \controllers\contents_controller.php:535
+#: \controllers\contents_controller.php:526
 msgid "Successfully reordered"
 msgstr ""
 
-#: \controllers\contents_controller.php:537
+#: \controllers\contents_controller.php:528
 msgid "Failed to reorder"
 msgstr ""
 
-#: \controllers\contents_controller.php:589
+#: \controllers\contents_controller.php:580
 msgid "Yes"
 msgstr ""
 
-#: \controllers\contents_controller.php:589
+#: \controllers\contents_controller.php:580
 msgid "No"
 msgstr ""
 
-#: \controllers\contents_controller.php:619
+#: \controllers\contents_controller.php:610
 msgid "Date not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:623
+#: \controllers\contents_controller.php:614
 msgid "Invalid date"
 msgstr ""
 
-#: \controllers\contents_controller.php:629
+#: \controllers\contents_controller.php:620
 msgid "Datetime not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:633
+#: \controllers\contents_controller.php:624
 msgid "Invalid datetime"
 msgstr ""
 
-#: \controllers\contents_controller.php:640
+#: \controllers\contents_controller.php:631
 msgid "After save"
 msgstr ""
 
-#: \controllers\contents_controller.php:643
+#: \controllers\contents_controller.php:634
 msgid "Continue editing this %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:644
+#: \controllers\contents_controller.php:635
 msgid "Continue editing this %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:647
+#: \controllers\contents_controller.php:638
 msgid "Add another %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:648
+#: \controllers\contents_controller.php:639
 msgid "Add another %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:651
+#: \controllers\contents_controller.php:642
 msgid "Go to to index of all %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:652
+#: \controllers\contents_controller.php:643
 msgid "Go to to index of all %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:655
+#: \controllers\contents_controller.php:646
 msgid "View saved %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:656
+#: \controllers\contents_controller.php:647
 msgid "View saved %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:658
+#: \controllers\contents_controller.php:649
 msgid "Go home"
 msgstr ""
 
-#: \controllers\contents_controller.php:671
+#: \controllers\contents_controller.php:662
 msgid "Go to the %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:672
+#: \controllers\contents_controller.php:663
 msgid "Go to the %s [female]"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 
 #: \models\content.php:310
 #: \views\brownie\index.ctp:13
-#: \views\contents\view.ctp:68
+#: \views\contents\view.ctp:80
 msgid "Add"
 msgstr ""
 
@@ -236,37 +236,37 @@ msgstr ""
 msgid "Invalid image. Only jpg, gif and png are allowed."
 msgstr ""
 
-#: \models\behaviors\brw_user.php:26;27
+#: \models\behaviors\brw_user.php:16
+msgid "Email already registered"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:20
+msgid "Email not valid"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:26
+msgid "Email cannot be empty"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:33
+msgid "Password cannot be empty"
+msgstr ""
+
+#: \models\behaviors\brw_user.php:37
+msgid "Passwords do not match"
+msgstr ""
+
+#: \models\behaviors\panel.php:637;638
 msgid "User"
 msgstr ""
 
-#: \models\behaviors\brw_user.php:28
+#: \models\behaviors\panel.php:639
 #: \views\layouts\brownie_default.ctp:34
 msgid "Users"
 msgstr ""
 
-#: \models\behaviors\brw_user.php:34
+#: \models\behaviors\panel.php:645
 msgid "Leave blank for no change"
-msgstr ""
-
-#: \models\behaviors\brw_user.php:51
-msgid "Email already registered"
-msgstr ""
-
-#: \models\behaviors\brw_user.php:55
-msgid "Email not valid"
-msgstr ""
-
-#: \models\behaviors\brw_user.php:61
-msgid "Email cannot be empty"
-msgstr ""
-
-#: \models\behaviors\brw_user.php:68
-msgid "Password cannot be empty"
-msgstr ""
-
-#: \models\behaviors\brw_user.php:72
-msgid "Passwords do not match"
 msgstr ""
 
 #: \views\brownie\index.ctp:18
@@ -398,16 +398,6 @@ msgstr ""
 msgid "Are you sure you want to delete this file?"
 msgstr ""
 
-#: \views\elements\i18n_view_field.ctp:6
-#: \views\helpers\i18n.php:7
-msgid "English"
-msgstr ""
-
-#: \views\elements\i18n_view_field.ctp:7
-#: \views\helpers\i18n.php:8
-msgid "Spanish"
-msgstr ""
-
 #: \views\elements\image.ctp:17
 msgid "Are you sure you want to delete this image?"
 msgstr ""
@@ -424,27 +414,27 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: \views\elements\index.ctp:79;81
+#: \views\elements\index.ctp:77;79
 msgid "Sort up"
 msgstr ""
 
-#: \views\elements\index.ctp:83;85
+#: \views\elements\index.ctp:81;83
 msgid "Sort down"
 msgstr ""
 
-#: \views\elements\index.ctp:98
+#: \views\elements\index.ctp:96
 msgid "No records"
 msgstr ""
 
-#: \views\elements\index.ctp:107
+#: \views\elements\index.ctp:105
 msgid "previous"
 msgstr ""
 
-#: \views\elements\index.ctp:111
+#: \views\elements\index.ctp:109
 msgid "next"
 msgstr ""
 
-#: \views\elements\index.ctp:119
+#: \views\elements\index.ctp:117
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr ""
 
@@ -532,8 +522,28 @@ msgstr ""
 msgid "Root"
 msgstr ""
 
+#: \views\helpers\i18n.php:8
+msgid "German"
+msgstr ""
+
 #: \views\helpers\i18n.php:9
+msgid "English"
+msgstr ""
+
+#: \views\helpers\i18n.php:10
+msgid "French"
+msgstr ""
+
+#: \views\helpers\i18n.php:11
 msgid "Italian"
+msgstr ""
+
+#: \views\helpers\i18n.php:12
+msgid "Dutch"
+msgstr ""
+
+#: \views\helpers\i18n.php:13
+msgid "Spanish"
 msgstr ""
 
 #: \views\layouts\brownie_default.ctp:23
