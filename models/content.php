@@ -162,6 +162,9 @@ class Content extends BrownieAppModel{
 		if ($Model->Behaviors->attached('Tree')) {
 			$data = $this->treeBeforeSave($data, $Model);
 		}
+		if ($Model->Behaviors->attached('Translate')) {
+			$data = $this->translateBeforeSave($data, $Model);
+		}
 		return $this->convertUploadsArray($data);
 	}
 
@@ -176,6 +179,23 @@ class Content extends BrownieAppModel{
 		if (array_key_exists('rght', $data[$Model->name])) {
 			unset($data[$Model->name]['rght']);
 		}
+		return $data;
+	}
+
+
+	function translateBeforeSave($data, $Model) {
+		pr($data);
+		foreach (Configure::read('Config.languages') as $lang) {
+			if (empty($data['Content']['enabled_' . $lang])) {
+				$translatableFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
+				foreach ($translatableFields as $field) {
+					if (isset($data[$Model->alias][$field][$lang])) {
+						unset($data[$Model->alias][$field][$lang]);
+					}
+				}
+			}
+		}
+		pr($data);
 		return $data;
 	}
 

@@ -685,16 +685,11 @@ class ContentsController extends BrownieAppController {
 
 
 	function _setI18nParams($Model) {
-		$langs3chars = $i18nFields = array();
+		$i18nFields = array();
 		if ($Model->Behaviors->enabled('Translate')) {
 			$i18nFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
-			$l10n = new L10n();
-			$map = $l10n->__l10nCatalog;
-			foreach ((array)Configure::read('Config.languages') as $lang) {
-				$langs3chars[$lang] = $map[$lang]['localeFallback'];
-			}
 		}
-		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => $langs3chars));
+		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => Configure::read('Config.languages')));
 	}
 
 

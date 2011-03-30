@@ -1182,3 +1182,12 @@ td.habtm li a:hover{
 	background-color: #666;
 	text-decoration: none;
 }
+
+#content form div#enabledLangs label, #content form div#enabledLangs div{
+	float: left;
+	clear: none;
+}
+
+div#enabledLangs label.enabledLangs{
+	padding: 6px;
+}
