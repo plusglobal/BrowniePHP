@@ -184,6 +184,9 @@ class BrownieAppController extends AppController {
 		if (in_array($action, array('reorder', 'edit_upload', 'delete_upload'))) {
 			$action = 'edit';
 		}
+		if ($action == 'export') {
+			$action = 'view';
+		}
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'import'))) {
 			return false;
 		}

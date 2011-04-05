@@ -507,6 +507,14 @@ class ContentsController extends BrownieAppController {
 		}
 	}
 
+
+	function export($model) {
+		$this->layout = 'ajax';
+		$this->header("Content-Type: application/force-download");
+		$this->header("Content-Disposition: attachment; filename=" . $model . ".csv");
+		$this->set('records', $this->Model->find('all'));
+	}
+
 	function js_edit($model) {
 		$this->header('Content-type: text/javascript');
 		$this->layout = 'ajax';
