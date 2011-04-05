@@ -16,6 +16,7 @@ class PanelComponent extends Object{
 				'/brownie/js/jquery.comboselect',
 				'/brownie/js/brownie',
 			),
+			'customHome' => false,
 		);
 		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 			$defaultSettings['css'][] = 'brownie';

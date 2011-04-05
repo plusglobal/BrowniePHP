@@ -4,7 +4,10 @@ class BrownieController extends BrownieAppController {
 	var $name = 'Brownie';
 
 	function index() {
-		//$this->Session->delete('modelsHash');
+		$customHome = Configure::read('brwSettings.customHome');
+		if ($customHome) {
+			$this->render('custom_home');
+		}
 	}
 
 	function beforeFilter() {
