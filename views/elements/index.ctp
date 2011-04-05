@@ -25,6 +25,13 @@
 				array('action' => 'import', $model)
 			) . '</li>';
 		}
+		if ($brwConfig['actions']['export']) {
+			echo '
+			<li class="export">' . $html->link(
+				__d('brownie', 'Export', true),
+				array('action' => 'export', $model)
+			) . '</li>';
+		}
 		?>
 		</ul>
 	</div>
