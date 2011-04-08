@@ -7,8 +7,8 @@
 echo $html->meta('favicon.ico', Router::url('/favicon.ico'), array('type' => 'icon'));
 echo $html->css(Configure::read('brwSettings.css'));
 echo $javascript->link(Configure::read('brwSettings.js'));
-
 ?>
+<script type="text/javascript">var APP_BASE = '<?php echo Router::url('/') ?>';</script>
 <title><?php echo $title_for_layout; ?></title>
 </head>
 <body>

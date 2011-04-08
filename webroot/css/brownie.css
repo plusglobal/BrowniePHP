@@ -608,6 +608,8 @@ div.view td.label{
 	background: #444;
 	color: #fff;
 	font-weight: bold;
+	text-align: right;
+	vertical-align: top;
 }
 
 .fcktxt ul, .fcktxt ol, .fcktxt p, .fcktxt table{
@@ -764,12 +766,10 @@ p.norecords{
 	clear: left;
 	margin: 0 20px;
 }
-#content form div {
+#content form div.input {
 	clear: both;
 	padding: .5em;
 	vertical-align: text-top;
-}
-#content form div.input {
 	color: #444;
 }
 #content form div.required {
@@ -790,9 +790,9 @@ p.norecords{
 }
 #content input, #content textarea{
 	clear: both;
-	font-size: 12px;
+	font-size: 13px;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-	padding: 2px;
+	padding: 3px;
 	width: 100%;
 }
 #content select {
@@ -1126,4 +1126,63 @@ a.cloneLink_File{
 #content a.cloneLink:hover{
 	background-color: #268AFC;
 	color: #fff;
+}
+
+table tr td.multiLang{
+	padding: 0;
+	border-collapse: collapse;
+	/*border-right: 0;
+	border-bottom: 0;*/
+}
+
+table tr td.multiLang table{
+	margin: -1px;
+}
+
+table tr td.multiLang table{
+	border-right: none;
+}
+
+td.multiLang td.fcktxt{
+	width: 100%;
+	border-right: none;
+}
+
+td.multiLang td.locale{
+	background-color: #f4f4f4;
+	text-align: right;
+	font-weight: bold;
+}
+
+span.lang{
+	color: #676767;
+}
+
+table tr td.habtm{
+	padding: 2px;
+	margin: 0;
+}
+
+td.habtm ul{
+	margin: 0;
+	padding: 0;
+}
+
+td.habtm li{
+	float: left;
+}
+
+td.habtm li a{
+	margin: 4px;
+	padding: 3px 7px 3px 7px;
+	display: block;
+	color: #444;
+	-moz-border-radius: 4px;
+	background: #ccc;
+}
+
+td.habtm li a:hover{
+	color: #fff;
+	background-color: #666;
+	text-decoration: none;
 }

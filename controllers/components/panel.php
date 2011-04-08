@@ -16,6 +16,7 @@ class PanelComponent extends Object{
 				'/brownie/js/jquery.comboselect',
 				'/brownie/js/brownie',
 			),
+			'customHome' => false,
 		);
 		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 			$defaultSettings['css'][] = 'brownie';
@@ -29,11 +30,11 @@ class PanelComponent extends Object{
 		if (!empty($settings['css']) and !is_array($settings['css'])) {
 			$settings['css'] = (array)$settings['css'];
 		}
-		if (file_exists(WWW_ROOT . 'js' . DS . 'fckeditor' . DS . 'fckeditor.js')) {
+
+		if (file_exists(WWW_ROOT . 'js' . DS . 'tiny_mce' . DS . 'jquery.tinymce.js')) {
+			$settings['js'][] = 'tiny_mce/jquery.tinymce';
+		} elseif (file_exists(WWW_ROOT . 'js' . DS . 'fckeditor' . DS . 'fckeditor.js')) {
 			$settings['js'][] = 'fckeditor/fckeditor';
-			Configure::write('Config.fckeditor', true);
-		} else {
-			Configure::write('Config.fckeditor', false);
 		}
 		$settings = Set::merge($defaultSettings, $settings);
 

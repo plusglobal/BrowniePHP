@@ -3,7 +3,7 @@
 class ContentsController extends BrownieAppController {
 
 	var $name = 'Contents';
-	var $helpers = array('Brownie.Fck');
+	var $helpers = array('Brownie.i18n');
 	var $Model;
 	var $uses = array('Brownie.Content');
 
@@ -47,6 +47,8 @@ class ContentsController extends BrownieAppController {
 				$this->Model->brwConfig['fields_no_root']
 			);
 		}
+
+		$this->Content->i18nInit($this->Model);
 	}
 
 	function beforeRender() {
@@ -74,7 +76,7 @@ class ContentsController extends BrownieAppController {
 		}
 
 		$this->paginate = $this->Model->brwConfig['paginate'];
-		if ($this->Content->isTree($this->Model)) {
+		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
@@ -113,7 +115,7 @@ class ContentsController extends BrownieAppController {
 			and $this->Model->name == $siteModel
 		);
 		if ($restricted) {
-			if($id != Configure::read('currentSite.id')) {
+			if ($id != Configure::read('currentSite.id')) {
 				$this->cakeError('error404');
 			} else {
 				$this->Model->brwConfig['actions']['add'] = false;
@@ -121,24 +123,14 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		$contain = array();
-
-		if ($this->Model->brwConfig['images']) {
-			$contain['BrwImage'] = array('order' => 'BrwImage.category_code, BrwImage.modified asc');
-		}
-
-		if ($this->Model->brwConfig['files']) {
-			$contain['BrwFile'] = array('order' => 'BrwFile.category_code, BrwFile.modified asc');
-		}
-
 		$this->Model->Behaviors->attach('Containable');
 		$record = $this->Model->find('all', array(
 			'conditions' => array($this->Model->name . '.id' => $id),
-			'contain' => $contain
+			'contain' => $this->Content->relatedModelsForView($this->Model)
 		));
 
 		if (empty($record)) {
-			$this->redirect(array('action' => 'index', $model));
+			$this->cakeError('error404');
 		}
 
 		if (method_exists($this->Model, 'brwAfterFind')) {
@@ -148,32 +140,14 @@ class ContentsController extends BrownieAppController {
 
 		//ejecutar brwAfterFind en los modelos relacionados que estan en $contain
 
-		if (!$restricted) {
-			if (is_array($this->Model->order)) {
-				list($keyOrder) = each($this->Model->order);
-				$keyOrder = str_replace($this->Model->alias . '.', '', $keyOrder);
-				$neighbors = $this->Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$model][$keyOrder]));
-				if (
-					!empty($this->Model->brwConfig['sortable']['direction'])
-					and $this->Model->brwConfig['sortable']['direction'] == 'desc'
-				) {
-					$tmp = $neighbors['prev'];
-					$neighbors['prev'] = $neighbors['next'];
-					$neighbors['next'] = $tmp;
-				}
-			} else {
-				$neighbors = $this->Model->find('neighbors', array('field' => 'id', 'value' => $id));
-			}
-		} else {
-			$neighbors = array();
-		}
-
+		$neighbors = $this->Content->neighborsForView($this->Model, $record, $restricted);
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);
 		$assoc_models = array();
-		if (!empty($this->Model->hasMany) and $this->Model->brwConfig['show_children']){
+		if (!empty($this->Model->hasMany) and $this->Model->brwConfig['show_children']) {
 			foreach ($assocs as $key_model => $related_model) {
+				if (substr($key_model, 0, 8) == 'BrwI18n_') continue;
 				if (!in_array($key_model, $this->Model->brwConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Panel');
@@ -202,10 +176,14 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		$this->set('record', $this->_formatForView($record, $this->Model));
+		$record = $this->Content->formatHABTMforView($record, $this->Model);
+		$record = $this->_formatForView($record, $this->Model);
+		$record = $this->Content->addI18nValues($record, $this->Model);
+		$this->set('record', $record);
 		$this->set('neighbors', $neighbors);
 		$this->set('assoc_models', $assoc_models);
 		$this->set('permissions', $permissions);
+		$this->_setI18nParams($this->Model);
 	}
 
 
@@ -218,7 +196,7 @@ class ContentsController extends BrownieAppController {
 
 		);
 		if ($restricted) {
-			if($id != Configure::read('currentSite.id')) {
+			if ($id != Configure::read('currentSite.id')) {
 				$this->cakeError('error404');
 			}
 		}
@@ -259,6 +237,10 @@ class ContentsController extends BrownieAppController {
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}
+			/*if (empty($this->data[$this->Model->alias]['id'])) {
+				$this->Model->create();
+				$this->Model->data = $this->data[$this->Model->alias];
+			}*/
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
 					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brwConfig['names']['singular']):
@@ -268,7 +250,7 @@ class ContentsController extends BrownieAppController {
 				if (!empty($this->data['Content']['after_save'])) {
 					switch ($this->data['Content']['after_save']) {
 						case 'edit':
-							$this->redirect(array('action'=>'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
+							$this->redirect(array('action' => 'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
 						break;
 						case 'add':
 							$this->redirect(array('action' => 'edit', $this->Model->name, 'after_save' => 'add'));
@@ -305,10 +287,10 @@ class ContentsController extends BrownieAppController {
 
 		$contain = $related = array();
 		if (!empty($this->Model->belongsTo)) {
-			foreach($this->Model->belongsTo as $key_model => $related_model) {
+			foreach ($this->Model->belongsTo as $key_model => $related_model) {
 				$AssocModel = $this->Model->$key_model;
-				if(!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
-					if ($this->Content->isTree($AssocModel)){
+				if (!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
+					if ($AssocModel->Behaviors->attached('Tree')) {
 						$relatedData = $AssocModel->generatetreelist();
 					} else {
 						$relatedData = $this->Content->findList($AssocModel, $related_model);
@@ -327,7 +309,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		if ($this->Content->isTree($this->Model)) {
+		if ($this->Model->Behaviors->enabled('Tree')) {
 			$related['tree']['parent_id'] = $this->Model->generatetreelist();
 		}
 		$this->set('related', $related);
@@ -346,6 +328,7 @@ class ContentsController extends BrownieAppController {
 					'conditions' => array($this->Model->name . '.id' => $id),
 					'contain' => $contain,
 				));
+				$this->data = $this->Content->i18nForEdit($this->data, $this->Model);
 			} else {
 				$this->data = Set::merge(
 					$this->Content->defaults($this->Model),
@@ -354,13 +337,14 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		if (method_exists($this->Model, 'brwBeforeEdit')) {
+		if (method_exists($this->Model, 'brwBeforeEdit') or !empty($this->Model->Behaviors->__methods['brwBeforeEdit'])) {
 			$this->data = $this->Model->brwBeforeEdit($this->data);
 			$this->set('schema', $this->Content->schemaForView($this->Model));
 		}
 
 		$this->set('fields', $fields);
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
+		$this->_setI18nParams($this->Model);
 		$this->_setAfterSaveOptionsParams($this->Model);
 	}
 
@@ -540,7 +524,7 @@ class ContentsController extends BrownieAppController {
 	function reorder($model, $direction, $id) {
 		if (
 			!in_array($direction, array('up', 'down'))
-			and !$this->Content->isTree($this->Model)
+			and !$this->Model->Bheaviors->attached('Tree')
 			and empty($this->Model->brwConfig['sortable'])
 		) {
 			$this->CakeError('error404');
@@ -556,7 +540,7 @@ class ContentsController extends BrownieAppController {
 			$this->redirect($ref);
 		} else {
 			$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
-		}/**/
+		}
 	}
 
 
@@ -565,7 +549,7 @@ class ContentsController extends BrownieAppController {
 		if (!empty($data[$Model->name])) {
 			$out = $this->_formatSingleForView($data, $Model);
 		} else {
-			if ($this->Content->isTree($Model)) {
+			if ($Model->Behaviors->attached('Tree')) {
 				$data = $this->_formatTree($data, $Model);
 			}
 			foreach ($data as $dataset) {
@@ -581,37 +565,39 @@ class ContentsController extends BrownieAppController {
 		$foreignKeys = $this->Content->getForeignKeys($Model);
 		$permissions = $this->arrayPermissions($Model->name);
 		$retData = $data;
-		foreach ($retData[$Model->name] as $key => $value) {
-			if (in_array($key, $fieldsHide)) {
-				unset($retData[$Model->name][$key]);
-			} elseif (in_array($key, $fieldsConfig['code'])) {
-				$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
-			} elseif (isset($foreignKeys[$key])) {
-				$read = $Model->{$foreignKeys[$key]}->findById($retData[$Model->name][$key]);
-				$retData[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
-				if ($this->_checkPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
-					$relatedURL = Router::url(array(
-						'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
-						$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
-					));
-					$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
-				}
+		if (!empty($retData[$Model->name])) {
+			foreach ($retData[$Model->name] as $key => $value) {
+				if (in_array($key, $fieldsHide)) {
+					unset($retData[$Model->name][$key]);
+				} elseif (in_array($key, $fieldsConfig['code'])) {
+					$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
+				} elseif (isset($foreignKeys[$key])) {
+					$read = $Model->{$foreignKeys[$key]}->findById($retData[$Model->name][$key]);
+					$retData[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
+					if ($this->_checkPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
+						$relatedURL = Router::url(array(
+							'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
+							$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
+						));
+						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
+					}
 
-			} elseif (!empty($Model->_schema[$key]['type'])) {
-				switch($Model->_schema[$key]['type']) {
-					case 'boolean':
-						$retData[$Model->name][$key] = $retData[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
-					break;
-					case 'datetime':
-						$retData[$Model->name][$key] = $this->_formatDateTime($retData[$Model->name][$key]);
-					break;
-					case 'date':
-						$retData[$Model->name][$key] = $this->_formatDate($retData[$Model->name][$key]);
-					break;
+				} elseif (!empty($Model->_schema[$key]['type'])) {
+					switch($Model->_schema[$key]['type']) {
+						case 'boolean':
+							$retData[$Model->name][$key] = $retData[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
+						break;
+						case 'datetime':
+							$retData[$Model->name][$key] = $this->_formatDateTime($retData[$Model->name][$key]);
+						break;
+						case 'date':
+							$retData[$Model->name][$key] = $this->_formatDate($retData[$Model->name][$key]);
+						break;
+					}
 				}
 			}
+			$retData[$Model->name]['brw_actions'] = $this->Content->actions($Model, $data, $permissions);
 		}
-		$retData[$Model->name]['brw_actions'] = $this->Content->actions($Model, $data, $permissions);
 		return $retData;
 	}
 
@@ -713,6 +699,20 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 		return $filter;
+	}
+
+
+	function _setI18nParams($Model) {
+		$langs3chars = $i18nFields = array();
+		if ($Model->Behaviors->enabled('Translate')) {
+			$i18nFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
+			$l10n = new L10n();
+			$map = $l10n->__l10nCatalog;
+			foreach ((array)Configure::read('Config.languages') as $lang) {
+				$langs3chars[$lang] = $map[$lang]['localeFallback'];
+			}
+		}
+		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => $langs3chars));
 	}
 
 

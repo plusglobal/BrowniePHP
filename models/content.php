@@ -97,7 +97,7 @@ class Content extends BrownieAppModel{
 			}
 
 			if ($value['type'] == 'integer' or $value['type'] == 'float') {
-				if ( !($this->isTree($Model) and $key =='parent_id') ) {
+				if ( !($Model->Behaviors->attached('Tree') and $key =='parent_id') ) {
 					$rules[$key][] = array(
 						'rule' => 'numeric',
 						'allowEmpty' => $allowEmpty,
@@ -145,9 +145,9 @@ class Content extends BrownieAppModel{
 
 
 
-	function isTree($Model) {
+	/*function isTree($Model) {
 		return in_array('tree', array_map('strtolower', $Model->Behaviors->_attached));
-	}
+	}*/
 
 
 	function brownieBeforeSave($data, $Model) {
@@ -159,7 +159,7 @@ class Content extends BrownieAppModel{
 				$data[$Model->name][$field] = null;
 			}
 		}
-		if ($this->isTree($Model)) {
+		if ($Model->Behaviors->attached('Tree')) {
 			$data = $this->treeBeforeSave($data, $Model);
 		}
 		return $this->convertUploadsArray($data);
@@ -182,11 +182,9 @@ class Content extends BrownieAppModel{
 
 	function fckFields($Model) {
 		$out = array();
-		if (Configure::read('Config.fckeditor')) {
-			foreach ($Model->_schema as $field => $metadata) {
-				if ($metadata['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_editor'])) {
-					$out[] = $field;
-				}
+		foreach ($Model->_schema as $field => $metadata) {
+			if ($metadata['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_editor'])) {
+				$out[] = $field;
 			}
 		}
 		return $out;
@@ -207,7 +205,7 @@ class Content extends BrownieAppModel{
 
 
 	function delete($Model, $id) {
-		if ($this->isTree($Model)) {
+		if ($Model->Behaviors->attached('Tree')) {
 			$deleted = $Model->removeFromTree($id, true);
 		} else {
 			$deleted = $Model->delete($id);
@@ -226,8 +224,13 @@ class Content extends BrownieAppModel{
 	}
 
 	function reorder($Model, $direction, $id) {
-		if ($this->isTree($Model)) {
+		if ($Model->Behaviors->attached('Tree')) {
 			return ($direction == 'down') ? $Model->moveDown($id, 1) : $Model->moveUp($id, 1);
+		}
+
+		$isTanslatable = $Model->Behaviors->enabled('Translate');
+		if ($isTanslatable) {
+			$Model->Behaviors->disable('Translate');
 		}
 
 		$sortField = $Model->brwConfig['sortable']['field'];
@@ -251,6 +254,11 @@ class Content extends BrownieAppModel{
 		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => null));
 		$saved2 = $Model->save(array('id' => $swap[$Model->alias]['id'], $sortField => $record[$Model->alias][$sortField]));
 		$saved3 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => $swap[$Model->alias][$sortField]));
+
+		if ($isTanslatable) {
+			$Model->Behaviors->enable('Translate');
+		}
+
 		return ($saved1 and $saved2 and $saved3);
 	}
 
@@ -382,5 +390,113 @@ class Content extends BrownieAppModel{
 		}
 	}
 
+	function neighborsForView($Model, $record, $restricted) {
+		$isTanslatable = $Model->Behaviors->enabled('Translate');
+		if ($isTanslatable) {
+			$Model->Behaviors->disable('Translate');
+		}
+
+		$neighbors = array();
+		if (!$restricted) {
+			if (is_array($Model->order)) {
+				list($keyOrder) = each($Model->order);
+				$keyOrder = str_replace($Model->alias . '.', '', $keyOrder);
+				$neighbors = $Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$Model->alias][$keyOrder]));
+				if (
+					!empty($Model->brwConfig['sortable']['direction'])
+					and $Model->brwConfig['sortable']['direction'] == 'desc'
+				) {
+					$tmp = $neighbors['prev'];
+					$neighbors['prev'] = $neighbors['next'];
+					$neighbors['next'] = $tmp;
+				}
+			} else {
+				$neighbors = $Model->find('neighbors', array('field' => 'id', 'value' => $record[$Model->alias]['id']));
+			}
+		}
+
+		if ($isTanslatable) {
+			$Model->Behaviors->enable('Translate');
+		}
+
+		return $neighbors;
+	}
+
+
+	function i18nInit($Model) {
+		if ($Model->Behaviors->attached('Translate')) {
+			$i18nSettings = $Model->Behaviors->Translate->settings[$Model->alias];
+			$settings = array();
+			foreach ($i18nSettings as $key => $value) {
+				$field = is_string($key)? $key : $value;
+				$settings[$field] = 'BrwI18n_' . $field;
+			}
+			$Model->Behaviors->detach('Translate');
+			$Model->Behaviors->attach('Translate', $settings);
+		}
+	}
+
+
+	function addI18nValues($record, $Model) {
+		if ($Model->Behaviors->attached('Translate')) {
+			$translated = $Model->find('first', array(
+				'conditions' => array($Model->alias . '.id' => $record[$Model->alias]['id']),
+				'contain' => array_values($Model->Behaviors->Translate->settings[$Model->alias]),
+			));
+			unset($translated[$Model->alias]);
+			$record = array_merge($record, $translated);
+		}
+		return $record;
+	}
+
+
+	function i18nForEdit($data, $Model) {
+		if ($Model->Behaviors->attached('Translate')) {
+			$dataWithTranslations = $this->addI18nValues($data, $Model);
+			$settings = $Model->Behaviors->Translate->settings[$Model->alias];
+			foreach ($settings as $field => $i18nModelName) {
+				$dataWithTranslations[$Model->alias][$field] = array();
+				foreach($dataWithTranslations[$i18nModelName] as $value) {
+					$dataWithTranslations[$Model->alias][$field][$value['locale']] = $value['content'];
+				}
+				unset($dataWithTranslations[$i18nModelName]);
+			}
+			$data = array_merge($data, $dataWithTranslations);
+		}
+		return $data;
+	}
+
+
+	function relatedModelsForView($Model) {
+		$contain = array_keys($Model->hasAndBelongsToMany);
+
+		if ($Model->brwConfig['images']) {
+			$contain['BrwImage'] = array('order' => 'BrwImage.id desc');
+		}
+		if ($Model->brwConfig['files']) {
+			$contain['BrwFile'] = array('order' => 'BrwFile.id asc');
+		}
+
+		return $contain;
+	}
+
+
+	function formatHABTMforView($record, $Model) {
+		$record['HABTM'] = array();
+		$i = 0;
+		foreach ($Model->hasAndBelongsToMany as $relModel => $settings) {
+			$record['HABTM'][$i] = array(
+				'model' => $relModel,
+				'name' => $Model->{$relModel}->brwConfig['names']['plural'],
+				'data' => array(),
+			);
+			foreach ($record[$relModel] as $value) {
+				$record['HABTM'][$i]['data'][$value['id']] = $value[$Model->{$relModel}->displayField];
+			}
+			unset($record[$relModel]);
+			$i++;
+		}
+		return $record;
+	}
 
 }

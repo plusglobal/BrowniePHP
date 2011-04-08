@@ -32,16 +32,34 @@
 	$i=0;
 	foreach ($record[$model] as $field_name => $field_value) {
 		if (!empty($schema[$field_name])) {
-			$class = ife(($i++ % 2 != 0), 'altrow', '');
-			echo '
-			<tr class="'.$class.'">
-				<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>
-				<td class="fcktxt">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>
-			</tr>';
+				echo '
+				<tr>
+					<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>';
+					if (in_array($field_name, $i18nFields)) {
+						echo '<td class="multiLang">
+						' . $this->element('i18n_view_field', array('data' => $record['BrwI18n_' . $field_name])) . '
+						</td>';
+					} else {
+						echo '<td class="fcktxt">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
+					}
+					echo '
+				</tr>';
 		}
 	}
 	?>
-
+	<?php foreach ($record['HABTM'] as $rel) : ?>
+	<tr>
+		<td class="label"><?php echo $rel['name'] ?></td>
+		<td class="habtm">
+			<ul>
+			<?php foreach ($rel['data'] as $id => $name) : ?>
+				<li><?php echo $html->link($name, array('plugin' => 'brownie',
+				'controller' => 'contents', 'action' => 'view', $rel['model'], $id)) ?></li>
+			<?php endforeach ?>
+			</ul>
+		</td>
+	</tr>
+	<?php endforeach ?>
 	</table>
 </div>
 
