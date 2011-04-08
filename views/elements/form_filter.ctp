@@ -8,7 +8,7 @@
 <?php
 echo $form->create('Filter', array(
 	'url' => array('controller' => 'contents', 'action' => 'filter', $model),
-	'class' => 'filter'
+	'class' => 'filter clearfix'
 ));
 foreach ($brwConfig['fields']['filter'] as $field) {
 	if (in_array($schema[$field]['type'], array('datetime', 'date'))) {

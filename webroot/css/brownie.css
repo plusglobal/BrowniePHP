@@ -1186,3 +1186,36 @@ td.habtm li a:hover{
 	background-color: #666;
 	text-decoration: none;
 }
+
+
+form.filter{
+	vertical-align: middle;
+	margin-bottom: 30px;
+}
+
+/*form.filter div.input, form.filter label, form.filter input, form.filter select{
+	display: inline !important;
+	margin: 0 3px !important;
+	padding: 0 !important;
+	line-height: 1.7em;
+}*/
+
+div#content form.filter div.input, div#content form.filter div.submit{
+	float: left;
+	clear: none;
+	margin: 0;
+	padding: 10px 10px 0 0;
+}
+
+div#content form.filter div.submit{
+	margin-top: 25px;
+	padding: 0;
+}
+
+div#content form.filter div.input select{
+	max-width: 150px;
+}
+
+div#content form.filter div.input select{
+	border: 1px solid #888;
+}
