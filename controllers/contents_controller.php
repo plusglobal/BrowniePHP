@@ -103,6 +103,7 @@ class ContentsController extends BrownieAppController {
 			'records' => $this->_formatForView($records, $this->Model),
 			'permissions' => array($this->Model->alias => $this->Model->brwConfig['actions']),
 			'filters' => $this->_filtersForView($filters),
+			'isAnyFilter' => !empty($filters),
 		));
 		if ($this->Model->brwConfig['fields']['filter']) {
 			$this->_setFilterData($this->Model);
@@ -511,10 +512,21 @@ class ContentsController extends BrownieAppController {
 
 
 	function export($model) {
+		$type = $this->Model->brwConfig['actions']['export'];
+		if (empty($type)) {
+			$this->cakeError('error404');
+		}
+		if (!in_array($type, array('xml', 'csv', 'json', 'php'))) {
+			$type = 'xml';
+		}
 		$this->layout = 'ajax';
+		if ($type == 'xml') {
+			$this->helpers[] = 'Xml';
+		}
 		$this->header("Content-Type: application/force-download");
-		$this->header("Content-Disposition: attachment; filename=" . $model . ".csv");
-		$this->set('records', $this->Model->find('all'));
+		$this->header("Content-Disposition: attachment; filename=" . $model . "." . $type);
+		$this->set('records', $this->Content->getForExport($this->Model, $this->params['named']));
+		$this->render('export/' . $type);
 	}
 
 	function js_edit($model) {
@@ -716,34 +728,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function _filterConditions($Model, $forData = false) {
-		$named = $this->params['named'];
-		$filter = array();
-		$isAnyFilter = false;
-		foreach ($Model->_schema as $field => $value) {
-			if ($field == 'id') continue;
-			$keyNamed = $Model->alias . '.' . $field;
-			if (in_array($value['type'], array('datetime', 'date'))) {
-				if (array_key_exists($keyNamed . '_from', $named)) {
-					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '_from'];
-					$isAnyFilter = true;
-				}
-				if (array_key_exists($keyNamed . '_to', $named)) {
-					$filter[$keyNamed. ' <= '] = $named[$keyNamed . '_to'];
-					$isAnyFilter = true;
-				}
-			} else {
-				if (array_key_exists($keyNamed, $named)) {
-					$isAnyFilter = true;
-					if ($forData) {
-						$filter[$Model->alias][$field] = $named[$keyNamed];
-					} else {
-						$filter[$keyNamed] = $named[$keyNamed];
-					}
-				}
-			}
-		}
-		$this->set('isAnyFilter', $isAnyFilter);
-		return $filter;
+		return $this->Content->filterConditions($Model, $this->params['named'], $forData);
 	}
 
 

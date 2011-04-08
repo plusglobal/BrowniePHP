@@ -499,4 +499,46 @@ class Content extends BrownieAppModel{
 		return $record;
 	}
 
+
+	function getForExport($Model, $named) {
+		if (!empty($named['direction']) and !empty($named['sort'])) {
+			$order = array($Model->alias . '.' . $named['sort'] => $named['direction']);
+		} else {
+			$order = $Model->order;
+		}
+		$params = array(
+			'conditions' => $this->filterConditions($Model, $named),
+			'order' => $order,
+			'contain' => array_keys($Model->belongsTo),
+		);
+		return $Model->find('all', $params);
+	}
+
+
+	function filterConditions($Model, $named, $forData = false) {
+		$filter = array();
+		foreach ($Model->_schema as $field => $value) {
+			if ($field == 'id') continue;
+			$keyNamed = $Model->alias . '.' . $field;
+			if (in_array($value['type'], array('datetime', 'date'))) {
+				if (array_key_exists($keyNamed . '_from', $named)) {
+					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '_from'];
+				}
+				if (array_key_exists($keyNamed . '_to', $named)) {
+					$filter[$keyNamed. ' <= '] = $named[$keyNamed . '_to'];
+				}
+			} else {
+				if (array_key_exists($keyNamed, $named)) {
+					if ($forData) {
+						$filter[$Model->alias][$field] = $named[$keyNamed];
+					} else {
+						$filter[$keyNamed] = $named[$keyNamed];
+					}
+				}
+			}
+		}
+		return $filter;
+	}
+
+
 }

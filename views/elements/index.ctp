@@ -26,18 +26,15 @@
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['export']) {
-			echo '
-			<li class="export">' . $html->link(
-				__d('brownie', 'Export', true),
-				array('action' => 'export', $model)
-			) . '</li>';
+			$url = array_merge(array('action' => 'export', $model), $this->params['named'], $filters);
+			echo '<li class="export">' . $html->link(__d('brownie', 'Export', true), $url) . '</li>';
 		}
 		?>
 		</ul>
 	</div>
 </div>
 <?php
-if ($brwConfig['fields']['filter']) {
+if ($brwConfig['fields']['filter'] and $calledFrom == 'index') {
 	echo $this->element('form_filter', array('brwConfig' => $brwConfig));
 }
 
