@@ -690,15 +690,25 @@ class ContentsController extends BrownieAppController {
 
 
 	function _filterConditions($Model, $forData = false) {
+		$named = $this->params['named'];
 		$filter = array();
 		foreach ($Model->_schema as $field => $value) {
 			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
-			if (array_key_exists($keyNamed, $this->params['named'])) {
-				if ($forData) {
-					$filter[$Model->alias][$field] = $this->params['named'][$keyNamed];
-				} else {
-					$filter[$keyNamed] = $this->params['named'][$keyNamed];
+			if ($value['type'] == 'datetime') {
+				if (array_key_exists($keyNamed . '.from', $named)) {
+					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '.from'];
+				}
+				if (array_key_exists($keyNamed . '.to', $named)) {
+					$filter[$keyNamed. ' <= '] = $named[$keyNamed . '.to'];
+				}
+			} else {
+				if (array_key_exists($keyNamed, $named)) {
+					if ($forData) {
+						$filter[$Model->alias][$field] = $named[$keyNamed];
+					} else {
+						$filter[$keyNamed] = $named[$keyNamed];
+					}
 				}
 			}
 		}

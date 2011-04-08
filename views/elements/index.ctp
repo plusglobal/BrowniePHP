@@ -37,7 +37,7 @@
 	</div>
 </div>
 <?php
-$paginator->options(array('url' => Set::merge($this->passedArgs, array('model' => $model))));
+//$paginator->options(array('url' => Set::merge($this->passedArgs, array('model' => $model))));
 $i = 0;
 if ($records):
 	echo '<table cellpadding="0" cellspacing="0">';

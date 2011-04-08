@@ -34,6 +34,7 @@ class PanelBehavior extends ModelBehavior {
 			'code' => array(),
 			'no_sanitize_html' => array(),
 			'names' => array(),
+			'filter' => array(),
 		),
 
 		'fields_no_root' => array(),
