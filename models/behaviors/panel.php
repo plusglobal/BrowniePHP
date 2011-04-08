@@ -232,6 +232,7 @@ class PanelBehavior extends ModelBehavior {
 		$this->_sanitizeConfig($Model);
 		$this->_customActionsConfig($Model);
 		$this->_fieldsNames($Model);
+		$this->_fieldsFilters($Model);
 		$this->_removeDuplicates($Model);
 	}
 
@@ -622,6 +623,27 @@ class PanelBehavior extends ModelBehavior {
 			$defaultNames[$field] = Inflector::humanize(str_replace('_id', '', $field));
 		}
 		$Model->brwConfig['fields']['names'] = Set::merge($defaultNames, $Model->brwConfig['fields']['names']);
+	}
+
+	/**
+	* Function to delete filter fields that are not foreignKeys or date
+	*/
+
+
+	function _fieldsFilters($Model) {
+		$validFields = array();
+		foreach ($Model->brwConfig['fields']['filter'] as $field) {
+			$fieldType = $Model->_schema[$field]['type'];
+			if (in_array($fieldType, array('date', 'datetime'))) {
+				$validFields[] = $field;
+			} elseif (in_array($field, Set::extract('{s}.foreignKey', $Model->belongsTo))) {
+				$validFields[] = $field;
+			}
+		}
+		if (count($Model->brwConfig['fields']['filter']) != count($validFields)) {
+			$this->log('[Brownie configuration error] filter fields can only be type: date, datetime and foreign keys');
+		}
+		$Model->brwConfig['fields']['filter'] = $validFields;
 	}
 
 

@@ -37,7 +37,11 @@
 	</div>
 </div>
 <?php
-//$paginator->options(array('url' => Set::merge($this->passedArgs, array('model' => $model))));
+if ($brwConfig['fields']['filter']) {
+	echo $this->element('form_filter', array('brwConfig' => $brwConfig));
+}
+
+
 $i = 0;
 if ($records):
 	echo '<table cellpadding="0" cellspacing="0">';

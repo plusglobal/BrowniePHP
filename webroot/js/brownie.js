@@ -20,7 +20,7 @@ $(document).ready(function(){
 	multipleComboSelect();
 	hoverRowsColors();
 	bindFancyBox();
-	$('.flash').click(function(){
+	$('#flashMessage').click(function(){
 		$(this).fadeOut();
 	})
 	toclone();

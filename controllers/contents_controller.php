@@ -83,7 +83,6 @@ class ContentsController extends BrownieAppController {
 		$filters = $this->_filterConditions($this->Model);
 		$this->paginate['conditions'] = $filters;
 
-
 		$records = $this->paginate($this->Model);
 		$isUniqueRecord = (
 			count($records) == 1
@@ -103,8 +102,11 @@ class ContentsController extends BrownieAppController {
 		$this->set(array(
 			'records' => $this->_formatForView($records, $this->Model),
 			'permissions' => array($this->Model->alias => $this->Model->brwConfig['actions']),
-			'filters' => $filters,
+			'filters' => $this->_filtersForView($filters),
 		));
+		if ($this->Model->brwConfig['fields']['filter']) {
+			$this->_setFilterData($this->Model);
+		}
 	}
 
 
@@ -544,6 +546,44 @@ class ContentsController extends BrownieAppController {
 	}
 
 
+	function filter($model) {
+		$url = array('controller' => 'contents', 'action' => 'index', $model);
+		foreach ($this->Model->brwConfig['fields']['filter'] as $field) {
+			$type = $this->Model->_schema[$field]['type'];
+			if (in_array($type, array('date', 'datetime'))) {
+				$keyFrom = $field . '_from';
+				$data = $this->data[$model];
+				foreach (array('_from', '_to') as $key) {
+					if (
+						!empty($this->data[$model][$field . $key]['year'])
+						and !empty($this->data[$model][$field . $key]['month'])
+						and !empty($this->data[$model][$field . $key]['day'])
+					) {
+						$url[$model . '.' . $field . $key] = $data[$field . $key]['year']
+							. '-' . $data[$field . $key]['month'] . '-' . $data[$field . $key]['day'];
+						if ($type == 'datetime') {
+							if (
+								!empty($this->data[$model][$field . $key]['hour'])
+								and !empty($this->data[$model][$field . $key]['min'])
+							) {
+								//pr($this->data);								pr($key);
+								$url[$model . '.' . $field . $key] .= ' ' . $data[$field . $key]['hour']
+									. ':' . $data[$field . $key]['min'] . ':00';
+							} else {
+								$url[$model . '.' . $field . $key] .= ' ' . (($key == 'from') ? '00:00:00' : '23:59:59');
+							}
+						}
+					}
+				}
+			} elseif (!empty($this->data[$model][$field])) {
+				$url[$model . '.' . $field] = $this->data[$model][$field];
+			}
+		}
+		//pr($url);
+		$this->redirect($url);
+	}
+
+
 	function _formatForView($data, $Model) {
 		$out = array();
 		if (!empty($data[$Model->name])) {
@@ -678,18 +718,22 @@ class ContentsController extends BrownieAppController {
 	function _filterConditions($Model, $forData = false) {
 		$named = $this->params['named'];
 		$filter = array();
+		$isAnyFilter = false;
 		foreach ($Model->_schema as $field => $value) {
 			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
-			if ($value['type'] == 'datetime') {
-				if (array_key_exists($keyNamed . '.from', $named)) {
-					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '.from'];
+			if (in_array($value['type'], array('datetime', 'date'))) {
+				if (array_key_exists($keyNamed . '_from', $named)) {
+					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '_from'];
+					$isAnyFilter = true;
 				}
-				if (array_key_exists($keyNamed . '.to', $named)) {
-					$filter[$keyNamed. ' <= '] = $named[$keyNamed . '.to'];
+				if (array_key_exists($keyNamed . '_to', $named)) {
+					$filter[$keyNamed. ' <= '] = $named[$keyNamed . '_to'];
+					$isAnyFilter = true;
 				}
 			} else {
 				if (array_key_exists($keyNamed, $named)) {
+					$isAnyFilter = true;
 					if ($forData) {
 						$filter[$Model->alias][$field] = $named[$keyNamed];
 					} else {
@@ -698,7 +742,55 @@ class ContentsController extends BrownieAppController {
 				}
 			}
 		}
+		$this->set('isAnyFilter', $isAnyFilter);
 		return $filter;
+	}
+
+
+	function _filtersForView($filters) {
+		foreach ($filters as $field => $value) {
+			if (strstr($field, '>') or strstr($field, '<')) {
+				unset($filters[$field]);
+			}
+		}
+		return $filters;
+	}
+
+
+	function _setFilterData($Model) {
+		$filterFields = $this->Model->brwConfig['fields']['filter'];
+		$model = $Model->alias;
+		foreach ($filterFields as $field) {
+			$type = $this->Model->_schema[$field]['type'];
+			switch ($type) {
+				case 'date': case 'datetime':
+					foreach (array('_from', '_to') as $key) {
+						if (!empty($this->params['named'][$model . '.' . $field . $key])) {
+							$this->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
+						} else {
+							$this->data[$model][$field . $key] = date('Y-m-d');
+							if ($type == 'datetime') {
+								$this->data[$model][$field . $key] .= ' ' . (($key == '_from')? '00:00:00': '23:59:59');
+							}
+						}
+					}
+				break;
+				case 'integer':
+					if (!empty($this->params['named'][$model . '.' . $field])) {
+						$this->data[$model][$field] = $this->params['named'][$model . '.' . $field];
+					}
+				break;
+			}
+		}
+
+		foreach ($Model->belongsTo as $relatedModel) {
+			if (in_array($relatedModel['foreignKey'], $filterFields)) {
+				$varSet = Inflector::pluralize($relatedModel['className']);
+				$varSet[0] = strToLower($varSet[0]);
+				$this->set($varSet, $this->Model->{$relatedModel['className']}->find('list'));
+			}
+		}
+
 	}
 
 
