@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-03-08 12:59-0300\n"
-"PO-Revision-Date: 2011-03-08 13:01-0300\n"
+"POT-Creation-Date: 2011-04-11 10:46-0300\n"
+"PO-Revision-Date: 2011-04-11 10:47-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com> <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -44,131 +44,131 @@ msgstr "The %s could not be saved. Please, check the error messages."
 msgid "The %s could not be saved. Please, check the error messages.[female]"
 msgstr "The %s could not be saved. Please, check the error messages."
 
-#: \controllers\contents_controller.php:372
+#: \controllers\contents_controller.php:375
 msgid "Successful delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:374
+#: \controllers\contents_controller.php:377
 msgid "Unable to delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:421
+#: \controllers\contents_controller.php:452
 msgid "%s files saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:422
+#: \controllers\contents_controller.php:453
 msgid "%s images saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:426
+#: \controllers\contents_controller.php:457
 msgid "No files saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:427
+#: \controllers\contents_controller.php:458
 msgid "No images saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:456
+#: \controllers\contents_controller.php:487
 msgid "The file was deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:457
+#: \controllers\contents_controller.php:488
 msgid "The image was deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:461
+#: \controllers\contents_controller.php:492
 msgid "The file could not be deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:462
+#: \controllers\contents_controller.php:493
 msgid "The image could not be deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:482
+#: \controllers\contents_controller.php:513
 msgid "The import could not be done. Please try again"
 msgstr ""
 
-#: \controllers\contents_controller.php:490
+#: \controllers\contents_controller.php:521
 msgid "Warning: %s::brwImport() must be defined"
 msgstr ""
 
-#: \controllers\contents_controller.php:511
+#: \controllers\contents_controller.php:550
 msgid "Successfully reordered"
 msgstr ""
 
-#: \controllers\contents_controller.php:513
+#: \controllers\contents_controller.php:552
 msgid "Failed to reorder"
 msgstr ""
 
-#: \controllers\contents_controller.php:564
+#: \controllers\contents_controller.php:603
 msgid "Yes"
 msgstr ""
 
-#: \controllers\contents_controller.php:564
+#: \controllers\contents_controller.php:603
 msgid "No"
 msgstr ""
 
-#: \controllers\contents_controller.php:593
+#: \controllers\contents_controller.php:632
 msgid "Date not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:597
+#: \controllers\contents_controller.php:636
 msgid "Invalid date"
 msgstr ""
 
-#: \controllers\contents_controller.php:603
+#: \controllers\contents_controller.php:642
 msgid "Datetime not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:607
+#: \controllers\contents_controller.php:646
 msgid "Invalid datetime"
 msgstr ""
 
-#: \controllers\contents_controller.php:614
+#: \controllers\contents_controller.php:653
 msgid "After save"
 msgstr ""
 
-#: \controllers\contents_controller.php:617
+#: \controllers\contents_controller.php:656
 msgid "Continue editing this %s [male]"
 msgstr "Continue editing this %s"
 
-#: \controllers\contents_controller.php:618
+#: \controllers\contents_controller.php:657
 msgid "Continue editing this %s [female]"
 msgstr "Continue editing this %s"
 
-#: \controllers\contents_controller.php:621
+#: \controllers\contents_controller.php:660
 msgid "Add another %s [male]"
 msgstr "Add another %s"
 
-#: \controllers\contents_controller.php:622
+#: \controllers\contents_controller.php:661
 msgid "Add another %s [female]"
 msgstr "Add another %s"
 
-#: \controllers\contents_controller.php:625
+#: \controllers\contents_controller.php:664
 msgid "Go to to index of all %s [male]"
 msgstr "Go to the index of all %s"
 
-#: \controllers\contents_controller.php:626
+#: \controllers\contents_controller.php:665
 msgid "Go to to index of all %s [female]"
 msgstr "Go to the index of all %s"
 
-#: \controllers\contents_controller.php:629
+#: \controllers\contents_controller.php:668
 msgid "View saved %s [male]"
 msgstr "View saved %s"
 
-#: \controllers\contents_controller.php:630
+#: \controllers\contents_controller.php:669
 msgid "View saved %s [female]"
 msgstr "View saved %s"
 
-#: \controllers\contents_controller.php:632
+#: \controllers\contents_controller.php:671
 msgid "Go home"
 msgstr ""
 
-#: \controllers\contents_controller.php:645
+#: \controllers\contents_controller.php:684
 msgid "Go to the %s [male]"
 msgstr "Go to the %s"
 
-#: \controllers\contents_controller.php:646
+#: \controllers\contents_controller.php:685
 msgid "Go to the %s [female]"
 msgstr "Go to the %s"
 
@@ -404,35 +404,39 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: \views\elements\index.ctp:49
+#: \views\elements\index.ctp:31
+msgid "Export"
+msgstr ""
+
+#: \views\elements\index.ctp:60
 msgid "Sort"
 msgstr ""
 
-#: \views\elements\index.ctp:52
+#: \views\elements\index.ctp:63
 msgid "Actions"
 msgstr ""
 
-#: \views\elements\index.ctp:73;75
+#: \views\elements\index.ctp:86;88
 msgid "Sort up"
 msgstr ""
 
-#: \views\elements\index.ctp:77;79
+#: \views\elements\index.ctp:90;92
 msgid "Sort down"
 msgstr ""
 
-#: \views\elements\index.ctp:92
-msgid "No records"
+#: \views\elements\index.ctp:106
+msgid "There are no %s"
 msgstr ""
 
-#: \views\elements\index.ctp:101
+#: \views\elements\index.ctp:116
 msgid "previous"
 msgstr ""
 
-#: \views\elements\index.ctp:105
+#: \views\elements\index.ctp:120
 msgid "next"
 msgstr ""
 
-#: \views\elements\index.ctp:113
+#: \views\elements\index.ctp:128
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr ""
 

@@ -102,7 +102,9 @@ if ($records):
 	<?php endforeach;
 	echo '</table>';
 else:
-	echo '<p class="norecords">' . __d('brownie', 'No records', true) . '</p>';
+	echo '<p class="norecords">'
+	. sprintf(__d('brownie', 'There are no %s', true), $brwConfig['names']['plural'])
+	. '</p>';
 endif;
 
 if ($records) {
