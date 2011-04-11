@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-03-29 14:29-0300\n"
-"PO-Revision-Date: 2011-03-29 15:27-0300\n"
+"POT-Creation-Date: 2011-04-11 11:03-0300\n"
+"PO-Revision-Date: 2011-04-11 11:04-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -93,83 +93,83 @@ msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
 msgid "Warning: %s::brwImport() must be defined"
 msgstr "Atención: %s::brwImport() debe estar definida"
 
-#: \controllers\contents_controller.php:526
+#: \controllers\contents_controller.php:534
 msgid "Successfully reordered"
 msgstr "Reordenado exitosamente"
 
-#: \controllers\contents_controller.php:528
+#: \controllers\contents_controller.php:536
 msgid "Failed to reorder"
 msgstr "No se pudo reordenar"
 
-#: \controllers\contents_controller.php:580
+#: \controllers\contents_controller.php:588
 msgid "Yes"
 msgstr "Sí"
 
-#: \controllers\contents_controller.php:580
+#: \controllers\contents_controller.php:588
 msgid "No"
 msgstr "No"
 
-#: \controllers\contents_controller.php:610
+#: \controllers\contents_controller.php:618
 msgid "Date not set"
 msgstr "Fecha no establecida"
 
-#: \controllers\contents_controller.php:614
+#: \controllers\contents_controller.php:622
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
-#: \controllers\contents_controller.php:620
+#: \controllers\contents_controller.php:628
 msgid "Datetime not set"
 msgstr "Fecha/hora no establecida"
 
-#: \controllers\contents_controller.php:624
+#: \controllers\contents_controller.php:632
 msgid "Invalid datetime"
 msgstr "Fecha/hora no válida"
 
-#: \controllers\contents_controller.php:631
+#: \controllers\contents_controller.php:639
 msgid "After save"
 msgstr "Después de guardar"
 
-#: \controllers\contents_controller.php:634
+#: \controllers\contents_controller.php:642
 msgid "Continue editing this %s [male]"
 msgstr "Continuar editando este %s"
 
-#: \controllers\contents_controller.php:635
+#: \controllers\contents_controller.php:643
 msgid "Continue editing this %s [female]"
 msgstr "Continuar editando esta %s"
 
-#: \controllers\contents_controller.php:638
+#: \controllers\contents_controller.php:646
 msgid "Add another %s [male]"
 msgstr "Agregar otro %s"
 
-#: \controllers\contents_controller.php:639
+#: \controllers\contents_controller.php:647
 msgid "Add another %s [female]"
 msgstr "Agregar otra %s"
 
-#: \controllers\contents_controller.php:642
+#: \controllers\contents_controller.php:650
 msgid "Go to to index of all %s [male]"
 msgstr "Ir al listado de todos los %s"
 
-#: \controllers\contents_controller.php:643
+#: \controllers\contents_controller.php:651
 msgid "Go to to index of all %s [female]"
 msgstr "Ir al listado de todas las %s"
 
-#: \controllers\contents_controller.php:646
+#: \controllers\contents_controller.php:654
 msgid "View saved %s [male]"
 msgstr "Examinar el %s guardado"
 
-#: \controllers\contents_controller.php:647
+#: \controllers\contents_controller.php:655
 msgid "View saved %s [female]"
 msgstr "Examinar la %s guardada"
 
-#: \controllers\contents_controller.php:649
+#: \controllers\contents_controller.php:657
 msgid "Go home"
 msgstr "Ir a home"
 
-#: \controllers\contents_controller.php:662
+#: \controllers\contents_controller.php:670
 msgid "Go to the %s [male]"
 msgstr "Ir al %s"
 
-#: \controllers\contents_controller.php:663
+#: \controllers\contents_controller.php:671
 msgid "Go to the %s [female]"
 msgstr "Ir a la %s"
 
@@ -197,33 +197,33 @@ msgstr "Este valor debe ser único y ya está siendo usado por otro %s"
 msgid "This value must be unique and it's already in use by another %s [female]"
 msgstr "Este valor debe ser único y ya está siendo usado por otra %s"
 
-#: \models\content.php:310
+#: \models\content.php:308
 #: \views\brownie\index.ctp:13
 #: \views\contents\view.ctp:80
 msgid "Add"
 msgstr "Agregar"
 
-#: \models\content.php:311
+#: \models\content.php:309
 msgid "View"
 msgstr "Examinar"
 
-#: \models\content.php:312
+#: \models\content.php:310
 #: \views\elements\file.ctp:10
 #: \views\elements\image.ctp:10
 msgid "Edit"
 msgstr "Modificar"
 
-#: \models\content.php:313
+#: \models\content.php:311
 #: \views\elements\file.ctp:15
 #: \views\elements\image.ctp:14
 msgid "Delete"
 msgstr "Eliminar"
 
-#: \models\content.php:331
+#: \models\content.php:329
 msgid "Are you sure you want to delete this %s?[male]"
 msgstr "¿Confirma que desea eliminar este %s?"
 
-#: \models\content.php:332
+#: \models\content.php:330
 msgid "Are you sure you want to delete this %s?[female]"
 msgstr "¿Confirma que desea eliminar esta %s?"
 
@@ -405,35 +405,39 @@ msgstr "¿Confirma que desea eliminar esta imagen?"
 msgid "Import"
 msgstr "Importar"
 
-#: \views\elements\index.ctp:53
+#: \views\elements\index.ctp:31
+msgid "Export"
+msgstr "Exportar"
+
+#: \views\elements\index.ctp:60
 msgid "Sort"
 msgstr "Orden"
 
-#: \views\elements\index.ctp:56
+#: \views\elements\index.ctp:63
 msgid "Actions"
 msgstr "Acciones"
 
-#: \views\elements\index.ctp:77;79
+#: \views\elements\index.ctp:84;86
 msgid "Sort up"
 msgstr "Reordenar hacia arriba"
 
-#: \views\elements\index.ctp:81;83
+#: \views\elements\index.ctp:88;90
 msgid "Sort down"
 msgstr "Reordenar hacia abajo"
 
-#: \views\elements\index.ctp:96
-msgid "No records"
-msgstr "No hay registros"
+#: \views\elements\index.ctp:104
+msgid "There are no %s"
+msgstr "No hay %s"
 
-#: \views\elements\index.ctp:105
+#: \views\elements\index.ctp:114
 msgid "previous"
 msgstr "anterior"
 
-#: \views\elements\index.ctp:109
+#: \views\elements\index.ctp:118
 msgid "next"
 msgstr "siguiente"
 
-#: \views\elements\index.ctp:117
+#: \views\elements\index.ctp:126
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr "Página %page% de %pages%, mostrando %current% :name_plural de un total de %count%"
 
@@ -560,6 +564,9 @@ msgstr "Sitio"
 #: \views\layouts\brownie_default.ctp:41
 msgid "Logout"
 msgstr "Cerrar sesión"
+
+#~ msgid "No records"
+#~ msgstr "No hay registros"
 
 #~ msgid "Down"
 #~ msgstr "Bajar"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-03-30 15:06-0300\n"
+"POT-Creation-Date: 2011-04-11 11:03-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -94,83 +94,83 @@ msgstr ""
 msgid "Warning: %s::brwImport() must be defined"
 msgstr ""
 
-#: \controllers\contents_controller.php:526
+#: \controllers\contents_controller.php:534
 msgid "Successfully reordered"
 msgstr ""
 
-#: \controllers\contents_controller.php:528
+#: \controllers\contents_controller.php:536
 msgid "Failed to reorder"
 msgstr ""
 
-#: \controllers\contents_controller.php:580
+#: \controllers\contents_controller.php:588
 msgid "Yes"
 msgstr ""
 
-#: \controllers\contents_controller.php:580
+#: \controllers\contents_controller.php:588
 msgid "No"
 msgstr ""
 
-#: \controllers\contents_controller.php:610
+#: \controllers\contents_controller.php:618
 msgid "Date not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:614
+#: \controllers\contents_controller.php:622
 msgid "Invalid date"
 msgstr ""
 
-#: \controllers\contents_controller.php:620
+#: \controllers\contents_controller.php:628
 msgid "Datetime not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:624
+#: \controllers\contents_controller.php:632
 msgid "Invalid datetime"
 msgstr ""
 
-#: \controllers\contents_controller.php:631
+#: \controllers\contents_controller.php:639
 msgid "After save"
 msgstr ""
 
-#: \controllers\contents_controller.php:634
+#: \controllers\contents_controller.php:642
 msgid "Continue editing this %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:635
+#: \controllers\contents_controller.php:643
 msgid "Continue editing this %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:638
+#: \controllers\contents_controller.php:646
 msgid "Add another %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:639
+#: \controllers\contents_controller.php:647
 msgid "Add another %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:642
+#: \controllers\contents_controller.php:650
 msgid "Go to to index of all %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:643
+#: \controllers\contents_controller.php:651
 msgid "Go to to index of all %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:646
+#: \controllers\contents_controller.php:654
 msgid "View saved %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:647
+#: \controllers\contents_controller.php:655
 msgid "View saved %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:649
+#: \controllers\contents_controller.php:657
 msgid "Go home"
 msgstr ""
 
-#: \controllers\contents_controller.php:662
+#: \controllers\contents_controller.php:670
 msgid "Go to the %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:663
+#: \controllers\contents_controller.php:671
 msgid "Go to the %s [female]"
 msgstr ""
 
@@ -406,35 +406,39 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: \views\elements\index.ctp:53
+#: \views\elements\index.ctp:31
+msgid "Export"
+msgstr ""
+
+#: \views\elements\index.ctp:60
 msgid "Sort"
 msgstr ""
 
-#: \views\elements\index.ctp:56
+#: \views\elements\index.ctp:63
 msgid "Actions"
 msgstr ""
 
-#: \views\elements\index.ctp:77;79
+#: \views\elements\index.ctp:84;86
 msgid "Sort up"
 msgstr ""
 
-#: \views\elements\index.ctp:81;83
+#: \views\elements\index.ctp:88;90
 msgid "Sort down"
 msgstr ""
 
-#: \views\elements\index.ctp:96
-msgid "No records"
+#: \views\elements\index.ctp:104
+msgid "There are no %s"
 msgstr ""
 
-#: \views\elements\index.ctp:105
+#: \views\elements\index.ctp:114
 msgid "previous"
 msgstr ""
 
-#: \views\elements\index.ctp:109
+#: \views\elements\index.ctp:118
 msgid "next"
 msgstr ""
 
-#: \views\elements\index.ctp:117
+#: \views\elements\index.ctp:126
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr ""
 
