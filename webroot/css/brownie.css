@@ -274,17 +274,24 @@ a{
 
 div.pagination {
 	clear: both;
-	
+	padding: 0;
+	margin-bottom: 15px;
 }
-div.pagination span{
+
+div.paging{
+	float: left;
+	margin-right: 10px;
+}
+
+div.paging span{
 	display: block;
 	float: left;
 }
-div.pagination a, div.pagination span.current, div.pagination a.prev, div.pagination a.next{
+div.paging a, div.paging span.current, div.paging a.prev, div.paging a.next{
 	display: block;
 	float: left;
 	text-align: center;
-	margin: 20px 4px 12px 0;
+	margin: 0 4px 0 0;
 	font-size: 13px;
 	font-weight: bold;
 	color: #757E82;
@@ -293,23 +300,71 @@ div.pagination a, div.pagination span.current, div.pagination a.prev, div.pagina
 	text-decoration: none;
 	background: #fff;
 }
-div.pagination span.current{
+div.paging span.current{
 	border: 1px solid #ccc;
 	color: #444;
 }
-div.pagination a:hover{
+div.paging a:hover{
 	background: #E1EBF5;
 	color: #000;
 }
 
-div.pagination span.prev span.disabled, div.pagination span.next span.disabled{
+div.paging span.prev span.disabled, div.paging span.next span.disabled{
 	display: none;
 }
 
-.pagination p{
-	margin: 20px 4px 12px 0;
+div.limiter{
+	float: right;
+	margin-left: 20px;
 }
 
+div.limiter li{
+	float: left;
+	border-left: 1px solid #676767;
+	padding: 0 4px;
+	margin: 4px 0;
+}
+
+div.limiter li:first-child{
+	border-left: none;
+}
+
+div.limiter ul{
+	float: left;
+}
+
+div.pagination p, div.limiter p{
+	padding: 4px 0;
+}
+
+div.paging, p.counter, div.limiter{
+	margin-top: 10px;
+}
+
+p.counter{
+	float: left;
+	margin-right: 20px;
+	padding: 4px 0;
+}
+
+div.limiter p{
+	float: left;
+	margin-right: 5px;
+	padding: 4px 0;
+}
+
+div.limiter li.current a{
+	font-weight: bold;
+	color: #000;
+}
+
+div.limiter a{
+	color: #333;
+}
+
+div.paging_counter{
+	float: left;
+}
 
 /* flash messages */
 
@@ -735,6 +790,9 @@ p.norecords{
 	background: #fff;
 }
 
+table#index{
+	margin-bottom: 15px;
+}
 
 /* form */
 
@@ -1188,17 +1246,14 @@ td.habtm li a:hover{
 }
 
 
-form.filter{
+div#content form.filter{
 	vertical-align: middle;
-	margin-bottom: 30px;
+	margin: 0 0 10px 0;
+	background: #fff;
+	border: 1px solid #CCCCCC;
+	padding: 0 7px 7px 7px;
+	width: auto;
 }
-
-/*form.filter div.input, form.filter label, form.filter input, form.filter select{
-	display: inline !important;
-	margin: 0 3px !important;
-	padding: 0 !important;
-	line-height: 1.7em;
-}*/
 
 div#content form.filter div.input, div#content form.filter div.submit{
 	float: left;
@@ -1219,3 +1274,4 @@ div#content form.filter div.input select{
 div#content form.filter div.input select{
 	border: 1px solid #888;
 }
+

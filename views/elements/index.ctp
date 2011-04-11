@@ -41,7 +41,12 @@ if ($brwConfig['fields']['filter'] and $calledFrom == 'index') {
 
 $i = 0;
 if ($records):
-	echo '<table cellpadding="0" cellspacing="0">';
+	$pageParams = $this->Paginator->params['paging'][$model];
+	if ($pageParams['pageCount'] > 1 or $pageParams['count'] > 20) {
+		echo $this->element('pagination', array('model' => $model));
+	}
+
+	echo '<table id="index">';
 	foreach ($records as $record):
 		if ($i == 0) {
 			echo '
@@ -107,32 +112,8 @@ else:
 endif;
 
 if ($records) {
-	echo '<div class="pagination">';
-	if ($numbers = $paginator->numbers(array('model' => $model, 'separator' => ''))) {
-		echo '
-		<div class="paging clearfix">
-			<span class="prev">' . $paginator->prev(
-				'&laquo; ' . __d('brownie', 'previous', true), array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
-			) . '</span>
-			' . $numbers . '
-			<span class="next">' . $paginator->next(
-				__d('brownie', 'next', true).' &raquo;', array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
-			) . '</span>
-		</div>';
-	}
-
-	echo '
-	<p>' . $paginator->counter(array(
-		'format' => String::insert(
-			__d('brownie', 'Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%', true),
-			array('name_plural' => $brwConfig['names']['plural'])
-		),
-		'model' => $model
-	)) . '</p>';
-
-	echo '</div>';
+	echo $this->element('pagination', array('model' => $model));
+	$this->Paginator = null;
 }
-
-unset($paginator);
 ?>
 </div>
