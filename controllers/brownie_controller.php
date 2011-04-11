@@ -6,7 +6,11 @@ class BrownieController extends BrownieAppController {
 	function index() {
 		$customHome = Configure::read('brwSettings.customHome');
 		if ($customHome) {
-			$this->render('custom_home');
+			if (!empty($customHome['plugin']) and $customHome['plugin'] == 'brownie') {
+				$this->redirect($customHome);
+			} else {
+				$this->render('custom_home');
+			}
 		}
 	}
 
