@@ -42,7 +42,8 @@ class BrownieController extends BrownieAppController {
 	function translations() {
 		$models = Configure::listObjects('model');
 		$translations = array();
-		$out = "<?php\n";
+		$out = "<?php\n__('January');__('February');__('March');__('April');__('May');__('June');
+		__('July');__('August');__('September');__('October');__('November');__('December');";
 		foreach ($models as $model) {
 			$Model = ClassRegistry::init($model);
 			$translations[Inflector::humanize(Inflector::underscore($Model->name))] = true;
