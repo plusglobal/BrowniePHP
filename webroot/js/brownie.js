@@ -78,7 +78,6 @@ function bindTinyMCE() {
 function bindFckEditor(id) {
 	$('textarea.richEditor').each(function(){
 		id = $(this).attr('id');
-		console.log(id);
 		oFCKeditor = new FCKeditor(id);
 		oFCKeditor.BasePath = APP_BASE + 'js/fckeditor/';
 		oFCKeditor.Config['CustomConfigurationsPath'] = APP_BASE + 'brownie/js/fckconfig.js';
