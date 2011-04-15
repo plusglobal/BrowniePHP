@@ -77,14 +77,11 @@ function bindTinyMCE() {
 
 function bindFckEditor(id) {
 	$('textarea.richEditor').each(function(){
-		var id = $(this).attr('id');
-		fckLoader_ProductDescription = function () {
-			var bFCKeditor_ProductDescription = new FCKeditor(id);
-			bFCKeditor_ProductDescription.BasePath = APP_BASE + "js/fckeditor/";
-			bFCKeditor_ProductDescription.ToolbarSet = "Brownie";
-			bFCKeditor_ProductDescription.ReplaceTextarea();
-		}
-		fckLoader_ProductDescription();
+		id = $(this).attr('id');
+		oFCKeditor = new FCKeditor(id);
+		oFCKeditor.BasePath = APP_BASE + 'js/fckeditor/';
+		oFCKeditor.Config['CustomConfigurationsPath'] = APP_BASE + 'brownie/js/fckconfig.js';
+		oFCKeditor.ToolbarSet = "Brownie";
+		oFCKeditor.ReplaceTextarea();
 	})
 }
-
