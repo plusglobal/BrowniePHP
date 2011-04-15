@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-04-11 11:03-0300\n"
-"PO-Revision-Date: 2011-04-11 11:04-0300\n"
+"POT-Creation-Date: 2011-04-15 16:21-0300\n"
+"PO-Revision-Date: 2011-04-15 16:21-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -260,7 +260,7 @@ msgid "User"
 msgstr "Usuario"
 
 #: \models\behaviors\panel.php:639
-#: \views\layouts\brownie_default.ctp:34
+#: \views\layouts\brownie_default.ctp:39
 msgid "Users"
 msgstr "Usuarios"
 
@@ -549,19 +549,23 @@ msgstr "Holandés"
 msgid "Spanish"
 msgstr "Español"
 
-#: \views\layouts\brownie_default.ctp:23
+#: \views\layouts\brownie_default.ctp:13
+msgid "Admin panel"
+msgstr "Panel de administración"
+
+#: \views\layouts\brownie_default.ctp:28
 msgid "User: %s"
 msgstr "Usuario: %s"
 
-#: \views\layouts\brownie_default.ctp:25
+#: \views\layouts\brownie_default.ctp:30
 msgid "Home"
 msgstr "Inicio"
 
-#: \views\layouts\brownie_default.ctp:28
+#: \views\layouts\brownie_default.ctp:33
 msgid "Site"
 msgstr "Sitio"
 
-#: \views\layouts\brownie_default.ctp:41
+#: \views\layouts\brownie_default.ctp:46
 msgid "Logout"
 msgstr "Cerrar sesión"
 

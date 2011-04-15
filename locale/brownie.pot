@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-04-11 11:03-0300\n"
+"POT-Creation-Date: 2011-04-15 16:21-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -261,7 +261,7 @@ msgid "User"
 msgstr ""
 
 #: \models\behaviors\panel.php:639
-#: \views\layouts\brownie_default.ctp:34
+#: \views\layouts\brownie_default.ctp:39
 msgid "Users"
 msgstr ""
 
@@ -550,19 +550,23 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:23
-msgid "User: %s"
-msgstr ""
-
-#: \views\layouts\brownie_default.ctp:25
-msgid "Home"
+#: \views\layouts\brownie_default.ctp:13
+msgid "Admin panel"
 msgstr ""
 
 #: \views\layouts\brownie_default.ctp:28
+msgid "User: %s"
+msgstr ""
+
+#: \views\layouts\brownie_default.ctp:30
+msgid "Home"
+msgstr ""
+
+#: \views\layouts\brownie_default.ctp:33
 msgid "Site"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:41
+#: \views\layouts\brownie_default.ctp:46
 msgid "Logout"
 msgstr ""
 
