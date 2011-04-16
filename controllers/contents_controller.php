@@ -84,17 +84,7 @@ class ContentsController extends BrownieAppController {
 		$this->paginate['conditions'] = $filters;
 
 		$records = $this->paginate($this->Model);
-		$isUniqueRecord = (
-			count($records) == 1
-			and !$this->Model->brwConfig['actions']['add']
-			and !$this->Model->brwConfig['actions']['delete']
-		);
-		if ($isUniqueRecord) {
-			$this->redirect(array(
-				'controller' => 'contents', 'action' => 'view',
-				$this->Model->alias, $records[0][$this->Model->alias]['id']
-			));
-		}
+
 		if (method_exists($this->Model, 'brwAfterFind')) {
 			$records = $this->Model->brwAfterFind($records);
 		}
