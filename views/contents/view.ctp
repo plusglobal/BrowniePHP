@@ -9,7 +9,7 @@
 				echo '
 				<li class="prev">
 					' . $html->link(__d('brownie', 'Previous', true),
-					array('action' => 'view', $model, $neighbors['prev'][$model]['id']),
+					array('action' => 'view', $model, $neighbors['prev'][$model]['id']) + $this->params['named'],
 					array('title' => __d('brownie', 'Previous', true))).'
 				</li>';
 			}
@@ -17,7 +17,7 @@
 				echo '
 				<li class="next">
 					' . $html->link(__d('brownie', 'Next', true),
-					array('action' => 'view', $model, $neighbors['next'][$model]['id']),
+					array('action' => 'view', $model, $neighbors['next'][$model]['id']) + $this->params['named'],
 					array('title' => __d('brownie', 'Next', true))).'
 				</li>';
 			}

@@ -390,35 +390,47 @@ class Content extends BrownieAppModel{
 		}
 	}
 
-	function neighborsForView($Model, $record, $restricted) {
+	function neighborsForView($Model, $record, $restricted, $named = array()) {
+		$neighbors = array();
 		$isTanslatable = $Model->Behaviors->enabled('Translate');
 		if ($isTanslatable) {
 			$Model->Behaviors->disable('Translate');
 		}
-
-		$neighbors = array();
 		if (!$restricted) {
-			if (is_array($Model->order)) {
-				list($keyOrder) = each($Model->order);
-				$keyOrder = str_replace($Model->alias . '.', '', $keyOrder);
-				$neighbors = $Model->find('neighbors', array('field' => $keyOrder, 'value' => $record[$Model->alias][$keyOrder]));
-				if (
-					!empty($Model->brwConfig['sortable']['direction'])
-					and $Model->brwConfig['sortable']['direction'] == 'desc'
-				) {
-					$tmp = $neighbors['prev'];
-					$neighbors['prev'] = $neighbors['next'];
-					$neighbors['next'] = $tmp;
+			if (!empty($named['sort']) and in_array($named['sort'], array_keys($Model->_schema))) {
+				$sort_field = $named['sort'];
+				$direction = 'asc';
+				if (!empty($named['direction']) and in_array($named['direction'], array('desc', 'asc'))) {
+					$direction = $named['direction'];
 				}
+			} elseif (is_array($Model->order)) {
+				list($sort_field, $direction) = each($Model->order);
 			} else {
-				$neighbors = $Model->find('neighbors', array('field' => 'id', 'value' => $record[$Model->alias]['id']));
+				$sort_field = 'id';
+				$direction = 'asc';
+			}
+			$sort_field = str_replace($Model->alias . '.', '', $sort_field);
+			if (
+				!empty($Model->_schema[$sort_field]['key']) and
+				in_array($Model->_schema[$sort_field]['key'], array('unique', 'primary'))
+			) {
+				$neighbors = $Model->find('neighbors', array(
+					'field' => $sort_field,
+					'value' => $record[$Model->alias][$sort_field],
+					'conditions' => $this->filterConditions($Model, $named)
+				));
+			} else {
+				//ToDo: custom neighborgs function for non-unique fields
+			}
+			if ($neighbors and $direction == 'desc') {
+				$tmp = $neighbors['prev'];
+				$neighbors['prev'] = $neighbors['next'];
+				$neighbors['next'] = $tmp;
 			}
 		}
-
 		if ($isTanslatable) {
 			$Model->Behaviors->enable('Translate');
 		}
-
 		return $neighbors;
 	}
 

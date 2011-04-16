@@ -100,7 +100,12 @@ if ($records):
 		<?php endif ?>
 
 			<td class="actions">
-			<?php echo $this->element('actions', array('record' => $record, 'model' => $model, 'calledFrom' => $calledFrom)) ?>
+			<?php
+			$paramsAction = array(
+				'filters' => $filters, 'record' => $record, 'model' => $model, 'calledFrom' => $calledFrom
+			);
+			echo $this->element('actions', $paramsAction);
+			?>
 			</td>
 		</tr>
 	<?php endforeach;

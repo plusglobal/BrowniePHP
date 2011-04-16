@@ -133,7 +133,7 @@ class ContentsController extends BrownieAppController {
 
 		//ejecutar brwAfterFind en los modelos relacionados que estan en $contain
 
-		$neighbors = $this->Content->neighborsForView($this->Model, $record, $restricted);
+		$neighbors = $this->Content->neighborsForView($this->Model, $record, $restricted, $this->params['named']);
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);

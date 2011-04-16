@@ -1,4 +1,8 @@
 <?php
+if (empty($filters)) {
+	$filters = array();
+}
+
 $after_save = null;
 switch ($calledFrom) {
 	case 'view':
@@ -17,9 +21,14 @@ switch ($calledFrom) {
 if (!empty($record[$model]['brw_actions']['edit'])) {
 	$record[$model]['brw_actions']['edit']['url']['after_save'] = $after_save;
 }
+if (!empty($record[$model]['brw_actions']['view'])) {
+	$record[$model]['brw_actions']['view']['url'] += $this->params['named'] + $filters;
+}
 if (!empty($record[$model]['brw_actions']['delete'])) {
 	$record[$model]['brw_actions']['delete']['url']['after_delete'] = $after_delete;
 }
+
+
 
 if (!empty($record[$model]['brw_actions'])): ?>
 <ul class="actions">
