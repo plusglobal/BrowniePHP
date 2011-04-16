@@ -23,6 +23,9 @@ if (!empty($record[$model]['brw_actions']['edit'])) {
 }
 if (!empty($record[$model]['brw_actions']['view'])) {
 	$record[$model]['brw_actions']['view']['url'] += $this->params['named'] + $filters;
+	if ($calledFrom == 'index') {
+		$record[$model]['brw_actions']['view']['url'] += array('back_to' => 'index');
+	}
 }
 if (!empty($record[$model]['brw_actions']['delete'])) {
 	$record[$model]['brw_actions']['delete']['url']['after_delete'] = $after_delete;

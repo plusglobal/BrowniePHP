@@ -625,7 +625,9 @@ li.prev a{
 li.next a{
 	background-image: url(ico/16x16/go-next.png);
 }
-
+li.back a{
+	background-image: url(ico/16x16/back.png);
+}
 li.down a{
 	background-image: url(ico/16x16/go-down.png);
 }

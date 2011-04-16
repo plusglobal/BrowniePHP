@@ -98,12 +98,9 @@ if ($records):
 			?>
 			</td>
 		<?php endif ?>
-
 			<td class="actions">
 			<?php
-			$paramsAction = array(
-				'filters' => $filters, 'record' => $record, 'model' => $model, 'calledFrom' => $calledFrom
-			);
+			$paramsAction = array('filters' => $filters, 'record' => $record, 'model' => $model, 'calledFrom' => $calledFrom);
 			echo $this->element('actions', $paramsAction);
 			?>
 			</td>

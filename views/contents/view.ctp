@@ -22,7 +22,23 @@
 				</li>';
 			}
 			?>
-			<?php // echo $html->link(__d('brownie', 'List', true), array('action'=>'index', $model)); ?>
+			<?php
+			if (!empty($this->params['named']['back_to'])) {
+				$backToUrl = array('plugin' => 'brownie', 'controller' => 'contents');
+				$named = $this->params['named'];
+				$back_to = $named['back_to'];
+				unset($named['back_to']);
+				switch($back_to) {
+					case 'index':
+						$backToUrl += array('action' => 'index', $model) + $this->params['named'];
+					break;
+				}
+				echo '
+				<li class="back">
+					' . $html->link(__d('brownie', 'Back', true), $backToUrl, array('title' => __d('brownie', 'Back', true))) . '
+				<li>';
+			}
+			?>
 		</ul>
 		<?php echo $this->element('actions', array('record' => $record, 'calledFrom' => 'view', 'inView' => true)) ?>
 	</div>
