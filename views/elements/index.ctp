@@ -43,7 +43,7 @@ $i = 0;
 if ($records):
 	$pageParams = $this->Paginator->params['paging'][$model];
 	if ($pageParams['pageCount'] > 1 or $pageParams['count'] > 20) {
-		echo $this->element('pagination', array('model' => $model));
+		echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));
 	}
 
 	echo '<table id="index">';
@@ -114,8 +114,8 @@ else:
 endif;
 
 if ($records) {
-	echo $this->element('pagination', array('model' => $model));
-	$this->Paginator = null;
+	echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));
+	//$this->Paginator = null;
 }
 ?>
 </div>
