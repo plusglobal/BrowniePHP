@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-04-15 16:40-0300\n"
-"PO-Revision-Date: 2011-04-15 16:41-0300\n"
+"POT-Creation-Date: 2011-04-17 15:41-0300\n"
+"PO-Revision-Date: 2011-04-17 15:41-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -29,147 +29,147 @@ msgstr "Ingresar datos de acceso"
 msgid "Menu"
 msgstr "Menú"
 
-#: \controllers\contents_controller.php:249
+#: \controllers\contents_controller.php:239
 msgid "The %s has been saved [male]"
 msgstr "El %s ha sido guardado"
 
-#: \controllers\contents_controller.php:250
+#: \controllers\contents_controller.php:240
 msgid "The %s has been saved [female]"
 msgstr "La %s ha sido guardada"
 
-#: \controllers\contents_controller.php:283
+#: \controllers\contents_controller.php:273
 msgid "The %s could not be saved. Please, check the error messages.[male]"
 msgstr "El %s no se ha guardado. Por favor, revise los errores a continuación."
 
-#: \controllers\contents_controller.php:284
+#: \controllers\contents_controller.php:274
 msgid "The %s could not be saved. Please, check the error messages.[female]"
 msgstr "La %s no se ha guardado. Por favor, revise los errores a continuación."
 
-#: \controllers\contents_controller.php:362
+#: \controllers\contents_controller.php:352
 msgid "Successful delete"
 msgstr "Eliminación exitosa"
 
-#: \controllers\contents_controller.php:364
+#: \controllers\contents_controller.php:354
 msgid "Unable to delete"
 msgstr "No se ha podido eliminar"
 
-#: \controllers\contents_controller.php:439
+#: \controllers\contents_controller.php:429
 msgid "%s files saved"
 msgstr "%s archivos guardados"
 
-#: \controllers\contents_controller.php:440
+#: \controllers\contents_controller.php:430
 msgid "%s images saved"
 msgstr "%s imágenes guardadas"
 
-#: \controllers\contents_controller.php:444
+#: \controllers\contents_controller.php:434
 msgid "No files saved"
 msgstr "No se han guardado archivos"
 
-#: \controllers\contents_controller.php:445
+#: \controllers\contents_controller.php:435
 msgid "No images saved"
 msgstr "No se han guardado imágenes"
 
-#: \controllers\contents_controller.php:474
+#: \controllers\contents_controller.php:464
 msgid "The file was deleted"
 msgstr "El archivo fue eliminado"
 
-#: \controllers\contents_controller.php:475
+#: \controllers\contents_controller.php:465
 msgid "The image was deleted"
 msgstr "La imagen fue eliminada"
 
-#: \controllers\contents_controller.php:479
+#: \controllers\contents_controller.php:469
 msgid "The file could not be deleted"
 msgstr "El archivo no ha podido eliminarse"
 
-#: \controllers\contents_controller.php:480
+#: \controllers\contents_controller.php:470
 msgid "The image could not be deleted"
 msgstr "La imagen no ha podido eliminarse"
 
-#: \controllers\contents_controller.php:500
+#: \controllers\contents_controller.php:490
 msgid "The import could not be done. Please try again"
 msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:508
+#: \controllers\contents_controller.php:498
 msgid "Warning: %s::brwImport() must be defined"
 msgstr "Atención: %s::brwImport() debe estar definida"
 
-#: \controllers\contents_controller.php:548
+#: \controllers\contents_controller.php:538
 msgid "Successfully reordered"
 msgstr "Reordenado exitosamente"
 
-#: \controllers\contents_controller.php:550
+#: \controllers\contents_controller.php:540
 msgid "Failed to reorder"
 msgstr "No se pudo reordenar"
 
-#: \controllers\contents_controller.php:640
+#: \controllers\contents_controller.php:630
 msgid "Yes"
 msgstr "Sí"
 
-#: \controllers\contents_controller.php:640
+#: \controllers\contents_controller.php:630
 msgid "No"
 msgstr "No"
 
-#: \controllers\contents_controller.php:670
+#: \controllers\contents_controller.php:660
 msgid "Date not set"
 msgstr "Fecha no establecida"
 
-#: \controllers\contents_controller.php:674
+#: \controllers\contents_controller.php:664
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
-#: \controllers\contents_controller.php:680
+#: \controllers\contents_controller.php:670
 msgid "Datetime not set"
 msgstr "Fecha/hora no establecida"
 
-#: \controllers\contents_controller.php:684
+#: \controllers\contents_controller.php:674
 msgid "Invalid datetime"
 msgstr "Fecha/hora no válida"
 
-#: \controllers\contents_controller.php:691
+#: \controllers\contents_controller.php:681
 msgid "After save"
 msgstr "Después de guardar"
 
-#: \controllers\contents_controller.php:694
+#: \controllers\contents_controller.php:684
 msgid "Continue editing this %s [male]"
 msgstr "Continuar editando este %s"
 
-#: \controllers\contents_controller.php:695
+#: \controllers\contents_controller.php:685
 msgid "Continue editing this %s [female]"
 msgstr "Continuar editando esta %s"
 
-#: \controllers\contents_controller.php:698
+#: \controllers\contents_controller.php:688
 msgid "Add another %s [male]"
 msgstr "Agregar otro %s"
 
-#: \controllers\contents_controller.php:699
+#: \controllers\contents_controller.php:689
 msgid "Add another %s [female]"
 msgstr "Agregar otra %s"
 
-#: \controllers\contents_controller.php:702
+#: \controllers\contents_controller.php:692
 msgid "Go to to index of all %s [male]"
 msgstr "Ir al listado de todos los %s"
 
-#: \controllers\contents_controller.php:703
+#: \controllers\contents_controller.php:693
 msgid "Go to to index of all %s [female]"
 msgstr "Ir al listado de todas las %s"
 
-#: \controllers\contents_controller.php:706
+#: \controllers\contents_controller.php:696
 msgid "View saved %s [male]"
 msgstr "Examinar el %s guardado"
 
-#: \controllers\contents_controller.php:707
+#: \controllers\contents_controller.php:697
 msgid "View saved %s [female]"
 msgstr "Examinar la %s guardada"
 
-#: \controllers\contents_controller.php:709
+#: \controllers\contents_controller.php:699
 msgid "Go home"
 msgstr "Ir a home"
 
-#: \controllers\contents_controller.php:722
+#: \controllers\contents_controller.php:712
 msgid "Go to the %s [male]"
 msgstr "Ir al %s"
 
-#: \controllers\contents_controller.php:723
+#: \controllers\contents_controller.php:713
 msgid "Go to the %s [female]"
 msgstr "Ir a la %s"
 
@@ -199,7 +199,7 @@ msgstr "Este valor debe ser único y ya está siendo usado por otra %s"
 
 #: \models\content.php:308
 #: \views\brownie\index.ctp:13
-#: \views\contents\view.ctp:80
+#: \views\contents\view.ctp:96
 msgid "Add"
 msgstr "Agregar"
 
@@ -389,6 +389,10 @@ msgstr "Anterior"
 msgid "Next"
 msgstr "Siguiente"
 
+#: \views\contents\view.ctp:38;38
+msgid "Back"
+msgstr "Volver"
+
 #: \views\elements\file.ctp:8
 msgid "Download"
 msgstr "Descargar"
@@ -445,7 +449,7 @@ msgstr "Reordenar hacia arriba"
 msgid "Sort down"
 msgstr "Reordenar hacia abajo"
 
-#: \views\elements\index.ctp:110
+#: \views\elements\index.ctp:112
 msgid "There are no %s"
 msgstr "No hay %s"
 
