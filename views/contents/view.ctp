@@ -30,7 +30,7 @@
 				unset($named['back_to']);
 				switch($back_to) {
 					case 'index':
-						$backToUrl += array('action' => 'index', $model) + $this->params['named'];
+						$backToUrl += array('action' => 'index', $model) + $named;
 					break;
 				}
 				echo '
