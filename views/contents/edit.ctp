@@ -48,21 +48,14 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 				}
 			}
 			if ($value['type'] == 'date') {
-				$params['minYear'] = date('Y') - 200;
-				$params['maxYear'] = date('Y') + 200;
+				$params['minYear'] = $brwConfig['fields']['date_ranges'][$key]['minYear'];
+				$params['maxYear'] = $brwConfig['fields']['date_ranges'][$key]['maxYear'];
+				$params['dateFormat'] = $brwConfig['fields']['date_ranges'][$key]['dateFormat'];
 				if ($value['null']) {
 					$params['empty'] = '-';
 				}
 			}
 
-			/*if (strstr($value['type'], 'enum(')) {
-				$options = enum2array($value['type']);
-				$translatedOptions = array();
-				foreach ($options as $field) {
-					$translatedOptions[$field] = __($field, true);
-				}
-				$params = array('type' => 'select', 'options' => $translatedOptions);
-			}*/
 			if (!empty($brwConfig['legends'][$key])) {
 				$params['after'] = $brwConfig['legends'][$key];
 			}

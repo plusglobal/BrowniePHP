@@ -36,6 +36,7 @@ class PanelBehavior extends ModelBehavior {
 			'no_sanitize_html' => array(),
 			'names' => array(),
 			'filter' => array(),
+			'date_ranges' => array(),
 		),
 
 		'fields_no_root' => array(),
@@ -234,6 +235,7 @@ class PanelBehavior extends ModelBehavior {
 		$this->_fieldsNames($Model);
 		$this->_fieldsFilters($Model);
 		$this->_removeDuplicates($Model);
+		$this->_setDefaultDateRanges($Model);
 	}
 
 
@@ -687,6 +689,28 @@ class PanelBehavior extends ModelBehavior {
 		$brwConfig['hide_children'] = array_keys(array_flip($brwConfig['hide_children']));
 
 		$Model->brwConfig = $brwConfig;
+	}
+
+
+	function _setDefaultDateRanges($Model) {
+		foreach ((array)$Model->_schema as $field => $config) {
+			if (in_array($config['type'], array('date', 'datetime'))) {
+				foreach (array('minYear', 'maxYear') as $yearType) {
+					if (empty($Model->brwConfig['fields']['date_ranges'][$field][$yearType])) {
+						$Model->brwConfig['fields']['date_ranges'][$field][$yearType] =
+							date('Y') + (($yearType == 'maxYear')? 100: -200);
+					} else {
+						$min = $Model->brwConfig['fields']['date_ranges'][$field][$yearType];
+						if (!ctype_digit($min) or !strlen($min) == 4) {
+							$Model->brwConfig['fields']['date_ranges'][$field][$yearType] = date('Y', strtotime($min));
+						}
+					}
+					if (empty($Model->brwConfig['fields']['date_ranges'][$field]['dateFormat'])) {
+						$Model->brwConfig['fields']['date_ranges'][$field]['dateFormat'] = 'MDY';
+					}
+				}
+			}
+		}
 	}
 
 }
