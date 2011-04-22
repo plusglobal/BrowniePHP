@@ -15,11 +15,17 @@ foreach ($brwConfig['fields']['filter'] as $field) {
 		echo $form->input($model . '.' . $field . '_from', array(
 			'label' => $brwConfig['fields']['names'][$field] . ' <span>' . __d('brownie', 'from', true) . '</span>',
 			'type' => $schema[$field]['type'],
+			'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
+			'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
+			'dateFormat' => $brwConfig['fields']['date_ranges'][$field]['dateFormat'],
 			'timeFormat' => '24'
 		));
 		echo $form->input($model . '.' . $field . '_to', array(
 			'label' => $brwConfig['fields']['names'][$field] . ' <span>' . __d('brownie', 'to', true) . '</span>',
 			'type' => $schema[$field]['type'],
+			'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
+			'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
+			'dateFormat' => $brwConfig['fields']['date_ranges'][$field]['dateFormat'],
 			'timeFormat' => '24'
 		));
 	} else {
