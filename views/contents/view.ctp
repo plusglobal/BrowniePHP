@@ -1,4 +1,4 @@
-<div class="view <?php echo $model;?>">
+<div class="view" id="<?php echo $model;?>_view">
 	<div class="clearfix">
 	<h1><?php  __d('brownie', $brwConfig['names']['singular']);?></h1>
 	<div class="actions-view">

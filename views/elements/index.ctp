@@ -1,4 +1,4 @@
-<div class="model-index">
+<div class="model-index" id="<?php echo $model ?>_index">
 
 <div class="index clearfix">
 	<h2><?php echo $brwConfig['names']['plural'] ?></h2>
