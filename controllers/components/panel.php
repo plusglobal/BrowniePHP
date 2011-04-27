@@ -14,6 +14,7 @@ class PanelComponent extends Object{
 				'/brownie/js/jquery.fancybox-1.3.1.pack',
 				'/brownie/js/jquery.selso',
 				'/brownie/js/jquery.comboselect',
+				'/brownie/js/jquery.jDoubleSelect',
 				'/brownie/js/brownie',
 			),
 			'customHome' => false,

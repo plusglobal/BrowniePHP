@@ -5,6 +5,8 @@ function hoverRowsColors() {
 	function() {
 		$(this).css('background-color', '#fff');
 	});
+	
+	$('select').jDoubleSelect();
 }
 
 function multipleComboSelect() {
