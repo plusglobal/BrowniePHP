@@ -173,6 +173,7 @@ a{
 #content{
 	padding: 20px 5px;
 	margin: 0 10px 10px 15px;	
+	overflow: auto;
 }
 
 #menu-items{
