@@ -79,7 +79,6 @@ class PanelBehavior extends ModelBehavior {
 	);
 
 	var $brwConfigDefaultImage = array(
-		'name_category' => 'Images',
 		'sizes' => array(),
 		'index' => false,
 		'description' => true,
@@ -321,6 +320,9 @@ class PanelBehavior extends ModelBehavior {
 				'conditions' => array('BrwImage.model' => $Model->name)
 			))), false);
 			foreach($Model->brwConfig['images'] as $key => $value) {
+				if (empty($value['name_category'])) {
+					$value['name_category'] = $key;
+				}
 				$Model->brwConfig['images'][$key] = Set::merge($this->brwConfigDefaultImage, $value);
 				foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
 					if (strstr($sizes, 'x')) {
