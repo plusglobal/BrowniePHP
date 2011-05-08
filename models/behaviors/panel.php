@@ -452,8 +452,14 @@ class PanelBehavior extends ModelBehavior {
 						$paths['sizes'][$size] = Router::url('/uploads/thumbs/' . $value['model'] . '/' . $size
 							. '/' . $value['record_id'] . '/' . $value['name']);
 					} else {
-						$paths['sizes'][$size] = Router::url(array('plugin' => 'brownie', 'controller' => 'thumbs',
-							'action' => 'view', $value['model'], $value['record_id'], $size, $value['name']));
+						$url = array(
+							'plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'view',
+							$value['model'], $value['record_id'], $size, $value['name']
+						);
+						foreach (Configure::read('Routing.prefixes') as $prefix) {
+							$url[$prefix] = false;
+						}
+						$paths['sizes'][$size] = Router::url($url);
 					}
 				}
 				$value['description'] = BrwSanitize::html($value['description']);
