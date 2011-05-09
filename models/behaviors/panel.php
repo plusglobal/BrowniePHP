@@ -79,7 +79,6 @@ class PanelBehavior extends ModelBehavior {
 	);
 
 	var $brwConfigDefaultImage = array(
-		'name_category' => 'Images',
 		'sizes' => array(),
 		'index' => false,
 		'description' => true,
@@ -321,6 +320,9 @@ class PanelBehavior extends ModelBehavior {
 				'conditions' => array('BrwImage.model' => $Model->name)
 			))), false);
 			foreach($Model->brwConfig['images'] as $key => $value) {
+				if (empty($value['name_category'])) {
+					$value['name_category'] = $key;
+				}
 				$Model->brwConfig['images'][$key] = Set::merge($this->brwConfigDefaultImage, $value);
 				foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
 					if (strstr($sizes, 'x')) {
@@ -450,8 +452,14 @@ class PanelBehavior extends ModelBehavior {
 						$paths['sizes'][$size] = Router::url('/uploads/thumbs/' . $value['model'] . '/' . $size
 							. '/' . $value['record_id'] . '/' . $value['name']);
 					} else {
-						$paths['sizes'][$size] = Router::url(array('plugin' => 'brownie', 'controller' => 'thumbs',
-							'action' => 'view', $value['model'], $value['record_id'], $size, $value['name']));
+						$url = array(
+							'plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'view',
+							$value['model'], $value['record_id'], $size, $value['name']
+						);
+						foreach (Configure::read('Routing.prefixes') as $prefix) {
+							$url[$prefix] = false;
+						}
+						$paths['sizes'][$size] = Router::url($url);
 					}
 				}
 				$value['description'] = BrwSanitize::html($value['description']);

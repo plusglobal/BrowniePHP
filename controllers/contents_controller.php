@@ -27,7 +27,7 @@ class ContentsController extends BrownieAppController {
 		$this->Model->Behaviors->attach('Brownie.Panel');
 
 
-		if (!$this->_checkPermissions($model, $this->params['action'])) {
+		if (!$this->_brwCheckPermissions($model, $this->params['action'])) {
 			$this->cakeError('error404');
 		}
 
@@ -144,7 +144,7 @@ class ContentsController extends BrownieAppController {
 				if (!in_array($key_model, $this->Model->brwConfig['hide_children'])) {
 					$AssocModel = $this->Model->$key_model;
 					$AssocModel->Behaviors->attach('Brownie.Panel');
-					if ($this->_checkPermissions($key_model)) {
+					if ($this->_brwCheckPermissions($key_model)) {
 						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brwConfig['paginate']['fields'])) {
 							unset($AssocModel->brwConfig['paginate']['fields'][$indx]);
 						}
@@ -204,7 +204,7 @@ class ContentsController extends BrownieAppController {
 			$action = 'add';
 		}
 
-		if (!$this->_checkPermissions($model, $action)) {
+		if (!$this->_brwCheckPermissions($model, $action)) {
 			$this->cakeError('error404');
 		}
 
@@ -616,7 +616,7 @@ class ContentsController extends BrownieAppController {
 				} elseif (isset($foreignKeys[$key])) {
 					$read = $Model->{$foreignKeys[$key]}->findById($retData[$Model->name][$key]);
 					$retData[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
-					if ($this->_checkPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
+					if ($this->_brwCheckPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
 						$relatedURL = Router::url(array(
 							'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
 							$foreignKeys[$key], $read[$foreignKeys[$key]]['id']

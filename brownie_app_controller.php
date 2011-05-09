@@ -157,7 +157,7 @@ class BrownieAppController extends AppController {
 		return $menu;
 	}*/
 
-	function _checkPermissions($model, $action = 'read', $id = null) {
+	function _brwCheckPermissions($model, $action = 'read', $id = null) {
 		$Model = ClassRegistry::getObject($model);
 		if (!$Model) {
 			return false;
@@ -257,7 +257,7 @@ class BrownieAppController extends AppController {
 			'import' => false
 		);
 		foreach ($ret as $action => $value) {
-			$ret[$action] = $this->_checkPermissions($model, $action);
+			$ret[$action] = $this->_brwCheckPermissions($model, $action);
 		}
 
 		return $ret;
