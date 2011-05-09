@@ -408,7 +408,7 @@ div.paging_counter{
 	color:#264409;
 }
 .error-message, #MessageSendForm div.error-message {
-	margin:0;
+	margin:7px 0;
 	padding-left: 0;
 	padding-right: 0;
 	font-weight: normal;
