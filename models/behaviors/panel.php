@@ -716,6 +716,9 @@ class PanelBehavior extends ModelBehavior {
 					if (empty($Model->brwConfig['fields']['date_ranges'][$field]['dateFormat'])) {
 						$Model->brwConfig['fields']['date_ranges'][$field]['dateFormat'] = 'MDY';
 					}
+					if (!isset($Model->brwConfig['fields']['date_ranges'][$field]['monthNames'])) {
+						$Model->brwConfig['fields']['date_ranges'][$field]['monthNames'] = true;
+					}
 				}
 			}
 		}
