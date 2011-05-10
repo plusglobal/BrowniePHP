@@ -14,15 +14,17 @@ class ThumbsController extends BrownieAppController{
 	* 150x113 recorta, si es necesario agranda la imagen
 	* 200_900 no recorta, no agranda
 	*/
-	function view($model = '', $recordId = '', $sizes = '', $file = '') {
-		$sourceFile = WWW_ROOT . 'uploads' . DS . $model . DS . $recordId . DS . $file;
+	function view($model = '', $recordId = '', $sizes = '', $category_code = '', $file = '') {
+		$Model = ClassRegistry::init($model);
+		$uploadsFolder = $Model->brwConfig['images'][$category_code]['folder'];
+		$sourceFile = WWW_ROOT . $uploadsFolder . DS . $model . DS . $recordId . DS . $file;
 		if (!file_exists($sourceFile)) {
 			$this->cakeError('error404');
 		}
 		$pathinfo = pathinfo($sourceFile);
 		App::import('Vendor', 'Brownie.resizeimage');
 		$format = $pathinfo['extension'];
-		$cacheDir = WWW_ROOT . 'uploads' . DS . 'thumbs';
+		$cacheDir = WWW_ROOT . $uploadsFolder . DS . 'thumbs';
 		$destDir = $cacheDir . DS . $model . DS . $sizes. DS . $recordId;
 		if (!is_dir($destDir)) {
 			if (!mkdir($destDir, 0755, true)) {

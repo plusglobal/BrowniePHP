@@ -27,7 +27,6 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 		echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 		foreach ($fields as $key => $value) {
 			$params = array();
-			//pr($related);
 			if (isset($related['belongsTo'][$key])) {
 				$params = array('type' => 'select', 'options' => $related['belongsTo'][$key]);
 				if ($schema[$key]['null']) {
@@ -87,7 +86,6 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 						$javascript->link('/brownie/js/jquery.selso', false);
 						$javascript->link('/brownie/js/jquery.comboselect', false);
 					}
-					//pr($params);
 					echo $form->input($key . '.' . $key, $params);
 				}
 			}

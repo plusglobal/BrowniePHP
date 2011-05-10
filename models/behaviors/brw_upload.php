@@ -76,13 +76,16 @@ class BrwUploadBehavior extends ModelBehavior {
 	function afterSave($Model, $created) {
 		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($file_changed) {
-			$model = $Model->data[$Model->alias]['model'];
-			$source = $Model->data[$Model->alias]['file'];
-			$dest_dir = WWW_ROOT . 'uploads' . DS . $model . DS . $Model->data[$Model->alias]['record_id'];
-			$dest =  $dest_dir . DS . $Model->data[$Model->alias]['name'];
-			$updating = !empty($Model->data[$Model->alias]['id']);
+			$data = $Model->data[$Model->alias];
+			$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
+			$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code']);
+			$model = $data['model'];
+			$source = $data['file'];
+			$dest_dir = WWW_ROOT . $uploadsFolder . DS . $model . DS . $data['record_id'];
+			$dest = $dest_dir . DS . $data['name'];
+			$updating = !empty($data['id']);
 			if ($updating and $file_changed) {
-				$this->_deleteFiles($model, $Model->data[$Model->alias]['record_id'], $Model->data['name_prev']);
+				$this->_deleteFiles($uploadsFolder, $model, $data['record_id'], $Model->data['name_prev']);
 			}
 			if (!is_dir($dest_dir)) {
 				if (!mkdir($dest_dir, 0777, true)) {
@@ -116,16 +119,15 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 	function beforeDelete($Model) {
-		$image = $Model->read();
-		$image = array_shift($image);
-		$this->_deleteFiles($image['model'], $image['record_id'], $image['name']);
+		$upload = $Model->read();
+		$upload = array_shift($upload);
+		$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
+		$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code']);
+		$this->_deleteFiles($uploadsFolder, $upload['model'], $upload['record_id'], $upload['name']);
 	}
 
-
-
-
-	function _deleteFiles($model, $record, $filename) {
-		$baseFilePath = WWW_ROOT . 'uploads' . DS . $model . DS . $record;
+	function _deleteFiles($uploadsFolder, $model, $record, $filename) {
+		$baseFilePath = WWW_ROOT . $uploadsFolder . DS . $model . DS . $record;
 		$filePath = $baseFilePath . DS . $filename;
 		if (is_file($filePath)) {
 			unlink($filePath);
@@ -135,7 +137,7 @@ class BrwUploadBehavior extends ModelBehavior {
 				rmdir($baseFilePath);
 			}
 		}
-		$baseCacheDir = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $model;
+		$baseCacheDir = WWW_ROOT . $uploadsFolder . DS . 'thumbs' . DS . $model;
 		if(is_dir($baseCacheDir)) {
 			$handle = opendir($baseCacheDir);
 			while ($sizeDir = readdir($handle)) {

@@ -82,12 +82,15 @@ class PanelBehavior extends ModelBehavior {
 		'sizes' => array(),
 		'index' => false,
 		'description' => true,
+		'public' => true,
+		'folder' => 'uploads',	//relative to WWW_ROOT
 	);
 
 	var $brwConfigDefaultFile = array(
-		'name_category' => 'Files',
 		'index' => false,
 		'description' => true,
+		'public' => true,
+		'folder' => 'uploads',	//relative to WWW_ROOT
 	);
 
 	var $brwConfigDefaultCustomActions = array(
@@ -332,16 +335,26 @@ class PanelBehavior extends ModelBehavior {
 					}
 					$Model->brwConfig['images'][$key]['array_sizes'][$i] = array('w' => $w, 'h' => $h);
 				}
+				Configure::write(
+					'brwSettings.Images.' . $Model->alias . '.' . $key,
+					$Model->brwConfig['images'][$key]['folder']
+				);
 			}
 		}
-
 		if ($Model->brwConfig['files']) {
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwFile.model' => $Model->name)
 			))), false);
 			foreach($Model->brwConfig['files'] as $key => $value) {
+				if (empty($value['name_category'])) {
+					$value['name_category'] = $key;
+				}
 				$Model->brwConfig['files'][$key] = Set::merge($this->brwConfigDefaultFile, $value);
+				Configure::write(
+					'brwSettings.Files.' . $Model->alias . '.' . $key,
+					$Model->brwConfig['files'][$key]['folder']
+				);
 			}
 		}
 	}
@@ -437,7 +450,8 @@ class PanelBehavior extends ModelBehavior {
 			if (!isset($Model->brwConfig['images'][$value['category_code']])) {
 				continue;
 			}
-			$relative_path = 'uploads/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
+			$uploadsFolder = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code']);
+			$relative_path = $uploadsFolder . '/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
 			$paths = array(
 				'path' => Router::url('/' . $relative_path),
 				'real_path' => WWW_ROOT . str_replace('/', DS, $relative_path),
@@ -446,15 +460,15 @@ class PanelBehavior extends ModelBehavior {
 				$paths['sizes'] = array();
 				$sizes = $Model->brwConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$cachedPath = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $value['model'] . DS . $size
+					$cachedPath = WWW_ROOT . $uploadsFolder . DS . 'thumbs' . DS . $value['model'] . DS . $size
 						. DS . $value['record_id'] . DS . $value['name'];
 					if (is_file($cachedPath)) {
-						$paths['sizes'][$size] = Router::url('/uploads/thumbs/' . $value['model'] . '/' . $size
+						$paths['sizes'][$size] = Router::url('/' . $uploadsFolder . '/thumbs/' . $value['model'] . '/' . $size
 							. '/' . $value['record_id'] . '/' . $value['name']);
 					} else {
 						$url = array(
 							'plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'view',
-							$value['model'], $value['record_id'], $size, $value['name']
+							$value['model'], $value['record_id'], $size, $value['category_code'], $value['name']
 						);
 						foreach (Configure::read('Routing.prefixes') as $prefix) {
 							$url[$prefix] = false;
@@ -503,17 +517,18 @@ class PanelBehavior extends ModelBehavior {
 			if (!isset($Model->brwConfig['files'][$value['category_code']])) {
 				continue;
 			}
+			$uploadsFolder = Configure::read('brwSettings.Files.' . $Model->alias . '.' . $value['category_code']);
 			if (empty($value['description'])) {
 				$value['description'] = $r[$key]['description'] = $value['name'];
 			}
 			$value['description'] = BrwSanitize::html($value['description']);
 
-			$relativePath = 'uploads/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name'];
+			$relativePath = $uploadsFolder . '/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name'];
 			$completePath = Router::url('/' . $relativePath);
 			$extension = end(explode('.', $value['name']));
 			$forceDownloadUrl = Router::url(array(
 				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
-				$Model->alias, $value['record_id'], $value['name']
+				$Model->alias, $value['record_id'], $value['category_code'], $value['name']
 			));
 			$paths = array(
 				'path' => $completePath,
