@@ -82,15 +82,15 @@ class PanelBehavior extends ModelBehavior {
 		'sizes' => array(),
 		'index' => false,
 		'description' => true,
-		'public' => true,
-		'folder' => 'uploads',	//relative to WWW_ROOT
+		'folder' => 'uploads',	//relative to path
+		'path' => WWW_ROOT,
 	);
 
 	var $brwConfigDefaultFile = array(
 		'index' => false,
 		'description' => true,
-		'public' => true,
-		'folder' => 'uploads',	//relative to WWW_ROOT
+		'folder' => 'uploads',	//relative to path
+		'path' => WWW_ROOT,
 	);
 
 	var $brwConfigDefaultCustomActions = array(
@@ -327,6 +327,7 @@ class PanelBehavior extends ModelBehavior {
 					$value['name_category'] = $key;
 				}
 				$Model->brwConfig['images'][$key] = Set::merge($this->brwConfigDefaultImage, $value);
+				$Model->brwConfig['images'][$key]['path'] = realpath($Model->brwConfig['images'][$key]['path']) . DS;
 				foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
 					if (strstr($sizes, 'x')) {
 						list($w, $h) = explode('x', $sizes);
@@ -337,7 +338,10 @@ class PanelBehavior extends ModelBehavior {
 				}
 				Configure::write(
 					'brwSettings.Images.' . $Model->alias . '.' . $key,
-					$Model->brwConfig['images'][$key]['folder']
+					array(
+						'folder' => $Model->brwConfig['images'][$key]['folder'],
+						'path' => $Model->brwConfig['images'][$key]['path'],
+					)
 				);
 			}
 		}
@@ -450,19 +454,26 @@ class PanelBehavior extends ModelBehavior {
 			if (!isset($Model->brwConfig['images'][$value['category_code']])) {
 				continue;
 			}
-			$uploadsFolder = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code']);
-			$relative_path = $uploadsFolder . '/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
+			$uploadsFolder = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.folder');
+			$uploadsPath = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.path');
+			$path = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.path');
+			if (strstr($path, WWW_ROOT)) {
+				$relative_path = $uploadsFolder . '/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
+			} else {
+				$relative_path = false;
+			}
 			$paths = array(
-				'path' => Router::url('/' . $relative_path),
-				'real_path' => WWW_ROOT . str_replace('/', DS, $relative_path),
+				'path' => ($relative_path)? Router::url('/' . $relative_path) : false,
+				'real_path' => $path . str_replace('/', DS, $relative_path),
 			);
 			if (!empty($Model->brwConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
 				$sizes = $Model->brwConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$cachedPath = WWW_ROOT . $uploadsFolder . DS . 'thumbs' . DS . $value['model'] . DS . $size
-						. DS . $value['record_id'] . DS . $value['name'];
-					if (is_file($cachedPath)) {
+					$cachedPath = $uploadsPath . $uploadsFolder . DS . 'thumbs' . DS . $value['model']
+						. DS . $size	. DS . $value['record_id'] . DS . $value['name'];
+					$isPublic = (substr($cachedPath, 0, strlen(WWW_ROOT)) === WWW_ROOT);
+					if (is_file($cachedPath) and $isPublic) {
 						$paths['sizes'][$size] = Router::url('/' . $uploadsFolder . '/thumbs/' . $value['model'] . '/' . $size
 							. '/' . $value['record_id'] . '/' . $value['name']);
 					} else {
@@ -475,6 +486,7 @@ class PanelBehavior extends ModelBehavior {
 						}
 						$paths['sizes'][$size] = Router::url($url);
 					}
+					$paths['sizes_real_paths'][$size] = $cachedPath;
 				}
 				$value['description'] = BrwSanitize::html($value['description']);
 				$value['alt'] = $value['description'];
@@ -517,7 +529,7 @@ class PanelBehavior extends ModelBehavior {
 			if (!isset($Model->brwConfig['files'][$value['category_code']])) {
 				continue;
 			}
-			$uploadsFolder = Configure::read('brwSettings.Files.' . $Model->alias . '.' . $value['category_code']);
+			$uploadsFolder = Configure::read('brwSettings.Files.' . $Model->alias . '.' . $value['category_code'] . '.folder');
 			if (empty($value['description'])) {
 				$value['description'] = $r[$key]['description'] = $value['name'];
 			}
