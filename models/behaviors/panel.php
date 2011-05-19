@@ -454,8 +454,8 @@ class PanelBehavior extends ModelBehavior {
 			if (!isset($Model->brwConfig['images'][$value['category_code']])) {
 				continue;
 			}
-			$uploadsFolder = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.folder');
-			$uploadsPath = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.path');
+			$uploadsFolder = $Model->brwConfig['images'][$value['category_code']]['folder'];
+			$uploadsPath = $Model->brwConfig['images'][$value['category_code']]['path'];
 			$path = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.path');
 			if (strstr($path, WWW_ROOT)) {
 				$relative_path = $uploadsFolder . '/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
@@ -486,7 +486,9 @@ class PanelBehavior extends ModelBehavior {
 						}
 						$paths['sizes'][$size] = Router::url($url);
 					}
-					$paths['sizes_real_paths'][$size] = $cachedPath;
+					if (is_file($cachedPath)) {
+						$paths['sizes_real_paths'][$size] = $cachedPath;
+					}
 				}
 				$value['description'] = BrwSanitize::html($value['description']);
 				$value['alt'] = $value['description'];

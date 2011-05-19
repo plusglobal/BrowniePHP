@@ -15,30 +15,8 @@ class ThumbsController extends BrownieAppController{
 	* 200_900 no recorta, no agranda
 	*/
 	function view($model = '', $recordId = '', $sizes = '', $category_code = '', $file = '') {
-		$Model = ClassRegistry::init($model);
-		$uploadsFolder = $Model->brwConfig['images'][$category_code]['folder'];
-		$uploadsPath = $Model->brwConfig['images'][$category_code]['path'];
-		$sourceFile = $uploadsPath . $uploadsFolder . DS . $model . DS . $recordId . DS . $file;
-		if (!file_exists($sourceFile)) {
-			$this->cakeError('error404');
-		}
-		$pathinfo = pathinfo($sourceFile);
-		App::import('Vendor', 'Brownie.resizeimage');
-		$format = $pathinfo['extension'];
-		$cacheDir = $uploadsPath . $uploadsFolder . DS . 'thumbs';
-		$destDir = $cacheDir . DS . $model . DS . $sizes. DS . $recordId;
-		if (!is_dir($destDir)) {
-			if (!mkdir($destDir, 0755, true)) {
-				$this->log('cant create dir on ' . __FILE__ . ' line ' . __LINE__);
-			}
-		}
-		$cachedFile = $destDir . DS . $file;
-		if (!is_file($cachedFile)) {
-			ini_set('memory_limit', '128M');
-			copy($sourceFile, $cachedFile);
-			resizeImage($cachedFile, $sizes);
-		}
-
+		$BrwImage = ClassRegistry::init('BrwImage');
+		$cachedFile = $BrwImage->createResizedVersions($model, $recordId, $sizes, $category_code, $file);
 		if (is_file($cachedFile)) {
 			$isPublic = (substr($cachedFile, 0, strlen(WWW_ROOT)) === WWW_ROOT);
 			if (!$isPublic and !$this->Session->check('Auth.BrwUser')) {

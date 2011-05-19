@@ -80,6 +80,11 @@ class BrwUploadBehavior extends ModelBehavior {
 			$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
 			$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code'] . '.folder');
 			$uploadsPath = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code'] . '.path');
+			if (empty($uploadsFolder) or empty($uploadsPath)) {
+				$RelModel = ClassRegistry::init($data['model']);
+				$uploadsFolder = $RelModel->brwConfig['images'][$data['category_code']]['folder'];
+				$uploadsPath = $RelModel->brwConfig['images'][$data['category_code']]['path'];
+			}
 			$model = $data['model'];
 			$source = $data['file'];
 			$dest_dir = $uploadsPath . $uploadsFolder . DS . $model . DS . $data['record_id'];
@@ -187,6 +192,33 @@ class BrwUploadBehavior extends ModelBehavior {
 			$parts[$key] = Inflector::slug($part, '-');
 		}
 		return join('.', $parts);
+	}
+
+	function createResizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
+		$RelModel = ClassRegistry::init($model);
+		$uploadsFolder = $RelModel->brwConfig['images'][$category_code]['folder'];
+		$uploadsPath = $RelModel->brwConfig['images'][$category_code]['path'];
+		$sourceFile = $uploadsPath . $uploadsFolder . DS . $model . DS . $recordId . DS . $file;
+		if (!file_exists($sourceFile)) {
+			return false;
+		}
+		$pathinfo = pathinfo($sourceFile);
+		App::import('Vendor', 'Brownie.resizeimage');
+		$format = $pathinfo['extension'];
+		$cacheDir = $uploadsPath . $uploadsFolder . DS . 'thumbs';
+		$destDir = $cacheDir . DS . $model . DS . $sizes. DS . $recordId;
+		if (!is_dir($destDir)) {
+			if (!mkdir($destDir, 0755, true)) {
+				$this->log('cant create dir on ' . __FILE__ . ' line ' . __LINE__);
+			}
+		}
+		$cachedFile = $destDir . DS . $file;
+		if (!is_file($cachedFile)) {
+			ini_set('memory_limit', '128M');
+			copy($sourceFile, $cachedFile);
+			resizeImage($cachedFile, $sizes);
+		}
+		return $cachedFile;
 	}
 
 }
