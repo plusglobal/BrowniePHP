@@ -9,8 +9,9 @@ class DownloadsController extends BrownieAppController {
 		$this->Auth->allow('*');
 	}
 
-	function get($model, $idRecord, $file) {
-		//Configure::write('debug', 0);
+	function get($model, $idRecord, $category_code, $file) {
+		$Model = ClassRegistry::init($model);
+		$uploadsFolder = $Model->brwConfig['files'][$category_code]['folder'];
 		$this->view = 'Media';
 		$pathinfo = pathinfo($file);
 		$params = array(
@@ -19,7 +20,7 @@ class DownloadsController extends BrownieAppController {
 			'extension' => $pathinfo['extension'],
 			'download' => true,
 			'mimeType' => array($pathinfo['extension'] => 'application/' . $pathinfo['extension']),
-			'path' => ROOT . DS . WEBROOT_DIR . DS . 'uploads' . DS . $model . DS . $idRecord . DS
+			'path' => ROOT . DS . WEBROOT_DIR . DS . $uploadsFolder . DS . $model . DS . $idRecord . DS
 		);
 		$this->set($params);
 	}

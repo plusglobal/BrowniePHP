@@ -76,13 +76,22 @@ class BrwUploadBehavior extends ModelBehavior {
 	function afterSave($Model, $created) {
 		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($file_changed) {
-			$model = $Model->data[$Model->alias]['model'];
-			$source = $Model->data[$Model->alias]['file'];
-			$dest_dir = WWW_ROOT . 'uploads' . DS . $model . DS . $Model->data[$Model->alias]['record_id'];
-			$dest =  $dest_dir . DS . $Model->data[$Model->alias]['name'];
-			$updating = !empty($Model->data[$Model->alias]['id']);
+			$data = $Model->data[$Model->alias];
+			$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
+			$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code'] . '.folder');
+			$uploadsPath = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code'] . '.path');
+			if (empty($uploadsFolder) or empty($uploadsPath)) {
+				$RelModel = ClassRegistry::init($data['model']);
+				$uploadsFolder = $RelModel->brwConfig['images'][$data['category_code']]['folder'];
+				$uploadsPath = $RelModel->brwConfig['images'][$data['category_code']]['path'];
+			}
+			$model = $data['model'];
+			$source = $data['file'];
+			$dest_dir = $uploadsPath . $uploadsFolder . DS . $model . DS . $data['record_id'];
+			$dest = $dest_dir . DS . $data['name'];
+			$updating = !empty($data['id']);
 			if ($updating and $file_changed) {
-				$this->_deleteFiles($model, $Model->data[$Model->alias]['record_id'], $Model->data['name_prev']);
+				$this->_deleteFiles($uploadsPath, $uploadsFolder, $model, $data['record_id'], $Model->data['name_prev']);
 			}
 			if (!is_dir($dest_dir)) {
 				if (!mkdir($dest_dir, 0777, true)) {
@@ -116,16 +125,16 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 	function beforeDelete($Model) {
-		$image = $Model->read();
-		$image = array_shift($image);
-		$this->_deleteFiles($image['model'], $image['record_id'], $image['name']);
+		$upload = $Model->read();
+		$upload = array_shift($upload);
+		$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
+		$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code'] . '.folder');
+		$uploadsPath = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code'] . '.path');
+		$this->_deleteFiles($uploadsPath, $uploadsFolder, $upload['model'], $upload['record_id'], $upload['name']);
 	}
 
-
-
-
-	function _deleteFiles($model, $record, $filename) {
-		$baseFilePath = WWW_ROOT . 'uploads' . DS . $model . DS . $record;
+	function _deleteFiles($uploadsPath, $uploadsFolder, $model, $record, $filename) {
+		$baseFilePath = $uploadsPath . $uploadsFolder . DS . $model . DS . $record;
 		$filePath = $baseFilePath . DS . $filename;
 		if (is_file($filePath)) {
 			unlink($filePath);
@@ -135,7 +144,7 @@ class BrwUploadBehavior extends ModelBehavior {
 				rmdir($baseFilePath);
 			}
 		}
-		$baseCacheDir = WWW_ROOT . 'uploads' . DS . 'thumbs' . DS . $model;
+		$baseCacheDir = $uploadsPath . $uploadsFolder . DS . 'thumbs' . DS . $model;
 		if(is_dir($baseCacheDir)) {
 			$handle = opendir($baseCacheDir);
 			while ($sizeDir = readdir($handle)) {
@@ -183,6 +192,33 @@ class BrwUploadBehavior extends ModelBehavior {
 			$parts[$key] = Inflector::slug($part, '-');
 		}
 		return join('.', $parts);
+	}
+
+	function createResizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
+		$RelModel = ClassRegistry::init($model);
+		$uploadsFolder = $RelModel->brwConfig['images'][$category_code]['folder'];
+		$uploadsPath = $RelModel->brwConfig['images'][$category_code]['path'];
+		$sourceFile = $uploadsPath . $uploadsFolder . DS . $model . DS . $recordId . DS . $file;
+		if (!file_exists($sourceFile)) {
+			return false;
+		}
+		$pathinfo = pathinfo($sourceFile);
+		App::import('Vendor', 'Brownie.resizeimage');
+		$format = $pathinfo['extension'];
+		$cacheDir = $uploadsPath . $uploadsFolder . DS . 'thumbs';
+		$destDir = $cacheDir . DS . $model . DS . $sizes. DS . $recordId;
+		if (!is_dir($destDir)) {
+			if (!mkdir($destDir, 0755, true)) {
+				$this->log('cant create dir on ' . __FILE__ . ' line ' . __LINE__);
+			}
+		}
+		$cachedFile = $destDir . DS . $file;
+		if (!is_file($cachedFile)) {
+			ini_set('memory_limit', '128M');
+			copy($sourceFile, $cachedFile);
+			resizeImage($cachedFile, $sizes);
+		}
+		return $cachedFile;
 	}
 
 }
