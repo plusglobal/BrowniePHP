@@ -389,6 +389,37 @@ class ContentsController extends BrownieAppController {
 
 	}
 
+	function delete_multiple($model) {
+		if (empty($this->data['Content'])) {
+			$msg = sprintf(__d('brownie', 'No %s selected to delete', true), $this->Model->brwConfig['names']['plural']);
+			$this->Session->setFlash($msg, 'flash_notice');
+		} else {
+			$deleted = $no_deleted = 0;
+			foreach ($this->data['Content']['id'] as $id) {
+				if ($this->Model->delete($id)) {
+					$deleted++;
+				} else {
+					$no_deleted++;
+				}
+			}
+			$msg_deleted = $msg_no_deleted = '';
+			if ($deleted) {
+				$msg_deleted = sprintf(__d('brownie', '%d %s deleted.', true), $deleted, $this->Model->brwConfig['names']['plural']) . ' ';
+			}
+			if ($no_deleted) {
+				$msg_no_deleted = sprintf(__d('brownie', '%d %s no deleted.', true), $deleted, $this->Model->brwConfig['names']['plural']) . ' ';
+			}
+			$this->Session->setFlash($msg_deleted . $msg_no_deleted);
+		}
+
+		$redir = env('HTTP_REFERER');
+		if (empty($redir)) {
+			$redir = array('action' => 'index', $model);
+		}
+		$this->redirect($redir);
+	}
+
+
 	/*
 	function _add_images($model, $recordId, $categoryCode) {
 		if (!empty($this->data)) {

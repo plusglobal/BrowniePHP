@@ -172,7 +172,6 @@ class BrownieAppController extends AppController {
 		if ($noPermission) {
 			return false;
 		}
-
 		//really bad patch, solucionar con permisos reales
 		if ($action == 'read') {
 			return true;
@@ -189,6 +188,9 @@ class BrownieAppController extends AppController {
 		}
 		if ($action == 'filter') {
 			$action = 'index';
+		}
+		if ($action == 'delete_multiple') {
+			$action = 'delete';
 		}
 		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'import'))) {
 			return false;

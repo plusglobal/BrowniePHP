@@ -40,17 +40,27 @@ if ($brwConfig['fields']['filter'] and $calledFrom == 'index') {
 
 
 $i = 0;
-if ($records):
+if ($records) {
 	$pageParams = $this->Paginator->params['paging'][$model];
 	if ($pageParams['pageCount'] > 1 or $pageParams['count'] > 20) {
 		echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));
 	}
 
+	if ($brwConfig['actions']['delete_multiple']) {
+		echo $form->create('Content', array(
+			'id' => 'deleteMultiple',
+			'url' => array('controller' => 'contents', 'action' => 'delete_multiple', $model)
+		));
+	}
+
 	echo '<table id="index">';
+
 	foreach ($records as $record):
 		if ($i == 0) {
-			echo '
-			<tr>';
+			echo '<tr>';
+			if ($brwConfig['actions']['delete_multiple']) {
+				echo '<th class="delete_multiple"><input type="checkbox"></th>';
+			}
 			foreach($brwConfig['paginate']['fields'] as $field_name) {
 				if (!empty($schema[$field_name])) {
 					echo '
@@ -74,6 +84,12 @@ if ($records):
 
 		echo '
 		<tr class="'.$class.' list">';
+		if ($brwConfig['actions']['delete_multiple']) {
+			echo '
+			<td class="delete_multiple">
+				<input type="checkbox" name="data[Content][id][]" value="' . $record[$model]['id'] . '">
+			</td>';
+		}
 
 		foreach($brwConfig['paginate']['fields'] as $field_name) {
 			if (!empty($schema[$field_name])) {
@@ -107,11 +123,14 @@ if ($records):
 		</tr>
 	<?php endforeach;
 	echo '</table>';
-else:
+	if ($brwConfig['actions']['delete_multiple']) {
+		echo $form->end(__d('brownie', 'Delete selected', true), array('class' => 'delete_multiple'));
+	}
+} else {
 	echo '<p class="norecords">'
 	. sprintf(__d('brownie', 'There are no %s', true), $brwConfig['names']['plural'])
 	. '</p>';
-endif;
+};
 
 if ($records) {
 	echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));

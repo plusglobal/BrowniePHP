@@ -525,6 +525,24 @@ th a:hover{
 	background: #444;
 }
 
+#content table .delete_multiple{
+	vertical-align: middle;
+	text-align: center;
+	padding: 0 5px;
+	margin: 0;
+	width: 1px;
+}
+
+#content .model-index table tr .delete_multiple input{
+	margin: 0;
+	padding: 0;
+}
+
+#content form#deleteMultiple div.submit{
+	margin: 0;
+	padding: 0;
+}
+
 div.view td, td.field, p.norecords{
 	padding: 7px;
 }

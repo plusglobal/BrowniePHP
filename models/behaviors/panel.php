@@ -49,6 +49,7 @@ class PanelBehavior extends ModelBehavior {
 			'edit_image' => true,
 			'edit_file' => true,
 			'delete' => true,
+			'delete_multiple' => false,
 			'export' => false,
 			'import' => false,
 			'search' => false,
