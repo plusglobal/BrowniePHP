@@ -59,7 +59,10 @@ if ($records) {
 		if ($i == 0) {
 			echo '<tr>';
 			if ($brwConfig['actions']['delete_multiple']) {
-				echo '<th class="delete_multiple"><input type="checkbox"></th>';
+				echo '
+				<th class="delete_multiple">
+					<input type="checkbox" id="deleteCheckAll" title="' . __d('brownie', 'Select/Unselect all', true) . '">
+				</th>';
 			}
 			foreach($brwConfig['paginate']['fields'] as $field_name) {
 				if (!empty($schema[$field_name])) {
@@ -80,7 +83,7 @@ if ($records) {
 			</tr>';
 		}
 
-		$class = ife(($i++ % 2 != 0), 'altrow', '');
+		$class = ($brwConfig['actions']['delete_multiple']) ? 'row_delete_multiple' : '';
 
 		echo '
 		<tr class="'.$class.' list">';
@@ -121,10 +124,12 @@ if ($records) {
 			?>
 			</td>
 		</tr>
-	<?php endforeach;
+	<?php
+		$i++;
+	endforeach;
 	echo '</table>';
 	if ($brwConfig['actions']['delete_multiple']) {
-		echo $form->end(__d('brownie', 'Delete selected', true), array('class' => 'delete_multiple'));
+		echo $form->end(__d('brownie', 'Delete selected', true));
 	}
 } else {
 	echo '<p class="norecords">'

@@ -1,12 +1,23 @@
+$(document).ready(function(){
+	multipleComboSelect();
+	hoverRowsColors();
+	bindFancyBox();
+	$('#flashMessage').click(function(){
+		$(this).fadeOut();
+	})
+	toclone();
+	bindRichEditor();
+	checkMultiple();
+	$('select').jDoubleSelect();
+});
+
 function hoverRowsColors() {
-   $('tr.list').hover(function() {
-		$(this).css('background-color', '#E1EBF5');
+	$('tr.list').hover(function() {
+		$(this).addClass('hover');
 	},
 	function() {
-		$(this).css('background-color', '#fff');
+		$(this).removeClass('hover');
 	});
-	
-	$('select').jDoubleSelect();
 }
 
 function multipleComboSelect() {
@@ -17,17 +28,6 @@ function bindFancyBox() {
 	$(".images-gallery a.brw-image").fancybox({'titlePosition': 'inside'});
 	$('a[target=modal]').fancybox({'titleShow': false});
 }
-
-$(document).ready(function(){
-	multipleComboSelect();
-	hoverRowsColors();
-	bindFancyBox();
-	$('#flashMessage').click(function(){
-		$(this).fadeOut();
-	})
-	toclone();
-	bindRichEditor();
-});
 
 function toclone() {
 	$('.hide').css('display', 'none');
@@ -86,4 +86,53 @@ function bindFckEditor(id) {
 		oFCKeditor.ToolbarSet = "Brownie";
 		oFCKeditor.ReplaceTextarea();
 	})
+}
+
+function checkMultiple() {
+	$('td.delete_multiple input[type=checkbox]').change(function(){
+		if ($(this).is(':checked')) {
+			$(this).parents('tr').addClass('checked');
+		} else {
+			$(this).parents('tr').removeClass('checked');
+			$('#deleteCheckAll').attr('checked', false);
+		}
+	});
+
+	$('#deleteCheckAll').change(function(){
+		var mustBeChecked = $(this).is(':checked');
+		$('td.delete_multiple input[type=checkbox]').each(function(){
+			if (mustBeChecked) {
+				$(this).attr('checked', true);
+			} else {
+				$(this).attr('checked', false);
+			}
+			$(this).change();
+		});
+	});
+
+	//$('tr.row_delete_multiple').click(function(){
+	$('form#deleteMultiple td.field').click(function(){
+		$(this).parents('tr').children('td').children('input').each(function(){
+			if (!$(this).is(':checked')) {
+				$(this).attr('checked', true);
+			} else {
+				$(this).attr('checked', false);
+			}
+			$(this).change();
+		});
+	});
+		
+	$('#deleteMultiple').submit(function(){
+		var allowSubmit = false;
+		$('td.delete_multiple input[type=checkbox]').each(function(){
+			if ($(this).is(':checked')) {
+				allowSubmit = true;
+				return;
+			}
+		});
+		if (!allowSubmit) {
+			alert('no!');
+		}
+		return allowSubmit;
+	});
 }

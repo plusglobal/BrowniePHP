@@ -390,13 +390,14 @@ class ContentsController extends BrownieAppController {
 	}
 
 	function delete_multiple($model) {
-		if (empty($this->data['Content'])) {
-			$msg = sprintf(__d('brownie', 'No %s selected to delete', true), $this->Model->brwConfig['names']['plural']);
+		$plural = $this->Model->brwConfig['names']['plural'];
+		if (empty($this->data['Content']['id'])) {
+			$msg = sprintf(__d('brownie', 'No %s selected to delete', true), $plural);
 			$this->Session->setFlash($msg, 'flash_notice');
 		} else {
 			$deleted = $no_deleted = 0;
 			foreach ($this->data['Content']['id'] as $id) {
-				if ($this->Model->delete($id)) {
+				if ($this->Content->delete($this->Model, $id)) {
 					$deleted++;
 				} else {
 					$no_deleted++;
@@ -404,12 +405,19 @@ class ContentsController extends BrownieAppController {
 			}
 			$msg_deleted = $msg_no_deleted = '';
 			if ($deleted) {
-				$msg_deleted = sprintf(__d('brownie', '%d %s deleted.', true), $deleted, $this->Model->brwConfig['names']['plural']) . ' ';
+				$msg_deleted = sprintf(__d('brownie', '%d %s deleted.', true), $deleted, $plural) . ' ';
 			}
 			if ($no_deleted) {
-				$msg_no_deleted = sprintf(__d('brownie', '%d %s no deleted.', true), $deleted, $this->Model->brwConfig['names']['plural']) . ' ';
+				$msg_no_deleted = sprintf(__d('brownie', '%d %s no deleted.', true), $no_deleted, $plural) . ' ';
 			}
-			$this->Session->setFlash($msg_deleted . $msg_no_deleted);
+
+			if ($deleted) {
+				if ($no_deleted) $flashStatus = 'flash_notice';
+				else $flashStatus = 'flash_success';
+			} else {
+				$flashStatus = 'flash_error';
+			}
+			$this->Session->setFlash($msg_deleted . $msg_no_deleted, $flashStatus);
 		}
 
 		$redir = env('HTTP_REFERER');

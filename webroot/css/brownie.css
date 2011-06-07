@@ -538,9 +538,22 @@ th a:hover{
 	padding: 0;
 }
 
+#content form#deleteMultiple{
+	margin: 0;
+	width: auto;
+}
+
 #content form#deleteMultiple div.submit{
 	margin: 0;
 	padding: 0;
+}
+
+tr.checked{
+	background-color: #fff9b7;
+}
+
+tr.hover{
+	background: #E1EBF5;
 }
 
 div.view td, td.field, p.norecords{
