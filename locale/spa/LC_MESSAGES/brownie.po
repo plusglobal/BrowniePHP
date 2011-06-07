@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-04-17 15:41-0300\n"
-"PO-Revision-Date: 2011-04-17 15:41-0300\n"
+"POT-Creation-Date: 2011-06-07 20:07-0300\n"
+"PO-Revision-Date: 2011-06-07 20:08-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -53,123 +53,135 @@ msgstr "Eliminación exitosa"
 msgid "Unable to delete"
 msgstr "No se ha podido eliminar"
 
-#: \controllers\contents_controller.php:429
+#: \controllers\contents_controller.php:395
+msgid "No %s selected to delete"
+msgstr "Ningún %s seleccionado para eliminar"
+
+#: \controllers\contents_controller.php:408
+msgid "%d %s deleted."
+msgstr "%d %s eliminados."
+
+#: \controllers\contents_controller.php:411
+msgid "%d %s no deleted."
+msgstr "%d %s no eliminados."
+
+#: \controllers\contents_controller.php:468
 msgid "%s files saved"
 msgstr "%s archivos guardados"
 
-#: \controllers\contents_controller.php:430
+#: \controllers\contents_controller.php:469
 msgid "%s images saved"
 msgstr "%s imágenes guardadas"
 
-#: \controllers\contents_controller.php:434
+#: \controllers\contents_controller.php:473
 msgid "No files saved"
 msgstr "No se han guardado archivos"
 
-#: \controllers\contents_controller.php:435
+#: \controllers\contents_controller.php:474
 msgid "No images saved"
 msgstr "No se han guardado imágenes"
 
-#: \controllers\contents_controller.php:464
+#: \controllers\contents_controller.php:503
 msgid "The file was deleted"
 msgstr "El archivo fue eliminado"
 
-#: \controllers\contents_controller.php:465
+#: \controllers\contents_controller.php:504
 msgid "The image was deleted"
 msgstr "La imagen fue eliminada"
 
-#: \controllers\contents_controller.php:469
+#: \controllers\contents_controller.php:508
 msgid "The file could not be deleted"
 msgstr "El archivo no ha podido eliminarse"
 
-#: \controllers\contents_controller.php:470
+#: \controllers\contents_controller.php:509
 msgid "The image could not be deleted"
 msgstr "La imagen no ha podido eliminarse"
 
-#: \controllers\contents_controller.php:490
+#: \controllers\contents_controller.php:529
 msgid "The import could not be done. Please try again"
 msgstr "La importación no se ha podido realizar. Por favor intenta nuevamente."
 
-#: \controllers\contents_controller.php:498
+#: \controllers\contents_controller.php:537
 msgid "Warning: %s::brwImport() must be defined"
 msgstr "Atención: %s::brwImport() debe estar definida"
 
-#: \controllers\contents_controller.php:538
+#: \controllers\contents_controller.php:584
 msgid "Successfully reordered"
 msgstr "Reordenado exitosamente"
 
-#: \controllers\contents_controller.php:540
+#: \controllers\contents_controller.php:586
 msgid "Failed to reorder"
 msgstr "No se pudo reordenar"
 
-#: \controllers\contents_controller.php:630
+#: \controllers\contents_controller.php:676
 msgid "Yes"
 msgstr "Sí"
 
-#: \controllers\contents_controller.php:630
+#: \controllers\contents_controller.php:676
 msgid "No"
 msgstr "No"
 
-#: \controllers\contents_controller.php:660
+#: \controllers\contents_controller.php:706
 msgid "Date not set"
 msgstr "Fecha no establecida"
 
-#: \controllers\contents_controller.php:664
+#: \controllers\contents_controller.php:710
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
-#: \controllers\contents_controller.php:670
+#: \controllers\contents_controller.php:716
 msgid "Datetime not set"
 msgstr "Fecha/hora no establecida"
 
-#: \controllers\contents_controller.php:674
+#: \controllers\contents_controller.php:720
 msgid "Invalid datetime"
 msgstr "Fecha/hora no válida"
 
-#: \controllers\contents_controller.php:681
+#: \controllers\contents_controller.php:727
 msgid "After save"
 msgstr "Después de guardar"
 
-#: \controllers\contents_controller.php:684
+#: \controllers\contents_controller.php:730
 msgid "Continue editing this %s [male]"
 msgstr "Continuar editando este %s"
 
-#: \controllers\contents_controller.php:685
+#: \controllers\contents_controller.php:731
 msgid "Continue editing this %s [female]"
 msgstr "Continuar editando esta %s"
 
-#: \controllers\contents_controller.php:688
+#: \controllers\contents_controller.php:734
 msgid "Add another %s [male]"
 msgstr "Agregar otro %s"
 
-#: \controllers\contents_controller.php:689
+#: \controllers\contents_controller.php:735
 msgid "Add another %s [female]"
 msgstr "Agregar otra %s"
 
-#: \controllers\contents_controller.php:692
+#: \controllers\contents_controller.php:738
 msgid "Go to to index of all %s [male]"
 msgstr "Ir al listado de todos los %s"
 
-#: \controllers\contents_controller.php:693
+#: \controllers\contents_controller.php:739
 msgid "Go to to index of all %s [female]"
 msgstr "Ir al listado de todas las %s"
 
-#: \controllers\contents_controller.php:696
+#: \controllers\contents_controller.php:742
 msgid "View saved %s [male]"
 msgstr "Examinar el %s guardado"
 
-#: \controllers\contents_controller.php:697
+#: \controllers\contents_controller.php:743
 msgid "View saved %s [female]"
 msgstr "Examinar la %s guardada"
 
-#: \controllers\contents_controller.php:699
+#: \controllers\contents_controller.php:745
 msgid "Go home"
 msgstr "Ir a home"
 
-#: \controllers\contents_controller.php:712
+#: \controllers\contents_controller.php:758
 msgid "Go to the %s [male]"
 msgstr "Ir al %s"
 
-#: \controllers\contents_controller.php:713
+#: \controllers\contents_controller.php:759
 msgid "Go to the %s [female]"
 msgstr "Ir a la %s"
 
@@ -255,16 +267,16 @@ msgstr "Contraseña no puede estar vacía"
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: \models\behaviors\panel.php:660;661
+#: \models\behaviors\panel.php:701;702
 msgid "User"
 msgstr "Usuario"
 
-#: \models\behaviors\panel.php:662
+#: \models\behaviors\panel.php:703
 #: \views\layouts\brownie_default.ctp:39
 msgid "Users"
 msgstr "Usuarios"
 
-#: \models\behaviors\panel.php:668
+#: \models\behaviors\panel.php:709
 msgid "Leave blank for no change"
 msgstr "Dejar en blanco para no cambiar"
 
@@ -329,28 +341,28 @@ msgstr "Agregar :name_singular"
 msgid "Edit :name_singular"
 msgstr "Editar :name_singular"
 
-#: \views\contents\edit.ctp:34
+#: \views\contents\edit.ctp:33
 msgid "None"
 msgstr "Ninguno"
 
-#: \views\contents\edit.ctp:41
+#: \views\contents\edit.ctp:40
 msgid "(No parent)"
 msgstr "(Sin padre)"
 
-#: \views\contents\edit.ctp:130
+#: \views\contents\edit.ctp:121
 #: \views\contents\edit_upload.ctp:38
 msgid "Description"
 msgstr "Descripción"
 
-#: \views\contents\edit.ctp:145
+#: \views\contents\edit.ctp:136
 msgid "Add Image"
 msgstr "Agregar imagen"
 
-#: \views\contents\edit.ctp:145
+#: \views\contents\edit.ctp:136
 msgid "Add File"
 msgstr "Agregar archivo"
 
-#: \views\contents\edit.ctp:162
+#: \views\contents\edit.ctp:153
 #: \views\contents\edit_upload.ctp:43
 msgid "Save"
 msgstr "Guardar"
@@ -409,15 +421,15 @@ msgstr "El siguiente listado está filtrado."
 msgid "View complete index"
 msgstr "Ver listado completo"
 
-#: \views\elements\form_filter.ctp:16
+#: \views\elements\form_filter.ctp:26
 msgid "from"
 msgstr "desde"
 
-#: \views\elements\form_filter.ctp:21
+#: \views\elements\form_filter.ctp:30
 msgid "to"
 msgstr "hasta"
 
-#: \views\elements\form_filter.ctp:29
+#: \views\elements\form_filter.ctp:39
 msgid "Filter"
 msgstr "Filtrar"
 
@@ -433,23 +445,31 @@ msgstr "Importar"
 msgid "Export"
 msgstr "Exportar"
 
-#: \views\elements\index.ctp:66
+#: \views\elements\index.ctp:64
+msgid "Select/Unselect all"
+msgstr "Seleccionar/Deseleccionar todos"
+
+#: \views\elements\index.ctp:79
 msgid "Sort"
 msgstr "Orden"
 
-#: \views\elements\index.ctp:69
+#: \views\elements\index.ctp:82
 msgid "Actions"
 msgstr "Acciones"
 
-#: \views\elements\index.ctp:90;92
+#: \views\elements\index.ctp:109;111
 msgid "Sort up"
 msgstr "Reordenar hacia arriba"
 
-#: \views\elements\index.ctp:94;96
+#: \views\elements\index.ctp:113;115
 msgid "Sort down"
 msgstr "Reordenar hacia abajo"
 
-#: \views\elements\index.ctp:112
+#: \views\elements\index.ctp:132
+msgid "Delete selected"
+msgstr "Eliminar seleccionados"
+
+#: \views\elements\index.ctp:136
 msgid "There are no %s"
 msgstr "No hay %s"
 
