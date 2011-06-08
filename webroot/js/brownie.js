@@ -108,9 +108,8 @@ function checkMultiple() {
 			}
 			$(this).change();
 		});
-	});
+	}).css('visibility', 'visible');
 
-	//$('tr.row_delete_multiple').click(function(){
 	$('form#deleteMultiple td.field').click(function(){
 		$(this).parents('tr').children('td').children('input').each(function(){
 			if (!$(this).is(':checked')) {

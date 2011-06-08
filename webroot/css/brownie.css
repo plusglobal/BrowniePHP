@@ -548,6 +548,10 @@ th a:hover{
 	padding: 0;
 }
 
+#deleteCheckAll{
+	visibility: hidden;
+}
+
 tr.checked{
 	background-color: #fff9b7;
 }
