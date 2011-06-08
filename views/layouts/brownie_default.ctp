@@ -8,7 +8,12 @@ echo $html->meta('favicon.ico', Router::url('/favicon.ico'), array('type' => 'ic
 echo $html->css(Configure::read('brwSettings.css'));
 echo $javascript->link(Configure::read('brwSettings.js'));
 ?>
-<script type="text/javascript">var APP_BASE = '<?php echo Router::url('/') ?>';</script>
+<script type="text/javascript">
+var APP_BASE = '<?php echo Router::url('/') ?>';
+var brwMsg = {
+	no_checked_for_deletion: '<?php __d('brownie', 'No records checked for deletion') ?>'
+};
+</script>
 <title><?php
 __d('brownie', 'Admin panel');
 if ($companyName) {

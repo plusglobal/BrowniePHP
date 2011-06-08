@@ -130,7 +130,7 @@ function checkMultiple() {
 			}
 		});
 		if (!allowSubmit) {
-			alert('no!');
+			alert(brwMsg.no_checked_for_deletion);
 		}
 		return allowSubmit;
 	});

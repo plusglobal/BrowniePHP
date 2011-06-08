@@ -562,6 +562,7 @@ th a:hover{
 
 tr.checked{
 	background-color: #FFFFCC;
+	color: #444;
 }
 
 tr.hover{

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-06-07 20:07-0300\n"
+"POT-Creation-Date: 2011-06-08 16:13-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -273,7 +273,7 @@ msgid "User"
 msgstr ""
 
 #: \models\behaviors\panel.php:703
-#: \views\layouts\brownie_default.ctp:39
+#: \views\layouts\brownie_default.ctp:44
 msgid "Users"
 msgstr ""
 
@@ -446,31 +446,31 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: \views\elements\index.ctp:64
-msgid "Select/Unselect all"
-msgstr ""
-
-#: \views\elements\index.ctp:79
-msgid "Sort"
-msgstr ""
-
-#: \views\elements\index.ctp:82
-msgid "Actions"
-msgstr ""
-
-#: \views\elements\index.ctp:109;111
-msgid "Sort up"
-msgstr ""
-
-#: \views\elements\index.ctp:113;115
-msgid "Sort down"
-msgstr ""
-
-#: \views\elements\index.ctp:132
+#: \views\elements\index.ctp:55;136
 msgid "Delete selected"
 msgstr ""
 
-#: \views\elements\index.ctp:136
+#: \views\elements\index.ctp:68
+msgid "Select/Unselect all"
+msgstr ""
+
+#: \views\elements\index.ctp:83
+msgid "Sort"
+msgstr ""
+
+#: \views\elements\index.ctp:86
+msgid "Actions"
+msgstr ""
+
+#: \views\elements\index.ctp:113;115
+msgid "Sort up"
+msgstr ""
+
+#: \views\elements\index.ctp:117;119
+msgid "Sort down"
+msgstr ""
+
+#: \views\elements\index.ctp:141
 msgid "There are no %s"
 msgstr ""
 
@@ -598,23 +598,27 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:13
+#: \views\layouts\brownie_default.ctp:14
+msgid "No records checked for deletion"
+msgstr ""
+
+#: \views\layouts\brownie_default.ctp:18
 msgid "Admin panel"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:28
+#: \views\layouts\brownie_default.ctp:33
 msgid "User: %s"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:30
+#: \views\layouts\brownie_default.ctp:35
 msgid "Home"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:33
+#: \views\layouts\brownie_default.ctp:38
 msgid "Site"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:46
+#: \views\layouts\brownie_default.ctp:51
 msgid "Logout"
 msgstr ""
 
