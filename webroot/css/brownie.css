@@ -541,11 +541,19 @@ th a:hover{
 #content form#deleteMultiple{
 	margin: 0;
 	width: auto;
+	padding: 0;
 }
 
 #content form#deleteMultiple div.submit{
-	margin: 0;
+	margin: 0 0 10px 0;
 	padding: 0;
+}
+
+#content form#deleteMultiple div.submit input{
+	font-size: 11px;
+	border: 0;
+	background: url(ico/16x16/delete.png) 2px center no-repeat transparent;
+	padding-left: 16px;
 }
 
 #deleteCheckAll{
@@ -553,7 +561,7 @@ th a:hover{
 }
 
 tr.checked{
-	background-color: #fff9b7;
+	background-color: #FFFFCC;
 }
 
 tr.hover{
