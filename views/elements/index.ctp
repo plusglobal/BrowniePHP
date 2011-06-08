@@ -41,8 +41,8 @@ if ($brwConfig['fields']['filter'] and $calledFrom == 'index') {
 
 $i = 0;
 if ($records) {
-	$pageParams = $this->Paginator->params['paging'][$model];
-	if ($pageParams['pageCount'] > 1 or $pageParams['count'] > 20) {
+	$controlsOnTop = ($this->Paginator->params['paging'][$model]['options']['limit'] > 20);
+	if ($controlsOnTop) {
 		echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));
 	}
 
@@ -51,6 +51,10 @@ if ($records) {
 			'id' => 'deleteMultiple',
 			'url' => array('controller' => 'contents', 'action' => 'delete_multiple', $model)
 		));
+		if ($controlsOnTop) {
+			echo '<div class="submit"><input type="submit" value="' . __d('brownie', 'Delete selected', true) . '" /></div>
+			';
+		}
 	}
 
 	echo '<table id="index">';
@@ -129,7 +133,8 @@ if ($records) {
 	endforeach;
 	echo '</table>';
 	if ($brwConfig['actions']['delete_multiple']) {
-		echo $form->end(__d('brownie', 'Delete selected', true));
+		echo '<div class="submit"><input type="submit" value="' . __d('brownie', 'Delete selected', true) . '" /></div>';
+		echo $form->end();
 	}
 } else {
 	echo '<p class="norecords">'
