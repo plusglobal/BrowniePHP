@@ -29,6 +29,15 @@
 			$url = array_merge(array('action' => 'export', $model), $this->params['named'], $filters);
 			echo '<li class="export">' . $html->link(__d('brownie', 'Export', true), $url) . '</li>';
 		}
+
+		foreach ($brwConfig['global_custom_actions'] as $customAction => $params) {
+			$params['url'] = array_merge($params['url'], $this->params['named']);
+			echo '
+			<li class="global_custom_action ' . $params['class'] . '">
+			' . $html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) . '
+			</li>';
+		}
+
 		?>
 		</ul>
 	</div>

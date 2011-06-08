@@ -827,6 +827,10 @@ div.index div.actions ul li.export a{
 	background-image: url(img/export.png);
 }
 
+/*div.index div.actions ul li.global_custom_action a{
+	background-image: url(ico/32x32/applications-system.png);
+}*/
+
 div.index div.actions ul li.add-images a{
 	background-image: url(ico/32x32/insert-image.png);
 }
