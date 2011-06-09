@@ -62,19 +62,6 @@ class ContentsController extends BrownieAppController {
 
 
 	function index() {
-		$filterSites = (
-			$siteModel = Configure::read('multiSitesModel')
-			and !Configure::read('Auth.BrwUser.root')
-			and $this->Model->name == $siteModel
-		);
-		if ($filterSites) {
-			$this->Model->brwConfig['paginate']['conditions'][] = array(
-				$this->Model->name . '.brw_user_id' => Configure::read('Auth.BrwUser.id')
-			);
-			$this->Model->brwConfig['actions']['add'] = false;
-			$this->Model->brwConfig['actions']['delete'] = false;
-		}
-
 		$this->paginate = $this->Model->brwConfig['paginate'];
 		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
@@ -102,20 +89,6 @@ class ContentsController extends BrownieAppController {
 
 
 	function view($model, $id) {
-		$restricted = (
-			$siteModel = Configure::read('multiSitesModel')
-			and !Configure::read('Auth.BrwUser.root')
-			and $this->Model->name == $siteModel
-		);
-		if ($restricted) {
-			if ($id != Configure::read('currentSite.id')) {
-				$this->cakeError('error404');
-			} else {
-				$this->Model->brwConfig['actions']['add'] = false;
-				$this->Model->brwConfig['actions']['delete'] = false;
-			}
-		}
-
 		$this->Model->Behaviors->attach('Containable');
 		$record = $this->Model->find('all', array(
 			'conditions' => array($this->Model->name . '.id' => $id),
@@ -133,7 +106,7 @@ class ContentsController extends BrownieAppController {
 
 		//ejecutar brwAfterFind en los modelos relacionados que estan en $contain
 
-		$neighbors = $this->Content->neighborsForView($this->Model, $record, $restricted, $this->params['named']);
+		$neighbors = $this->Content->neighborsForView($this->Model, $record, $restricted = null, $this->params['named']);
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);
@@ -181,20 +154,6 @@ class ContentsController extends BrownieAppController {
 
 
 	function edit($model, $id = null) {
-
-		$restricted = (
-			$siteModel = Configure::read('multiSitesModel')
-			and !Configure::read('Auth.BrwUser.root')
-			and $this->Model->name == $siteModel
-
-		);
-		if ($restricted) {
-			if ($id != Configure::read('currentSite.id')) {
-				$this->cakeError('error404');
-			}
-		}
-
-
 		if (!empty($id)) {
 			if (!$this->Model->read(array('id'), $id)) {
 				$this->cakeError('error404');
@@ -224,9 +183,6 @@ class ContentsController extends BrownieAppController {
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model);
 			$fieldList = array_merge(array_keys($fields), array('name', 'model', 'category_code', 'description', 'record_id'));
-			if (Configure::read('multiSitesModel')) {
-				$fieldList[] = 'site_id';
-			}
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}

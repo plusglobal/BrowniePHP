@@ -4,7 +4,6 @@ class PanelComponent extends Object{
 
 	function initialize(&$Controller, $settings = array()) {
 		$defaultSettings = array(
-			'multiSitesModel' => false,
 			'css' => array(
 				'/brownie/css/brownie',
 				'/brownie/css/fancybox/jquery.fancybox-1.3.1',
@@ -45,9 +44,7 @@ class PanelComponent extends Object{
 
 		$settings = Set::merge($defaultSettings, $settings);
 
-		Configure::write('multiSitesModel', $settings['multiSitesModel']);
 		Configure::write('brwSettings', $settings);
-
 
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');

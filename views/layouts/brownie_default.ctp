@@ -34,20 +34,8 @@ if ($companyName) {
 			<ul>
 				<li class="home"><?php echo $html->link(__d('brownie', 'Home', true),
 				array('controller' => 'brownie', 'action' => 'index')) ?></li>
-				<?php if($sitesModel = Configure::read('multiSitesModel') and $currentSite = Configure::read('currentSite.id')): ?>
-				<li class="site"><?php echo $html->link(__d('brownie', 'Site', true),
-				array('controller' => 'contents', 'action' => 'view', $sitesModel, $currentSite)) ?></li>
-				<?php endif ?>
-
-				<?php //parche provisorio para que un usuario no cambie el valor root
-				if(Configure::read('Auth.BrwUser.root')): ?>
 				<li class="users"><?php echo $html->link(__d('brownie', 'Users', true),
 				array('controller' => 'contents', 'action' => 'index', 'BrwUser')) ?></li>
-				<?php endif ?>
-
-
-				<?php /*<li class="groups"><?php echo $html->link(__d('brownie', 'Users groups', true),
-				array('controller' => 'contents', 'action' => 'index', 'BrwGroup')) ?></li>*/ ?>
 				<li class="logout"><?php echo $html->link(__d('brownie', 'Logout', true),
 				array('controller' => 'brownie', 'action' => 'logout')) ?></li>
 			</ul>

@@ -42,7 +42,7 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	function beforeFind($Model, $query) {
+	/*function beforeFind($Model, $query) {
 		$user = Configure::read('Auth.BrwUser');
 		if ($user and !$user['root']) {
 			if (!empty($query['conditions']['BrwUser.id']) and $query['conditions']['BrwUser.id'] != $user['id']) {
@@ -52,7 +52,7 @@ class BrwUserBehavior extends ModelBehavior {
 			}
 		}
 		return $query;
-	}
+	}*/
 
 
 	function beforeSave($Model) {
@@ -67,15 +67,6 @@ class BrwUserBehavior extends ModelBehavior {
 		return $Model->data;
 	}
 
-
-	function sites($Model, $user) {
-		$siteModel = Configure::read('multiSitesModel');
-		$params = array();
-		if (!$user['root']) {
-			$params['conditions'] = array($siteModel . '.brw_user_id' => $user['id']);
-		}
-		return $Model->{$siteModel}->find('list', $params);
-	}
 
 	function checkPasswordMatch($Model, $data) {
 		$password = $Model->data[$Model->name]['password'];

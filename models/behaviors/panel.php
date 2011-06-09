@@ -39,8 +39,6 @@ class PanelBehavior extends ModelBehavior {
 			'date_ranges' => array(),
 		),
 
-		'fields_no_root' => array(),
-
 		'actions' => array(
 			'index' => true,
 			'view' => true,
@@ -56,8 +54,6 @@ class PanelBehavior extends ModelBehavior {
 			'print' => false,
 			'empty' => false,
 		),
-
-		'actions_no_root' => array(),
 
 		'custom_actions' => array(),
 
@@ -109,24 +105,6 @@ class PanelBehavior extends ModelBehavior {
 	function setup($Model, $config = array()) {
 		$this->brwConfigInit($Model);
 		$this->_attachUploads($Model);
-		$this->_treeMultiSites($Model);
-	}
-
-	function beforeFind($Model, $query) {
-		$this->_treeMultiSites($Model);
-
-		if ($site = Configure::read('currentSite') and !in_array($Model->name, array('BrwImage', 'BrwFile'))) {
-			if($this->isSiteDependent($Model)) {
-				if (empty($query['conditions'])) {
-					$query['conditions'] = array();
-				}
-				if (is_array($query['conditions'])) {
-					$foreignKey = $Model->belongsTo[Configure::read('multiSitesModel')]['foreignKey'];
-					$query['conditions'][$Model->alias . '.' . $foreignKey] = $site['id'];
-				}
-			}
-		}
-		return $query;
 	}
 
 	function afterFind($Model, $results, $primary) {
@@ -143,18 +121,6 @@ class PanelBehavior extends ModelBehavior {
 		return $results;
 	}
 
-	function beforeValidate($Model) {
-		$this->_treeMultiSites($Model);
-
-		if ($site = Configure::read('currentSite') and $this->isSiteDependent($Model)) {
-			$Model->data[$Model->alias]['site_id'] = $site['id'];
-		}
-		return $Model->data;
-	}
-
-	function beforeSave($Model) {
-		return $this->beforeValidate($Model);
-	}
 
 	function afterSave($Model, $created) {
 		if (
@@ -206,15 +172,6 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
-	function isSiteDependent($Model) {
-		if (in_array($Model->name, array('BrwImage', 'BrwFile'))) {
-			return false;
-		} else {
-			return !empty($Model->belongsTo[Configure::read('multiSitesModel')]) and $Model->brwConfig['site_dependent'];
-		}
-	}
-
-
 	function brwConfigInit($Model) {
 		$defaults = $this->brwConfigDefault;
 		if (empty($Model->brwConfig)) {
@@ -226,13 +183,9 @@ class PanelBehavior extends ModelBehavior {
 
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
 
-		if ($this->isSiteDependent($Model) and Configure::read('multiSitesModel')) {
-			$Model->brwConfig['fields']['hide'][] = 'site_id';
-		}
-
 		$this->_sortableConfig($Model);
 		$this->_paginateConfig($Model);
-		$this->_parentConfig($Model);
+		//$this->_parentConfig($Model);
 		$this->_namesConfig($Model);
 		$this->_filesAndImagesConfig($Model);
 		$this->_conditionalConfig($Model);
@@ -292,7 +245,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 
-	function _parentConfig($Model) {
+	/*function _parentConfig($Model) {
 		$siteModel = Configure::read('multiSitesModel');
 		if (!isset($Model->brwConfig['parent'])) {
 			$belongsTo = $Model->belongsTo;
@@ -304,7 +257,7 @@ class PanelBehavior extends ModelBehavior {
 				$Model->brwConfig['parent'] = $keys[0];
 			}
 		}
-	}
+	}*/
 
 
 	function _namesConfig($Model) {
@@ -616,15 +569,6 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
-	function _treeMultiSites($Model) {
-		if (Configure::read('multiSitesModel') and in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))) {
-			if ($site = Configure::read('currentSite')) {
-				$Model->Behaviors->attach('Tree', array('scope' => $Model->alias . '.site_id = ' . $site['id']));
-			}
-		}
-	}
-
-
 	function sanitizeHtml($Model, $results) {
 		App::import('Brownie.BrwSanitize');
 		foreach ($results as $i => $result) {
@@ -714,9 +658,6 @@ class PanelBehavior extends ModelBehavior {
 				'password' => __d('brownie', 'Leave blank for no change', true),
 			),
 		);
-		if (!Configure::read('multiSitesModel')) {
-			$brwUserDefault['fields']['hide'][] = 'root';
-		}
 		return Set::merge($defaults, $brwUserDefaults);
 	}
 
