@@ -18,6 +18,7 @@ class PanelComponent extends Object{
 				'/brownie/js/brownie',
 			),
 			'customHome' => false,
+			'userModels' => array('BrwUser'),
 		);
 		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 			$defaultSettings['css'][] = 'brownie';
@@ -37,6 +38,11 @@ class PanelComponent extends Object{
 		} elseif (file_exists(WWW_ROOT . 'js' . DS . 'fckeditor' . DS . 'fckeditor.js')) {
 			$settings['js'][] = 'fckeditor/fckeditor';
 		}
+
+		if (!empty($settings['userModels'])) {
+			$defaultSettings['userModels'] = $settings['userModels'];
+		}
+
 		$settings = Set::merge($defaultSettings, $settings);
 
 		Configure::write('multiSitesModel', $settings['multiSitesModel']);

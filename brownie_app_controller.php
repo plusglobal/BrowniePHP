@@ -2,11 +2,18 @@
 
 class BrownieAppController extends AppController {
 
-	var $components = array('Auth', 'Session');
+	var $components = array('Brownie.MyAuth', 'Session');
 	var $helpers = array('Html', 'Session', 'Javascript');
 	var $uses = array('BrwUser');
 	var $layout = 'brownie_default';
 	static $currentUser;
+
+
+	function constructClasses() {
+		parent::constructClasses();
+		$this->Auth = $this->MyAuth;
+	}
+
 
 	function beforeFilter() {
 		$this->_authSettings();

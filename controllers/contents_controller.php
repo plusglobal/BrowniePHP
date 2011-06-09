@@ -614,7 +614,6 @@ class ContentsController extends BrownieAppController {
 								!empty($this->data[$model][$field . $key]['hour'])
 								and !empty($this->data[$model][$field . $key]['min'])
 							) {
-								//pr($this->data);								pr($key);
 								$url[$model . '.' . $field . $key] .= ' ' . $data[$field . $key]['hour']
 									. ':' . $data[$field . $key]['min'] . ':00';
 							} else {
@@ -627,7 +626,6 @@ class ContentsController extends BrownieAppController {
 				$url[$model . '.' . $field] = $this->data[$model][$field];
 			}
 		}
-		//pr($url);
 		$this->redirect($url);
 	}
 
