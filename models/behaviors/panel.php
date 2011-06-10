@@ -177,12 +177,13 @@ class PanelBehavior extends ModelBehavior {
 		if (empty($Model->brwConfig)) {
 			$Model->brwConfig = array();
 		}
-		if ($Model->alias == 'BrwUser') {
+
+		$userModels = Configure::read('brwSettings.userModels');
+		if (is_array($userModels) and in_array($Model->alias, $userModels)) {
 			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
 		}
 
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
-
 		$this->_sortableConfig($Model);
 		$this->_paginateConfig($Model);
 		//$this->_parentConfig($Model);
@@ -638,6 +639,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function _brwConfigUserDefault($Model, $defaults) {
+		$Model->Behaviors->attach('Brownie.BrwUser');
 		$brwUserDefaults = array(
 			'fields' => array(
 				'no_edit' => array('last_login'),
@@ -646,18 +648,21 @@ class PanelBehavior extends ModelBehavior {
 				'virtual' => array('repeat_password' => array('after' => 'password')),
 				'hide' => array('last_login'),
 			),
-			'names' => array(
-				'section' => __d('brownie', 'User', true),
-				'singular' => __d('brownie', 'User', true),
-				'plural' => __d('brownie', 'Users', true),
-			),
 			'paginate' => array(
-				'fields' => array('id', 'email'),
+				'fields' => array('id', 'email')
 			),
 			'legends' => array(
 				'password' => __d('brownie', 'Leave blank for no change', true),
 			),
 		);
+		if ($Model->alias == 'BrwUser') {
+			$brwUserDefaults['names'] = array(
+				'section' => __d('brownie', 'User', true),
+				'singular' => __d('brownie', 'User', true),
+				'plural' => __d('brownie', 'Users', true),
+			);
+		}
+
 		return Set::merge($defaults, $brwUserDefaults);
 	}
 
