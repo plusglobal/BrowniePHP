@@ -17,14 +17,11 @@ class BrownieAppController extends AppController {
 
 	function beforeFilter() {
 		$this->_authSettings();
-		//$this->_modelsToDb();
 		$this->_menuConfig();
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 
-		if (!$this->Session->read('Auth.BrwUser')) {
-			$this->Session->delete('BrwSite');
-		}
-
+	    Configure::write('brwSettings.authModel', $this->Session->read('authModel'));
+	    Configure::write('authUser', $this->Session->read('Auth.BrwUser'));
 		parent::beforeFilter();
 	}
 

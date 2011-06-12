@@ -82,7 +82,6 @@ class BrwUserBehavior extends ModelBehavior {
 	function checkPasswordMatch($Model, $data) {
 		$password = $Model->data[$Model->name]['password'];
 		$repeat_password = $Model->data[$Model->name]['repeat_password'];
-		//pr(Configure::read('brwSettings.authModel'));
 		if ($Model->alias == 'BrwUser') {
 			$repeat_password = Security::hash($repeat_password, null, true);
 		}
