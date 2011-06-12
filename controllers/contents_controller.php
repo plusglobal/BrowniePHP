@@ -48,6 +48,8 @@ class ContentsController extends BrownieAppController {
 			);
 		}*/
 
+		$this->_checkBrwUserCrud();
+
 		$this->Content->i18nInit($this->Model);
 	}
 
@@ -782,5 +784,17 @@ class ContentsController extends BrownieAppController {
 		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => $langs3chars));
 	}
 
+
+	function _checkBrwUserCrud() {
+		$authModel = $this->Session->read('authModel');
+		$mustRedirect = (
+			($this->Model->alias == 'BrwUser' and $authModel != 'BrwUser')
+			or
+			($this->Model->alias == $authModel and $this->params['action'] == 'index')
+		);
+		if ($mustRedirect) {
+			$this->redirect(array('action' => 'view', $authModel, $this->Session->read('Auth.BrwUser.id')));
+		}
+	}
 
 }
