@@ -2,7 +2,7 @@
 
 class BrwUserBehavior extends ModelBehavior {
 
-	function setup($Model, $config = array()) {
+	function setup($Model) {
 		$Model->displayField = 'email';
 		$Model->validate = $this->_validate($Model);
 	}
@@ -24,6 +24,13 @@ class BrwUserBehavior extends ModelBehavior {
 					'on' => 'create',
 					'required' => true,
 					'message' =>  __d('brownie', 'Email cannot be empty', true),
+				),
+			),
+			'password' => array(
+				array(
+					'rule' => 'notEmpty',
+					'on' => 'create',
+					'message' =>  __d('brownie', 'Password cannot be empty', true),
 				),
 			),
 			'repeat_password' => array(
@@ -56,18 +63,17 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	function beforeSave($Model) {
-		if ($Model->alias == 'BrwUser') {
-			if (!empty($Model->data['BrwUser']['id']) and isset($Model->data['BrwUser']['password'])) {
-				if (Security::hash('', null, true) == $Model->data['BrwUser']['password']) {
-					unset($Model->data['BrwUser']['password']);
-					if (isset($Model->data['BrwUser']['repeat_password'])) {
-						unset($Model->data['BrwUser']['repeat_password']);
-					}
-				}
-			}
-		} else {
+		if ($Model->alias != 'BrwUser') {
 			$pass = $Model->data[$Model->alias]['password'];
 			$Model->data[$Model->alias]['password'] = Security::hash($pass, null, true);
+		}
+		if (!empty($Model->data[$Model->alias]['id']) and isset($Model->data[$Model->alias]['password'])) {
+			if (Security::hash('', null, true) == $Model->data[$Model->alias]['password']) {
+				unset($Model->data[$Model->alias]['password']);
+				if (isset($Model->data[$Model->alias]['repeat_password'])) {
+					unset($Model->data[$Model->alias]['repeat_password']);
+				}
+			}
 		}
 		return $Model->data;
 	}
@@ -84,7 +90,7 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 	function brwBeforeEdit($Model, $data) {
-		$data['BrwUser']['password'] = $data['BrwUser']['repeat_password'] = '';
+		$data[$Model->alias]['password'] = $data[$Model->alias]['repeat_password'] = '';
 		return $data;
 	}
 

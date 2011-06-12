@@ -182,7 +182,6 @@ class PanelBehavior extends ModelBehavior {
 		if (is_array($userModels) and in_array($Model->alias, $userModels)) {
 			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
 		}
-
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
 		$this->_sortableConfig($Model);
 		$this->_paginateConfig($Model);
@@ -662,7 +661,6 @@ class PanelBehavior extends ModelBehavior {
 				'plural' => __d('brownie', 'Users', true),
 			);
 		}
-
 		return Set::merge($defaults, $brwUserDefaults);
 	}
 
