@@ -22,6 +22,10 @@ class BrownieController extends BrownieAppController {
 				'password' => $this->Auth->password($this->data['BrwUser']['password']),
 			));
 		}
+		$authModel = $this->Session->read('authModel');
+		if ($authModel) {
+		    Configure::write('brwSettings.authModel', $authModel);
+		}
 		parent::beforeFilter();
 	}
 

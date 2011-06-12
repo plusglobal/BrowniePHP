@@ -56,13 +56,18 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	function beforeSave($Model) {
-		if (!empty($Model->data['BrwUser']['id']) and isset($Model->data['BrwUser']['password'])) {
-			if (Security::hash('', null, true) == $Model->data['BrwUser']['password']) {
-				unset($Model->data['BrwUser']['password']);
-				if (isset($Model->data['BrwUser']['repeat_password'])) {
-					unset($Model->data['BrwUser']['repeat_password']);
+		if ($Model->alias == 'BrwUser') {
+			if (!empty($Model->data['BrwUser']['id']) and isset($Model->data['BrwUser']['password'])) {
+				if (Security::hash('', null, true) == $Model->data['BrwUser']['password']) {
+					unset($Model->data['BrwUser']['password']);
+					if (isset($Model->data['BrwUser']['repeat_password'])) {
+						unset($Model->data['BrwUser']['repeat_password']);
+					}
 				}
 			}
+		} else {
+			$pass = $Model->data[$Model->alias]['password'];
+			$Model->data[$Model->alias]['password'] = Security::hash($pass, null, true);
 		}
 		return $Model->data;
 	}
@@ -70,7 +75,11 @@ class BrwUserBehavior extends ModelBehavior {
 
 	function checkPasswordMatch($Model, $data) {
 		$password = $Model->data[$Model->name]['password'];
-		$repeat_password = Security::hash($Model->data[$Model->name]['repeat_password'], null, true);
+		$repeat_password = $Model->data[$Model->name]['repeat_password'];
+		//pr(Configure::read('brwSettings.authModel'));
+		if ($Model->alias == 'BrwUser') {
+			$repeat_password = Security::hash($repeat_password, null, true);
+		}
 		return ($password == $repeat_password);
 	}
 

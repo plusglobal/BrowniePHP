@@ -37,7 +37,7 @@ class ContentsController extends BrownieAppController {
 			$this->arrayPermissions($this->Model->alias)
 		);
 
-		if (!Configure::read('Auth.BrwUser.root')) {
+		/*if (!Configure::read('Auth.BrwUser.root')) {
 			$this->Model->brwConfig['actions'] = Set::merge(
 				$this->Model->brwConfig['actions'],
 				$this->Model->brwConfig['actions_no_root']
@@ -46,7 +46,7 @@ class ContentsController extends BrownieAppController {
 				$this->Model->brwConfig['fields'],
 				$this->Model->brwConfig['fields_no_root']
 			);
-		}
+		}*/
 
 		$this->Content->i18nInit($this->Model);
 	}
