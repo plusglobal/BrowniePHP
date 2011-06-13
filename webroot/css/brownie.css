@@ -526,11 +526,15 @@ th a:hover{
 }
 
 #content table .delete_multiple{
-	vertical-align: middle;
+	vertical-align: top;
 	text-align: center;
-	padding: 0 5px;
+	padding: 8px 5px;
 	margin: 0;
 	width: 1px;
+}
+
+#content table th.delete_multiple{
+	padding-top: 12px;
 }
 
 #content .model-index table tr .delete_multiple input{
@@ -591,18 +595,30 @@ th.actions{
 	text-transform: uppercase;
 }
 
-th.actions{
+th.actions, th.index_image{
 	overflow: hidden;
 	text-align: left;
 	padding-left: 10px;
 	padding-right: 10px;
+	color: #fff;
 }
 
 table td.actions{
-	vertical-align: middle;
+	vertical-align: top;
 	line-height: 1.9em;
 	text-align: left;
-	padding: 0 8px;
+	padding: 3px 8px;
+}
+
+table td.index_image{
+	text-align: center;
+	padding: 0;
+	vertical-align: middle;
+	padding: 7px;
+}
+
+table td.index_image a img{
+	margin: 0;
 }
 
 ul.actions{

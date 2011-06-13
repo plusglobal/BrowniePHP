@@ -55,7 +55,7 @@ if ($records) {
 		echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));
 	}
 
-	if ($brwConfig['actions']['delete_multiple']) {
+	if ($brwConfig['actions']['delete']) {
 		echo $form->create('Content', array(
 			'id' => 'deleteMultiple',
 			'url' => array('controller' => 'contents', 'action' => 'delete_multiple', $model)
@@ -71,21 +71,29 @@ if ($records) {
 	foreach ($records as $record):
 		if ($i == 0) {
 			echo '<tr>';
-			if ($brwConfig['actions']['delete_multiple']) {
+			if ($brwConfig['actions']['delete']) {
 				echo '
 				<th class="delete_multiple">
 					<input type="checkbox" id="deleteCheckAll" title="' . __d('brownie', 'Select/Unselect all', true) . '">
 				</th>';
 			}
-			foreach($brwConfig['paginate']['fields'] as $field_name) {
+			foreach ($brwConfig['paginate']['fields'] as $field_name) {
 				if (!empty($schema[$field_name])) {
 					echo '
-					<th class="' . $field_name . ' ' . $schema[$field_name]['class']
-					. '">' . $paginator->sort(
+					<th class="' . $field_name . ' ' . $schema[$field_name]['class'] . '">
+					' . $paginator->sort(
 						__($brwConfig['fields']['names'][$field_name], true),
 						$field_name,
 						array('model' => $model, 'escape' => false)
 					) . '</th>';
+					if ($field_name == 'id') {
+						foreach ($brwConfig['paginate']['images'] as $indexImageKey) {
+							echo '
+							<th class="index_image">
+								' . $brwConfig['images'][$indexImageKey]['name_category'] . '
+							</th>';
+						}
+					}
 				}
 			}
 			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
@@ -96,23 +104,33 @@ if ($records) {
 			</tr>';
 		}
 
-		$class = ($brwConfig['actions']['delete_multiple']) ? 'row_delete_multiple' : '';
+		$class = ($brwConfig['actions']['delete']) ? 'row_delete_multiple' : '';
 
 		echo '
 		<tr class="'.$class.' list">';
-		if ($brwConfig['actions']['delete_multiple']) {
+		if ($brwConfig['actions']['delete']) {
 			echo '
 			<td class="delete_multiple">
 				<input type="checkbox" name="data[Content][id][]" value="' . $record[$model]['id'] . '">
 			</td>';
 		}
-
 		foreach($brwConfig['paginate']['fields'] as $field_name) {
 			if (!empty($schema[$field_name])) {
 				echo '
 				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">'
 					. ( !empty($record[$model][$field_name]) ? $record[$model][$field_name] : '&nbsp;' )
 				. '</td>';
+				if ($field_name == 'id') {
+					foreach ($brwConfig['paginate']['images'] as $indexImageKey) {
+						echo '<td class="index_image field">';
+						if (!empty($record['BrwImage'][$indexImageKey]['tag'])) {
+							echo $record['BrwImage'][$indexImageKey]['tag'];
+						} else {
+							echo '&nbsp;';
+						}
+						echo '</td>';
+					}
+				}
 			}
 		}
 
@@ -141,7 +159,7 @@ if ($records) {
 		$i++;
 	endforeach;
 	echo '</table>';
-	if ($brwConfig['actions']['delete_multiple']) {
+	if ($brwConfig['actions']['delete']) {
 		echo '<div class="submit"><input type="submit" value="' . __d('brownie', 'Delete selected', true) . '" /></div>';
 		echo $form->end();
 	}

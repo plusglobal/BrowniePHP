@@ -25,7 +25,7 @@ function multipleComboSelect() {
 }
 
 function bindFancyBox() {
-	$(".images-gallery a.brw-image").fancybox({'titlePosition': 'inside'});
+	$('a.brw-image').fancybox({'titlePosition': 'inside'});
 	$('a[target=modal]').fancybox({'titleShow': false});
 }
 
@@ -110,15 +110,15 @@ function checkMultiple() {
 		});
 	}).css('visibility', 'visible');
 
-	$('form#deleteMultiple td.field').click(function(){
-		$(this).parents('tr').children('td').children('input').each(function(){
-			if (!$(this).is(':checked')) {
-				$(this).attr('checked', true);
-			} else {
-				$(this).attr('checked', false);
-			}
-			$(this).change();
-		});
+	$('form#deleteMultiple tr').click(function(e){
+		console.log(e);
+		if (e.target.type == "checkbox") {
+			e.stopPropagation();
+		} else {
+			$checkbox = $(this).find(':checkbox');
+			$checkbox.attr('checked', !$checkbox.attr('checked'));
+			$checkbox.change();
+		};
 	});
 		
 	$('#deleteMultiple').submit(function(){
@@ -133,5 +133,10 @@ function checkMultiple() {
 			alert(brwMsg.no_checked_for_deletion);
 		}
 		return allowSubmit;
+	});
+	
+	$('td.actions a').click(function(e){
+		e.stopPropagation();
+		return true;
 	});
 }
