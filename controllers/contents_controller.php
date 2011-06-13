@@ -72,6 +72,10 @@ class ContentsController extends BrownieAppController {
 		$filters = $this->_filterConditions($this->Model);
 		$this->paginate['conditions'] = $filters;
 
+		if (!empty($this->Model->brwConfig['paginate']['images'])) {
+			$this->paginate['contain'][] = 'BrwImage';
+		}
+
 		$records = $this->paginate($this->Model);
 
 		if (method_exists($this->Model, 'brwAfterFind')) {

@@ -12,7 +12,8 @@ class PanelBehavior extends ModelBehavior {
 
 		'paginate' => array(
 			'limit' => 20,
-			'fields' => array()
+			'fields' => array(),
+			'images' => array(),
 		),
 
 		'index' => array(
@@ -47,7 +48,6 @@ class PanelBehavior extends ModelBehavior {
 			'edit_image' => true,
 			'edit_file' => true,
 			'delete' => true,
-			'delete_multiple' => false,
 			'export' => false,
 			'import' => false,
 			'search' => false,
