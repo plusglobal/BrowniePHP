@@ -478,15 +478,29 @@ class ContentsController extends BrownieAppController {
 
 	function import($model) {
 		if (!$this->Model->brwConfig['actions']['import']) {
-			$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
+			$this->cakeError('error404');
 		}
-
 		if (!empty($this->data)) {
 			$result = $this->Model->brwImport($this->data);
-			if (!$result) {
-				$this->Session->setFlash(__d('brownie', 'The import could not be done. Please try again', true), 'flash_error');
+			if (is_array($result)) {
+				$import = $result;
+				if (empty($import['flash'])) {
+					$import['flash'] = ($import['result']) ? 'flash_success' : 'flash_error';
+				}
 			} else {
-				$this->Session->setFlash($result, 'flash_success');
+				if ($result) {
+					$import['msg'] = $import['result'] = $result;
+					$import['flash'] = 'flash_success';
+				} else {
+					$import['msg'] = __d('brownie', 'The import could not be done. Please try again', true);
+					$import['result'] = false;
+					$import['flash'] = 'flash_error';
+				}
+			}
+
+			$this->Session->setFlash($import['msg'], $import['flash']);
+
+			if ($import['result']) {
 				$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
 			}
 		}
