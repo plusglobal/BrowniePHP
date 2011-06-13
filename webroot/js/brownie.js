@@ -111,7 +111,6 @@ function checkMultiple() {
 	}).css('visibility', 'visible');
 
 	$('form#deleteMultiple tr').click(function(e){
-		console.log(e);
 		if (e.target.type == "checkbox") {
 			e.stopPropagation();
 		} else {
