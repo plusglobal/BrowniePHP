@@ -50,7 +50,11 @@ if ($brwConfig['fields']['filter'] and $calledFrom == 'index') {
 
 $i = 0;
 if ($records) {
-	$controlsOnTop = ($this->Paginator->params['paging'][$model]['options']['limit'] >= 20);
+	$controlsOnTop = (
+		$this->Paginator->params['paging'][$model]['options']['limit'] >= 20
+		and
+		$this->Paginator->params['paging'][$model]['count'] >= 20
+	);
 	if ($controlsOnTop) {
 		echo $this->element('pagination', array('model' => $model, 'brwConfig' => $brwConfig));
 	}
