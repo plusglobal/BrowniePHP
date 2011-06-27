@@ -77,14 +77,6 @@ class PanelBehavior extends ModelBehavior {
 
 	);
 
-	var $brwConfigDefaultImage = array(
-		'sizes' => array(),
-		'index' => false,
-		'description' => true,
-		'folder' => 'uploads',	//relative to path
-		'path' => WWW_ROOT,
-	);
-
 	var $brwConfigDefaultCustomActions = array(
 		'title' => '',
 		'url' => array('plugin' => false),
@@ -178,9 +170,8 @@ class PanelBehavior extends ModelBehavior {
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
 		$this->_sortableConfig($Model);
 		$this->_paginateConfig($Model);
-		//$this->_parentConfig($Model);
 		$this->_namesConfig($Model);
-		$this->_filesAndImagesConfig($Model);
+		$this->_uploadsConfig($Model);
 		$this->_conditionalConfig($Model);
 		$this->_sanitizeConfig($Model);
 		$this->_customActionsConfig($Model);
@@ -237,22 +228,6 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
-
-	/*function _parentConfig($Model) {
-		$siteModel = Configure::read('multiSitesModel');
-		if (!isset($Model->brwConfig['parent'])) {
-			$belongsTo = $Model->belongsTo;
-			if(isset($belongsTo[$siteModel])) {
-				unset($belongsTo[$siteModel]);
-			}
-			$keys = array_keys($belongsTo);
-			if (!empty($keys[0])) {
-				$Model->brwConfig['parent'] = $keys[0];
-			}
-		}
-	}*/
-
-
 	function _namesConfig($Model) {
 		$modelName = Inflector::underscore($Model->alias);
 		if (empty($Model->brwConfig['names']['singular'])) {
@@ -266,67 +241,50 @@ class PanelBehavior extends ModelBehavior {
 		}
 	}
 
-	function _filesAndImagesConfig($Model) {
-		if ($Model->brwConfig['images']) {
-			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
-				'foreignKey' => 'record_id',
-				'conditions' => array('BrwImage.model' => $Model->name)
-			))), false);
-			foreach($Model->brwConfig['images'] as $key => $value) {
-				if (empty($value['name_category'])) {
-					$value['name_category'] = $key;
-				}
-				$Model->brwConfig['images'][$key] = Set::merge($this->brwConfigDefaultImage, $value);
-				$Model->brwConfig['images'][$key]['path'] = realpath($Model->brwConfig['images'][$key]['path']) . DS;
-				foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
-					if (strstr($sizes, 'x')) {
-						list($w, $h) = explode('x', $sizes);
-					} else {
-						list($w, $h) = explode('_', $sizes);
-					}
-					$Model->brwConfig['images'][$key]['array_sizes'][$i] = array('w' => $w, 'h' => $h);
-				}
-				Configure::write(
-					'brwSettings.Images.' . $Model->alias . '.' . $key,
-					array(
-						'folder' => $Model->brwConfig['images'][$key]['folder'],
-						'path' => $Model->brwConfig['images'][$key]['path'],
-					)
+
+	function _uploadsConfig($Model) {
+		foreach (array('BrwFile' => 'files', 'BrwImage' => 'images') as $uploadModel => $uploadType) {
+			if ($Model->brwConfig[$uploadType]) {
+				$brwConfigDefaultUpload = array(
+					'index' => false,
+					'description' => true,
+					'path' => Configure::read('brwSettings.uploadsPath'),
 				);
-			}
-		}
-		if ($Model->brwConfig['files']) {
-			$brwConfigDefaultFile = array(
-				'index' => false,
-				'description' => true,
-				'path' => WWW_ROOT . 'uploads',
-			);
-			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
-				'foreignKey' => 'record_id',
-				'conditions' => array('BrwFile.model' => $Model->name)
-			))), false);
-			foreach($Model->brwConfig['files'] as $key => $value) {
-				if (empty($value['name_category'])) {
-					$value['name_category'] = $key;
+				$Model->bindModel(array('hasMany' => array($uploadModel => array(
+					'foreignKey' => 'record_id',
+					'conditions' => array($uploadModel . '.model' => $Model->name)
+				))), false);
+				foreach ($Model->brwConfig[$uploadType] as $key => $value) {
+					if (empty($value['name_category'])) {
+						$value['name_category'] = $key;
+					}
+					$Model->brwConfig[$uploadType][$key] = Set::merge($brwConfigDefaultUpload, $value);
+					if (!is_dir(realpath($Model->brwConfig[$uploadType][$key]['path']))) {
+						mkdir($Model->brwConfig[$uploadType][$key]['path'], 0777, true);
+					}
+					$Model->brwConfig[$uploadType][$key]['path'] = realpath($Model->brwConfig[$uploadType][$key]['path']);
+					if ($uploadModel == 'BrwImage') {
+						foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
+							if (strstr($sizes, 'x')) {
+								list($w, $h) = explode('x', $sizes);
+							} else {
+								list($w, $h) = explode('_', $sizes);
+							}
+							$Model->brwConfig['images'][$key]['array_sizes'][$i] = array('w' => $w, 'h' => $h);
+						}
+					}
 				}
-				$Model->brwConfig['files'][$key] = Set::merge($brwConfigDefaultFile, $value);
-				if (!is_dir(realpath($Model->brwConfig['files'][$key]['path']))) {
-					mkdir($Model->brwConfig['files'][$key]['path'], 0777, true);
-				}
-				$Model->brwConfig['files'][$key]['path'] = realpath($Model->brwConfig['files'][$key]['path']);
-				/*Configure::write(
-					'brwSettings.Files.' . $Model->alias . '.' . $key,
-					$Model->brwConfig['files'][$key]['path']
-				);*/
 			}
 		}
 	}
+
 
 	function _conditionalConfig($Model) {
 		if (!empty($Model->brwConfig['fields']['conditional'])) {
 			$Model->brwConfig['fields']['conditional'] = $this->_camelize($Model->brwConfig['fields']['conditional']);
 		}
 	}
+
 
 	function _sanitizeConfig($Model) {
 		$no_sanitize = array();
@@ -349,6 +307,7 @@ class PanelBehavior extends ModelBehavior {
 	function fieldsEdit($Model) {
 		return $this->fieldsForForm($Model, 'edit');
 	}
+
 
 	function fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
@@ -401,23 +360,6 @@ class PanelBehavior extends ModelBehavior {
 		}
 		return $r;
 	}
-
-
-	/*function _addBrwImagePaths($r, $Model) {
-		$r = $this->_addBrwFilePaths($r, $Model, 'images');
-		pr($r);
-
-		foreach ($r as $key => $value) {
-
-			$merged = array_merge($r[$key], $paths);
-			if (!empty($Model->brwConfig['images'][$value['category_code']]['index'])) {
-				$ret[$value['category_code']] = $merged;
-			} else {
-				$ret[$value['category_code']][] = $merged;
-			}
-		}
-		return $ret;
-	}*/
 
 
 	function _addBrwFilePaths($r, $Model) {
@@ -479,7 +421,7 @@ class PanelBehavior extends ModelBehavior {
 					$cachedPath = $Model->brwConfig[$fileType][$value['category_code']]['path']
 						. DS . 'thumbs' . DS . $value['model'] . DS . $size . DS . $value['record_id'] . DS . $value['name'];
 					if (is_file($cachedPath) and $isPublic) {
-						$paths['sizes'][$size] = Router::url(str_replace(DS, '/', substr($cachedPath, strlen(WWW_ROOT))));
+						$paths['sizes'][$size] = Router::url(str_replace(DS, '/', substr($cachedPath, strlen(WWW_ROOT) - 1)));
 					} else {
 						$url = array(
 							'plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'view',
@@ -609,10 +551,6 @@ class PanelBehavior extends ModelBehavior {
 		}
 		$Model->brwConfig['fields']['names'] = Set::merge($defaultNames, $Model->brwConfig['fields']['names']);
 	}
-
-	/**
-	* Function to delete filter fields that are not foreignKeys or date
-	*/
 
 
 	function _fieldsFilters($Model) {

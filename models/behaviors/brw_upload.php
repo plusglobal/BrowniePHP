@@ -6,6 +6,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	var $extensions = array('png', 'jpg', 'gif', 'jpeg');
 	var $excluded_extensions = array('php');
 
+
 	function setup($Model, $config = array()) {
 		$this->max_upload_size = 50 * 1024 * 1024;
 	}
@@ -73,6 +74,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		return true;
 	}
 
+
 	function afterSave($Model, $created) {
 		if (!empty($Model->data[$Model->alias]['file'])) {
 			$data = $Model->data[$Model->alias];
@@ -93,6 +95,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		}
 	}
 
+
 	function _copy($Model, $source, $dest) {
 		$newDest = $dest;
 		while (is_file($newDest)) {
@@ -112,14 +115,15 @@ class BrwUploadBehavior extends ModelBehavior {
 		}
 	}
 
+
 	function beforeDelete($Model) {
-		$upload = $Model->read();
-		$upload = array_shift($upload);
-		$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
-		$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code'] . '.folder');
-		$uploadsPath = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code'] . '.path');
+		$upload = array_shift($Model->read());
+		$uploadType = ($Model->alias == 'BrwImage') ? 'images' : 'files';
+		$relModel = ClassRegistry::init($upload['model']);
+		$uploadsPath = $relModel->brwConfig[$uploadType][$upload['category_code']]['path'];
 		$this->_deleteFiles($uploadsPath, $upload['model'], $upload['record_id'], $upload['name']);
 	}
+
 
 	function _deleteFiles($uploadsPath, $model, $record, $filename) {
 		$baseFilePath = $uploadsPath . DS . $model . DS . $record;
@@ -182,7 +186,8 @@ class BrwUploadBehavior extends ModelBehavior {
 		return join('.', $parts);
 	}
 
-	function createResizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
+
+	function resizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
 		$RelModel = ClassRegistry::init($model);
 		$uploadsPath = $RelModel->brwConfig['images'][$category_code]['path'];
 		$sourceFile = $uploadsPath . DS . $model . DS . $recordId . DS . $file;
