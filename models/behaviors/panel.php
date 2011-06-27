@@ -479,8 +479,7 @@ class PanelBehavior extends ModelBehavior {
 					$cachedPath = $Model->brwConfig[$fileType][$value['category_code']]['path']
 						. DS . 'thumbs' . DS . $value['model'] . DS . $size . DS . $value['record_id'] . DS . $value['name'];
 					if (is_file($cachedPath) and $isPublic) {
-						$paths['sizes'][$size] = Router::url('/' . $uploadsFolder . '/thumbs/' . $value['model'] . '/' . $size
-							. '/' . $value['record_id'] . '/' . $value['name']);
+						$paths['sizes'][$size] = Router::url(str_replace(DS, '/', substr($cachedPath, strlen(WWW_ROOT))));
 					} else {
 						$url = array(
 							'plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'view',
