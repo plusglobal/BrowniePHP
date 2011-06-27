@@ -74,24 +74,13 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 	function afterSave($Model, $created) {
-		$file_changed = !empty($Model->data[$Model->alias]['file']);
-		if ($file_changed) {
+		if (!empty($Model->data[$Model->alias]['file'])) {
 			$data = $Model->data[$Model->alias];
-			$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
-			$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code'] . '.folder');
-			$uploadsPath = Configure::read('brwSettings.' . $uploadType . '.' . $data['model'] . '.' . $data['category_code'] . '.path');
-			if (empty($uploadsFolder) or empty($uploadsPath)) {
-				$RelModel = ClassRegistry::init($data['model']);
-				$uploadsFolder = $RelModel->brwConfig['images'][$data['category_code']]['folder'];
-				$uploadsPath = $RelModel->brwConfig['images'][$data['category_code']]['path'];
-			}
-			$model = $data['model'];
-			$source = $data['file'];
-			$dest_dir = $uploadsPath . $uploadsFolder . DS . $model . DS . $data['record_id'];
-			$dest = $dest_dir . DS . $data['name'];
-			$updating = !empty($data['id']);
-			if ($updating and $file_changed) {
-				$this->_deleteFiles($uploadsPath, $uploadsFolder, $model, $data['record_id'], $Model->data['name_prev']);
+			$uploadType = ($Model->alias == 'BrwFile')? 'files' : 'images';
+			$uploadsPath = classRegistry::init($data['model'])->brwConfig[$uploadType][$data['category_code']]['path'];
+			$dest_dir = $uploadsPath . DS . $data['model'] . DS . $data['record_id'];
+			if (!empty($data['id'])) {
+				$this->_deleteFiles($uploadsPath, $data['model'], $data['record_id'], $Model->data['name_prev']);
 			}
 			if (!is_dir($dest_dir)) {
 				if (!mkdir($dest_dir, 0777, true)) {
@@ -100,9 +89,7 @@ class BrwUploadBehavior extends ModelBehavior {
 					chmod($dest_dir, 0777);
 				}
 			}
-			if ($this->_copy($Model, $source, $dest)) {
-				chmod($dest, 0777);
-			}
+			$this->_copy($Model, $data['file'], $dest_dir . DS . $data['name']);
 		}
 	}
 
@@ -114,7 +101,8 @@ class BrwUploadBehavior extends ModelBehavior {
 			$newDest = join(DS, $parts) . DS . $file;
 		}
 		if (copy($source, $newDest)) {
-			if($newDest != $dest) {
+			chmod($newDest, 0777);
+			if ($newDest != $dest) {
 				return $Model->save(array('id' => $Model->id, 'name' => $file), array('callbacks' => false, 'validate' => false));
 			} else {
 				return true;
@@ -130,11 +118,11 @@ class BrwUploadBehavior extends ModelBehavior {
 		$uploadType = ($Model->alias == 'BrwImage') ? 'Images' : 'Files';
 		$uploadsFolder = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code'] . '.folder');
 		$uploadsPath = Configure::read('brwSettings.' . $uploadType . '.' . $upload['model'] . '.' . $upload['category_code'] . '.path');
-		$this->_deleteFiles($uploadsPath, $uploadsFolder, $upload['model'], $upload['record_id'], $upload['name']);
+		$this->_deleteFiles($uploadsPath, $upload['model'], $upload['record_id'], $upload['name']);
 	}
 
-	function _deleteFiles($uploadsPath, $uploadsFolder, $model, $record, $filename) {
-		$baseFilePath = $uploadsPath . $uploadsFolder . DS . $model . DS . $record;
+	function _deleteFiles($uploadsPath, $model, $record, $filename) {
+		$baseFilePath = $uploadsPath . DS . $model . DS . $record;
 		$filePath = $baseFilePath . DS . $filename;
 		if (is_file($filePath)) {
 			unlink($filePath);
@@ -144,11 +132,11 @@ class BrwUploadBehavior extends ModelBehavior {
 				rmdir($baseFilePath);
 			}
 		}
-		$baseCacheDir = $uploadsPath . $uploadsFolder . DS . 'thumbs' . DS . $model;
-		if(is_dir($baseCacheDir)) {
+		$baseCacheDir = $uploadsPath . DS . 'thumbs' . DS . $model;
+		if (is_dir($baseCacheDir)) {
 			$handle = opendir($baseCacheDir);
 			while ($sizeDir = readdir($handle)) {
-				if(is_dir($baseCacheDir . DS . $sizeDir)) {
+				if (is_dir($baseCacheDir . DS . $sizeDir)) {
 					$fileToDelete = $baseCacheDir . DS . $sizeDir . DS . $record . DS . $filename;
 					if (is_file($fileToDelete)) {
 						unlink($fileToDelete);
@@ -196,16 +184,15 @@ class BrwUploadBehavior extends ModelBehavior {
 
 	function createResizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
 		$RelModel = ClassRegistry::init($model);
-		$uploadsFolder = $RelModel->brwConfig['images'][$category_code]['folder'];
 		$uploadsPath = $RelModel->brwConfig['images'][$category_code]['path'];
-		$sourceFile = $uploadsPath . $uploadsFolder . DS . $model . DS . $recordId . DS . $file;
+		$sourceFile = $uploadsPath . DS . $model . DS . $recordId . DS . $file;
 		if (!file_exists($sourceFile)) {
 			return false;
 		}
 		$pathinfo = pathinfo($sourceFile);
 		App::import('Vendor', 'Brownie.resizeimage');
 		$format = $pathinfo['extension'];
-		$cacheDir = $uploadsPath . $uploadsFolder . DS . 'thumbs';
+		$cacheDir = $uploadsPath . DS . 'thumbs';
 		$destDir = $cacheDir . DS . $model . DS . $sizes. DS . $recordId;
 		if (!is_dir($destDir)) {
 			if (!mkdir($destDir, 0755, true)) {

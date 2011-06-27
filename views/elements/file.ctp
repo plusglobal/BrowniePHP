@@ -1,9 +1,12 @@
 <div class="files clearfix">
-	<?php echo $file['tag_force_download']; ?>
+	<a href="<?php echo $file['url'] ?>" class="brw-file"><?php echo $file['description'] ?></a>
 	<ul class="files-actions actions clearfix">
 		<?php
 		if ($permissions[$model]['edit']) {
 			echo '
+			<li class="view">
+				<a href="' . $file['url'] . '" target="_blank">' . __d('brownie', 'View', true) . '</a>
+			</li>
 			<li class="download">
 				<a href="' . $file['force_download'] . '">' . __d('brownie', 'Download', true) . '</a>
 			</li>

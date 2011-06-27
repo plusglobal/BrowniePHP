@@ -9,20 +9,36 @@ class DownloadsController extends BrownieAppController {
 		$this->Auth->allow('*');
 	}
 
+	function view($model, $idRecord, $category_code, $file) {
+		$this->_get($model, $idRecord, $category_code, $file, false);
+	}
+
 	function get($model, $idRecord, $category_code, $file) {
+		$this->_get($model, $idRecord, $category_code, $file, true);
+	}
+
+	function _get($model, $idRecord, $category_code, $file, $download = true) {
 		$Model = ClassRegistry::init($model);
-		$uploadsFolder = $Model->brwConfig['files'][$category_code]['folder'];
+		$filePath = $Model->brwConfig['files'][$category_code]['path']
+			. DS . $model . DS . $idRecord . DS . $file;
+
+		$isPublic = (substr($file, 0, strlen(WWW_ROOT)) === WWW_ROOT);
+		if (!$isPublic and !$this->Session->check('Auth.BrwUser')) {
+			$this->cakeError('error404');
+		}
+
 		$this->view = 'Media';
-		$pathinfo = pathinfo($file);
+		$pathinfo = pathinfo($filePath);
 		$params = array(
-			'id' => $file,
+			'id' => $pathinfo['basename'],
 			'name' => $pathinfo['filename'],
 			'extension' => $pathinfo['extension'],
-			'download' => true,
-			'mimeType' => array($pathinfo['extension'] => 'application/' . $pathinfo['extension']),
-			'path' => ROOT . DS . WEBROOT_DIR . DS . $uploadsFolder . DS . $model . DS . $idRecord . DS
+			'download' => $download,
+			//'mimeType' => array($pathinfo['extension'] => 'application/' . $pathinfo['extension']),
+			'path' => $pathinfo['dirname'] . DS
 		);
 		$this->set($params);
 	}
+
 
 }

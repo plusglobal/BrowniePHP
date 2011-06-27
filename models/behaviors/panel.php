@@ -85,13 +85,6 @@ class PanelBehavior extends ModelBehavior {
 		'path' => WWW_ROOT,
 	);
 
-	var $brwConfigDefaultFile = array(
-		'index' => false,
-		'description' => true,
-		'folder' => 'uploads',	//relative to path
-		'path' => WWW_ROOT,
-	);
-
 	var $brwConfigDefaultCustomActions = array(
 		'title' => '',
 		'url' => array('plugin' => false),
@@ -303,6 +296,11 @@ class PanelBehavior extends ModelBehavior {
 			}
 		}
 		if ($Model->brwConfig['files']) {
+			$brwConfigDefaultFile = array(
+				'index' => false,
+				'description' => true,
+				'path' => WWW_ROOT . 'uploads',
+			);
 			$Model->bindModel(array('hasMany' => array('BrwFile' => array(
 				'foreignKey' => 'record_id',
 				'conditions' => array('BrwFile.model' => $Model->name)
@@ -311,11 +309,15 @@ class PanelBehavior extends ModelBehavior {
 				if (empty($value['name_category'])) {
 					$value['name_category'] = $key;
 				}
-				$Model->brwConfig['files'][$key] = Set::merge($this->brwConfigDefaultFile, $value);
-				Configure::write(
+				$Model->brwConfig['files'][$key] = Set::merge($brwConfigDefaultFile, $value);
+				if (!is_dir(realpath($Model->brwConfig['files'][$key]['path']))) {
+					mkdir($Model->brwConfig['files'][$key]['path'], 0777, true);
+				}
+				$Model->brwConfig['files'][$key]['path'] = realpath($Model->brwConfig['files'][$key]['path']);
+				/*Configure::write(
 					'brwSettings.Files.' . $Model->alias . '.' . $key,
-					$Model->brwConfig['files'][$key]['folder']
-				);
+					$Model->brwConfig['files'][$key]['path']
+				);*/
 			}
 		}
 	}
@@ -401,35 +403,81 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
+	/*function _addBrwImagePaths($r, $Model) {
+		$r = $this->_addBrwFilePaths($r, $Model, 'images');
+		pr($r);
+
+		foreach ($r as $key => $value) {
+
+			$merged = array_merge($r[$key], $paths);
+			if (!empty($Model->brwConfig['images'][$value['category_code']]['index'])) {
+				$ret[$value['category_code']] = $merged;
+			} else {
+				$ret[$value['category_code']][] = $merged;
+			}
+		}
+		return $ret;
+	}*/
+
+
+	function _addBrwFilePaths($r, $Model) {
+		return $this->_addBrwUploadsPaths($r, $Model, 'files');
+	}
+
+
 	function _addBrwImagePaths($r, $Model) {
+		return $this->_addBrwUploadsPaths($r, $Model, 'images');
+	}
+
+
+	function _addBrwUploadsPaths($r, $Model, $fileType) {
+
 		App::import('Brownie.BrwSanitize');
 		$ret = array();
-		foreach ($Model->brwConfig['images'] as $catCode => $value) {
+		foreach ($Model->brwConfig[$fileType] as $catCode => $value) {
 			$ret[$catCode] = array();
 		}
 		foreach ($r as $key => $value) {
-			if (!isset($Model->brwConfig['images'][$value['category_code']])) {
+			if (!isset($Model->brwConfig[$fileType][$value['category_code']])) {
 				continue;
 			}
-			$uploadsFolder = $Model->brwConfig['images'][$value['category_code']]['folder'];
-			$uploadsPath = $Model->brwConfig['images'][$value['category_code']]['path'];
-			$path = Configure::read('brwSettings.Images.' . $Model->alias . '.' . $value['category_code'] . '.path');
-			if (strstr($path, WWW_ROOT)) {
-				$relative_path = $uploadsFolder . '/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
+			$file = $Model->brwConfig[$fileType][$value['category_code']]['path']
+				. DS . $value['model'] . DS . $value['record_id'] . DS . $value['name'];
+			$forceDownloadUrl = Router::url(array(
+				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
+				$Model->alias, $value['record_id'], $value['category_code'], $value['name']
+			));
+			if (empty($value['description'])) {
+				$value['description'] = $value['name'];
+			}
+			$value['description'] = BrwSanitize::html($value['description']);
+			$isPublic = (substr($file, 0, strlen(WWW_ROOT)) === WWW_ROOT);
+			if ($isPublic) {
+				$url = Router::url(str_replace(DS, '/', substr($file, strlen(WWW_ROOT))));
 			} else {
-				$relative_path = false;
+				$url = Router::url(array(
+					'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'view',
+					$Model->alias, $value['record_id'], $value['category_code'], $value['name']
+				));
 			}
 			$paths = array(
-				'path' => ($relative_path)? Router::url('/' . $relative_path) : false,
-				'real_path' => $path . str_replace('/', DS, $relative_path),
+				'public' => $isPublic,
+				'url' => $url,
+				'path' => $file,
+				'description' => $value['description'],
+				'force_download' => $forceDownloadUrl,
+				'tag_force_download' => '
+					<a title="' . $value['description'] . '" href="' . $forceDownloadUrl .
+						'" class="brw-file ' . end(explode('.', $value['name'])) . '">
+						' . $value['description'] . '
+					</a>',
 			);
 			if (!empty($Model->brwConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
 				$sizes = $Model->brwConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$cachedPath = $uploadsPath . $uploadsFolder . DS . 'thumbs' . DS . $value['model']
-						. DS . $size	. DS . $value['record_id'] . DS . $value['name'];
-					$isPublic = (substr($cachedPath, 0, strlen(WWW_ROOT)) === WWW_ROOT);
+					$cachedPath = $Model->brwConfig[$fileType][$value['category_code']]['path']
+						. DS . 'thumbs' . DS . $value['model'] . DS . $size . DS . $value['record_id'] . DS . $value['name'];
 					if (is_file($cachedPath) and $isPublic) {
 						$paths['sizes'][$size] = Router::url('/' . $uploadsFolder . '/thumbs/' . $value['model'] . '/' . $size
 							. '/' . $value['record_id'] . '/' . $value['name']);
@@ -447,27 +495,24 @@ class PanelBehavior extends ModelBehavior {
 						$paths['sizes_real_paths'][$size] = $cachedPath;
 					}
 				}
-				$value['description'] = BrwSanitize::html($value['description']);
-				$value['alt'] = $value['description'];
-				if (empty($value['description'])) {
-					$value['alt'] = $value['name'];
+				$r[$key]['alt'] = $value['description'];
+				if ($value['description'] == $value['name']) {
 					$value['description'] = '';
 				}
-				$r[$key]['alt'] = $value['alt'];
-				$r[$key]['description'] = $value['description'];
 				if (!empty($sizes[0])) {
 					if ($sizes[0] != end($sizes)) {
-						$paths['tag'] = '<a class="brw-image" title="' . htmlspecialchars($value['description']) .
-							'" href="' . $paths['sizes'][end($sizes)] . '" rel="brw_image_' . $value['record_id'] .
-							'"><img alt="' . htmlspecialchars($value['description']) . '" src="' . $paths['sizes'][$sizes[0]] . '" /></a>';
+						$paths['tag'] = '<a class="brw-image" title="' . $value['description'] . '" href="'
+							. $paths['sizes'][end($sizes)] . '" rel="brw_image_' . $value['record_id']
+							. '"><img alt="' . htmlspecialchars($value['description']) . '" src="'
+							. $paths['sizes'][$sizes[0]] . '" /></a>';
 					} else {
-						$paths['tag'] = '<img alt="' . htmlspecialchars($value['description']) .
-							'" src="' . $paths['sizes'][$sizes[0]] . '" />';
+						$paths['tag'] = '<img alt="' . htmlspecialchars($value['description'])
+							. '" src="' . $paths['sizes'][$sizes[0]] . '" />';
 					}
 				}
 			}
-			$merged = am($r[$key], $paths);
-			if (!empty($Model->brwConfig['images'][$value['category_code']]['index'])) {
+			$merged = array_merge($r[$key], $paths);
+			if (!empty($Model->brwConfig[$fileType][$value['category_code']]['index'])) {
 				$ret[$value['category_code']] = $merged;
 			} else {
 				$ret[$value['category_code']][] = $merged;
@@ -476,55 +521,6 @@ class PanelBehavior extends ModelBehavior {
 		return $ret;
 	}
 
-
-
-	function _addBrwFilePaths($r, $Model) {
-		App::import('Brownie.BrwSanitize');
-		$ret = array();
-		foreach ($Model->brwConfig['files'] as $catCode => $value) {
-			$ret[$catCode] = array();
-		}
-		foreach ($r as $key => $value) {
-			if (!isset($Model->brwConfig['files'][$value['category_code']])) {
-				continue;
-			}
-			$uploadsFolder = Configure::read('brwSettings.Files.' . $Model->alias . '.' . $value['category_code'] . '.folder');
-			if (empty($value['description'])) {
-				$value['description'] = $r[$key]['description'] = $value['name'];
-			}
-			$value['description'] = BrwSanitize::html($value['description']);
-
-			$relativePath = $uploadsFolder . '/' . $Model->name . '/' . $value['record_id'] . '/' . $value['name'];
-			$completePath = Router::url('/' . $relativePath);
-			$extension = end(explode('.', $value['name']));
-			$forceDownloadUrl = Router::url(array(
-				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
-				$Model->alias, $value['record_id'], $value['category_code'], $value['name']
-			));
-			$paths = array(
-				'path' => $completePath,
-				'real_path' => WWW_ROOT . str_replace('/', DS, $relativePath),
-				'tag' => '
-					<a title="' . htmlspecialchars($value['description']) . '" href="' . $completePath .
-						'" class="brw-file '.$extension.'">
-						' . $value['description'] . '
-					</a>',
-				'force_download' => $forceDownloadUrl,
-				'tag_force_download' =>'
-					<a title="' . htmlspecialchars($value['description']) . '" href="' . $forceDownloadUrl .
-						'" class="brw-file '.$extension.'">
-						' . $value['description'] . '
-					</a>',
-			);
-			$merged = am($r[$key], $paths);
-			if (!empty($Model->brwConfig['files'][$value['category_code']]['index'])) {
-				$ret[$value['category_code']] = $merged;
-			} else {
-				$ret[$value['category_code']][] = $merged;
-			}
-		}
-		return $ret;
-	}
 
 
 	function _camelize($array) {
