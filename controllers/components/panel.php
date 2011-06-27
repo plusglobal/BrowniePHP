@@ -18,6 +18,7 @@ class PanelComponent extends Object{
 			),
 			'customHome' => false,
 			'userModels' => array('BrwUser'),
+			'uploadsPath' => WWW_ROOT . 'uploads',
 		);
 		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 			$defaultSettings['css'][] = 'brownie';
