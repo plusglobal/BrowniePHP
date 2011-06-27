@@ -9,7 +9,6 @@ class ContentsController extends BrownieAppController {
 
 
 	function beforeFilter() {
-
 		parent::beforeFilter();
 
 		if (!empty($this->params['pass'][0])) {
@@ -17,7 +16,6 @@ class ContentsController extends BrownieAppController {
 		} elseif (!empty($this->data['Content']['model'])) {
 			$model = $this->data['Content']['model'];
 		}
-
 		if (empty($model) or !$this->Content->modelExists($model)) {
 			$this->cakeError('error404');
 		}
@@ -30,7 +28,6 @@ class ContentsController extends BrownieAppController {
 		if (!$this->_brwCheckPermissions($model, $this->params['action'])) {
 			$this->cakeError('error404');
 		}
-
 
 		$this->Model->brwConfig['actions'] = array_merge(
 			$this->Model->brwConfig['actions'],
@@ -58,7 +55,6 @@ class ContentsController extends BrownieAppController {
 		$schema = $this->Content->schemaForView($this->Model);
 		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
-		//$this->log($this->Model);
 		parent::beforeRender();
 	}
 
@@ -482,15 +478,29 @@ class ContentsController extends BrownieAppController {
 
 	function import($model) {
 		if (!$this->Model->brwConfig['actions']['import']) {
-			$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
+			$this->cakeError('error404');
 		}
-
 		if (!empty($this->data)) {
 			$result = $this->Model->brwImport($this->data);
-			if (!$result) {
-				$this->Session->setFlash(__d('brownie', 'The import could not be done. Please try again', true), 'flash_error');
+			if (is_array($result)) {
+				$import = $result;
+				if (empty($import['flash'])) {
+					$import['flash'] = ($import['result']) ? 'flash_success' : 'flash_error';
+				}
 			} else {
-				$this->Session->setFlash($result, 'flash_success');
+				if ($result) {
+					$import['msg'] = $import['result'] = $result;
+					$import['flash'] = 'flash_success';
+				} else {
+					$import['msg'] = __d('brownie', 'The import could not be done. Please try again', true);
+					$import['result'] = false;
+					$import['flash'] = 'flash_error';
+				}
+			}
+
+			$this->Session->setFlash($import['msg'], $import['flash']);
+
+			if ($import['result']) {
 				$this->redirect(array('controller' => 'contents', 'action' => 'index', $model));
 			}
 		}

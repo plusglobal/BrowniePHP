@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2011-06-08 16:13-0300\n"
-"PO-Revision-Date: 2011-06-08 16:14-0300\n"
+"PO-Revision-Date: 2011-06-14 15:35-0300\n"
 "Last-Translator: Mauro Zadunaisky <maurozadu@gmail.com>\n"
 "Language-Team: Plus Global <mauro@plusglobal.com>\n"
 "MIME-Version: 1.0\n"
@@ -195,7 +195,7 @@ msgstr "Número no válido"
 
 #: \models\content.php:113
 msgid "Please supply a valid email address"
-msgstr "addDirección de email no válida"
+msgstr "Dirección de email no válida"
 
 #: \models\content.php:120
 msgid "Incorrect value"

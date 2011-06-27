@@ -10,6 +10,7 @@ echo $javascript->link(Configure::read('brwSettings.js'));
 ?>
 <script type="text/javascript">
 var APP_BASE = '<?php echo Router::url('/') ?>';
+var SESSION_ID = '<?php echo $session->id() ?>';
 var brwMsg = {
 	no_checked_for_deletion: '<?php __d('brownie', 'No records checked for deletion') ?>'
 };

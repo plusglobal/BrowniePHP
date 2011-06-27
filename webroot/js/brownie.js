@@ -2,14 +2,23 @@ $(document).ready(function(){
 	multipleComboSelect();
 	hoverRowsColors();
 	bindFancyBox();
-	$('#flashMessage').click(function(){
-		$(this).fadeOut();
-	})
+	flashClick();
 	toclone();
 	bindRichEditor();
 	checkMultiple();
 	$('select').jDoubleSelect();
 });
+
+function flashClick() {
+	$('#flashMessage a').click(function(e){
+		e.stopPropagation();
+		return true;
+	});
+
+	$('#flashMessage').click(function(){
+		$(this).fadeOut();
+	})
+}
 
 function hoverRowsColors() {
 	$('tr.list').hover(function() {
