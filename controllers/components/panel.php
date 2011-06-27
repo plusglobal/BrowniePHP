@@ -4,7 +4,6 @@ class PanelComponent extends Object{
 
 	function initialize(&$Controller, $settings = array()) {
 		$defaultSettings = array(
-			'multiSitesModel' => false,
 			'css' => array(
 				'/brownie/css/brownie',
 				'/brownie/css/fancybox/jquery.fancybox-1.3.1',
@@ -18,6 +17,7 @@ class PanelComponent extends Object{
 				'/brownie/js/brownie',
 			),
 			'customHome' => false,
+			'userModels' => array('BrwUser'),
 		);
 		if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 			$defaultSettings['css'][] = 'brownie';
@@ -37,11 +37,14 @@ class PanelComponent extends Object{
 		} elseif (file_exists(WWW_ROOT . 'js' . DS . 'fckeditor' . DS . 'fckeditor.js')) {
 			$settings['js'][] = 'fckeditor/fckeditor';
 		}
+
+		if (!empty($settings['userModels'])) {
+			$defaultSettings['userModels'] = $settings['userModels'];
+		}
+
 		$settings = Set::merge($defaultSettings, $settings);
 
-		Configure::write('multiSitesModel', $settings['multiSitesModel']);
 		Configure::write('brwSettings', $settings);
-
 
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');

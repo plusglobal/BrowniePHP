@@ -47,7 +47,7 @@
 	<?php
 	$i=0;
 	foreach ($record[$model] as $field_name => $field_value) {
-		if (!empty($schema[$field_name])) {
+		if (!empty($schema[$field_name]) and !in_array($field_name, $brwConfig['fields']['no_view'])) {
 				echo '
 				<tr>
 					<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>';

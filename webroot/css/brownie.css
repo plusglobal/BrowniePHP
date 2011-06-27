@@ -556,8 +556,10 @@ th a:hover{
 #content form#deleteMultiple div.submit input{
 	font-size: 11px;
 	border: 0;
-	background: url(ico/16x16/delete.png) 2px center no-repeat transparent;
-	padding-left: 16px;
+	background: url(ico/16x16/delete.png) left center no-repeat transparent;
+	padding: 3px 3px 3px 19px;
+	margin: 0;
+	display: inline;
 }
 
 #deleteCheckAll{
