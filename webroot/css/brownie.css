@@ -1313,7 +1313,6 @@ td.habtm li a:hover{
 	text-decoration: none;
 }
 
-
 div#content form.filter{
 	vertical-align: middle;
 	margin: 0 0 10px 0;
@@ -1343,3 +1342,11 @@ div#content form.filter div.input select{
 	border: 1px solid #888;
 }
 
+#content form div#enabledLangs label, #content form div#enabledLangs div{
+	float: left;
+	clear: none;
+}
+
+div#enabledLangs label.enabledLangs{
+	padding: 6px;
+}

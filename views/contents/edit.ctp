@@ -25,6 +25,20 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 		</legend>
 		<?php
 		echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
+
+
+		if (!empty($langs3chars)) {
+			echo '<div id="enabledLangs" class="clearfix">
+			<label class="enabledLangs">' . __d('brownie', 'Enabled languages', true) . '</label>' ;
+			foreach ($langs3chars as $lang2 => $lang3) {
+				echo $form->input('enabled_' . $lang3, array(
+					'type' => 'checkbox', 'label' => $this->i18n->humanize($lang3)
+				));
+			}
+			echo '</div>';
+		}
+
+
 		foreach ($fields as $key => $value) {
 			$params = array();
 			if (isset($related['belongsTo'][$key])) {
