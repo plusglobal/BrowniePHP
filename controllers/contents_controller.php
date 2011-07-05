@@ -530,9 +530,8 @@ class ContentsController extends BrownieAppController {
 		if ($type == 'xls') {
 			$contentType = 'application/xml';
 		}
-		header("Content-type: " . $contentType);
-		header("Content-Disposition: attachment; filename=" . $model . ".xml");
-		//header("Content-Disposition: attachment; filename=" . $model . "." . $type);
+		header('Content-type: ' . $contentType);
+		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
 		$this->set('records', $this->Content->getForExport($this->Model, $this->params['named']));
 		$this->render('export/' . $type);
 	}
