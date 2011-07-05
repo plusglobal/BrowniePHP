@@ -388,10 +388,13 @@ class PanelBehavior extends ModelBehavior {
 				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
 				$Model->alias, $value['record_id'], $value['category_code'], $value['name']
 			));
-			if (empty($value['description'])) {
-				$value['description'] = $value['name'];
+			if ($Model->brwConfig[$fileType][$value['category_code']]['description']) {
+				$value['description'] = BrwSanitize::html($value['description']);
+				$value['title'] = $value['description'];
 			}
-			$value['description'] = BrwSanitize::html($value['description']);
+			if (empty($value['title'])) {
+				$value['title'] = $value['name'];
+			}
 			$isPublic = (substr($file, 0, strlen(WWW_ROOT)) === WWW_ROOT);
 			if ($isPublic) {
 				$url = Router::url(str_replace(DS, '/', substr($file, strlen(WWW_ROOT))));
@@ -435,24 +438,17 @@ class PanelBehavior extends ModelBehavior {
 						$paths['sizes_real_paths'][$size] = $cachedPath;
 					}
 				}
-				$r[$key]['alt'] = $value['description'];
-				if ($value['description'] == $value['name']) {
-					$value['description'] = '';
-				}
 				if (!empty($sizes[0])) {
+					$paths['tag'] = '<img alt="' . $value['title'] . '" src="' . $paths['sizes'][$sizes[0]] . '" />';
 					if ($sizes[0] != end($sizes)) {
-						$paths['tag'] = '<a class="brw-image" title="' . $value['description'] . '" href="'
+						$paths['tag'] = '<a class="brw-image" title="' . $value['title'] . '" href="'
 							. $paths['sizes'][end($sizes)] . '" rel="brw_image_' . $value['record_id']
-							. '"><img alt="' . htmlspecialchars($value['description']) . '" src="'
-							. $paths['sizes'][$sizes[0]] . '" /></a>';
-					} else {
-						$paths['tag'] = '<img alt="' . htmlspecialchars($value['description'])
-							. '" src="' . $paths['sizes'][$sizes[0]] . '" />';
+							. '">' . $paths['tag'] . '</a>';
 					}
 				}
 			}
 			$merged = array_merge($r[$key], $paths);
-			if (!empty($Model->brwConfig[$fileType][$value['category_code']]['index'])) {
+			if ($Model->brwConfig[$fileType][$value['category_code']]['index']) {
 				$ret[$value['category_code']] = $merged;
 			} else {
 				$ret[$value['category_code']][] = $merged;
