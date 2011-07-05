@@ -245,15 +245,12 @@ class PanelBehavior extends ModelBehavior {
 	function _uploadsConfig($Model) {
 		foreach (array('BrwFile' => 'files', 'BrwImage' => 'images') as $uploadModel => $uploadType) {
 			if ($Model->brwConfig[$uploadType]) {
-				$brwConfigDefaultUpload = array(
-					'index' => false,
-					'description' => true,
-					'path' => Configure::read('brwSettings.uploadsPath'),
-				);
 				$Model->bindModel(array('hasMany' => array($uploadModel => array(
 					'foreignKey' => 'record_id',
 					'conditions' => array($uploadModel . '.model' => $Model->name)
 				))), false);
+				$brwConfigDefaultUpload = array('index' => false, 'description' => true, 'path' => './uploads');
+				//to-do: find some way to set default path
 				foreach ($Model->brwConfig[$uploadType] as $key => $value) {
 					if (empty($value['name_category'])) {
 						$value['name_category'] = $key;
@@ -262,7 +259,9 @@ class PanelBehavior extends ModelBehavior {
 					if (!is_dir(realpath($Model->brwConfig[$uploadType][$key]['path']))) {
 						mkdir($Model->brwConfig[$uploadType][$key]['path'], 0777, true);
 					}
-					$Model->brwConfig[$uploadType][$key]['path'] = realpath($Model->brwConfig[$uploadType][$key]['path']);
+					if (!empty($Model->brwConfig[$uploadType][$key]['path'])) {
+						$Model->brwConfig[$uploadType][$key]['path'] = realpath($Model->brwConfig[$uploadType][$key]['path']);
+					}
 					if ($uploadModel == 'BrwImage') {
 						foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
 							if (strstr($sizes, 'x')) {
