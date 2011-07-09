@@ -71,8 +71,6 @@ class PanelBehavior extends ModelBehavior {
 
 		'hide_children' => array('BrwImage', 'BrwFile'),
 
-		'site_dependent' => true,
-
 		'sortable' => array('field' => 'sort', 'sort' => 'ASC')
 
 	);
