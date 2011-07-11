@@ -27,7 +27,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 		echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 
 
-		if (!empty($langs3chars)) {
+		/*if (!empty($langs3chars)) {
 			echo '<div id="enabledLangs" class="clearfix">
 			<label class="enabledLangs">' . __d('brownie', 'Enabled languages', true) . '</label>' ;
 			foreach ($langs3chars as $lang2 => $lang3) {
@@ -36,7 +36,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 				));
 			}
 			echo '</div>';
-		}
+		}*/
 
 
 		foreach ($fields as $key => $value) {
