@@ -1,5 +1,7 @@
 <div class="files clearfix">
-	<a target="_blank" href="<?php echo $file['url'] ?>" class="brw-file"><?php echo $file['description'] ?></a>
+	<a target="_blank" href="<?php echo $file['url'] ?>" class="brw-file" title="<?php echo $file['title'] ?>">
+		<?php echo $file['title'] ?>
+	</a>
 	<ul class="files-actions actions clearfix">
 		<?php
 		if ($permissions[$model]['edit']) {

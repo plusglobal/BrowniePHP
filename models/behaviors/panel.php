@@ -407,12 +407,13 @@ class PanelBehavior extends ModelBehavior {
 				'url' => $url,
 				'path' => $file,
 				'description' => $value['description'],
+				'title' => $value['title'],
 				'force_download' => $forceDownloadUrl,
 				'tag_force_download' => '
-					<a title="' . $value['description'] . '" href="' . $forceDownloadUrl .
-						'" class="brw-file ' . end(explode('.', $value['name'])) . '">
-						' . $value['description'] . '
-					</a>',
+					<a title="' . $value['title'] . '" href="' . $forceDownloadUrl
+					. '" class="brw-file ' . end(explode('.', $value['name'])) . '">' . $value['title']
+					. '</a>
+				',
 			);
 			if (!empty($Model->brwConfig['images'][$value['category_code']]['sizes'])) {
 				$paths['sizes'] = array();
