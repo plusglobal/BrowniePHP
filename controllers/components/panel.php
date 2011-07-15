@@ -14,6 +14,7 @@ class PanelComponent extends Object{
 				'/brownie/js/jquery.selso',
 				'/brownie/js/jquery.comboselect',
 				'/brownie/js/jquery.jDoubleSelect',
+				'/brownie/js/jquery.toChecklist.min',
 				'/brownie/js/brownie',
 			),
 			'customHome' => false,

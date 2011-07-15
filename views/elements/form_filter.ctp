@@ -11,7 +11,7 @@ echo $form->create('Filter', array(
 	'class' => 'filter clearfix'
 ));
 
-foreach ($brwConfig['fields']['filter'] as $field) {
+foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 	if (in_array($schema[$field]['type'], array('datetime', 'date'))) {
 		$params = array(
 			'type' => $schema[$field]['type'],
@@ -30,10 +30,15 @@ foreach ($brwConfig['fields']['filter'] as $field) {
 			$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'to', true))
 		);
 	} else {
-		echo $form->input($model . '.' . $field, array(
-			'empty' => '-',
+		$params = array(
+			'empty' => ($multiple) ? false : '-',
 			'label' => $brwConfig['fields']['names'][$field],
-		));
+			'multiple' => ($multiple) ? 'checkbox' : false,
+		);
+		if ($multiple) {
+			$params['empty'] =
+		}
+		echo $form->input($model . '.' . $field, $params);
 	}
 }
 echo $form->end(__d('brownie', 'Filter', true));

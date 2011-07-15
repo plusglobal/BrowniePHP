@@ -562,6 +562,9 @@ class Content extends BrownieAppModel{
 				}
 			} else {
 				if (array_key_exists($keyNamed, $named)) {
+					if (strstr($named[$keyNamed], '.')) {
+						$named[$keyNamed] = explode('.', $named[$keyNamed]);
+					}
 					if ($forData) {
 						$filter[$Model->alias][$field] = $named[$keyNamed];
 					} else {
