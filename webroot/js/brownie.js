@@ -7,6 +7,7 @@ $(document).ready(function(){
 	bindRichEditor();
 	checkMultiple();
 	$('select').jDoubleSelect();
+	filterCheckbox();
 });
 
 function flashClick() {
@@ -147,4 +148,21 @@ function checkMultiple() {
 		e.stopPropagation();
 		return true;
 	});
+}
+
+function filterCheckbox() {
+	$('div.filter-checkbox div.checkbox').addClass('clearfix');
+	$button = $('<input type="button" value="Elegir" class="filter-choose">');
+	$div = $('div.filter-checkbox');
+	$div.before($button).hide();
+	$button.toggle(
+		function(){
+			$div.show();
+			$button.val('Hecho');
+		},
+		function(){
+			$div.hide();
+			$button.val('Elegir');
+		}
+	);
 }

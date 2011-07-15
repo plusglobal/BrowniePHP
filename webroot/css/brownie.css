@@ -1350,3 +1350,34 @@ div#content form.filter div.input select{
 div#enabledLangs label.enabledLangs{
 	padding: 6px;
 }
+
+div.filter-checkbox{
+	border: 1px solid #999;
+	position: absolute;
+	background: #fff;
+	padding: 0;
+	margin: 4px 7px 0 0;
+}
+div.filter-checkbox div.checkbox{
+	padding: 0px;
+	margin: 0px;
+}
+div.filter-checkbox div.checkbox:hover{
+	background-color: #E1EBF5;
+}
+#content form.filter div.filter-checkbox label{
+	font-weight: normal;
+	font-size: 12px;
+	padding: 4px 4px 4px 22px;
+	margin: 0;
+	line-height: 1.1em;
+}
+
+#content form.filter div.filter-checkbox input{
+	margin: 5px 4px 4px 4px;
+}
+
+#content form.filter input.filter-choose{
+	padding: 1px;
+	font-size: 12px;
+}

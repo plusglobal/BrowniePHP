@@ -31,12 +31,15 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 		);
 	} else {
 		$params = array(
-			'empty' => ($multiple) ? false : '-',
+			'empty' => '-',
 			'label' => $brwConfig['fields']['names'][$field],
-			'multiple' => ($multiple) ? 'checkbox' : false,
 		);
 		if ($multiple) {
-			$params['empty'] =
+			$params = array_merge($params, array(
+				'empty' => false, 'multiple' => 'checkbox',
+				'between' => '<div class="filter-checkbox clearfix">',
+				'after' => '</div>',
+			));
 		}
 		echo $form->input($model . '.' . $field, $params);
 	}
