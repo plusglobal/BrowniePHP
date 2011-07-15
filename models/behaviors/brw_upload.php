@@ -57,6 +57,9 @@ class BrwUploadBehavior extends ModelBehavior {
 
 
 	function beforeSave($Model) {
+		if (!empty($Model->data[$Model->alias]['description'])) {
+			$Model->data[$Model->alias]['description'] = trim($Model->data[$Model->alias]['description']);
+		}
 		$updating = !empty($Model->data[$Model->alias]['id']);
 		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($updating) {

@@ -184,7 +184,7 @@ class Content extends BrownieAppModel{
 
 
 	function translateBeforeSave($data, $Model) {
-		pr($data);
+		/*
 		foreach (Configure::read('Config.languages') as $lang) {
 			if (empty($data['Content']['enabled_' . $lang])) {
 				$translatableFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
@@ -196,6 +196,7 @@ class Content extends BrownieAppModel{
 			}
 		}
 		pr($data);
+		*/
 		return $data;
 	}
 
