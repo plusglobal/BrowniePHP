@@ -523,15 +523,16 @@ class ContentsController extends BrownieAppController {
 		$this->layout = 'ajax';
 		if ($type == 'xml') {
 			$this->helpers[] = 'Xml';
-		} elseif ($type == 'xls') {
-			$this->helpers[] = 'Brownie.XmlExcel';
 		}
-		$contentType = 'application/' . $type;
 		if ($type == 'xls') {
-			$contentType = 'application/xml';
+			header('Content-type: application/x-msdownload; charset=utf-8');
+			$type = 'xls.csv';
+		} else {
+			header('Content-type: application/' . $type . '; charset=utf-8');
 		}
-		header('Content-type: ' . $contentType);
 		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
+		header("Pragma: no-cache");
+		header("Expires: 0");
 		$this->set('records', $this->Content->getForExport($this->Model, $this->params['named']));
 		$this->render('export/' . $type);
 	}
