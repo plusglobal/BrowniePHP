@@ -796,11 +796,16 @@ class ContentsController extends BrownieAppController {
 
 	function _checkBrwUserCrud() {
 		$authModel = $this->Session->read('authModel');
-		$mustRedirect = (
-			($this->Model->alias == 'BrwUser' and $authModel != 'BrwUser')
-			or
-			($this->Model->alias == $authModel and $this->params['action'] == 'index')
-		);
+		$mustRedirect = false;
+		if ($this->Model->alias == 'BrwUser') {
+			if ($authModel != 'BrwUser') {
+				$mustRedirect = true;
+			}
+		} else {
+			if ($this->Model->alias == $authModel and $this->params['action'] == 'index') {
+				$mustRedirect = true;
+			}
+		}
 		if ($mustRedirect) {
 			$this->redirect(array('action' => 'view', $authModel, $this->Session->read('Auth.BrwUser.id')));
 		}

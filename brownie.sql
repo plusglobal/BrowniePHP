@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS `brw_users` (
   `id` int(5) unsigned NOT NULL auto_increment,
   `email` varchar(50) collate utf8_unicode_ci NOT NULL,
   `password` varchar(255) collate utf8_unicode_ci NOT NULL,
-  `root` tinyint(1) NOT NULL default '1',
   `last_login` datetime NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,

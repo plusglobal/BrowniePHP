@@ -17,11 +17,7 @@ __d('brownie', 'November');
 __d('brownie', 'December');
 
 
-__d('brownie', 'Brw Group');
-__d('brownie', 'Brw Permission');
 __d('brownie', 'Brw User');
-__d('brownie', 'Brw Model');
 __d('brownie', 'Add User');
-__d('brownie', 'Root');
 
 ?>

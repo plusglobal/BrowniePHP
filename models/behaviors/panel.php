@@ -117,6 +117,7 @@ class PanelBehavior extends ModelBehavior {
 		}
 	}
 
+
 	function beforeDelete($Model) {
 		$toNullModels = array();
 		$assoc = array_merge($Model->hasMany, $Model->hasOne);
@@ -160,7 +161,6 @@ class PanelBehavior extends ModelBehavior {
 		if (empty($Model->brwConfig)) {
 			$Model->brwConfig = array();
 		}
-
 		$userModels = Configure::read('brwSettings.userModels');
 		if (is_array($userModels) and in_array($Model->alias, $userModels)) {
 			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
@@ -575,7 +575,7 @@ class PanelBehavior extends ModelBehavior {
 				'hide' => array('last_login'),
 			),
 			'paginate' => array(
-				'fields' => array('id', 'email')
+				'fields' => array('id', 'email', 'last_login'),
 			),
 			'legends' => array(
 				'password' => __d('brownie', 'Leave blank for no change', true),
@@ -588,7 +588,8 @@ class PanelBehavior extends ModelBehavior {
 				'plural' => __d('brownie', 'Users', true),
 			);
 		}
-		return Set::merge($defaults, $brwUserDefaults);
+		$defaults = Set::merge($defaults, $brwUserDefaults);
+		return $defaults;
 	}
 
 
