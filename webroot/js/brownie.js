@@ -152,7 +152,7 @@ function checkMultiple() {
 
 function filterCheckbox() {
 	$('div.filter-checkbox div.checkbox').addClass('clearfix');
-	$button = $('<input type="button" value="Elegir" class="filter-choose">');
+	$button = $('<input type="button" value="' + brwMsg.choose + '" class="filter-choose">');
 	$div = $('div.filter-checkbox');
 	$div.before($button).hide();
 	$button.toggle(
