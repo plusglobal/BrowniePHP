@@ -12,9 +12,10 @@ echo $form->create('Filter', array(
 ));
 
 foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
-	if (in_array($schema[$field]['type'], array('datetime', 'date'))) {
+	$fieldType = $schema[$field]['type'];
+	if (in_array($fieldType, array('datetime', 'date'))) {
 		$params = array(
-			'type' => $schema[$field]['type'],
+			'type' => $fieldType,
 			'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
 			'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
 			'dateFormat' => $brwConfig['fields']['date_ranges'][$field]['dateFormat'],
@@ -34,9 +35,15 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			'empty' => '-',
 			'label' => $brwConfig['fields']['names'][$field],
 		);
-		if ($multiple) {
+		if ($fieldType == 'boolean') {
+			$params += array(
+				'type' => 'select',
+				'options' => array(1 => __d('brownie', 'Yes', true), 0 => __d('brownie', 'No', true)),
+			);
+		} elseif ($multiple) {
 			$params = array_merge($params, array(
-				'empty' => false, 'multiple' => 'checkbox',
+				'empty' => false,
+				'multiple' => 'checkbox',
 				'between' => '<div class="filter-checkbox clearfix">',
 				'after' => '</div>',
 			));

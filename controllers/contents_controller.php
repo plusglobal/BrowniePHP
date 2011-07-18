@@ -771,7 +771,7 @@ class ContentsController extends BrownieAppController {
 						}
 					}
 				break;
-				case 'integer':
+				case 'integer': case 'boolean':
 					if (!empty($this->params['named'][$model . '.' . $field])) {
 						$fieldData = $this->params['named'][$model . '.' . $field];
 						if (strstr($fieldData, '.')) {

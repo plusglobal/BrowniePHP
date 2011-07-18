@@ -554,11 +554,10 @@ class PanelBehavior extends ModelBehavior {
 		foreach ($validFields as $field => $multiple) {
 			$fieldType = $Model->_schema[$field]['type'];
 			if (
-				!in_array($fieldType, array('date', 'datetime'))
+				!in_array($fieldType, array('date', 'datetime', 'boolean'))
 				and
 				!in_array($field, Set::extract('{s}.foreignKey', $Model->belongsTo))
 			) {
-				//pr($fieldType);
 				unset($validFields[$field]);
 			}
 		}
