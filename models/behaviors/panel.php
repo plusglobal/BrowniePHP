@@ -455,7 +455,6 @@ class PanelBehavior extends ModelBehavior {
 				$ret[$value['category_code']][] = $merged;
 			}
 		}
-		pr($ret);
 		return $ret;
 	}
 
