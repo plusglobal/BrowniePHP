@@ -100,7 +100,6 @@ class PanelBehavior extends ModelBehavior {
 		if (!in_array($Model->alias, array('BrwFile', 'BrwImage'))) {
 			$results = $this->sanitizeHtml($Model, $results);
 		}
-
 		return $results;
 	}
 
@@ -247,8 +246,11 @@ class PanelBehavior extends ModelBehavior {
 					'foreignKey' => 'record_id',
 					'conditions' => array($uploadModel . '.model' => $Model->name)
 				))), false);
-				$brwConfigDefaultUpload = array('index' => false, 'description' => true, 'path' => './uploads');
-				//to-do: find some way to set default path
+				$brwConfigDefaultUpload = array(
+					'index' => false,
+					'description' => true,
+					'path' => Configure::read('brwSettings.uploadsPath'),
+				);
 				foreach ($Model->brwConfig[$uploadType] as $key => $value) {
 					if (empty($value['name_category'])) {
 						$value['name_category'] = $key;
@@ -348,7 +350,7 @@ class PanelBehavior extends ModelBehavior {
 				}
 				$r[$key] = $this->_addBrwFilePaths($value, $thisModel);
 			} else {
-				if(is_array($value)) {
+				if (is_array($value)) {
 					$r[$key] = $this->_addFilePaths($value, $Model);
 				} else {
 					$r[$key] = $value;
@@ -395,7 +397,7 @@ class PanelBehavior extends ModelBehavior {
 			}
 			$isPublic = (substr($file, 0, strlen(WWW_ROOT)) === WWW_ROOT);
 			if ($isPublic) {
-				$url = Router::url(str_replace(DS, '/', substr($file, strlen(WWW_ROOT))));
+				$url = Router::url('/' . str_replace(DS, '/', substr($file, strlen(WWW_ROOT))));
 			} else {
 				$url = Router::url(array(
 					'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'view',
@@ -453,6 +455,7 @@ class PanelBehavior extends ModelBehavior {
 				$ret[$value['category_code']][] = $merged;
 			}
 		}
+		pr($ret);
 		return $ret;
 	}
 

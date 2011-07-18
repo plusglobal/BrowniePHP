@@ -17,7 +17,7 @@ $defaultSettings = array(
 	),
 	'customHome' => false,
 	'userModels' => array('BrwUser'),
-	'uploadsPath' => WWW_ROOT . 'uploads',
+	'uploadsPath' => './uploads',
 );
 if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 	$defaultSettings['css'][] = 'brownie';
