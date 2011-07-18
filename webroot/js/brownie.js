@@ -157,12 +157,12 @@ function filterCheckbox() {
 	$div.before($button).hide();
 	$button.toggle(
 		function(){
-			$div.show();
-			$button.val('Hecho');
+			$div.fadeIn('fast');
+			$button.val(brwMsg.done);
 		},
 		function(){
-			$div.hide();
-			$button.val('Elegir');
+			$div.fadeOut('fast');
+			$button.val(brwMsg.choose);
 		}
 	);
 }
