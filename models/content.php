@@ -358,7 +358,11 @@ class Content extends BrownieAppModel{
 			}
 		}
 		foreach ($Model->brwConfig['custom_actions'] as $action => $custom) {
-			if (Set::matches($custom['conditions'], $record)) {
+			$matchCondition = true;
+			if (!empty($custom['conditions'])) {
+				$matchCondition = call_user_func(array($Model, $custom['conditions']), $record);
+			}
+			if ($matchCondition) {
 				$custom['url'][] = $record[$Model->alias]['id'];
 				$actions[$action] = Set::merge($defaultAction, $custom);
 			}
