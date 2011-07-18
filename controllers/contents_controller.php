@@ -523,16 +523,16 @@ class ContentsController extends BrownieAppController {
 		$this->layout = 'ajax';
 		if ($type == 'xml') {
 			$this->helpers[] = 'Xml';
-		} elseif ($type == 'xls') {
-			$this->helpers[] = 'Brownie.XmlExcel';
 		}
-		$contentType = 'application/' . $type;
 		if ($type == 'xls') {
-			$contentType = 'application/xml';
+			header('Content-type: application/x-msdownload; charset=utf-8');
+			$type = 'xls.csv';
+		} else {
+			header('Content-type: application/' . $type . '; charset=utf-8');
 		}
-		header("Content-type: " . $contentType);
-		header("Content-Disposition: attachment; filename=" . $model . ".xml");
-		//header("Content-Disposition: attachment; filename=" . $model . "." . $type);
+		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
+		header("Pragma: no-cache");
+		header("Expires: 0");
 		$this->set('records', $this->Content->getForExport($this->Model, $this->params['named']));
 		$this->render('export/' . $type);
 	}
@@ -567,8 +567,9 @@ class ContentsController extends BrownieAppController {
 
 
 	function filter($model) {
+		//pr($this->data);
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
-		foreach ($this->Model->brwConfig['fields']['filter'] as $field) {
+		foreach ($this->Model->brwConfig['fields']['filter'] as $field => $multiple) {
 			$type = $this->Model->_schema[$field]['type'];
 			if (in_array($type, array('date', 'datetime'))) {
 				$keyFrom = $field . '_from';
@@ -595,7 +596,11 @@ class ContentsController extends BrownieAppController {
 					}
 				}
 			} elseif (!empty($this->data[$model][$field])) {
-				$url[$model . '.' . $field] = $this->data[$model][$field];
+				if (is_array($this->data[$model][$field])) {
+					$url[$model . '.' . $field] = join('.', $this->data[$model][$field]);
+				} else {
+					$url[$model . '.' . $field] = $this->data[$model][$field];
+				}
 			}
 		}
 		$this->redirect($url);
@@ -616,6 +621,7 @@ class ContentsController extends BrownieAppController {
 		}
 		return $out;
 	}
+
 
 	function _formatSingleForView($data, $Model, $inView = false) {
 		$fieldsConfig = $Model->brwConfig['fields'];
@@ -639,7 +645,6 @@ class ContentsController extends BrownieAppController {
 						));
 						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 					}
-
 				} elseif (!empty($Model->_schema[$key]['type'])) {
 					switch($Model->_schema[$key]['type']) {
 						case 'boolean':
@@ -751,7 +756,7 @@ class ContentsController extends BrownieAppController {
 	function _setFilterData($Model) {
 		$filterFields = $this->Model->brwConfig['fields']['filter'];
 		$model = $Model->alias;
-		foreach ($filterFields as $field) {
+		foreach ($filterFields as $field => $multiple) {
 			$type = $this->Model->_schema[$field]['type'];
 			switch ($type) {
 				case 'date': case 'datetime':
@@ -768,14 +773,18 @@ class ContentsController extends BrownieAppController {
 				break;
 				case 'integer':
 					if (!empty($this->params['named'][$model . '.' . $field])) {
-						$this->data[$model][$field] = $this->params['named'][$model . '.' . $field];
+						$fieldData = $this->params['named'][$model . '.' . $field];
+						if (strstr($fieldData, '.')) {
+							$fieldData = explode('.', $fieldData);
+						}
+						$this->data[$model][$field] = $fieldData;
 					}
 				break;
 			}
 		}
 
 		foreach ($Model->belongsTo as $relatedModel) {
-			if (in_array($relatedModel['foreignKey'], $filterFields)) {
+			if (in_array($relatedModel['foreignKey'], array_keys($filterFields))) {
 				$varSet = Inflector::pluralize($relatedModel['className']);
 				$varSet[0] = strToLower($varSet[0]);
 				$this->set($varSet, $this->Model->{$relatedModel['className']}->find('list'));
