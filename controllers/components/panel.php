@@ -25,25 +25,13 @@ if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 if (file_exists(WWW_ROOT . 'js' . DS . 'brownie.js')) {
 	$defaultSettings['js'][] = 'brownie';
 }
-if (!empty($settings['js']) and !is_array($settings['js'])) {
-	$settings['js'] = (array)$settings['js'];
-}
-if (!empty($settings['css']) and !is_array($settings['css'])) {
-	$settings['css'] = (array)$settings['css'];
-}
-
 if (file_exists(WWW_ROOT . 'js' . DS . 'tiny_mce' . DS . 'jquery.tinymce.js')) {
-	$settings['js'][] = 'tiny_mce/jquery.tinymce';
+	$defaultSettings['js'][] = 'tiny_mce/jquery.tinymce';
 } elseif (file_exists(WWW_ROOT . 'js' . DS . 'fckeditor' . DS . 'fckeditor.js')) {
-	$settings['js'][] = 'fckeditor/fckeditor';
+	$defaultSettings['js'][] = 'fckeditor/fckeditor';
 }
 
-if (!empty($settings['userModels'])) {
-	$defaultSettings['userModels'] = $settings['userModels'];
-}
-
-$settings = Set::merge($defaultSettings, (array)Configure::read('brwSettings'));
-Configure::write('brwSettings', $settings);
+Configure::write('brwSettings', Set::merge($defaultSettings, (array)Configure::read('brwSettings')));
 
 
 class PanelComponent extends Object{
