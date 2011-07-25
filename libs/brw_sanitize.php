@@ -10,7 +10,9 @@ class BrwSanitize {
 	}
 
 	function url($string) {
-		if (!strtolower(substr($string, 0, 6)) != 'http://' and strtolower(substr($string, 0, 7)) != 'https://') {
+		$http = strtolower(substr($string, 0, 7));
+		$https = strtolower(substr($string, 0, 8));
+		if ($http != 'http://' and  $https != 'https://') {
 			return 'http://' . $string;
 		} else {
 			return $string;
