@@ -701,9 +701,9 @@ class ContentsController extends BrownieAppController {
 			'type' => 'select',
 			'label' => __d('brownie', 'After save', true),
 			'options' => array(
-				'edit' => ($Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Continue editing this %s [male]', true), $Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'Continue editing this %s [female]', true), $Model->brwConfig['names']['singular'])
+				'view' => ($Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brwConfig['names']['singular'])
 				,
 				'add' =>  ($Model->brwConfig['names']['gender'] == 1) ?
 					sprintf(__d('brownie', 'Add another %s [male]', true), $Model->brwConfig['names']['singular']):
@@ -713,9 +713,9 @@ class ContentsController extends BrownieAppController {
 					sprintf(__d('brownie', 'Go to to index of all %s [male]', true), $Model->brwConfig['names']['plural']):
 					sprintf(__d('brownie', 'Go to to index of all %s [female]', true), $Model->brwConfig['names']['plural'])
 				,
-				'view' => ($Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brwConfig['names']['singular'])
+				'edit' => ($Model->brwConfig['names']['gender'] == 1) ?
+					sprintf(__d('brownie', 'Continue editing this %s [male]', true), $Model->brwConfig['names']['singular']):
+					sprintf(__d('brownie', 'Continue editing this %s [female]', true), $Model->brwConfig['names']['singular'])
 				,
 				'home' => __d('brownie', 'Go home', true),
 			),
