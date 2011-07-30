@@ -562,7 +562,7 @@ class PanelBehavior extends ModelBehavior {
 			}
 		}
 		if (count($Model->brwConfig['fields']['filter']) != count($validFields)) {
-			$this->log('[Brownie configuration error] filter fields can only be type: date, datetime and foreign keys');
+			$this->log('[Brownie configuration error] filter fields can only be type: boolean, date, datetime and foreign keys');
 		}
 		//pr($validFields);
 		$Model->brwConfig['fields']['filter'] = $validFields;

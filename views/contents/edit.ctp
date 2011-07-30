@@ -60,7 +60,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 					continue;
 				}
 			}
-			if ($value['type'] == 'date') {
+			if (in_array($value['type'], array('datetime', 'date'))) {
 				$params['minYear'] = $brwConfig['fields']['date_ranges'][$key]['minYear'];
 				$params['maxYear'] = $brwConfig['fields']['date_ranges'][$key]['maxYear'];
 				$params['dateFormat'] = $brwConfig['fields']['date_ranges'][$key]['dateFormat'];
