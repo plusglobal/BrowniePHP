@@ -31,7 +31,7 @@ function hoverRowsColors() {
 }
 
 function multipleComboSelect() {
-	$('.combo-select').comboselect({ sort: 'none', addbtn: '&raquo;',  rembtn: '&laquo;' });
+	$('.combo-select').comboselect({ sort: 'none', addbtn: brwMsg.select + ' &raquo;',  rembtn: '&laquo; ' + brwMsg.unselect});
 }
 
 function bindFancyBox() {
@@ -152,7 +152,7 @@ function checkMultiple() {
 
 function filterCheckbox() {
 	$('div.filter-checkbox div.checkbox').addClass('clearfix');
-	$button = $('<input type="button" value="' + brwMsg.choose + '" class="filter-choose">');
+	$button = $('<input type="button" value="' + brwMsg.select + '" class="filter-choose">');
 	$div = $('div.filter-checkbox');
 	$div.before($button).hide();
 	$button.toggle(
@@ -162,7 +162,7 @@ function filterCheckbox() {
 		},
 		function(){
 			$div.fadeOut('fast');
-			$button.val(brwMsg.choose);
+			$button.val(brwMsg.select);
 		}
 	);
 }

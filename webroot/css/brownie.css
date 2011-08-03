@@ -1123,7 +1123,7 @@ div#content fieldset.comboselect {
 div#content fieldset.comboselect * {
 	display: block;
 	float: left;
-	width: 45%;
+	width: 40%;
 }
 
 div#content fieldset.comboselect select {
@@ -1134,7 +1134,7 @@ div#content fieldset.comboselect select {
 
 div#content fieldset.comboselect fieldset {
 	border: 0;
-	width: 40px;
+	width: 80px;
 	margin: 0;
 	padding-top: 25px;
 }
@@ -1142,6 +1142,7 @@ div#content fieldset.comboselect fieldset {
 div#content fieldset.comboselect fieldset input {
 	width: 100%;
 	clear: left;
+	font-size: 11px;
 	margin: 5px 0;
 }
 
