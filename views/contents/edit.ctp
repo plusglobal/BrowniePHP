@@ -93,8 +93,9 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 			foreach ($related['hasAndBelongsToMany'] as $key => $list) {
 				if (!empty($list)) {
 					$params = array('multiple' => 'checkbox', 'options' => $list);
-					if(count($list) > 5) {
+					if (count($list) > 5) {
 						$params['multiple'] = 'multiple';
+						$params['escape'] = false;
 						$params['size'] = 5;
 						$params['class'] = 'combo-select';
 						$javascript->link('/brownie/js/jquery.selso', false);
