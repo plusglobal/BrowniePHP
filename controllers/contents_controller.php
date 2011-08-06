@@ -827,7 +827,7 @@ class ContentsController extends BrownieAppController {
 				$fieldsToHide = array_merge($fieldsToHide, $toHide);
 			}
 		}
-		$Model->brwConfig['fields']['hide'] = array_merge($Model->brwConfig['fields']['hide'], $fieldsToHide);
+		$Model->brwConfig['fields']['no_view'] = array_merge($Model->brwConfig['fields']['hide'], $fieldsToHide);
 	}
 
 }
