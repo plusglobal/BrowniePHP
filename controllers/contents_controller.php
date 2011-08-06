@@ -537,12 +537,6 @@ class ContentsController extends BrownieAppController {
 		$this->render('export/' . $type);
 	}
 
-	function js_edit($model) {
-		$this->header('Content-type: text/javascript');
-		$this->layout = 'ajax';
-	}
-
-
 	function reorder($model, $direction, $id) {
 		if (
 			!in_array($direction, array('up', 'down'))

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-var brwConditionals = <?php echo json_encode($brwConfig['fields']['conditional']) ?>;
+var brwConditionals = <?php echo json_encode($brwConfig['fields']['conditional_camelized']) ?>;
 var brwModel = '<?php echo $model ?>';
 $(document).ready(function(){
 	$.each(brwConditionals, function(index, value) {

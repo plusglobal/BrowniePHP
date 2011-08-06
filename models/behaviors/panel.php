@@ -90,6 +90,25 @@ class PanelBehavior extends ModelBehavior {
 		$this->_attachUploads($Model);
 	}
 
+	function beforeValidate($Model) {
+		if ($Model->brwConfig['fields']['conditional']) {
+			foreach ($Model->brwConfig['fields']['conditional'] as $field => $rules) {
+				//pr($Model->data);				echo $field;
+				if (!empty($Model->data[$Model->alias][$field])) {
+					$id = $Model->data[$Model->alias][$field];
+					$fieldsNoValidate = array_diff($rules['hide'], $rules['show_conditions'][$id]);
+					//pr($fieldsNoValidate);
+					foreach ($fieldsNoValidate as $fieldNoValidate) {
+						if (isset($Model->validate[$fieldNoValidate])) {
+							unset($Model->validate[$fieldNoValidate]);
+						}
+						$Model->data[$Model->alias][$fieldNoValidate] = null;
+					}
+				}
+			}
+		}
+	}
+
 	function afterFind($Model, $results, $primary) {
 		if ($Model->name != 'BrwImage') {
 			$results = $this->_addImagePaths($results, $Model);
@@ -280,7 +299,7 @@ class PanelBehavior extends ModelBehavior {
 
 	function _conditionalConfig($Model) {
 		if (!empty($Model->brwConfig['fields']['conditional'])) {
-			$Model->brwConfig['fields']['conditional'] = $this->_camelize($Model->brwConfig['fields']['conditional']);
+			$Model->brwConfig['fields']['conditional_camelized'] = $this->_camelize($Model->brwConfig['fields']['conditional']);
 		}
 	}
 
