@@ -1,3 +1,4 @@
+<script type="text/javascript">
 var brwConditionals = <?php echo json_encode($brwConfig['fields']['conditional']) ?>;
 var brwModel = '<?php echo $model ?>';
 $(document).ready(function(){
@@ -15,3 +16,4 @@ $(document).ready(function(){
 		}).change();
 	});
 });
+</script>

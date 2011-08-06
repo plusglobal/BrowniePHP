@@ -1,6 +1,6 @@
 <?php
 if (!empty($brwConfig['fields']['conditional'])) {
-	echo $javascript->link(Router::url(array('controller' => 'contents', 'action' => 'js_edit', $model, 'js_edit.js')));
+	echo $this->element('js_conditional_fields');
 }
 ?><div class="form">
 <?php
