@@ -144,6 +144,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
+		$this->_hideConditionalFields($this->Model, $record);
 		$record = $this->Content->formatHABTMforView($record, $this->Model);
 		$record = $this->_formatForView($record, $this->Model);
 		$record = $this->Content->addI18nValues($record, $this->Model);
@@ -151,6 +152,7 @@ class ContentsController extends BrownieAppController {
 		$this->set('neighbors', $neighbors);
 		$this->set('assoc_models', $assoc_models);
 		$this->set('permissions', $permissions);
+		$this->set('brwConfig', $this->Model->brwConfig);
 		$this->_setI18nParams($this->Model);
 	}
 
@@ -812,6 +814,20 @@ class ContentsController extends BrownieAppController {
 		if ($mustRedirect) {
 			$this->redirect(array('action' => 'view', $authModel, $this->Session->read('Auth.BrwUser.id')));
 		}
+	}
+
+	function _hideConditionalFields($Model, $record) {
+		$fieldsToHide = array();
+		foreach ($Model->brwConfig['fields']['conditional'] as $field => $config) {
+			if (!empty($record[$Model->alias][$field])) {
+				$toHide = array_diff(
+					$config['hide'],
+					$config['show_conditions'][$record[$Model->alias][$field]]
+				);
+				$fieldsToHide = array_merge($fieldsToHide, $toHide);
+			}
+		}
+		$Model->brwConfig['fields']['hide'] = array_merge($Model->brwConfig['fields']['hide'], $fieldsToHide);
 	}
 
 }

@@ -1305,6 +1305,7 @@ td.habtm li a{
 	display: block;
 	color: #444;
 	-moz-border-radius: 4px;
+	border-radius: 4px;
 	background: #ccc;
 }
 

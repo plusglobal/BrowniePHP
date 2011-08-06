@@ -93,11 +93,9 @@ class PanelBehavior extends ModelBehavior {
 	function beforeValidate($Model) {
 		if ($Model->brwConfig['fields']['conditional']) {
 			foreach ($Model->brwConfig['fields']['conditional'] as $field => $rules) {
-				//pr($Model->data);				echo $field;
 				if (!empty($Model->data[$Model->alias][$field])) {
 					$id = $Model->data[$Model->alias][$field];
 					$fieldsNoValidate = array_diff($rules['hide'], $rules['show_conditions'][$id]);
-					//pr($fieldsNoValidate);
 					foreach ($fieldsNoValidate as $fieldNoValidate) {
 						if (isset($Model->validate[$fieldNoValidate])) {
 							unset($Model->validate[$fieldNoValidate]);
