@@ -577,6 +577,14 @@ class Content extends BrownieAppModel{
 				}
 			}
 		}
+		foreach ($Model->hasAndBelongsToMany as $related) {
+			if (!empty($named[$related['className']])) {
+				$values = explode('.', $named[$related['className']]);
+				foreach ($values as $value) {
+					$filter[$related['className']][]['id'] = $value;
+				}
+			}
+		}
 		return $filter;
 	}
 
