@@ -144,7 +144,7 @@ function checkMultiple() {
 		return allowSubmit;
 	});
 	
-	$('td.actions a').click(function(e){
+	$('#deleteMultiple a').click(function(e){
 		e.stopPropagation();
 		return true;
 	});
