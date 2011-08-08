@@ -101,7 +101,7 @@ if ($records) {
 				}
 			}
 			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
-				echo '<th class="actions">' . __d('brownie', 'Sort', true) . '</th>';
+				echo '<th class="actions sortable">' . __d('brownie', 'Sort', true) . '</th>';
 			}
 			echo '
 				<th class="actions">' . __d('brownie', 'Actions', true) . '</th>
