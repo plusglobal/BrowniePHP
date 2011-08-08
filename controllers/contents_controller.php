@@ -595,7 +595,7 @@ class ContentsController extends BrownieAppController {
 				if (is_array($this->data[$model][$field])) {
 					$url[$model . '.' . $field] = join('.', $this->data[$model][$field]);
 				} else {
-					$url[$model . '.' . $field] = $this->data[$model][$field];
+					$url[$model . '.' . $field] = urlencode($this->data[$model][$field]);
 				}
 			}
 		}
@@ -767,7 +767,7 @@ class ContentsController extends BrownieAppController {
 						}
 					}
 				break;
-				case 'integer': case 'boolean':
+				case 'integer': case 'boolean': case 'string':
 					if (!empty($this->params['named'][$model . '.' . $field])) {
 						$fieldData = $this->params['named'][$model . '.' . $field];
 						if (strstr($fieldData, '.')) {

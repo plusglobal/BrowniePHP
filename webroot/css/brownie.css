@@ -1324,11 +1324,15 @@ div#content form.filter{
 	width: auto;
 }
 
-div#content form.filter div.input, div#content form.filter div.submit{
+div#content form.filter div.input, div#content form.filter div.submit, div#content form.filter div.text{
 	float: left;
 	clear: none;
 	margin: 0;
 	padding: 10px 10px 0 0;
+}
+
+div#content form.filter div.text{
+	margin-right: 4px;
 }
 
 div#content form.filter div.submit{
@@ -1340,8 +1344,13 @@ div#content form.filter div.input select{
 	max-width: 150px;
 }
 
-div#content form.filter div.input select{
+div#content form.filter div.input select, div#content form.filter div.input input{
 	border: 1px solid #888;
+}
+
+div#content form.filter div.input input{
+	font-size: 11px;
+	padding: 2px;
 }
 
 #content form div#enabledLangs label, #content form div#enabledLangs div{

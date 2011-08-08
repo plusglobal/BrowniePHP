@@ -568,10 +568,10 @@ class PanelBehavior extends ModelBehavior {
 
 	function _fieldsFilters($Model) {
 		$validFields = Set::normalize($Model->brwConfig['fields']['filter']);
-		foreach ($validFields as $field => $multiple) {
+		/*foreach ($validFields as $field => $multiple) {
 			$fieldType = $Model->_schema[$field]['type'];
 			if (
-				!in_array($fieldType, array('date', 'datetime', 'boolean'))
+				!in_array($fieldType, array('date', 'datetime', 'boolean', ))
 				and
 				!in_array($field, Set::extract('{s}.foreignKey', $Model->belongsTo))
 			) {
@@ -580,7 +580,7 @@ class PanelBehavior extends ModelBehavior {
 		}
 		if (count($Model->brwConfig['fields']['filter']) != count($validFields)) {
 			$this->log('[Brownie configuration error] filter fields can only be type: boolean, date, datetime and foreign keys');
-		}
+		}*/
 		//pr($validFields);
 		$Model->brwConfig['fields']['filter'] = $validFields;
 		//$Model->brwConfig['fields']['filter'] = $validFields;
