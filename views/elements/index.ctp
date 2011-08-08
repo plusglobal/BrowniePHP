@@ -26,7 +26,7 @@
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['export']) {
-			$url = array_merge(array('action' => 'export', $model), $this->params['named'], $filters);
+			$url = array_merge(array('action' => 'export', $model), $filters, $this->params['named']);
 			echo '<li class="export">' . $html->link(__d('brownie', 'Export', true), $url) . '</li>';
 		}
 

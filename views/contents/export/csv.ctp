@@ -1,4 +1,4 @@
 <?php
 foreach ($records as $record) {
-	echo join(',', $record[$model]) . "\n";
+	echo '"' . join('";"', $record[$model]) . '"' . "\n";
 }
