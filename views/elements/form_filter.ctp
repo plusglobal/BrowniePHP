@@ -11,10 +11,19 @@ echo $form->create('Filter', array(
 	'class' => 'filter clearfix'
 ));
 
+$isAvanced = false;
 foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 	$fieldType = $schema[$field]['type'];
+	$params = array();
+	$before = $after = '';
+	if (array_key_exists($field, $brwConfig['fields']['filter_advanced'])) {
+		$before = '<div class="advanced">';
+		$after = '</div>';
+		$isAvanced = true;
+	}
+
 	if (in_array($fieldType, array('datetime', 'date'))) {
-		$params = array(
+		$params += array(
 			'type' => $fieldType,
 			'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
 			'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
@@ -22,16 +31,16 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			'monthNames' => $brwConfig['fields']['date_ranges'][$field]['monthNames'],
 			'timeFormat' => '24'
 		);
-		echo $form->input(
+
+		echo $before . $form->input(
 			$model . '.' . $field . '_from',
 			$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'from', true))
-		);
-		echo $form->input(
+		) . $form->input(
 			$model . '.' . $field . '_to',
 			$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'to', true))
-		);
+		) . $after;
 	} else {
-		$params = array(
+		$params += array(
 			'empty' => '-',
 			'label' => $brwConfig['fields']['names'][$field],
 		);
@@ -48,9 +57,10 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 				'after' => '</div>',
 			));
 		}
-		echo $form->input($model . '.' . $field, $params);
+		echo $before . $form->input($model . '.' . $field, $params) . $after;
 	}
 }
-echo $form->end(__d('brownie', 'Filter', true));
+echo $form->submit(__d('brownie', 'Filter', true), array('id' => 'filterSubmit'));
+echo $form->end();
 ?>
 

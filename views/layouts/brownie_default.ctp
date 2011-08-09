@@ -15,7 +15,9 @@ var brwMsg = {
 	no_checked_for_deletion: '<?php __d('brownie', 'No records checked for deletion') ?>',
 	select: '<?php __d('brownie', 'Select') ?>',
 	unselect: '<?php __d('brownie', 'Unselect') ?>',
-	done: '<?php __d('brownie', 'Done') ?>'
+	done: '<?php __d('brownie', 'Done') ?>',
+	show_advanced: '<?php __d('brownie', 'Show advanced filters') ?>',
+	hide_advanced: '<?php __d('brownie', 'Hide advanced filters') ?>'
 };
 </script>
 <title><?php

@@ -1324,6 +1324,18 @@ div#content form.filter{
 	width: auto;
 }
 
+form.filter div.advanced{
+	display: none;
+}
+
+a#show_advanced{
+	margin-left: 5px;
+	float: right;
+	color: #444;
+	position: absolute;
+	width: 100px;
+}
+
 div#content form.filter div.input, div#content form.filter div.submit, div#content form.filter div.text{
 	float: left;
 	clear: none;
@@ -1392,3 +1404,4 @@ div.filter-checkbox div.checkbox:hover{
 	padding: 1px;
 	font-size: 12px;
 }
+

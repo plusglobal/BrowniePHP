@@ -37,6 +37,7 @@ class PanelBehavior extends ModelBehavior {
 			'no_sanitize_html' => array(),
 			'names' => array(),
 			'filter' => array(),
+			'filter_advanced' => array(),
 			'date_ranges' => array(),
 		),
 
@@ -567,23 +568,13 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function _fieldsFilters($Model) {
-		$validFields = Set::normalize($Model->brwConfig['fields']['filter']);
-		/*foreach ($validFields as $field => $multiple) {
-			$fieldType = $Model->_schema[$field]['type'];
-			if (
-				!in_array($fieldType, array('date', 'datetime', 'boolean', ))
-				and
-				!in_array($field, Set::extract('{s}.foreignKey', $Model->belongsTo))
-			) {
-				unset($validFields[$field]);
-			}
-		}
-		if (count($Model->brwConfig['fields']['filter']) != count($validFields)) {
-			$this->log('[Brownie configuration error] filter fields can only be type: boolean, date, datetime and foreign keys');
-		}*/
-		//pr($validFields);
-		$Model->brwConfig['fields']['filter'] = $validFields;
-		//$Model->brwConfig['fields']['filter'] = $validFields;
+		$Model->brwConfig['fields']['filter'] = Set::normalize($Model->brwConfig['fields']['filter']);
+		$Model->brwConfig['fields']['filter_advanced'] = Set::normalize($Model->brwConfig['fields']['filter_advanced']);
+
+		$Model->brwConfig['fields']['filter'] = array_merge(
+			$Model->brwConfig['fields']['filter'],
+			$Model->brwConfig['fields']['filter_advanced']
+		);
 	}
 
 

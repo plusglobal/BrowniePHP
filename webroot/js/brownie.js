@@ -8,6 +8,7 @@ $(document).ready(function(){
 	checkMultiple();
 	$('select').jDoubleSelect();
 	filterCheckbox();
+	showAdvancedFilters();
 });
 
 function flashClick() {
@@ -165,4 +166,17 @@ function filterCheckbox() {
 			$button.val(brwMsg.select);
 		}
 	);
+}
+
+function showAdvancedFilters() {
+	if ($('.advanced').length) {
+		$('#filterSubmit').after('<a href="#" id="show_advanced">' + brwMsg.show_advanced + '</a>');
+		$('#show_advanced').toggle(function(){
+			$('.advanced').show();
+			$(this).html(brwMsg.hide_advanced)
+		}, function() {
+			$('.advanced').hide();
+			$(this).html(brwMsg.show_advanced)
+		});
+	}
 }
