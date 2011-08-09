@@ -33,20 +33,7 @@ class ContentsController extends BrownieAppController {
 			$this->Model->brwConfig['actions'],
 			$this->arrayPermissions($this->Model->alias)
 		);
-
-		/*if (!Configure::read('Auth.BrwUser.root')) {
-			$this->Model->brwConfig['actions'] = Set::merge(
-				$this->Model->brwConfig['actions'],
-				$this->Model->brwConfig['actions_no_root']
-			);
-			$this->Model->brwConfig['fields'] = Set::merge(
-				$this->Model->brwConfig['fields'],
-				$this->Model->brwConfig['fields_no_root']
-			);
-		}*/
-
 		$this->_checkBrwUserCrud();
-
 		$this->Content->i18nInit($this->Model);
 	}
 
@@ -760,17 +747,19 @@ class ContentsController extends BrownieAppController {
 						if (!empty($this->params['named'][$model . '.' . $field . $key])) {
 							$this->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
 						} else {
+							/*
+							to-do: make configurable the default ranges
 							$this->data[$model][$field . $key] = date('Y-m-d');
 							if ($type == 'datetime') {
 								$this->data[$model][$field . $key] .= ' ' . (($key == '_from')? '00:00:00': '23:59:59');
-							}
+							}*/
 						}
 					}
 				break;
 				case 'integer': case 'boolean': case 'string':
 					if (!empty($this->params['named'][$model . '.' . $field])) {
 						$fieldData = $this->params['named'][$model . '.' . $field];
-						if (strstr($fieldData, '.')) {
+						if ($type  == 'integer' and strstr($fieldData, '.')) {
 							$fieldData = explode('.', $fieldData);
 						}
 						$this->data[$model][$field] = $fieldData;

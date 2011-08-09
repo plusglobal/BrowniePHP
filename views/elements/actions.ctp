@@ -1,8 +1,4 @@
 <?php
-if (empty($filters)) {
-	$filters = array();
-}
-
 $after_save = null;
 switch ($calledFrom) {
 	case 'view':
@@ -22,7 +18,11 @@ if (!empty($record[$model]['brw_actions']['edit'])) {
 	$record[$model]['brw_actions']['edit']['url']['after_save'] = $after_save;
 }
 if (!empty($record[$model]['brw_actions']['view'])) {
-	$record[$model]['brw_actions']['view']['url'] += $this->params['named'] + $filters;
+	$named = array();
+	foreach ($this->params['named'] as $key => $value) {
+		$named[$key] = urlencode($value);
+	}
+	$record[$model]['brw_actions']['view']['url'] += $named;
 	if ($calledFrom == 'index') {
 		$record[$model]['brw_actions']['view']['url'] += array('back_to' => 'index');
 	}

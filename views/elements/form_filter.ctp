@@ -29,7 +29,8 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
 			'dateFormat' => $brwConfig['fields']['date_ranges'][$field]['dateFormat'],
 			'monthNames' => $brwConfig['fields']['date_ranges'][$field]['monthNames'],
-			'timeFormat' => '24'
+			'timeFormat' => '24',
+			'empty' => '-',
 		);
 
 		echo $before . $form->input(
