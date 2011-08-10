@@ -202,8 +202,12 @@ class ContentsController extends BrownieAppController {
 							if ($parent = $this->Model->brwConfig['parent']) {
 								$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
 								if (!empty($this->data[$this->Model->alias][$foreignKey])) {
-									$this->redirect(array('action' => 'view', $parent, $this->data[$this->Model->alias][$foreignKey]));
+									$idRedir = $this->data[$this->Model->alias][$foreignKey];
+								} else {
+									$record = $this->Model->findById($this->Model->id);
+									$idRedir = $record[$this->Model->alias][$foreignKey];
 								}
+								$this->redirect(array('action' => 'view', $parent, $idRedir));
 							}
 							$this->redirect(array('action' => 'index', $this->Model->name));
 						break;
