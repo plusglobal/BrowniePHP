@@ -108,16 +108,13 @@ class BrownieAppController extends AppController {
 		if (in_array($action, array('reorder', 'edit_upload', 'delete_upload'))) {
 			$action = 'edit';
 		}
-		if ($action == 'export') {
-			$action = 'view';
-		}
 		if ($action == 'filter') {
 			$action = 'index';
 		}
 		if ($action == 'delete_multiple') {
 			$action = 'delete';
 		}
-		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'import'))) {
+		if (!in_array($action, array('index', 'add', 'view', 'delete', 'edit', 'import', 'export'))) {
 			return false;
 		}
 		$Model->Behaviors->attach('Brownie.Panel');

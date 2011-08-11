@@ -194,6 +194,9 @@ class PanelBehavior extends ModelBehavior {
 		$this->_fieldsFilters($Model);
 		$this->_removeDuplicates($Model);
 		$this->_setDefaultDateRanges($Model);
+		if ($Model->brwConfig['actions']['export']) {
+			$this->_exportFields($Model);
+		}
 	}
 
 
@@ -645,5 +648,18 @@ class PanelBehavior extends ModelBehavior {
 			}
 		}
 	}
+
+
+	function _exportFields($Model) {
+		if (empty($Model->brwConfig['fields']['export'])) {
+			foreach ($Model->_schema as $field => $config) {
+				if ($config['type'] != 'text') {
+					$Model->brwConfig['fields']['export'][] = $field;
+				}
+			}
+		}
+		//to-do remove fields no export from the previous array
+	}
+
 
 }
