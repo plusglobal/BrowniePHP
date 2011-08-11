@@ -153,7 +153,9 @@ class Content extends BrownieAppModel{
 	function brownieBeforeSave($data, $Model) {
 		foreach ($Model->_schema as $field => $value) {
 			if (
-				$value['null'] and empty($data[$Model->name][$field])
+				$value['null']
+				and !empty($data[$Model->name][$field])
+				and $data[$Model->name][$field] === ''
 				and !in_array($field, $Model->brwConfig['fields']['hide'])
 			) {
 				$data[$Model->name][$field] = null;

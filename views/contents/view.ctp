@@ -52,11 +52,15 @@
 				<tr>
 					<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>';
 					if (in_array($field_name, $i18nFields)) {
-						echo '<td class="multiLang">
+						echo '
+						<td class="multiLang">
 						' . $this->element('i18n_view_field', array('data' => $record['BrwI18n_' . $field_name])) . '
 						</td>';
 					} else {
-						echo '<td class="fcktxt">' . ife(!empty($field_value), $field_value, '&nbsp;') . '</td>';
+						echo '
+						<td class="fcktxt">
+						' . (($field_value === null or $field_value === '') ? '&nbsp;' : $field_value ) . '
+						</td>';
 					}
 					echo '
 				</tr>';

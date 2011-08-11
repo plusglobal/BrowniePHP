@@ -121,9 +121,9 @@ if ($records) {
 		foreach($brwConfig['paginate']['fields'] as $field_name) {
 			if (!empty($schema[$field_name])) {
 				echo '
-				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">'
-					. ( !empty($record[$model][$field_name]) ? $record[$model][$field_name] : '&nbsp;' )
-				. '</td>';
+				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">
+				' . (($record[$model][$field_name] === null or $record[$model][$field_name] === '') ? '&nbsp;' : $record[$model][$field_name] ) . '
+				</td>';
 				if ($field_name == 'id') {
 					foreach ($brwConfig['paginate']['images'] as $indexImageKey) {
 						echo '<td class="index_image field">';
