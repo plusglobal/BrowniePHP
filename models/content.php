@@ -309,9 +309,9 @@ class Content extends BrownieAppModel{
 	}
 
 	function isForeignKey($Model, $field) {
-		foreach ($Model->belongsTo as $belongsTo) {
+		foreach ($Model->belongsTo as $model => $belongsTo) {
 			if ($belongsTo['foreignKey'] == $field) {
-				return true;
+				return $model;
 			}
 		}
 		return false;
@@ -550,7 +550,19 @@ class Content extends BrownieAppModel{
 			'order' => $order,
 			'contain' => array_keys($Model->belongsTo),
 		);
-		return $Model->find('all', $params);
+		$records = $Model->find('all', $params);
+		if ($Model->brwConfig['export']['replace_foreign_keys']) {
+			foreach ($records as $i => $record) {
+				foreach ($record[$Model->alias] as $field => $value) {
+					$relModel = $this->isForeignKey($Model, $field);
+					if ($relModel) {
+						$displayField = $Model->{$relModel}->displayField;
+						$records[$i][$Model->alias][$field] = $records[$i][$relModel][$displayField];
+					}
+				}
+			}
+		}
+		return $records;
 	}
 
 
@@ -598,5 +610,14 @@ class Content extends BrownieAppModel{
 		return $filter;
 	}
 
+
+	function getRelatedBrwConfig($Model) {
+		$brwConfigs = array();
+		$models = array_merge($Model->hasAndBelongsToMany, $Model->belongsTo, $Model->hasMany, $Model->hasOne);
+		foreach ($models as $model => $config) {
+			$brwConfigs[$model] = $Model->{$model}->brwConfig;
+		}
+		return $brwConfigs;
+	}
 
 }

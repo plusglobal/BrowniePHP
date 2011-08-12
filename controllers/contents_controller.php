@@ -506,7 +506,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function export($model) {
-		$type = $this->Model->brwConfig['actions']['export'];
+		$type = $this->Model->brwConfig['export']['type'];
 		if (empty($type)) {
 			$this->cakeError('error404');
 		}
@@ -526,7 +526,11 @@ class ContentsController extends BrownieAppController {
 		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
 		header("Pragma: no-cache");
 		header("Expires: 0");
-		$this->set('records', $this->Content->getForExport($this->Model, $this->params['named']));
+		$this->set(array(
+			'records' => $this->Content->getForExport($this->Model, $this->params['named']),
+			'relatedBrwConfig' => $this->Content->getRelatedBrwConfig($this->Model),
+		));
+
 		$this->render('export/' . $type);
 	}
 

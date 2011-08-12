@@ -9,25 +9,22 @@ class PanelBehavior extends ModelBehavior {
 			'singular' => false,
 			'gender' => 1 //1 for male, 2 for female, according to http://en.wikipedia.org/wiki/ISO_5218
 		),
-
 		'paginate' => array(
 			'limit' => 20,
 			'fields' => array(),
 			'images' => array(),
 		),
-
 		'index' => array(
 			'home' => true,
 			'menu' => true
 		),
-
 		'fields' => array(
 			'no_add' => array(),
 			'no_edit' => array(),
 			'no_view' => array(),
 			'hide' => array('lft', 'rght'),
 			'export' => array(),
-			'no_export' => array(),
+			'no_export' => array('lft', 'rght'),
 			'search' => array(),
 			'no_search' => array(),
 			'no_editor' => array(),
@@ -40,7 +37,6 @@ class PanelBehavior extends ModelBehavior {
 			'filter_advanced' => array(),
 			'date_ranges' => array(),
 		),
-
 		'actions' => array(
 			'index' => true,
 			'view' => true,
@@ -55,26 +51,18 @@ class PanelBehavior extends ModelBehavior {
 			'print' => false,
 			'empty' => false,
 		),
-
 		'custom_actions' => array(),
-
 		'global_custom_actions' => array(),
-
 		'images' => array(),
-
 		'files' => array(),
-
 		'default' => array(),
-
 		'parent' => null,
-
 		'show_children' => true,
-
 		'hide_children' => array('BrwImage', 'BrwFile'),
-
-		'sortable' => array('field' => 'sort', 'sort' => 'ASC')
-
+		'sortable' => array('field' => 'sort', 'sort' => 'ASC'),
+		'export' => array('type' => 'csv', 'replace_foreign_keys' => true),
 	);
+
 
 	var $brwConfigDefaultCustomActions = array(
 		'title' => '',
@@ -658,7 +646,13 @@ class PanelBehavior extends ModelBehavior {
 				}
 			}
 		}
-		//to-do remove fields no export from the previous array
+		$whitelisted = array();
+		foreach ($Model->brwConfig['fields']['export'] as $field) {
+			if (!in_array($field, $Model->brwConfig['fields']['no_export'])) {
+				$whitelisted[] = $field;
+			}
+		}
+		$Model->brwConfig['fields']['export'] = $whitelisted;
 	}
 
 

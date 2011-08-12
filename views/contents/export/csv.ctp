@@ -1,6 +1,15 @@
 <?php
 foreach ($brwConfig['fields']['export'] as $field) {
-	$fieldName = !empty($brwConfig['fields']['names'][$field]) ? $brwConfig['fields']['names'][$field] : $field;
+	$fieldName = $field;
+	if (!empty($brwConfig['fields']['names'][$field])) {
+		$fieldName = $brwConfig['fields']['names'][$field];
+	} else {
+		$tmp = explode('.', $field); $relModel = $tmp[0]; $relField = $tmp[1];
+		if (!empty($relatedBrwConfig[$relModel])) {
+			$fieldName = $relatedBrwConfig[$relModel]['names']['singular'] . ' ' .
+			$relatedBrwConfig[$relModel]['fields']['names'][$relField];
+		}
+	}
 	echo '"' . $fieldName . '";';
 }
 echo "\n";
@@ -8,10 +17,11 @@ foreach ($records as $record) {
 	foreach ($brwConfig['fields']['export'] as $field) {
 		if (strstr($field, '.')) {
 			$tmp = explode('.', $field);
-			echo '"' . $record[$tmp[0]][$tmp[1]] . '";';
+			$value = $record[$tmp[0]][$tmp[1]];
 		} else {
-			echo '"' . $record[$model][$field] . '";';
+			$value = $record[$model][$field];
 		}
+		echo '"' . $value . '";';
 	}
 	reset($brwConfig['fields']['export']);
 	echo "\n";
