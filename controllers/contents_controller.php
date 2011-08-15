@@ -99,12 +99,19 @@ class ContentsController extends BrownieAppController {
 		$permissions[$model] = $this->arrayPermissions($model);
 
 		$assocs = array_merge($this->Model->hasMany, $this->Model->hasOne);
+		if ($this->Model->Behaviors->attached('Tree')) {
+			$assocs[$model] = array('className' => 'User', 'foreignKey' => 'parent_id');
+		}
 		$assoc_models = array();
 		if (!empty($this->Model->hasMany) and $this->Model->brwConfig['show_children']) {
 			foreach ($assocs as $key_model => $related_model) {
 				if (substr($key_model, 0, 8) == 'BrwI18n_') continue;
 				if (!in_array($key_model, $this->Model->brwConfig['hide_children'])) {
-					$AssocModel = $this->Model->$key_model;
+					if ($key_model == $model) {
+						$AssocModel = $this->Model;
+					} else {
+						$AssocModel = $this->Model->$key_model;
+					}
 					$AssocModel->Behaviors->attach('Brownie.Panel');
 					if ($this->_brwCheckPermissions($key_model)) {
 						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brwConfig['paginate']['fields'])) {
@@ -119,7 +126,7 @@ class ContentsController extends BrownieAppController {
 							'brwConfig' => $AssocModel->brwConfig,
 							'model' => $key_model,
 							'records' => $this->_formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
-							'schema' => $this->Content->schemaForView($this->Model->$key_model),
+							'schema' => $this->Content->schemaForView($AssocModel),
 							'filters' => array_merge(
 								$this->_filterConditions($AssocModel),
 								array($AssocModel->alias . '.' . $related_model['foreignKey'] => $id)
