@@ -580,7 +580,7 @@ class PanelBehavior extends ModelBehavior {
 				'hide' => array('last_login'),
 			),
 			'paginate' => array(
-				'fields' => array('id', 'email', 'last_login'),
+				'fields' => array('id', 'email'),
 			),
 			'legends' => array(
 				'password' => __d('brownie', 'Leave blank for no change', true),
