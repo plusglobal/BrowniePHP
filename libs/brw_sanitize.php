@@ -6,7 +6,7 @@ class BrwSanitize {
 		if (!is_string($str)) {
 			return $str;
 		}
-		return htmlspecialchars($str, ENT_NOQUOTES, Configure::read('App.encoding'));
+		return str_replace(array('<', '>'), array('&lt;', '&gt;'), $str);
 	}
 
 	function url($string) {
