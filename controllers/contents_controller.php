@@ -827,7 +827,7 @@ class ContentsController extends BrownieAppController {
 	function _hideConditionalFields($Model, $record) {
 		$fieldsToHide = array();
 		foreach ($Model->brwConfig['fields']['conditional'] as $field => $config) {
-			if (!empty($record[$Model->alias][$field])) {
+			if (isset($record[$Model->alias][$field])) {
 				$toHide = array_diff(
 					$config['hide'],
 					$config['show_conditions'][$record[$Model->alias][$field]]
