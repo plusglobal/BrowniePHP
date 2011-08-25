@@ -802,7 +802,7 @@ class ContentsController extends BrownieAppController {
 		if ($Model->Behaviors->enabled('Translate')) {
 			$i18nFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
 		}
-		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => Configure::read('Config.languages')));
+		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => Configure::read('Config.langs')));
 	}
 
 
