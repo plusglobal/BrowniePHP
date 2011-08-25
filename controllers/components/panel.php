@@ -68,7 +68,7 @@ class PanelComponent extends Object{
 			foreach ((array)Configure::read('Config.languages') as $lang) {
 				$langs3chars[$lang] = $l10n->__l10nCatalog[$lang]['localeFallback'];
 			}
-			Configure::write('Config.languages', $langs3chars);
+			Configure::write('Config.langs', $langs3chars);
 		}
 	}
 
