@@ -29,6 +29,8 @@ if (file_exists(WWW_ROOT . 'js' . DS . 'tiny_mce' . DS . 'jquery.tinymce.js')) {
 	$defaultSettings['js'][] = 'tiny_mce/jquery.tinymce';
 } elseif (file_exists(WWW_ROOT . 'js' . DS . 'fckeditor' . DS . 'fckeditor.js')) {
 	$defaultSettings['js'][] = 'fckeditor/fckeditor';
+} elseif (file_exists(WWW_ROOT . 'js' . DS . 'ckeditor' . DS . 'ckeditor.js')) {
+	$defaultSettings['js'][] = 'ckeditor/ckeditor';
 }
 
 Configure::write('brwSettings', Set::merge($defaultSettings, (array)Configure::read('brwSettings')));
