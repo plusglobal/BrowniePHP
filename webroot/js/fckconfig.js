@@ -6,4 +6,4 @@
 FCKConfig.ProcessHTMLEntities = false; 
 FCKConfig.IncludeLatinEntities = false; 
 FCKConfig.IncludeGreekEntities = false;
-FCKConfig.FullPage = true;
+

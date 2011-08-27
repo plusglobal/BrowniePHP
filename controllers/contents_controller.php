@@ -802,7 +802,7 @@ class ContentsController extends BrownieAppController {
 		if ($Model->Behaviors->enabled('Translate')) {
 			$i18nFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
 		}
-		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => Configure::read('Config.languages')));
+		$this->set(array('i18nFields' => $i18nFields, 'langs3chars' => Configure::read('Config.langs')));
 	}
 
 
@@ -827,7 +827,7 @@ class ContentsController extends BrownieAppController {
 	function _hideConditionalFields($Model, $record) {
 		$fieldsToHide = array();
 		foreach ($Model->brwConfig['fields']['conditional'] as $field => $config) {
-			if (!empty($record[$Model->alias][$field])) {
+			if (isset($record[$Model->alias][$field])) {
 				$toHide = array_diff(
 					$config['hide'],
 					$config['show_conditions'][$record[$Model->alias][$field]]

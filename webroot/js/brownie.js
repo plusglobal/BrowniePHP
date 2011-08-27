@@ -66,6 +66,8 @@ function bindRichEditor() {
 		bindTinyMCE();
 	} else if (typeof FCKeditor == 'function') {
 		bindFckEditor();
+	} else if (typeof CKEDITOR == 'object') {
+		bindCKEditor();
 	}
 }
 
@@ -76,7 +78,7 @@ function bindTinyMCE() {
 		theme: 'advanced',
 		plugins: 'contextmenu,paste,table,inlinepopups',
 		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,link,unlink,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,blockquote,|,undo,redo,|,code,removeformat,forecolor,table",
-		skin : "o2k7",
+		skin : "default",
 		skin_variant : "silver",
 		theme_advanced_buttons2: '',
 		theme_advanced_toolbar_location : "top",
@@ -84,6 +86,7 @@ function bindTinyMCE() {
 		theme_advanced_statusbar_location : "bottom",
 		theme_advanced_resizing : true,
 		paste_auto_cleanup_on_paste: true,
+		theme_advanced_path : false,
 		content_css: APP_BASE + 'brownie/css/tinymce.css'
 	});
 }
@@ -97,6 +100,25 @@ function bindFckEditor(id) {
 		oFCKeditor.ToolbarSet = "Brownie";
 		oFCKeditor.ReplaceTextarea();
 	})
+}
+
+function bindCKEditor(id) {
+	$('textarea.richEditor').each(function(){
+		id = $(this).attr('id');
+		options = {
+			uiColor: '#E6E6E6',
+			removePlugins: 'elementspath',
+			entities: false,
+			toolbar : [
+				['Bold','Italic','Underline','TextColor','-','Link','Unlink','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','OrderedList','UnorderedList','Table'],
+				['Source','RemoveFormat']
+			]
+		};
+		if (typeof customCKEditor != 'undefined' && id in customCKEditor) {
+			jQuery.extend(options, customCKEditor[id]);
+		}
+		CKEDITOR.replace(id, options);		
+	});
 }
 
 function checkMultiple() {
