@@ -52,19 +52,12 @@ class ContentsController extends BrownieAppController {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
-		$filters = $this->_filterConditions($this->Model);
-		$this->paginate['conditions'] = $filters;
-
-		if (!empty($this->Model->brwConfig['paginate']['images'])) {
-			$this->paginate['contain'][] = 'BrwImage';
-		}
-
+		$this->paginate['conditions'] = $filters = $this->_filterConditions($this->Model);
+		$this->paginate['contain'] = $this->Content->relatedModelsForIndex($this->Model, $this->paginate);
 		$records = $this->paginate($this->Model);
-
 		if (method_exists($this->Model, 'brwAfterFind')) {
 			$records = $this->Model->brwAfterFind($records);
 		}
-
 		$this->set(array(
 			'records' => $this->_formatForView($records, $this->Model),
 			'permissions' => array($this->Model->alias => $this->Model->brwConfig['actions']),
@@ -120,7 +113,8 @@ class ContentsController extends BrownieAppController {
 						$filters = $this->_filterConditions($AssocModel);
 						$this->paginate[$AssocModel->name] = Set::merge(
 							$AssocModel->brwConfig['paginate'],
-							array('conditions' => $filters)
+							array('conditions' => $filters),
+							array('contain' => $this->Content->relatedModelsForIndex($AssocModel, $AssocModel->brwConfig['paginate']))
 						);
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brwConfig,
@@ -565,7 +559,6 @@ class ContentsController extends BrownieAppController {
 
 
 	function filter($model) {
-		//pr($this->data);
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
 		foreach ($this->Model->brwConfig['fields']['filter'] as $field => $multiple) {
 			$type = $this->Model->_schema[$field]['type'];
@@ -634,12 +627,11 @@ class ContentsController extends BrownieAppController {
 				} elseif (in_array($key, $fieldsConfig['code'])) {
 					$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
 				} elseif (isset($foreignKeys[$key])) {
-					$read = $Model->{$foreignKeys[$key]}->findById($retData[$Model->name][$key]);
-					$retData[$Model->name][$key] = $read[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
-					if ($this->_brwCheckPermissions($Model->{$foreignKeys[$key]}->name, 'view', $read[$foreignKeys[$key]]['id'])) {
+					$retData[$Model->name][$key] = $data[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
+					if ($this->_brwCheckPermissions($Model->{$foreignKeys[$key]}->name, 'view', $data[$foreignKeys[$key]]['id'])) {
 						$relatedURL = Router::url(array(
 							'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
-							$foreignKeys[$key], $read[$foreignKeys[$key]]['id']
+							$foreignKeys[$key], $data[$foreignKeys[$key]]['id']
 						));
 						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 					}

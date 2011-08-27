@@ -16,7 +16,7 @@ class Content extends BrownieAppModel{
 		$out = array();
 		if (!empty($Model->belongsTo)) {
 			foreach ($Model->belongsTo as $alias => $assocModel) {
-				$out[$assocModel['foreignKey']] = $alias;
+				$out[$assocModel['foreignKey']] = $assocModel['className'];
 			}
 		}
 		return $out;
@@ -507,18 +507,40 @@ class Content extends BrownieAppModel{
 
 
 	function relatedModelsForView($Model) {
-		$contain = array_keys($Model->hasAndBelongsToMany);
-
+		$containedModels = array_merge(
+			array_keys($Model->hasAndBelongsToMany),
+			array_keys($Model->belongsTo)
+		);
 		if ($Model->brwConfig['images']) {
-			$contain['BrwImage'] = array('order' => 'BrwImage.id desc');
+			$containedModels['BrwImage'] = array('order' => 'BrwImage.id desc');
 		}
 		if ($Model->brwConfig['files']) {
-			$contain['BrwFile'] = array('order' => 'BrwFile.id asc');
+			$containedModels['BrwFile'] = array('order' => 'BrwFile.id asc');
 		}
-
-		return $contain;
+		$ret = array();
+		foreach ($containedModels as $containedModel) {
+			$ret[$containedModel] = array('fields' => array('id', $Model->{$containedModel}->displayField));
+		}
+		return $ret;
 	}
 
+
+	function relatedModelsForIndex($Model, $paginate) {
+		$containedForIndex = array();
+		foreach ($paginate['fields'] as $field) {
+			$relModel = $this->isForeignKey($Model, $field);
+			if ($relModel) {
+				$containedForIndex[] = $relModel;
+			}
+		}
+		$containedModels = $this->relatedModelsForView($Model);
+		foreach ($containedModels as $containedModel => $fields) {
+			if (!in_array($containedModel, $containedForIndex)) {
+				unset($containedModels[$containedModel]);
+			}
+		}
+		return $containedModels;
+	}
 
 	function formatHABTMforView($record, $Model) {
 		$record['HABTM'] = array();
