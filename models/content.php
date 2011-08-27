@@ -571,7 +571,7 @@ class Content extends BrownieAppModel{
 		foreach ($Model->_schema as $field => $value) {
 			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
-			if (in_array($value['type'], array('datetime', 'date'))) {
+			if (in_array($value['type'], array('datetime', 'date')) and !$forData) {
 				if (array_key_exists($keyNamed . '_from', $named)) {
 					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '_from'];
 				}
@@ -580,7 +580,7 @@ class Content extends BrownieAppModel{
 				}
 			} else {
 				if (array_key_exists($keyNamed, $named)) {
-					if (in_array($value['type'], array('integer', 'boolean'))) {
+					if (in_array($value['type'], array('integer', 'boolean', 'date', 'datetime'))) {
 						if (strstr($named[$keyNamed], '.')) {
 							$named[$keyNamed] = explode('.', $named[$keyNamed]);
 						}
