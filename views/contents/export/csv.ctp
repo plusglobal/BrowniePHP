@@ -10,7 +10,7 @@ foreach ($brwConfig['fields']['export'] as $field) {
 			$relatedBrwConfig[$relModel]['fields']['names'][$relField];
 		}
 	}
-	echo '"' . $fieldName . '";';
+	echo $fieldName . ',';
 }
 echo "\n";
 foreach ($records as $record) {
@@ -21,7 +21,7 @@ foreach ($records as $record) {
 		} else {
 			$value = $record[$model][$field];
 		}
-		echo '"' . $value . '";';
+		echo $value . ',';
 	}
 	reset($brwConfig['fields']['export']);
 	echo "\n";
