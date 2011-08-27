@@ -119,7 +119,13 @@ class ContentsController extends BrownieAppController {
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brwConfig,
 							'model' => $key_model,
-							'records' => $this->_formatForView($this->paginate($AssocModel, array($related_model['foreignKey'] => $id)), $AssocModel),
+							'records' => $this->_formatForView(
+								$this->paginate(
+									$AssocModel,
+									array($AssocModel->alias . '.' . $related_model['foreignKey'] => $id)
+								),
+								$AssocModel
+							),
 							'schema' => $this->Content->schemaForView($AssocModel),
 							'filters' => array_merge(
 								$this->_filterConditions($AssocModel),
@@ -617,7 +623,7 @@ class ContentsController extends BrownieAppController {
 	function _formatSingleForView($data, $Model, $inView = false) {
 		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
-		$foreignKeys = $this->Content->getForeignKeys($Model);
+		$fK = $this->Content->getForeignKeys($Model);
 		$permissions = $this->arrayPermissions($Model->name);
 		$retData = $data;
 		if (!empty($retData[$Model->name])) {
@@ -626,12 +632,13 @@ class ContentsController extends BrownieAppController {
 					unset($retData[$Model->name][$key]);
 				} elseif (in_array($key, $fieldsConfig['code'])) {
 					$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
-				} elseif (isset($foreignKeys[$key])) {
-					$retData[$Model->name][$key] = $data[$foreignKeys[$key]][$Model->{$foreignKeys[$key]}->displayField];
-					if ($this->_brwCheckPermissions($Model->{$foreignKeys[$key]}->name, 'view', $data[$foreignKeys[$key]]['id'])) {
+				} elseif (isset($fK[$key])) {
+					$retData[$Model->name][$key]
+						= $data[$fK[$key]['alias']][$Model->{$fK[$key]['className']}->displayField];
+					if ($this->_brwCheckPermissions($Model->{$fK[$key]['className']}->name, 'view', $data[$fK[$key]['alias']]['id'])) {
 						$relatedURL = Router::url(array(
 							'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
-							$foreignKeys[$key], $data[$foreignKeys[$key]]['id']
+							$fK[$key]['className'], $data[$fK[$key]['alias']]['id']
 						));
 						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 					}

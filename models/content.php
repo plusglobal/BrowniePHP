@@ -16,7 +16,10 @@ class Content extends BrownieAppModel{
 		$out = array();
 		if (!empty($Model->belongsTo)) {
 			foreach ($Model->belongsTo as $alias => $assocModel) {
-				$out[$assocModel['foreignKey']] = $assocModel['className'];
+				$out[$assocModel['foreignKey']] = array(
+					'alias' => $alias,
+					'className' => $assocModel['className'],
+				);
 			}
 		}
 		return $out;
