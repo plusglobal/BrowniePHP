@@ -514,15 +514,18 @@ class Content extends BrownieAppModel{
 			array_keys($Model->hasAndBelongsToMany),
 			array_keys($Model->belongsTo)
 		);
-		if ($Model->brwConfig['images']) {
-			$containedModels['BrwImage'] = array('order' => 'BrwImage.id desc');
-		}
-		if ($Model->brwConfig['files']) {
-			$containedModels['BrwFile'] = array('order' => 'BrwFile.id asc');
-		}
 		$ret = array();
 		foreach ($containedModels as $containedModel) {
 			$ret[$containedModel] = array('fields' => array('id', $Model->{$containedModel}->displayField));
+			if (!empty($Model->{$containedModel}->order)) {
+				$ret[$containedModel]['order'] = $Model->{$containedModel}->order;
+			}
+		}
+		if ($Model->brwConfig['images']) {
+			$ret['BrwImage'] = array('fields' => '*', 'order' => 'BrwImage.id desc');
+		}
+		if ($Model->brwConfig['files']) {
+			$ret['BrwFile'] = array('fields' => '*', 'order' => 'BrwFile.id desc');
 		}
 		return $ret;
 	}
@@ -535,6 +538,9 @@ class Content extends BrownieAppModel{
 			if ($relModel) {
 				$containedForIndex[] = $relModel;
 			}
+		}
+		if (!empty($paginate['images'])) {
+			$containedForIndex[] = 'BrwImage';
 		}
 		$containedModels = $this->relatedModelsForView($Model);
 		foreach ($containedModels as $containedModel => $fields) {
