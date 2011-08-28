@@ -517,9 +517,6 @@ class Content extends BrownieAppModel{
 		$ret = array();
 		foreach ($containedModels as $containedModel) {
 			$ret[$containedModel] = array('fields' => array('id', $Model->{$containedModel}->displayField));
-			if (!empty($Model->{$containedModel}->order)) {
-				$ret[$containedModel]['order'] = $Model->{$containedModel}->order;
-			}
 		}
 		if ($Model->brwConfig['images']) {
 			$ret['BrwImage'] = array('fields' => '*', 'order' => 'BrwImage.id desc');
@@ -602,12 +599,16 @@ class Content extends BrownieAppModel{
 		foreach ($Model->_schema as $field => $value) {
 			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
-			if (in_array($value['type'], array('datetime', 'date')) and !$forData) {
+			$isRange = (!$forData and (
+				in_array($value['type'], array('datetime', 'date', 'float'))
+				or ($value['type'] == 'integer' and !$this->isForeignKey($Model, $field))
+			));
+			if ($isRange) {
 				if (array_key_exists($keyNamed . '_from', $named)) {
-					$filter[$keyNamed. ' >= '] = $named[$keyNamed . '_from'];
+					$filter[$keyNamed . ' >= '] = $named[$keyNamed . '_from'];
 				}
 				if (array_key_exists($keyNamed . '_to', $named)) {
-					$filter[$keyNamed. ' <= '] = $named[$keyNamed . '_to'];
+					$filter[$keyNamed . ' <= '] = $named[$keyNamed . '_to'];
 				}
 			} else {
 				if (array_key_exists($keyNamed, $named)) {

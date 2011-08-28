@@ -22,17 +22,20 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 		$isAvanced = true;
 	}
 
-	if (in_array($fieldType, array('datetime', 'date'))) {
-		$params += array(
-			'type' => $fieldType,
-			'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
-			'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
-			'dateFormat' => $brwConfig['fields']['date_ranges'][$field]['dateFormat'],
-			'monthNames' => $brwConfig['fields']['date_ranges'][$field]['monthNames'],
-			'timeFormat' => '24',
-			'empty' => '-',
-		);
-
+	if (in_array($fieldType, array('datetime', 'date')) or $schema[$field]['class'] == 'number') {
+		if ($schema[$field]['class'] == 'number') {
+			$params += array('class' => 'number');
+		} else {
+			$params += array(
+				'type' => $fieldType,
+				'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
+				'maxYear' => $brwConfig['fields']['date_ranges'][$field]['maxYear'],
+				'dateFormat' => $brwConfig['fields']['date_ranges'][$field]['dateFormat'],
+				'monthNames' => $brwConfig['fields']['date_ranges'][$field]['monthNames'],
+				'timeFormat' => '24',
+				'empty' => '-',
+			);
+		}
 		echo $before . $form->input(
 			$model . '.' . $field . '_from',
 			$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'from', true))

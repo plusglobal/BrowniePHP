@@ -1405,3 +1405,6 @@ div.filter-checkbox div.checkbox:hover{
 	font-size: 12px;
 }
 
+#content form.filter input.number{
+	width: 70px;
+}

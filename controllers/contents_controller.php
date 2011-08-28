@@ -592,6 +592,13 @@ class ContentsController extends BrownieAppController {
 						}
 					}
 				}
+			} elseif (
+				$type == 'float' or
+				($type == 'integer' and !$this->Content->isForeignKey($this->Model, $field))
+			) {
+				foreach (array('_from', '_to') as $key) {
+					$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
+				}
 			} elseif (!empty($this->data[$model][$field])) {
 				if (is_array($this->data[$model][$field])) {
 					$url[$model . '.' . $field] = join('.', $this->data[$model][$field]);
@@ -758,30 +765,23 @@ class ContentsController extends BrownieAppController {
 		$model = $Model->alias;
 		foreach ($filterFields as $field => $multiple) {
 			$type = $this->Model->_schema[$field]['type'];
-			switch ($type) {
-				case 'date': case 'datetime':
-					foreach (array('_from', '_to') as $key) {
-						if (!empty($this->params['named'][$model . '.' . $field . $key])) {
-							$this->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
-						} else {
-							/*
-							to-do: make configurable the default ranges
-							$this->data[$model][$field . $key] = date('Y-m-d');
-							if ($type == 'datetime') {
-								$this->data[$model][$field . $key] .= ' ' . (($key == '_from')? '00:00:00': '23:59:59');
-							}*/
-						}
+			$isRange = (in_array($type, array('date', 'datetime', 'float')) or (
+				in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field)
+			));
+			if ($isRange) {
+				foreach (array('_from', '_to') as $key) {
+					if (isset($this->params['named'][$model . '.' . $field . $key])) {
+						$this->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
 					}
-				break;
-				case 'integer': case 'boolean': case 'string':
-					if (!empty($this->params['named'][$model . '.' . $field])) {
-						$fieldData = $this->params['named'][$model . '.' . $field];
-						if ($type  == 'integer' and strstr($fieldData, '.')) {
-							$fieldData = explode('.', $fieldData);
-						}
-						$this->data[$model][$field] = $fieldData;
+				}
+			} elseif ($type == 'integer' or $type == 'boolean' or $type == 'string') {
+				if (!empty($this->params['named'][$model . '.' . $field])) {
+					$fieldData = $this->params['named'][$model . '.' . $field];
+					if ($type  == 'integer' and strstr($fieldData, '.')) {
+						$fieldData = explode('.', $fieldData);
 					}
-				break;
+					$this->data[$model][$field] = $fieldData;
+				}
 			}
 		}
 
