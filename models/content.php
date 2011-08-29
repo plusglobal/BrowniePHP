@@ -510,14 +510,7 @@ class Content extends BrownieAppModel{
 
 
 	function relatedModelsForView($Model) {
-		$containedModels = array_merge(
-			array_keys($Model->hasAndBelongsToMany),
-			array_keys($Model->belongsTo)
-		);
-		$ret = array();
-		foreach ($containedModels as $containedModel) {
-			$ret[$containedModel] = array('fields' => array('id', $Model->{$containedModel}->displayField));
-		}
+		$ret = array_keys(array_merge($Model->hasAndBelongsToMany, $Model->belongsTo));
 		if ($Model->brwConfig['images']) {
 			$ret['BrwImage'] = array('fields' => '*', 'order' => 'BrwImage.id desc');
 		}
@@ -539,10 +532,16 @@ class Content extends BrownieAppModel{
 		if (!empty($paginate['images'])) {
 			$containedForIndex[] = 'BrwImage';
 		}
-		$containedModels = $this->relatedModelsForView($Model);
+		$containedModels = Set::normalize($this->relatedModelsForView($Model));
 		foreach ($containedModels as $containedModel => $fields) {
 			if (!in_array($containedModel, $containedForIndex)) {
 				unset($containedModels[$containedModel]);
+			} else {
+				if (in_array($containedModel, array('BrwImage', 'BrwFile'))) {
+					$containedModels[$containedModel]['fields'] = '*';
+				} else {
+					$containedModels[$containedModel]['fields'] = array('id', $Model->{$containedModel}->displayField);
+				}
 			}
 		}
 		return $containedModels;

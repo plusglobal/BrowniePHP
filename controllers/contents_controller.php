@@ -72,10 +72,11 @@ class ContentsController extends BrownieAppController {
 
 	function view($model, $id) {
 		$this->Model->Behaviors->attach('Containable');
-		$record = $this->Model->find('all', array(
+		$params = array(
 			'conditions' => array($this->Model->name . '.id' => $id),
-			'contain' => $this->Content->relatedModelsForView($this->Model)
-		));
+			'contain' => $this->Content->relatedModelsForView($this->Model),
+		);
+		$record = $this->Model->find('all', $params);
 
 		if (empty($record)) {
 			$this->cakeError('error404');
@@ -640,9 +641,9 @@ class ContentsController extends BrownieAppController {
 				} elseif (in_array($key, $fieldsConfig['code'])) {
 					$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
 				} elseif (isset($fK[$key])) {
-					$retData[$Model->name][$key]
-						= $data[$fK[$key]['alias']][$Model->{$fK[$key]['className']}->displayField];
-					if ($this->_brwCheckPermissions($Model->{$fK[$key]['className']}->name, 'view', $data[$fK[$key]['alias']]['id'])) {
+					$RelModel = ($fK[$key]['className'] == $Model->name) ? $Model : $Model->{$fK[$key]['className']};
+					$retData[$Model->name][$key] = $data[$fK[$key]['alias']][$RelModel->displayField];
+					if ($this->_brwCheckPermissions($RelModel->name, 'view', $data[$fK[$key]['alias']]['id'])) {
 						$relatedURL = Router::url(array(
 							'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
 							$fK[$key]['className'], $data[$fK[$key]['alias']]['id']
