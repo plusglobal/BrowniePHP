@@ -18,6 +18,8 @@ $defaultSettings = array(
 	'customHome' => false,
 	'userModels' => array('BrwUser'),
 	'uploadsPath' => './uploads',
+	'dateFormat' => 'Y-m-d',
+	'datetimeFormat' => 'Y-m-d h:i:s',
 );
 if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 	$defaultSettings['css'][] = 'brownie';

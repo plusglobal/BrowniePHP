@@ -686,9 +686,7 @@ class ContentsController extends BrownieAppController {
 		if (empty($date) or $date == '0000-00-00') {
 			return __d('brownie', 'Date not set', true);
 		} else {
-			App::Import('Helper', 'Time');
-			$time = new TimeHelper();
-			return $time->format('d/m/Y', $date, __d('brownie', 'Invalid date', true));
+			return date(Configure::read('brwSettings.dateFormat'), strtotime($date));
 		}
 	}
 
@@ -697,9 +695,7 @@ class ContentsController extends BrownieAppController {
 		if (empty($datetime) or $datetime == '0000-00-00 00:00:00') {
 			return __d('brownie', 'Datetime not set', true);
 		} else {
-			App::Import('Helper', 'Time');
-			$time = new TimeHelper();
-			return $time->format('d/m/Y H:i:s', $datetime, __d('brownie', 'Invalid datetime', true));
+			return date(Configure::read('brwSettings.datetimeFormat'), strtotime($datetime));
 		}
 	}
 
