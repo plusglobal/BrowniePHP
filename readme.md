@@ -23,21 +23,21 @@ BrowniePHP is a plugin for the CakePHP framework, therefore, you have to know ho
 
 ## How do I use it?
 
-Follow the [setup instructions](http://codaset.com/plusglobal/browniephp/wiki/Setup)
+Follow the [setup instructions](https://github.com/plusglobal/BrowniePHP/wiki/Setup)
 
 ## Where can I find help?
 
-The [documentation](http://codaset.com/plusglobal/browniephp/wiki/home) is under development and unfortunately we cannot predict when it is going to be completed. In the meantime, you can [grab the demo app](http://codaset.com/plusglobal/browniephp-demo-app) that will give you a pretty good idea of how to use it.
+The [documentation](https://github.com/plusglobal/BrowniePHP/wiki) is under development and unfortunately we cannot predict when it is going to be completed. In the meantime, you can [grab the demo app](https://github.com/plusglobal/BrowniePHP-Demo-App) that will give you a pretty good idea of how to use it.
 
 You can ask a question at [twitter](http://twitter.com/#!/search?q=%23BrowniePHP), [stackoverflow](http://stackoverflow.com/questions/tagged/browniephp) and [CakePHP Questions](http://ask.cakephp.org/questions/tagged/brownie). Be sure to tag your question with 'browniephp' so we can find it. We will try to answer you as soon as possible.
 
 ## How can I contribute to BrowniePHP?
 
-Same as any open source project: you can [open a ticket](http://codaset.com/plusglobal/browniephp/tickets) or fork the project, change the code and then make a pull request.
+Same as any open source project: you can [open a ticket](https://github.com/plusglobal/BrowniePHP/issues) or fork the project, change the code and then make a pull request.
 
 ## Requirements
 
-Check out [the Requirements page](http://codaset.com/plusglobal/browniephp/wiki/Requirements)
+Check out [the Requirements page](https://github.com/plusglobal/BrowniePHP/wiki/Requirements)
 
 ## License
 
