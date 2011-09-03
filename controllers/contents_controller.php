@@ -641,7 +641,7 @@ class ContentsController extends BrownieAppController {
 				} elseif (in_array($key, $fieldsConfig['code'])) {
 					$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
 				} elseif (isset($fK[$key])) {
-					$RelModel = ($fK[$key]['className'] == $Model->name) ? $Model : $Model->{$fK[$key]['className']};
+					$RelModel = ($fK[$key]['className'] == $Model->name) ? $Model : $Model->{$fK[$key]['alias']};
 					$retData[$Model->name][$key] = $data[$fK[$key]['alias']][$RelModel->displayField];
 					if ($this->_brwCheckPermissions($RelModel->name, 'view', $data[$fK[$key]['alias']]['id'])) {
 						$relatedURL = Router::url(array(
