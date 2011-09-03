@@ -553,13 +553,19 @@ th a:hover{
 	padding: 0;
 }
 
-#content form#deleteMultiple div.submit input{
-	font-size: 11px;
-	border: 0;
-	background: url(ico/16x16/delete.png) left center no-repeat transparent;
-	padding: 3px 3px 3px 19px;
+#content form#deleteMultiple div.submit button{
 	margin: 0;
-	display: inline;
+	padding: 0;
+}
+
+#content form#deleteMultiple div.submit button span{ 
+	font-size: 11px;
+	background-image: url(ico/16x16/delete.png);
+	background-position: left center;
+	background-repeat:	no-repeat;
+	padding: 2px 4px 2px 19px;
+	display: block;
+	cursor: default;
 }
 
 #deleteCheckAll{

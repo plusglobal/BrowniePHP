@@ -64,9 +64,11 @@ if ($records) {
 			'id' => 'deleteMultiple',
 			'url' => array('controller' => 'contents', 'action' => 'delete_multiple', $model)
 		));
+		$deleteButton = '
+		<div class="submit"><button><span>' . __d('brownie', 'Delete selected', true) . '</span></button></div>
+		';
 		if ($controlsOnTop) {
-			echo '<div class="submit"><input type="submit" value="' . __d('brownie', 'Delete selected', true) . '" /></div>
-			';
+			echo $deleteButton;
 		}
 	}
 
@@ -164,7 +166,7 @@ if ($records) {
 	endforeach;
 	echo '</table>';
 	if ($brwConfig['actions']['delete']) {
-		echo '<div class="submit"><input type="submit" value="' . __d('brownie', 'Delete selected', true) . '" /></div>';
+		echo $deleteButton;
 		echo $form->end();
 	}
 } else {
