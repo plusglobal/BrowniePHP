@@ -265,11 +265,9 @@ class PanelBehavior extends ModelBehavior {
 						$value['name_category'] = $key;
 					}
 					$Model->brwConfig[$uploadType][$key] = Set::merge($brwConfigDefaultUpload, $value);
-					if (!is_dir(realpath($Model->brwConfig[$uploadType][$key]['path']))) {
+					$Model->brwConfig[$uploadType][$key]['realpath'] = realpath($Model->brwConfig[$uploadType][$key]['path']);
+					if (!is_dir($Model->brwConfig[$uploadType][$key]['realpath'])) {
 						mkdir($Model->brwConfig[$uploadType][$key]['path'], 0777, true);
-					}
-					if (!empty($Model->brwConfig[$uploadType][$key]['path'])) {
-						$Model->brwConfig[$uploadType][$key]['path'] = realpath($Model->brwConfig[$uploadType][$key]['path']);
 					}
 					if ($uploadModel == 'BrwImage') {
 						foreach ($Model->brwConfig['images'][$key]['sizes'] as $i => $sizes) {
@@ -392,6 +390,8 @@ class PanelBehavior extends ModelBehavior {
 				continue;
 			}
 			$file = $Model->brwConfig[$fileType][$value['category_code']]['path']
+				. '/' . $value['model'] . '/' . $value['record_id'] . '/' . $value['name'];
+			$realPathFile = $Model->brwConfig[$fileType][$value['category_code']]['realpath']
 				. DS . $value['model'] . DS . $value['record_id'] . DS . $value['name'];
 			$forceDownloadUrl = Router::url(array(
 				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
@@ -404,9 +404,9 @@ class PanelBehavior extends ModelBehavior {
 			if (empty($value['title'])) {
 				$value['title'] = $value['name'];
 			}
-			$isPublic = (substr($file, 0, strlen(WWW_ROOT)) === WWW_ROOT);
+			$isPublic = (substr($realPathFile, 0, strlen(WWW_ROOT)) === WWW_ROOT);
 			if ($isPublic) {
-				$url = Router::url('/' . str_replace(DS, '/', substr($file, strlen(WWW_ROOT))));
+				$url = Router::url('/' . str_replace(DS, '/', substr($realPathFile, strlen(WWW_ROOT))));
 			} else {
 				$url = Router::url(array(
 					'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'view',
@@ -417,6 +417,7 @@ class PanelBehavior extends ModelBehavior {
 				'public' => $isPublic,
 				'url' => $url,
 				'path' => $file,
+				'realpath' => $realPathFile,
 				'description' => $value['description'],
 				'title' => $value['title'],
 				'force_download' => $forceDownloadUrl,
@@ -430,7 +431,7 @@ class PanelBehavior extends ModelBehavior {
 				$paths['sizes'] = array();
 				$sizes = $Model->brwConfig['images'][$value['category_code']]['sizes'];
 				foreach($sizes as $size) {
-					$cachedPath = $Model->brwConfig[$fileType][$value['category_code']]['path']
+					$cachedPath = $Model->brwConfig[$fileType][$value['category_code']]['realpath']
 						. DS . 'thumbs' . DS . $value['model'] . DS . $size . DS . $value['record_id'] . DS . $value['name'];
 					if (is_file($cachedPath) and $isPublic) {
 						$paths['sizes'][$size] = Router::url(str_replace(DS, '/', substr($cachedPath, strlen(WWW_ROOT) - 1)));

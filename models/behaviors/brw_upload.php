@@ -182,7 +182,8 @@ class BrwUploadBehavior extends ModelBehavior {
 
 
 	function _cleanFileName($filename) {
-		$parts = explode('.', $filename);
+		$info = pathinfo($filename);
+		$parts = explode('.', $info['basename']);
 		foreach ($parts as $key => $part) {
 			$parts[$key] = Inflector::slug($part, '-');
 		}
