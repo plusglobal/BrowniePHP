@@ -165,5 +165,10 @@ endforeach;
 <?php echo $form->input('after_save', $afterSaveOptionsParams) ?>
 </fieldset>
 
-<?php echo $form->end(__d('brownie', 'Save', true)); ?>
+<div class="submit">
+	<input type="submit" value="<?php echo __d('brownie', 'Save', true) ?>" />
+	<a href="<?php echo Router::url(array('controller' => 'brownie', 'action' => 'index')) ?>" class="cancel">Cancel</a>
+</div>
+
+<?php echo $form->end(); ?>
 </div>

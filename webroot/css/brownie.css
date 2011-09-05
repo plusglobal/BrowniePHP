@@ -971,9 +971,16 @@ div.checkbox label{
 	vertical-align: bottom;
 }
 
- #footer{
+#footer{
 	clear: both;
 	height: 40px;
+}
+
+div.submit a.cancel{
+	line-height: 25px;
+	margin-left: 15px;
+	padding-left: 15px;
+	border-left: 1px solid #ccc;
 }
 
 /* uploads */

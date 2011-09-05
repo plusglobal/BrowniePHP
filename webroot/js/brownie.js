@@ -9,6 +9,7 @@ $(document).ready(function(){
 	$('select').jDoubleSelect();
 	filterCheckbox();
 	showAdvancedFilters();
+	$('.submit .cancel').click(function(){ history.go(-1); return false;})
 });
 
 function flashClick() {
