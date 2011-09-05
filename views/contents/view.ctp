@@ -48,38 +48,40 @@
 	$i=0;
 	foreach ($record[$model] as $field_name => $field_value) {
 		if (!empty($schema[$field_name]) and !in_array($field_name, $brwConfig['fields']['no_view'])) {
-				echo '
-				<tr>
-					<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>';
-					if (in_array($field_name, $i18nFields)) {
-						echo '
-						<td class="multiLang">
-						' . $this->element('i18n_view_field', array('data' => $record['BrwI18n_' . $field_name])) . '
-						</td>';
-					} else {
-						echo '
-						<td class="fcktxt">
-						' . (($field_value === null or $field_value === '') ? '&nbsp;' : $field_value ) . '
-						</td>';
-					}
+			echo '
+			<tr>
+				<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>';
+				if (in_array($field_name, $i18nFields)) {
 					echo '
-				</tr>';
+					<td class="multiLang">
+					' . $this->element('i18n_view_field', array('data' => $record['BrwI18n_' . $field_name])) . '
+					</td>';
+				} else {
+					echo '
+					<td class="fcktxt">
+					' . (($field_value === null or $field_value === '') ? '&nbsp;' : $field_value ) . '
+					</td>';
+				}
+				echo '
+			</tr>';
 		}
 	}
 	?>
-	<?php foreach ($record['HABTM'] as $rel) : ?>
-	<tr>
-		<td class="label"><?php echo $rel['name'] ?></td>
-		<td class="habtm">
-			<ul>
-			<?php foreach ($rel['data'] as $id => $name) : ?>
-				<li><?php echo $html->link($name, array('plugin' => 'brownie',
-				'controller' => 'contents', 'action' => 'view', $rel['model'], $id)) ?></li>
-			<?php endforeach ?>
-			</ul>
-		</td>
-	</tr>
-	<?php endforeach ?>
+	<?php foreach ($record['HABTM'] as $rel): ?>
+		<?php if (!in_array($rel['model'], $brwConfig['hide_related']['hasAndBelongsToMany'])): ?>
+		<tr>
+			<td class="label"><?php echo $rel['name'] ?></td>
+			<td class="habtm">
+				<ul>
+				<?php foreach ($rel['data'] as $id => $name) : ?>
+					<li><?php echo $html->link($name, array('plugin' => 'brownie',
+					'controller' => 'contents', 'action' => 'view', $rel['model'], $id)) ?></li>
+				<?php endforeach ?>
+				</ul>
+			</td>
+		</tr>
+		<?php endif; ?>
+	<?php endforeach; ?>
 	</table>
 </div>
 

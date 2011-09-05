@@ -59,6 +59,11 @@ class PanelBehavior extends ModelBehavior {
 		'parent' => null,
 		'show_children' => true,
 		'hide_children' => array('BrwImage', 'BrwFile'),
+		'hide_related' => array(
+			'hasMany' => array('BrwImage', 'BrwFile'),
+			'hasAndBelongsToMany' => array(),
+			'hasOne' => array(),
+		),
 		'sortable' => array('field' => 'sort', 'sort' => 'ASC'),
 		'export' => array('type' => 'csv', 'replace_foreign_keys' => true),
 	);
@@ -86,10 +91,18 @@ class PanelBehavior extends ModelBehavior {
 					$id = $Model->data[$Model->alias][$field];
 					$fieldsNoValidate = array_diff($rules['hide'], $rules['show_conditions'][$id]);
 					foreach ($fieldsNoValidate as $fieldNoValidate) {
-						if (isset($Model->validate[$fieldNoValidate])) {
-							unset($Model->validate[$fieldNoValidate]);
+						if (is_array($fieldNoValidate)) {
+							foreach ($fieldNoValidate as $relModel) {
+								if (isset($Model->data[$relModel][$relModel])) {
+									$Model->data[$relModel][$relModel] = array();
+								}
+							}
+						} else {
+							if (isset($Model->validate[$fieldNoValidate])) {
+								unset($Model->validate[$fieldNoValidate]);
+							}
+							$Model->data[$Model->alias][$fieldNoValidate] = null;
 						}
-						$Model->data[$Model->alias][$fieldNoValidate] = null;
 					}
 				}
 			}

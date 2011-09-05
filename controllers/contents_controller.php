@@ -821,7 +821,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function _hideConditionalFields($Model, $record) {
-		$fieldsToHide = array();
+		$habtmToHide = $fieldsToHide = array();
 		foreach ($Model->brwConfig['fields']['conditional'] as $field => $config) {
 			if (isset($record[$Model->alias][$field])) {
 				$toHide = array_diff(
@@ -829,9 +829,16 @@ class ContentsController extends BrownieAppController {
 					$config['show_conditions'][$record[$Model->alias][$field]]
 				);
 				$fieldsToHide = array_merge($fieldsToHide, $toHide);
+				if (!empty($fieldsToHide['HABTM'])) {
+					$habtmToHide = array_merge($habtmToHide, $fieldsToHide['HABTM']);
+					unset($fieldsToHide['HABTM']);
+				}
 			}
 		}
-		$Model->brwConfig['fields']['no_view'] = array_merge($Model->brwConfig['fields']['hide'], $fieldsToHide);
+		$Model->brwConfig['fields']['no_view']
+			= array_merge($Model->brwConfig['fields']['hide'], $fieldsToHide);
+		$Model->brwConfig['hide_related']['hasAndBelongsToMany']
+			= array_merge($Model->brwConfig['hide_related']['hasAndBelongsToMany'], $habtmToHide);
 	}
 
 }
