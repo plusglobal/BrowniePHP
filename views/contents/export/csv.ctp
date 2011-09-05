@@ -21,7 +21,7 @@ foreach ($records as $record) {
 		} else {
 			$value = $record[$model][$field];
 		}
-		echo $value . ',';
+		echo utf8_decode($value) . ',';
 	}
 	reset($brwConfig['fields']['export']);
 	echo "\n";

@@ -526,10 +526,12 @@ class ContentsController extends BrownieAppController {
 			$this->helpers[] = 'Xml';
 		}
 		if ($type == 'xls') {
-			header('Content-type: application/x-msdownload; charset=utf-8');
+			//header('Content-type: application/x-msdownload; charset=utf-8');
+			header('Content-type: application/x-msdownload');
 			$type = 'xls.csv';
 		} else {
-			header('Content-type: application/' . $type . '; charset=utf-8');
+			//header('Content-type: application/' . $type . '; charset=utf-8');
+			header('Content-type: application/' . $type);
 		}
 		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
 		header("Pragma: no-cache");
