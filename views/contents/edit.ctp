@@ -30,13 +30,12 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 		echo '</div>';
 	}*/
 
-
 	foreach ($fields as $key => $value) {
 		$params = array();
 		if (isset($related['belongsTo'][$key])) {
 			$params = array('type' => 'select', 'options' => $related['belongsTo'][$key], 'escape' => false);
 			if ($schema[$key]['null']) {
-				$params['empty'] = '- ' . __d('brownie', 'None', true);
+				$params['empty'] = '-';
 			}
 		} elseif (isset($related['tree'][$key])) {
 			if (!empty($related['tree'][$key])) {
