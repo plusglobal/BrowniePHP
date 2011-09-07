@@ -162,15 +162,11 @@ class ContentsController extends BrownieAppController {
 		} else {
 			$action = 'add';
 		}
-
 		if (!$this->_brwCheckPermissions($model, $action)) {
 			$this->cakeError('error404');
 		}
-
 		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
-
 		if (!empty($this->data)) {
-
 			if (!empty($this->data[$this->Model->alias]['id']) and $this->data[$this->Model->alias]['id'] != $id) {
 				$this->cakeError('error404');
 			}
@@ -187,43 +183,7 @@ class ContentsController extends BrownieAppController {
 				$this->Session->setFlash($msg, 'flash_success');
 
 				if (!empty($this->data['Content']['after_save'])) {
-					switch ($this->data['Content']['after_save']) {
-						case 'referer':
-							if ($this->data['Content']['referer']) {
-								$this->redirect($this->data['Content']['referer']);
-							} else {
-								$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
-							}
-						break;
-						case 'edit':
-							$this->redirect(array('action' => 'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
-						break;
-						case 'add':
-							$this->redirect(array('action' => 'edit', $this->Model->name, 'after_save' => 'add'));
-						break;
-						case 'index':
-							$this->redirect(array('action' => 'index', $this->Model->name));
-						break;
-						case 'parent':
-							if ($parent = $this->Model->brwConfig['parent']) {
-								$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
-								if (!empty($this->data[$this->Model->alias][$foreignKey])) {
-									$idRedir = $this->data[$this->Model->alias][$foreignKey];
-								} else {
-									$record = $this->Model->findById($this->Model->id);
-									$idRedir = $record[$this->Model->alias][$foreignKey];
-								}
-								$this->redirect(array('action' => 'view', $parent, $idRedir));
-							}
-							$this->redirect(array('action' => 'index', $this->Model->name));
-						break;
-						case 'view':
-							$this->redirect(array('action' => 'view', $this->Model->name, $this->Model->id));
-						break;
-						case 'home':
-							$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
-						break;
-					}
+					$this->_afterSaveRedirect();
 				}
 			} else {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
@@ -267,7 +227,6 @@ class ContentsController extends BrownieAppController {
 		if (empty($this->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
-				//$this->Model->Behaviors->detach('Brownie.Panel');
 				if ($this->Model->brwConfig['images']) {
 					$contain[] = 'BrwImage';
 				}
@@ -752,7 +711,7 @@ class ContentsController extends BrownieAppController {
 				sprintf(__d('brownie', 'Go to the %s [male]', true), $parentModel->brwConfig['names']['singular']):
 				sprintf(__d('brownie', 'Go to the %s [female]', true), $parentModel->brwConfig['names']['singular']);
 		}
-		if (!$data['Content']['referer']) {
+		if (!$data['Content']['referer'] or !empty($this->params['named']['after_save'])) {
 			unset($params['options']['referer']);
 		}
 		$this->set('afterSaveOptionsParams', $params);
@@ -856,6 +815,47 @@ class ContentsController extends BrownieAppController {
 			= array_merge($Model->brwConfig['fields']['hide'], $fieldsToHide);
 		$Model->brwConfig['hide_related']['hasAndBelongsToMany']
 			= array_merge($Model->brwConfig['hide_related']['hasAndBelongsToMany'], $habtmToHide);
+	}
+
+
+	function _afterSaveRedirect() {
+		switch ($this->data['Content']['after_save']) {
+			case 'referer':
+				if ($this->data['Content']['referer']) {
+					$this->redirect($this->data['Content']['referer']);
+				} else {
+					$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
+				}
+			break;
+			case 'edit':
+				$this->redirect(array('action' => 'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
+			break;
+			case 'add':
+				$this->redirect(array('action' => 'edit', $this->Model->name, 'after_save' => 'add'));
+			break;
+			case 'index':
+				$this->redirect(array('action' => 'index', $this->Model->name));
+			break;
+			case 'parent':
+				if ($parent = $this->Model->brwConfig['parent']) {
+					$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
+					if (!empty($this->data[$this->Model->alias][$foreignKey])) {
+						$idRedir = $this->data[$this->Model->alias][$foreignKey];
+					} else {
+						$record = $this->Model->findById($this->Model->id);
+						$idRedir = $record[$this->Model->alias][$foreignKey];
+					}
+					$this->redirect(array('action' => 'view', $parent, $idRedir));
+				}
+				$this->redirect(array('action' => 'index', $this->Model->name));
+			break;
+			case 'view':
+				$this->redirect(array('action' => 'view', $this->Model->name, $this->Model->id));
+			break;
+			case 'home':
+				$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
+			break;
+		}
 	}
 
 }

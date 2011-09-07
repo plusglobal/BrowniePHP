@@ -34,6 +34,7 @@ if (!empty($record[$model]['brw_actions']['delete'])) {
 	$record[$model]['brw_actions']['delete']['url']['after_delete'] = $after_delete;
 }
 
+
 if (!empty($record[$model]['brw_actions'])): ?>
 <ul class="actions">
 <?php foreach ($record[$model]['brw_actions'] as $action => $params): ?>

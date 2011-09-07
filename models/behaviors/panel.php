@@ -89,19 +89,21 @@ class PanelBehavior extends ModelBehavior {
 			foreach ($Model->brwConfig['fields']['conditional'] as $field => $rules) {
 				if (isset($Model->data[$Model->alias][$field])) {
 					$id = $Model->data[$Model->alias][$field];
-					$fieldsNoValidate = array_diff($rules['hide'], $rules['show_conditions'][$id]);
-					foreach ($fieldsNoValidate as $fieldNoValidate) {
-						if (is_array($fieldNoValidate)) {
-							foreach ($fieldNoValidate as $relModel) {
-								if (isset($Model->data[$relModel][$relModel])) {
-									$Model->data[$relModel][$relModel] = array();
+					if (!empty($rules['show_conditions'][$id])) {
+						$fieldsNoValidate = array_diff($rules['hide'], $rules['show_conditions'][$id]);
+						foreach ($fieldsNoValidate as $fieldNoValidate) {
+							if (is_array($fieldNoValidate)) {
+								foreach ($fieldNoValidate as $relModel) {
+									if (isset($Model->data[$relModel][$relModel])) {
+										$Model->data[$relModel][$relModel] = array();
+									}
 								}
+							} else {
+								if (isset($Model->validate[$fieldNoValidate])) {
+									unset($Model->validate[$fieldNoValidate]);
+								}
+								$Model->data[$Model->alias][$fieldNoValidate] = null;
 							}
-						} else {
-							if (isset($Model->validate[$fieldNoValidate])) {
-								unset($Model->validate[$fieldNoValidate]);
-							}
-							$Model->data[$Model->alias][$fieldNoValidate] = null;
 						}
 					}
 				}
