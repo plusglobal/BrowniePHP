@@ -1,8 +1,5 @@
-<?php
-if (!empty($brwConfig['fields']['conditional'])) {
-	echo $this->element('js_conditional_fields');
-}
-?><div class="form">
+<?php if (!empty($brwConfig['fields']['conditional'])) echo $this->element('js_conditional_fields'); ?>
+<div class="form">
 <?php
 $url = array('controller' => 'contents', 'action' => 'edit', $model);
 $adding = empty($this->data[$model]['id']);
@@ -11,102 +8,97 @@ if (!$adding) {
 }
 echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url));
 ?>
-	<fieldset>
- 		<legend>
-		<?php
-		if ($adding) {
-			$action = __d('brownie', 'Add :name_singular', true);
-		} else {
-			$action = __d('brownie', 'Edit :name_singular', true);
+<fieldset>
+	<legend>
+	<?php
+	$action = $adding ? __d('brownie', 'Add :name_singular', true) : __d('brownie', 'Edit :name_singular', true);
+	echo String::insert($action, array('name_singular' => $brwConfig['names']['singular']));
+	?>
+	</legend>
+	<?php
+	echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
+
+
+	/*if (!empty($langs3chars)) {
+		echo '<div id="enabledLangs" class="clearfix">
+		<label class="enabledLangs">' . __d('brownie', 'Enabled languages', true) . '</label>' ;
+		foreach ($langs3chars as $lang2 => $lang3) {
+			echo $form->input('enabled_' . $lang3, array(
+				'type' => 'checkbox', 'label' => $this->i18n->humanize($lang3)
+			));
 		}
-
-		echo String::insert($action, array('name_singular' => $brwConfig['names']['singular']));
-		?>
-		</legend>
-		<?php
-		echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
+		echo '</div>';
+	}*/
 
 
-		/*if (!empty($langs3chars)) {
-			echo '<div id="enabledLangs" class="clearfix">
-			<label class="enabledLangs">' . __d('brownie', 'Enabled languages', true) . '</label>' ;
-			foreach ($langs3chars as $lang2 => $lang3) {
-				echo $form->input('enabled_' . $lang3, array(
-					'type' => 'checkbox', 'label' => $this->i18n->humanize($lang3)
-				));
+	foreach ($fields as $key => $value) {
+		$params = array();
+		if (isset($related['belongsTo'][$key])) {
+			$params = array('type' => 'select', 'options' => $related['belongsTo'][$key], 'escape' => false);
+			if ($schema[$key]['null']) {
+				$params['empty'] = '- ' . __d('brownie', 'None', true);
 			}
-			echo '</div>';
-		}*/
-
-
-		foreach ($fields as $key => $value) {
-			$params = array();
-			if (isset($related['belongsTo'][$key])) {
-				$params = array('type' => 'select', 'options' => $related['belongsTo'][$key], 'escape' => false);
-				if ($schema[$key]['null']) {
-					$params['empty'] = '- ' . __d('brownie', 'None', true);
+		} elseif (isset($related['tree'][$key])) {
+			if (!empty($related['tree'][$key])) {
+				$params = array(
+					'type' => 'select',
+					'options' => $related['tree'][$key],
+					'empty' => __d('brownie', '(No parent)', true),
+				);
+				if (!empty($this->params['named'][$key])) {
+					$params['selected'] = $this->params['named'][$key];
 				}
-			} elseif (isset($related['tree'][$key])) {
-				if (!empty($related['tree'][$key])) {
-					$params = array(
-						'type' => 'select',
-						'options' => $related['tree'][$key],
-						'empty' => __d('brownie', '(No parent)', true),
-					);
-					if (!empty($this->params['named'][$key])) {
-						$params['selected'] = $this->params['named'][$key];
-					}
-				} else {
-					continue;
-				}
-			}
-			if (in_array($value['type'], array('datetime', 'date'))) {
-				$params['minYear'] = $brwConfig['fields']['date_ranges'][$key]['minYear'];
-				$params['maxYear'] = $brwConfig['fields']['date_ranges'][$key]['maxYear'];
-				$params['dateFormat'] = $brwConfig['fields']['date_ranges'][$key]['dateFormat'];
-				if ($value['null']) {
-					$params['empty'] = '-';
-				}
-			}
-
-			if (!empty($brwConfig['legends'][$key])) {
-				$params['after'] = $brwConfig['legends'][$key];
-			}
-
-			if (strstr($key, 'password')) {
-				$params['type'] = 'password';
-			}
-
-			$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
-			$params['label'] = __($brwConfig['fields']['names'][$key], true);
-			if (in_array($key, $fckFields)) {
-				$params['class'] = 'richEditor';
-			}
-			if (!in_array($key, $i18nFields)) {
-				echo $form->input($model . '.' . $key, $params);
 			} else {
-				echo $this->element('i18n_input', array('model' => $model, 'field' => $key, 'params' => $params));
+				continue;
+			}
+		}
+		if (in_array($value['type'], array('datetime', 'date'))) {
+			$params['minYear'] = $brwConfig['fields']['date_ranges'][$key]['minYear'];
+			$params['maxYear'] = $brwConfig['fields']['date_ranges'][$key]['maxYear'];
+			$params['dateFormat'] = $brwConfig['fields']['date_ranges'][$key]['dateFormat'];
+			if ($value['null']) {
+				$params['empty'] = '-';
 			}
 		}
 
-		if (!empty($related['hasAndBelongsToMany'])) {
-			foreach ($related['hasAndBelongsToMany'] as $key => $list) {
-				if (!empty($list)) {
-					$params = array('multiple' => 'checkbox', 'options' => $list);
-					if (count($list) > 5) {
-						$params['multiple'] = 'multiple';
-						$params['escape'] = false;
-						$params['size'] = 5;
-						$params['class'] = 'combo-select';
-						$javascript->link('/brownie/js/jquery.selso', false);
-						$javascript->link('/brownie/js/jquery.comboselect', false);
-					}
-					echo $form->input($key . '.' . $key, $params);
+		if (!empty($brwConfig['legends'][$key])) {
+			$params['after'] = $brwConfig['legends'][$key];
+		}
+
+		if (strstr($key, 'password')) {
+			$params['type'] = 'password';
+		}
+
+		$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
+		$params['label'] = __($brwConfig['fields']['names'][$key], true);
+		if (in_array($key, $fckFields)) {
+			$params['class'] = 'richEditor';
+		}
+		if (!in_array($key, $i18nFields)) {
+			echo $form->input($model . '.' . $key, $params);
+		} else {
+			echo $this->element('i18n_input', array('model' => $model, 'field' => $key, 'params' => $params));
+		}
+	}
+
+	if (!empty($related['hasAndBelongsToMany'])) {
+		foreach ($related['hasAndBelongsToMany'] as $key => $list) {
+			if (!empty($list)) {
+				$params = array('multiple' => 'checkbox', 'options' => $list);
+				if (count($list) > 5) {
+					$params['multiple'] = 'multiple';
+					$params['escape'] = false;
+					$params['size'] = 5;
+					$params['class'] = 'combo-select';
+					$javascript->link('/brownie/js/jquery.selso', false);
+					$javascript->link('/brownie/js/jquery.comboselect', false);
 				}
+				echo $form->input($key . '.' . $key, $params);
 			}
 		}
-		?>
-	</fieldset>
+	}
+	?>
+</fieldset>
 <?php
 $uploads = array('Image', 'File');
 $i=0;
@@ -164,7 +156,7 @@ endforeach;
 <fieldset>
 <?php echo $form->input('after_save', $afterSaveOptionsParams) ?>
 </fieldset>
-
+<?php echo $form->hidden('referer') ?>
 <div class="submit">
 	<input type="submit" value="<?php echo __d('brownie', 'Save', true) ?>" />
 	<a href="<?php echo Router::url(array('controller' => 'brownie', 'action' => 'index')) ?>" class="cancel">Cancel</a>

@@ -662,8 +662,8 @@ ul.actions li a:hover{
 }*/
 
 ul.actions a{
-	background: 4px center no-repeat;
-	padding-left: 26px;
+	background: 0 0 no-repeat;
+	padding-left: 20px;
 	padding-right: 10px;
 	color: #444;
 	font-weight: bold;
@@ -672,6 +672,10 @@ ul.actions a{
 
 li.view a{
 	background-image: url(ico/16x16/edit-find.png);
+}
+
+li.index a{
+	background-image: url(ico/16x16/list.png);
 }
 
 li.add a{

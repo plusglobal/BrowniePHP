@@ -37,6 +37,7 @@ class ContentsController extends BrownieAppController {
 		$this->Content->i18nInit($this->Model);
 	}
 
+
 	function beforeRender() {
 		$brwConfig = $this->Model->brwConfig;
 		$schema = $this->Content->schemaForView($this->Model);
@@ -166,13 +167,7 @@ class ContentsController extends BrownieAppController {
 			$this->cakeError('error404');
 		}
 
-
-		if ($id) {
-			$fields = $this->Content->fieldsEdit($this->Model);
-		} else {
-			$fields = $this->Content->fieldsAdd($this->Model);
-		}
-
+		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
 
 		if (!empty($this->data)) {
 
@@ -185,10 +180,6 @@ class ContentsController extends BrownieAppController {
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}
-			/*if (empty($this->data[$this->Model->alias]['id'])) {
-				$this->Model->create();
-				$this->Model->data = $this->data[$this->Model->alias];
-			}*/
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
 					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brwConfig['names']['singular']):
@@ -197,6 +188,13 @@ class ContentsController extends BrownieAppController {
 
 				if (!empty($this->data['Content']['after_save'])) {
 					switch ($this->data['Content']['after_save']) {
+						case 'referer':
+							if ($this->data['Content']['referer']) {
+								$this->redirect($this->data['Content']['referer']);
+							} else {
+								$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
+							}
+						break;
 						case 'edit':
 							$this->redirect(array('action' => 'edit', $this->Model->name, $this->Model->id, 'after_save' => 'edit'));
 						break;
@@ -287,6 +285,7 @@ class ContentsController extends BrownieAppController {
 					$this->_filterConditions($this->Model, true)
 				);
 			}
+			$this->data['Content']['referer'] = env('HTTP_REFERER') ? $this->referer() : null;
 		}
 
 		if (method_exists($this->Model, 'brwBeforeEdit') or !empty($this->Model->Behaviors->__methods['brwBeforeEdit'])) {
@@ -297,7 +296,7 @@ class ContentsController extends BrownieAppController {
 		$this->set('fields', $fields);
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
 		$this->_setI18nParams($this->Model);
-		$this->_setAfterSaveOptionsParams($this->Model);
+		$this->_setAfterSaveOptionsParams($this->Model, $this->data);
 	}
 
 
@@ -702,11 +701,25 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _setAfterSaveOptionsParams($Model) {
+	function _setAfterSaveOptionsParams($Model, $data) {
+
+		if (!empty($this->params['named']['after_save'])) {
+			$default = $this->params['named']['after_save'];
+		} elseif ($data['Content']['referer']) {
+			$default = 'referer';
+		} elseif ($Model->brwConfig['actions']['view']) {
+			$default = 'view';
+		} elseif ($Model->brwConfig['actions']['index']) {
+			$default = 'index';
+		} else {
+			$default = 'home';
+		}
+
 		$params = array(
 			'type' => 'select',
 			'label' => __d('brownie', 'After save', true),
 			'options' => array(
+				'referer' => __d('brownie', 'Back to where I was', true),
 				'view' => ($Model->brwConfig['names']['gender'] == 1) ?
 					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brwConfig['names']['singular']):
 					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brwConfig['names']['singular'])
@@ -725,7 +738,7 @@ class ContentsController extends BrownieAppController {
 				,
 				'home' => __d('brownie', 'Go home', true),
 			),
-			'default' => (empty($this->params['named']['after_save']))? 'view':$this->params['named']['after_save'],
+			'default' => $default,
 		);
 		foreach (array('add', 'view', 'index') as $action) {
 			if (!$Model->brwConfig['actions'][$action]) {
@@ -739,7 +752,9 @@ class ContentsController extends BrownieAppController {
 				sprintf(__d('brownie', 'Go to the %s [male]', true), $parentModel->brwConfig['names']['singular']):
 				sprintf(__d('brownie', 'Go to the %s [female]', true), $parentModel->brwConfig['names']['singular']);
 		}
-
+		if (!$data['Content']['referer']) {
+			unset($params['options']['referer']);
+		}
 		$this->set('afterSaveOptionsParams', $params);
 	}
 

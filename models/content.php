@@ -335,6 +335,7 @@ class Content extends BrownieAppModel{
 			'view' => __d('brownie', 'View', true),
 			'edit' => __d('brownie', 'Edit', true),
 			'delete' => __d('brownie', 'Delete', true),
+			'index' => __d('brownie', 'List all', true),
 		));
 		foreach ($actionsTitles as $action => $title) {
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
@@ -342,7 +343,7 @@ class Content extends BrownieAppModel{
 				$options = array('title' => $title);
 				if($action == 'add') {
 					$url['action'] = 'edit';
-				} else {
+				} elseif ($action != 'index') {
 					$url[] = $record[$Model->alias]['id'];
 				}
 				$actions[$action] = Set::merge($defaultAction, array(

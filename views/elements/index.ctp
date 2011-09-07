@@ -13,7 +13,10 @@
 					array('name_singular' => $brwConfig['names']['singular'])
 				),
 				array_merge(
-					array('action' => 'edit', $model, 'after_save' => ($this->params['action'] == 'view') ? 'parent':'index'),
+					array(
+						'action' => 'edit', $model,
+						'after_save' => ($this->params['action'] == 'view') ? 'parent': null
+					),
 					$filters
 				)
 			) . '</li>';
@@ -105,8 +108,10 @@ if ($records) {
 			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
 				echo '<th class="actions sortable">' . __d('brownie', 'Sort', true) . '</th>';
 			}
+
+			echo '<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
+
 			echo '
-				<th class="actions">' . __d('brownie', 'Actions', true) . '</th>
 			</tr>';
 		}
 

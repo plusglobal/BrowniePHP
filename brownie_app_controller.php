@@ -134,7 +134,8 @@ class BrownieAppController extends AppController {
 			'view' => false,
 			'edit' => false,
 			'delete' => false,
-			'import' => false
+			'import' => false,
+			'index' => false,
 		);
 		foreach ($ret as $action => $value) {
 			$ret[$action] = $this->_brwCheckPermissions($model, $action);

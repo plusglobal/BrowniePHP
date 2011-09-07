@@ -27,23 +27,28 @@
 
 	$limit = $brwConfig['paginate']['limit'];
 	$limits = '';
-	foreach (array($limit, $limit * 2, $limit * 5, $limit * 10) as $limit) {
-		if ($this->Paginator->params['paging'][$model]['count'] >= $limit) {
-			$params = array_merge(
-				array('controller' => $this->params['controller'], 'action' => $this->params['action'], 'plugin' => 'brownie'),
-				$this->params['pass'],
-				array_merge($this->params['named'], array('limit' => $limit))
-			);
-			if (!empty($params['page'])) {
-				unset($params['page']);
+	if ($this->Paginator->params['paging'][$model]['pageCount'] > 1) {
+		$limitations = array($limit, $limit * 2, $limit * 5, $limit * 10);
+		foreach ($limitations as $i => $limit) {
+			$prev = ($i == 0) ? 0 : $limitations[$i-1];
+			if ($this->Paginator->params['paging'][$model]['count'] >= $prev) {
+				$params = array_merge(
+					array('controller' => $this->params['controller'], 'action' => $this->params['action'], 'plugin' => 'brownie'),
+					$this->params['pass'],
+					array_merge($this->params['named'], array('limit' => $limit))
+				);
+				if (!empty($params['page'])) {
+					unset($params['page']);
+				}
+				$limitCompare = (!empty($this->params['named']['limit'])? $this->params['named']['limit']:$brwConfig['paginate']['limit']);
+				$limits .= '
+				<li' . (($limitCompare == $limit) ? ' class="current"' : '') . '>
+					<a href="' . Router::url($params) . '">' . $limit . '</a>
+				</li>';
 			}
-			$limitCompare = (!empty($this->params['named']['limit'])? $this->params['named']['limit']:$brwConfig['paginate']['limit']);
-			$limits .= '<li' . (($limitCompare == $limit)?' class="current"' : '') . '>
-				<a href="'.Router::url($params).'">'.$limit.'</a>
-			</li>';
 		}
 	}
-	if($limits) {
+	if ($limits) {
 		echo '
 		<div class="limiter">
 			<p>' . sprintf(__d('brownie', '%s per page', true), $brwConfig['names']['plural']) . ':</p>
