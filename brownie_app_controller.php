@@ -14,12 +14,8 @@ class BrownieAppController extends AppController {
 		$this->Auth = $this->MyAuth;
 	}
 
-
 	function beforeFilter() {
-		$this->_authSettings();
-		$this->_menuConfig();
 		$this->pageTitle = __d('brownie', 'Control panel', true);
-
 	    Configure::write('brwSettings.authModel', $this->Session->read('authModel'));
 	    Configure::write('authUser', $this->Session->read('Auth.BrwUser'));
 		parent::beforeFilter();
@@ -28,19 +24,6 @@ class BrownieAppController extends AppController {
 	function beforeRender() {
 		$this->_companyName();
 		parent::beforeRender();
-	}
-
-	function _authSettings() {
-		$this->Auth->userModel = 'BrwUser';
-		$this->Auth->fields = array('username'  => 'email', 'password'  => 'password');
-		$this->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
-		$this->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
-		$this->Auth->loginError = __d('brownie', 'Login failed. Invalid username or password.', true);
-		$this->Auth->authError = __d('brownie', 'Please login.', true);
-		Configure::write('Auth.BrwUser', $this->Session->read('Auth.BrwUser'));
-		$this->set('authUser', $this->Session->read('Auth.BrwUser'));
-		$this->set('BrwUser', $this->Session->read('Auth.BrwUser'));
-		self::$currentUser = $this->Session->read('Auth.BrwUser');
 	}
 
 
@@ -65,22 +48,6 @@ class BrownieAppController extends AppController {
 		}
 		return Security::hash($toHash);
 	}*/
-
-	function _menuConfig() {
-		if (!empty($this->brwMenu)) {
-			$menu = $this->brwMenu;
-		} else {
-			$menu = array();
-			$models = App::objects('model');
-			foreach($models as $model) {
-				$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
-				$menu[$button] = $model;
-			}
-			$menu = array(__d('brownie', 'Menu', true) => $menu);
-		}
-		$this->set('brwMenu', $menu);
-	}
-
 
 	function _companyName() {
 		if ($this->Session->check('BrwSite')) {

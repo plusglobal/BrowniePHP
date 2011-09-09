@@ -31,7 +31,7 @@ if ($companyName) {
 	<div id="container">
 		<div id="header">
 			<h1>
-			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index')) ?>
+			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
 			</h1>
 		</div>
 		<?php if (!empty($authUser)) { ?>
@@ -39,11 +39,11 @@ if ($companyName) {
 			<p id="welcome-user"><?php echo sprintf(__d('brownie', 'User: %s', true), $authUser['email']) ?></p>
 			<ul>
 				<li class="home"><?php echo $html->link(__d('brownie', 'Home', true),
-				array('controller' => 'brownie', 'action' => 'index')) ?></li>
+				array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 				<li class="users"><?php echo $html->link(__d('brownie', 'Users', true),
-				array('controller' => 'contents', 'action' => 'index', 'BrwUser')) ?></li>
+				array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, 'BrwUser')) ?></li>
 				<li class="logout"><?php echo $html->link(__d('brownie', 'Logout', true),
-				array('controller' => 'brownie', 'action' => 'logout')) ?></li>
+				array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 			</ul>
 		</div>
 		<div id="menu"><?php echo $this->element('menu') ?></div>

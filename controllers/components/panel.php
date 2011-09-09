@@ -46,6 +46,11 @@ class PanelComponent extends Object{
 
 		$this->controller = $Controller;
 
+		if (!empty($Controller->params['brw']) or $Controller->params['plugin'] == 'brownie') {
+			$this->_setForLayout();
+			$this->_menuConfig();
+		}
+
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.BrwUpload');
@@ -61,7 +66,9 @@ class PanelComponent extends Object{
 			if (!$Controller->Session->check('Auth.BrwUser')) {
 				$Controller->cakeError('error404');
 			}
-			$Controller->layout = 'ajax';
+			App::build(array('views' => ROOT . DS . 'plugins' . DS . 'brownie' . DS . 'views' . DS));
+			$Controller->helpers[] = 'javascript';
+			$Controller->layout = 'brownie_default';
 		}
 
 		if (Configure::read('Config.languages')) {
@@ -72,10 +79,48 @@ class PanelComponent extends Object{
 			}
 			Configure::write('Config.langs', $langs3chars);
 		}
+
 	}
 
 	function beforeRender() {
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
+	}
+
+	function _setForLayout() {
+		$this->_authSettings();
+	}
+
+
+	function _authSettings() {
+		//pr($this->controller->Session->read('Auth.BrwUser'));
+		$this->controller->Auth->userModel = 'BrwUser';
+		$this->controller->Auth->fields = array('username'  => 'email', 'password'  => 'password');
+		$this->controller->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
+		$this->controller->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
+		$this->controller->Auth->loginError = __d('brownie', 'Login failed. Invalid username or password.', true);
+		$this->controller->Auth->authError = __d('brownie', 'Please login.', true);
+		Configure::write('Auth.BrwUser', $this->controller->Session->read('Auth.BrwUser'));
+		$this->controller->set('authUser', $this->controller->Session->read('Auth.BrwUser'));
+		//$this->controller->set('authUser', 'k');
+		$this->controller->set('BrwUser', $this->controller->Session->read('Auth.BrwUser'));
+		$this->controller->currentUser = $this->controller->Session->read('Auth.BrwUser');
+		$this->controller->set('caca', true);
+	}
+
+
+	function _menuConfig() {
+		if (!empty($this->controller->brwMenu)) {
+			$menu = $this->controller->brwMenu;
+		} else {
+			$menu = array();
+			$models = App::objects('model');
+			foreach($models as $model) {
+				$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
+				$menu[$button] = $model;
+			}
+			$menu = array(__d('brownie', 'Menu', true) => $menu);
+		}
+		$this->controller->set('brwMenu', $menu);
 	}
 
 }
