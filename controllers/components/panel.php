@@ -110,7 +110,7 @@ class PanelComponent extends Object{
 		if ($this->controller->currentUser) {
 			$authModel = $this->controller->Session->read('authModel');
 			if ($authModel != 'BrwUser') {
-				$menu = $this->controller->brwMenuPerUserType[$authModel];
+				$menu = $this->controller->brwMenuPerAuthUser[$authModel];
 			} elseif (!empty($this->controller->brwMenu)) {
 				$menu = $this->controller->brwMenu;
 			} else {
