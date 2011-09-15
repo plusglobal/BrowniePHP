@@ -492,8 +492,9 @@ class ContentsController extends BrownieAppController {
 			header('Content-type: application/' . $type);
 		}
 		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
-		header("Pragma: no-cache");
-		header("Expires: 0");
+		header('Pragma: no-cache');
+		header('Pragma: public');
+		header('Expires: 0');
 		$this->set(array(
 			'records' => $this->Content->getForExport($this->Model, $this->params['named']),
 			'relatedBrwConfig' => $this->Content->getRelatedBrwConfig($this->Model),
