@@ -48,7 +48,6 @@ class PanelComponent extends Object{
 
 		if (!empty($Controller->params['brw']) or $Controller->params['plugin'] == 'brownie') {
 			$this->_setForLayout();
-			$this->_menuConfig();
 		}
 
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
@@ -88,6 +87,7 @@ class PanelComponent extends Object{
 
 	function _setForLayout() {
 		$this->_authSettings();
+		$this->_menuConfig();
 	}
 
 
@@ -107,18 +107,23 @@ class PanelComponent extends Object{
 
 
 	function _menuConfig() {
-		if (!empty($this->controller->brwMenu)) {
-			$menu = $this->controller->brwMenu;
-		} else {
-			$menu = array();
-			$models = App::objects('model');
-			foreach($models as $model) {
-				$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
-				$menu[$button] = $model;
+		if ($this->controller->currentUser) {
+			$authModel = $this->controller->Session->read('authModel');
+			if ($authModel != 'BrwUser') {
+				$menu = $this->controller->brwMenuPerUserType[$authModel];
+			} elseif (!empty($this->controller->brwMenu)) {
+				$menu = $this->controller->brwMenu;
+			} else {
+				$menu = array();
+				$models = App::objects('model');
+				foreach($models as $model) {
+					$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
+					$menu[$button] = $model;
+				}
+				$menu = array(__d('brownie', 'Menu', true) => $menu);
 			}
-			$menu = array(__d('brownie', 'Menu', true) => $menu);
+			$this->controller->set('brwMenu', $menu);
 		}
-		$this->controller->set('brwMenu', $menu);
 	}
 
 }
