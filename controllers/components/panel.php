@@ -104,7 +104,6 @@ class PanelComponent extends Object{
 		//$this->controller->set('authUser', 'k');
 		$this->controller->set('BrwUser', $this->controller->Session->read('Auth.BrwUser'));
 		$this->controller->currentUser = $this->controller->Session->read('Auth.BrwUser');
-		$this->controller->set('caca', true);
 	}
 
 
