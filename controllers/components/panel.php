@@ -100,8 +100,7 @@ class PanelComponent extends Object{
 		$this->controller->Auth->loginError = __d('brownie', 'Login failed. Invalid username or password.', true);
 		$this->controller->Auth->authError = __d('brownie', 'Please login.', true);
 		Configure::write('Auth.BrwUser', $this->controller->Session->read('Auth.BrwUser'));
-		$this->controller->set('authUser', $this->controller->Session->read('Auth.BrwUser'));
-		//$this->controller->set('authUser', 'k');
+		$this->controller->set('brwAuthUser', $this->controller->Session->read('Auth.BrwUser'));
 		$this->controller->set('BrwUser', $this->controller->Session->read('Auth.BrwUser'));
 		$this->controller->currentUser = $this->controller->Session->read('Auth.BrwUser');
 	}

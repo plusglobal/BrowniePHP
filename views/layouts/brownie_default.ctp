@@ -34,9 +34,9 @@ if ($companyName) {
 			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
 			</h1>
 		</div>
-		<?php if (!empty($authUser)) { ?>
+		<?php if (!empty($brwAuthUser)) { ?>
 		<div id="options-bar">
-			<p id="welcome-user"><?php echo sprintf(__d('brownie', 'User: %s', true), $authUser['email']) ?></p>
+			<p id="welcome-user"><?php echo sprintf(__d('brownie', 'User: %s', true), $brwAuthUser['email']) ?></p>
 			<ul>
 				<li class="home"><?php echo $html->link(__d('brownie', 'Home', true),
 				array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
