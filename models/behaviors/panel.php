@@ -638,7 +638,7 @@ class PanelBehavior extends ModelBehavior {
 				foreach (array('minYear', 'maxYear') as $yearType) {
 					if (empty($Model->brwConfig['fields']['date_ranges'][$field][$yearType])) {
 						$Model->brwConfig['fields']['date_ranges'][$field][$yearType] =
-							date('Y') + (($yearType == 'maxYear')? 100: -200);
+							date('Y') + (($yearType == 'maxYear')? 20: -150);
 					} else {
 						$min = $Model->brwConfig['fields']['date_ranges'][$field][$yearType];
 						if (!ctype_digit($min) or !strlen($min) == 4) {
