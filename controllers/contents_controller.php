@@ -17,6 +17,7 @@ class ContentsController extends BrownieAppController {
 			$model = $this->data['Content']['model'];
 		}
 		if (empty($model) or !$this->Content->modelExists($model)) {
+			pr('Model does not exists');
 			$this->cakeError('error404');
 		}
 
@@ -26,6 +27,7 @@ class ContentsController extends BrownieAppController {
 
 
 		if (!$this->_brwCheckPermissions($model, $this->params['action'])) {
+			pr('No permissions');
 			$this->cakeError('error404');
 		}
 
@@ -80,6 +82,7 @@ class ContentsController extends BrownieAppController {
 		$record = $this->Model->find('all', $params);
 
 		if (empty($record)) {
+			pr('Record does not exists');
 			$this->cakeError('error404');
 		}
 
@@ -156,6 +159,7 @@ class ContentsController extends BrownieAppController {
 	function edit($model, $id = null) {
 		if (!empty($id)) {
 			if (!$this->Model->read(array('id'), $id)) {
+				pr('Record does not exists');
 				$this->cakeError('error404');
 			}
 			$action = 'edit';
@@ -163,11 +167,13 @@ class ContentsController extends BrownieAppController {
 			$action = 'add';
 		}
 		if (!$this->_brwCheckPermissions($model, $action)) {
+			pr('No permissions');
 			$this->cakeError('error404');
 		}
 		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
 		if (!empty($this->data)) {
 			if (!empty($this->data[$this->Model->alias]['id']) and $this->data[$this->Model->alias]['id'] != $id) {
+				pr('Record does not exists');
 				$this->cakeError('error404');
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
@@ -262,6 +268,7 @@ class ContentsController extends BrownieAppController {
 	function delete($model, $id) {
 		$record = $this->Model->findById($id);
 		if (!$record) {
+			pr('Record does not exists');
 			$this->cakeError('error404');
 		}
 

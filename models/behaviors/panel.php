@@ -201,14 +201,14 @@ class PanelBehavior extends ModelBehavior {
 			$this->_exportFields($Model);
 		}
 		$authModel = Configure::read('brwSettings.authModel');
-		if ($authModel != 'BrwUser') {
+		if ($authModel and $authModel != 'BrwUser') {
 			if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
 				$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
 			}
 			if ($Model->brwConfigPerAuthUser[$authModel]['type'] == 'none') {
 				$Model->brwConfig['actions'] = array(
-					'add' => false, 'edit' => false, 'index' => false, 
-					'view' => false, 'export' => false, 'import' => false, 
+					'add' => false, 'edit' => false, 'index' => false,
+					'view' => false, 'export' => false, 'import' => false,
 				);
 			} else {
 				$Model->brwConfig = Set::merge($Model->brwConfig, $Model->brwConfigPerAuthUser[$authModel]['brwConfig']);
