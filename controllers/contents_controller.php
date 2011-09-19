@@ -177,8 +177,12 @@ class ContentsController extends BrownieAppController {
 				$this->cakeError('error404');
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
-			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model);
-			$fieldList = array_merge(array_keys($fields), array('name', 'model', 'category_code', 'description', 'record_id'));
+			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model, $this->Session);
+			$fieldList = array_merge(
+				array_keys($fields),
+				array('name', 'model', 'category_code', 'description', 'record_id'),
+				$this->data['Content']['fieldList']
+			);
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}

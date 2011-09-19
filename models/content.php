@@ -153,7 +153,8 @@ class Content extends BrownieAppModel{
 	}*/
 
 
-	function brownieBeforeSave($data, $Model) {
+	function brownieBeforeSave($data, $Model, $Session) {
+		$data['Content']['fieldList'] = array();
 		foreach ($Model->_schema as $field => $value) {
 			if (
 				$value['null']
@@ -170,7 +171,9 @@ class Content extends BrownieAppModel{
 		if ($Model->Behaviors->attached('Translate')) {
 			$data = $this->translateBeforeSave($data, $Model);
 		}
-		return $this->convertUploadsArray($data);
+		$data = $this->ownedBeforeSave($data, $Model, $Session->read('Auth.BrwUser.id'));
+		$data = $this->convertUploadsArray($data);
+		return $data;
 	}
 
 
@@ -202,6 +205,16 @@ class Content extends BrownieAppModel{
 		}
 		pr($data);
 		*/
+		return $data;
+	}
+
+
+	function ownedBeforeSave($data, $Model, $authUserId) {
+		$authModel = Configure::read('brwSettings.authModel');
+		if ($authModel) {
+			$data['Content']['fieldList'][] = $fk = $Model->belongsTo[$authModel]['foreignKey'];
+			$data[$Model->name][$fk] = $authUserId;
+		}
 		return $data;
 	}
 

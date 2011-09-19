@@ -33,6 +33,10 @@ if (!empty($record[$model]['brw_actions']['view'])) {
 if (!empty($record[$model]['brw_actions']['delete'])) {
 	$record[$model]['brw_actions']['delete']['url']['after_delete'] = $after_delete;
 }
+if (!empty($record[$model]['brw_actions']['add'])) {
+	if ($calledFrom == 'view')
+	$record[$model]['brw_actions']['add']['url']['after_save'] = 'view';
+}
 
 
 if (!empty($record[$model]['brw_actions'])): ?>

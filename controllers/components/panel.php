@@ -46,10 +46,6 @@ class PanelComponent extends Object{
 
 		$this->controller = $Controller;
 
-		if (!empty($Controller->params['brw']) or $Controller->params['plugin'] == 'brownie') {
-			$this->_setForLayout();
-		}
-
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.BrwUpload');
@@ -70,6 +66,10 @@ class PanelComponent extends Object{
 			$Controller->layout = 'brownie_default';
 		}
 
+		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
+			$this->_authSettings();
+		}
+
 		if (Configure::read('Config.languages')) {
 			$langs3chars = array();
 			$l10n = new L10n();
@@ -82,12 +82,10 @@ class PanelComponent extends Object{
 	}
 
 	function beforeRender() {
+		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
+			$this->_menuConfig();
+		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
-	}
-
-	function _setForLayout() {
-		$this->_authSettings();
-		$this->_menuConfig();
 	}
 
 

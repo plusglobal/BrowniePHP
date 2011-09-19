@@ -84,6 +84,7 @@ class PanelBehavior extends ModelBehavior {
 		$this->_attachUploads($Model);
 	}
 
+
 	function beforeValidate($Model) {
 		if ($Model->brwConfig['fields']['conditional']) {
 			foreach ($Model->brwConfig['fields']['conditional'] as $field => $rules) {
@@ -110,6 +111,7 @@ class PanelBehavior extends ModelBehavior {
 			}
 		}
 	}
+
 
 	function afterFind($Model, $results, $primary) {
 		if ($Model->name != 'BrwImage') {
@@ -177,6 +179,9 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function brwConfigInit($Model) {
+		if (!$Model->Behaviors->attached('Containable')) {
+			$Model->Behaviors->attach('Containable');
+		}
 		$defaults = $this->brwConfigDefault;
 		if (empty($Model->brwConfig)) {
 			$Model->brwConfig = array();
@@ -186,6 +191,7 @@ class PanelBehavior extends ModelBehavior {
 			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
 		}
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
+		$this->_configPerAuthUser($Model);
 		$this->_sortableConfig($Model);
 		$this->_paginateConfig($Model);
 		$this->_namesConfig($Model);
@@ -199,20 +205,6 @@ class PanelBehavior extends ModelBehavior {
 		$this->_setDefaultDateRanges($Model);
 		if ($Model->brwConfig['actions']['export']) {
 			$this->_exportFields($Model);
-		}
-		$authModel = Configure::read('brwSettings.authModel');
-		if ($authModel and $authModel != 'BrwUser') {
-			if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
-				$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
-			}
-			if ($Model->brwConfigPerAuthUser[$authModel]['type'] == 'none') {
-				$Model->brwConfig['actions'] = array(
-					'add' => false, 'edit' => false, 'index' => false,
-					'view' => false, 'export' => false, 'import' => false,
-				);
-			} else {
-				$Model->brwConfig = Set::merge($Model->brwConfig, $Model->brwConfigPerAuthUser[$authModel]['brwConfig']);
-			}
 		}
 	}
 
@@ -689,4 +681,31 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
+	function _configPerAuthUser($Model) {
+		$authModel = Configure::read('brwSettings.authModel');
+		if ($authModel and $authModel != 'BrwUser') {
+			if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
+				$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
+			}
+			$type = $Model->brwConfigPerAuthUser[$authModel]['type'];
+			if ($type == 'none') {
+				$Model->bwConfig['actions'] = array(
+					'add' => false, 'edit' => false, 'index' => false,
+					'view' => false, 'export' => false, 'import' => false,
+				);
+			} else {
+				$brwConfig = $Model->brwConfigPerAuthUser[$authModel]['brwConfig'];
+				if ($type == 'owned') {
+					if (empty($Model->belongsTo[$authModel])) {
+						pr('type = owned is valid only for models that belongsTo the auth model');
+					} else  {
+						$fk = $Model->belongsTo[$authModel]['foreignKey'];
+						$brwConfig['fields']['hide'][] = $fk;
+					}
+				}
+				$Model->brwConfig = Set::merge($Model->brwConfig, $brwConfig);
+			}
+		}
+
+	}
 }
