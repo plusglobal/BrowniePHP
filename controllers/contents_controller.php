@@ -25,8 +25,11 @@ class ContentsController extends BrownieAppController {
 		$this->Model->recursive = -1;
 		$this->Model->Behaviors->attach('Brownie.Panel');
 
-
-		if (!$this->_brwCheckPermissions($model, $this->params['action'])) {
+		$action = $this->params['action'];
+		if ($action == 'edit' and empty($this->params['pass'][1]))  {
+			$action = 'add';
+		}
+		if (!$this->_brwCheckPermissions($model, $action)) {
 			pr('No permissions');
 			$this->cakeError('error404');
 		}

@@ -5,20 +5,14 @@
 	<div class="actions">
 		<ul>
 		<?php
-		if ($permissions[$model]['edit'] and $permissions[$model]['add']) {
+		if ($permissions[$model]['add']) {
 			echo '
 			<li class="add">' . $html->link(
 				String::insert(
 					__d('brownie', 'Add :name_singular', true),
 					array('name_singular' => $brwConfig['names']['singular'])
 				),
-				array_merge(
-					array(
-						'action' => 'edit', $model,
-						'after_save' => ($this->params['action'] == 'view') ? 'parent': null
-					),
-					$filters
-				)
+				array_merge(array('action' => 'edit', $model), $filters)
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['import']) {

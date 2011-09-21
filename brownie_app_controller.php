@@ -68,7 +68,6 @@ class BrownieAppController extends AppController {
 		if ($action == 'read') {
 			return true;
 		}
-
 		if ($action == 'js_edit') {
 			return true;
 		}

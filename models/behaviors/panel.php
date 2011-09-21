@@ -80,8 +80,11 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function setup($Model, $config = array()) {
-		$this->brwConfigInit($Model);
-		$this->_attachUploads($Model);
+		if (empty($Model->brwInitiated)) {
+			$this->brwConfigInit($Model);
+			$this->_attachUploads($Model);
+			$Model->brwInitiated = true;
+		}
 	}
 
 

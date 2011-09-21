@@ -5,12 +5,14 @@ class Content extends BrownieAppModel{
 	var $useTable = false;
 	var $brwConfig = array();
 
+
 	function modelExists($model) {
 		if ($model == 'BrwUser') {
 			return true;
 		}
 		return in_array($model, Configure::listObjects('model'));
 	}
+
 
 	function getForeignKeys($Model) {
 		$out = array();
@@ -25,6 +27,7 @@ class Content extends BrownieAppModel{
 		return $out;
 	}
 
+
 	function fieldsAdd($Model) {
 		return $this->_fieldsForForm($Model, 'add');
 	}
@@ -33,6 +36,7 @@ class Content extends BrownieAppModel{
 	function fieldsEdit($Model) {
 		return $this->_fieldsForForm($Model, 'edit');
 	}
+
 
 	function _fieldsForForm($Model, $action) {
 		$schema = $Model->_schema;
@@ -74,6 +78,7 @@ class Content extends BrownieAppModel{
 		}
 		return $schema;
 	}
+
 
 	function addValidationsRules($Model, $edit) {
 		if ($edit) {
@@ -252,6 +257,7 @@ class Content extends BrownieAppModel{
 		return $deleted;
 	}
 
+
 	function fieldUnique($Model, $field) {
 		$indexes = $Model->getDataSource()->index($Model->table);
 		foreach ($indexes as $index) {
@@ -261,6 +267,7 @@ class Content extends BrownieAppModel{
 		}
 		return false;
 	}
+
 
 	function reorder($Model, $direction, $id) {
 		if ($Model->Behaviors->attached('Tree')) {
@@ -324,6 +331,7 @@ class Content extends BrownieAppModel{
 		return $schema;
 	}
 
+
 	function isForeignKey($Model, $field) {
 		foreach ($Model->belongsTo as $model => $belongsTo) {
 			if ($belongsTo['foreignKey'] == $field) {
@@ -354,9 +362,7 @@ class Content extends BrownieAppModel{
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
 				$url = array('controller' => 'contents', 'action' => $action, $Model->alias);
 				$options = array('title' => $title);
-				if($action == 'add') {
-					$url['action'] = 'edit';
-				} elseif ($action != 'index') {
+				if ($action != 'index') {
 					$url[] = $record[$Model->alias]['id'];
 				}
 				$actions[$action] = Set::merge($defaultAction, array(
@@ -433,6 +439,7 @@ class Content extends BrownieAppModel{
 			return $ret;
 		}
 	}
+
 
 	function neighborsForView($Model, $record, $restricted, $named = array()) {
 		$neighbors = array();
@@ -560,6 +567,7 @@ class Content extends BrownieAppModel{
 		}
 		return $containedModels;
 	}
+
 
 	function formatHABTMforView($record, $Model) {
 		$record['HABTM'] = array();
