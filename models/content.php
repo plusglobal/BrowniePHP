@@ -676,4 +676,18 @@ class Content extends BrownieAppModel{
 		return $brwConfigs;
 	}
 
+
+	function attachBackend($Model) {
+		$Model->Behaviors->attach('Brownie.BrwBackend');
+		$models = array_merge(
+			array_keys($Model->belongsTo),
+			array_keys($Model->hasAndBelongsToMany),
+			array_keys($Model->hasOne),
+			array_keys($Model->hasMany)
+		);
+		foreach ($models as $model) {
+			$Model->{$model}->Behaviors->attach('Brownie.BrwBackend');
+		}
+	}
+
 }
