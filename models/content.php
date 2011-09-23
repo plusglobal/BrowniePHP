@@ -555,7 +555,10 @@ class Content extends BrownieAppModel{
 		}
 		$containedModels = Set::normalize($this->relatedModelsForView($Model));
 		foreach ($containedModels as $containedModel => $fields) {
-			if (!in_array($containedModel, $containedForIndex)) {
+			if (
+				!in_array($containedModel, $containedForIndex)
+				and $containedModel != Configure::read('brwSettings.authModel')
+			) {
 				unset($containedModels[$containedModel]);
 			} else {
 				if (in_array($containedModel, array('BrwImage', 'BrwFile'))) {

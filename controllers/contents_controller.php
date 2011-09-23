@@ -24,6 +24,7 @@ class ContentsController extends BrownieAppController {
 		$this->Model = ClassRegistry::init($model);
 		$this->Model->recursive = -1;
 		$this->Model->Behaviors->attach('Brownie.Panel');
+		$this->Model->Behaviors->attach('Brownie.BrwBackend');
 
 		$action = $this->params['action'];
 		if ($action == 'edit' and empty($this->params['pass'][1]))  {

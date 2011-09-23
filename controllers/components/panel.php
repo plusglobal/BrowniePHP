@@ -54,6 +54,7 @@ class PanelComponent extends Object{
 			$BrwUser = $Controller->Session->read('Auth.BrwUser');
 			unset($BrwUser['BrwUser']['password']);
 			$Controller->set('BrwUser', $BrwUser);
+			Configure::write('brwSettings.authUser', $BrwUser);
 		}
 
 		if (!empty($Controller->params['brw'])) {
