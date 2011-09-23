@@ -99,7 +99,10 @@ if ($records) {
 					}
 				}
 			}
-			if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)) {
+			if (
+				$brwConfig['actions']['edit'] and
+				(($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree))
+			) {
 				echo '<th class="actions sortable">' . __d('brownie', 'Sort', true) . '</th>';
 			}
 
@@ -139,7 +142,10 @@ if ($records) {
 			}
 		}
 
-		if (($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree)): ?>
+		if (
+			$brwConfig['actions']['edit'] and
+			(($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree))
+		): ?>
 			<td class="sortable actions">
 			<?php
 			echo $html->link(__d('brownie', 'Sort up', true),
