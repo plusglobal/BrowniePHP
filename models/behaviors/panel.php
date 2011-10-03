@@ -251,6 +251,14 @@ class PanelBehavior extends ModelBehavior {
 				}
 			}
 			$Model->brwConfig['paginate']['fields'] = $fields;
+		} else {
+			$fields = array();
+			foreach ($Model->brwConfig['paginate']['fields'] as $field) {
+				if (!in_array($field, $Model->brwConfig['fields']['hide'])) {
+					$fields[] = $field;
+				}
+			}
+			$Model->brwConfig['paginate']['fields'] = $fields;
 		}
 		if (empty($Model->brwConfig['paginate']['order']) and !empty($Model->order)) {
 			$Model->brwConfig['paginate']['order'] = $Model->order;
