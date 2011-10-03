@@ -65,7 +65,7 @@ class PanelBehavior extends ModelBehavior {
 			'hasOne' => array(),
 		),
 		'sortable' => array('field' => 'sort', 'sort' => 'ASC'),
-		'export' => array('type' => 'csv', 'replace_foreign_keys' => true),
+		'export' => array('type' => null, 'replace_foreign_keys' => true),
 	);
 
 
@@ -207,7 +207,7 @@ class PanelBehavior extends ModelBehavior {
 		$this->_removeDuplicates($Model);
 		$this->_setDefaultDateRanges($Model);
 		if ($Model->brwConfig['actions']['export']) {
-			$this->_exportFields($Model);
+			$this->_exportConfig($Model);
 		}
 	}
 
@@ -674,7 +674,7 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
-	function _exportFields($Model) {
+	function _exportConfig($Model) {
 		if (empty($Model->brwConfig['fields']['export'])) {
 			foreach ($Model->_schema as $field => $config) {
 				if ($config['type'] != 'text') {
@@ -689,6 +689,9 @@ class PanelBehavior extends ModelBehavior {
 			}
 		}
 		$Model->brwConfig['fields']['export'] = $whitelisted;
+		if (empty($Model->brwConfig['export']['type'])) {
+			$Model->brwConfig['export']['type'] = Configure::read('brwSettings.defaultExportType');
+		}
 	}
 
 
