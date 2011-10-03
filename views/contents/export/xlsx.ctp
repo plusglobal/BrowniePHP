@@ -18,6 +18,7 @@ foreach ($brwConfig['fields']['export'] as $col => $field) {
 	}
 	$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $fieldName);
 }
+
 foreach ($records as $row => $record) {
 	foreach ($brwConfig['fields']['export'] as $col => $field) {
 		if (strstr($field, '.')) {
@@ -30,12 +31,6 @@ foreach ($records as $row => $record) {
 	}
 	reset($brwConfig['fields']['export']);
 }
-
-/*$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('A1', 'Hello');
-$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('B2', 'world!');
-$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('C1', 'Hello');
-$objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow('D2', 'world!');*/
-
 
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 $objWriter->save('php://output');
