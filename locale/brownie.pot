@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2011-07-18 19:27-0300\n"
+"POT-Creation-Date: 2011-10-04 19:28-0300\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -14,134 +14,142 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: \brownie_app_controller.php:21
+#: \brownie_app_controller.php:18
 msgid "Control panel"
 msgstr ""
 
-#: \brownie_app_controller.php:38
-msgid "Login failed. Invalid username or password."
-msgstr ""
-
-#: \brownie_app_controller.php:39
-msgid "Please login."
-msgstr ""
-
-#: \brownie_app_controller.php:79
-msgid "Menu"
-msgstr ""
-
-#: \controllers\contents_controller.php:197
+#: \controllers\contents_controller.php:195
 msgid "The %s has been saved [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:198
+#: \controllers\contents_controller.php:196
 msgid "The %s has been saved [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:231
+#: \controllers\contents_controller.php:204
 msgid "The %s could not be saved. Please, check the error messages.[male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:232
+#: \controllers\contents_controller.php:205
 msgid "The %s could not be saved. Please, check the error messages.[female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:310
+#: \controllers\contents_controller.php:284
 msgid "Successful delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:312
+#: \controllers\contents_controller.php:286
 msgid "Unable to delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:353
+#: \controllers\contents_controller.php:327
 msgid "No %s selected to delete"
 msgstr ""
 
-#: \controllers\contents_controller.php:366
+#: \controllers\contents_controller.php:340
 msgid "%d %s deleted."
 msgstr ""
 
-#: \controllers\contents_controller.php:369
+#: \controllers\contents_controller.php:343
 msgid "%d %s no deleted."
 msgstr ""
 
-#: \controllers\contents_controller.php:426
+#: \controllers\contents_controller.php:400
 msgid "%s files saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:427
+#: \controllers\contents_controller.php:401
 msgid "%s images saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:431
+#: \controllers\contents_controller.php:405
 msgid "No files saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:432
+#: \controllers\contents_controller.php:406
 msgid "No images saved"
 msgstr ""
 
-#: \controllers\contents_controller.php:461
+#: \controllers\contents_controller.php:435
 msgid "The file was deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:462
+#: \controllers\contents_controller.php:436
 msgid "The image was deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:466
+#: \controllers\contents_controller.php:440
 msgid "The file could not be deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:467
+#: \controllers\contents_controller.php:441
 msgid "The image could not be deleted"
 msgstr ""
 
-#: \controllers\contents_controller.php:495
+#: \controllers\contents_controller.php:469
 msgid "The import could not be done. Please try again"
 msgstr ""
 
-#: \controllers\contents_controller.php:509
+#: \controllers\contents_controller.php:483
 msgid "Warning: %s::brwImport() must be defined"
 msgstr ""
 
-#: \controllers\contents_controller.php:556
+#: \controllers\contents_controller.php:525
 msgid "Successfully reordered"
 msgstr ""
 
-#: \controllers\contents_controller.php:558
+#: \controllers\contents_controller.php:527
 msgid "Failed to reorder"
 msgstr ""
 
-#: \controllers\contents_controller.php:651
-#: \views\elements\form_filter.ctp:41
+#: \controllers\contents_controller.php:626
+#: \views\elements\form_filter.ctp:54
 msgid "Yes"
 msgstr ""
 
-#: \controllers\contents_controller.php:651
-#: \views\elements\form_filter.ctp:41
+#: \controllers\contents_controller.php:626
+#: \views\elements\form_filter.ctp:54
 msgid "No"
 msgstr ""
 
-#: \controllers\contents_controller.php:681
+#: \controllers\contents_controller.php:657
 msgid "Date not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:685
-msgid "Invalid date"
-msgstr ""
-
-#: \controllers\contents_controller.php:691
+#: \controllers\contents_controller.php:666
 msgid "Datetime not set"
 msgstr ""
 
-#: \controllers\contents_controller.php:695
-msgid "Invalid datetime"
+#: \controllers\contents_controller.php:689
+msgid "After save"
+msgstr ""
+
+#: \controllers\contents_controller.php:691
+msgid "Back to where I was"
+msgstr ""
+
+#: \controllers\contents_controller.php:693
+msgid "View saved %s [male]"
+msgstr ""
+
+#: \controllers\contents_controller.php:694
+msgid "View saved %s [female]"
+msgstr ""
+
+#: \controllers\contents_controller.php:697
+msgid "Add another %s [male]"
+msgstr ""
+
+#: \controllers\contents_controller.php:698
+msgid "Add another %s [female]"
+msgstr ""
+
+#: \controllers\contents_controller.php:701
+msgid "Go to to index of all %s [male]"
 msgstr ""
 
 #: \controllers\contents_controller.php:702
-msgid "After save"
+msgid "Go to to index of all %s [female]"
 msgstr ""
 
 #: \controllers\contents_controller.php:705
@@ -152,94 +160,86 @@ msgstr ""
 msgid "Continue editing this %s [female]"
 msgstr ""
 
-#: \controllers\contents_controller.php:709
-msgid "Add another %s [male]"
-msgstr ""
-
-#: \controllers\contents_controller.php:710
-msgid "Add another %s [female]"
-msgstr ""
-
-#: \controllers\contents_controller.php:713
-msgid "Go to to index of all %s [male]"
-msgstr ""
-
-#: \controllers\contents_controller.php:714
-msgid "Go to to index of all %s [female]"
-msgstr ""
-
-#: \controllers\contents_controller.php:717
-msgid "View saved %s [male]"
-msgstr ""
-
-#: \controllers\contents_controller.php:718
-msgid "View saved %s [female]"
-msgstr ""
-
-#: \controllers\contents_controller.php:720
+#: \controllers\contents_controller.php:708
 msgid "Go home"
 msgstr ""
 
-#: \controllers\contents_controller.php:733
+#: \controllers\contents_controller.php:721
 msgid "Go to the %s [male]"
 msgstr ""
 
-#: \controllers\contents_controller.php:734
+#: \controllers\contents_controller.php:722
 msgid "Go to the %s [female]"
 msgstr ""
 
-#: \models\content.php:93
+#: \controllers\components\panel.php:100
+msgid "Login failed. Invalid username or password."
+msgstr ""
+
+#: \controllers\components\panel.php:101
+msgid "Please login."
+msgstr ""
+
+#: \controllers\components\panel.php:123
+msgid "Menu"
+msgstr ""
+
+#: \models\content.php:102
 msgid "This field is required"
 msgstr ""
 
-#: \models\content.php:104
+#: \models\content.php:113
 msgid "Please supply  a valid number"
 msgstr ""
 
-#: \models\content.php:113
+#: \models\content.php:122
 msgid "Please supply a valid email address"
 msgstr ""
 
-#: \models\content.php:120
+#: \models\content.php:129
 msgid "Incorrect value"
 msgstr ""
 
-#: \models\content.php:129
+#: \models\content.php:138
 msgid "This value must be unique and it's already in use by another %s [male]"
 msgstr ""
 
-#: \models\content.php:130
+#: \models\content.php:139
 msgid "This value must be unique and it's already in use by another %s [female]"
 msgstr ""
 
-#: \models\content.php:329
+#: \models\content.php:358
 #: \views\brownie\index.ctp:13
-#: \views\contents\view.ctp:96
+#: \views\contents\view.ctp:102
 msgid "Add"
 msgstr ""
 
-#: \models\content.php:330
+#: \models\content.php:359
 #: \views\elements\file.ctp:10
 msgid "View"
 msgstr ""
 
-#: \models\content.php:331
+#: \models\content.php:360
 #: \views\elements\file.ctp:15
 #: \views\elements\image.ctp:10
 msgid "Edit"
 msgstr ""
 
-#: \models\content.php:332
+#: \models\content.php:361
 #: \views\elements\file.ctp:20
 #: \views\elements\image.ctp:14
 msgid "Delete"
 msgstr ""
 
-#: \models\content.php:350
+#: \models\content.php:362
+msgid "List all"
+msgstr ""
+
+#: \models\content.php:378
 msgid "Are you sure you want to delete this %s?[male]"
 msgstr ""
 
-#: \models\content.php:351
+#: \models\content.php:379
 msgid "Are you sure you want to delete this %s?[female]"
 msgstr ""
 
@@ -271,16 +271,16 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: \models\behaviors\panel.php:587
+#: \models\behaviors\panel.php:622
 msgid "Leave blank for no change"
 msgstr ""
 
-#: \models\behaviors\panel.php:592;593
+#: \models\behaviors\panel.php:627;628
 msgid "User"
 msgstr ""
 
-#: \models\behaviors\panel.php:594
-#: \views\layouts\brownie_default.ctp:40
+#: \models\behaviors\panel.php:629
+#: \views\layouts\brownie_default.ctp:43
 msgid "Users"
 msgstr ""
 
@@ -310,7 +310,7 @@ msgstr ""
 
 #: \views\brownie\translations.ctp:2
 #: \views\elements\translations.ctp:2
-#: \views\layouts\brownie_default.ctp:17
+#: \views\layouts\brownie_default.ctp:18
 msgid "Done"
 msgstr ""
 
@@ -337,37 +337,33 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: \views\contents\edit.ctp:18
+#: \views\contents\edit.ctp:14
 #: \views\elements\index.ctp:12
 msgid "Add :name_singular"
 msgstr ""
 
-#: \views\contents\edit.ctp:20
+#: \views\contents\edit.ctp:14
 msgid "Edit :name_singular"
 msgstr ""
 
-#: \views\contents\edit.ctp:47
-msgid "None"
-msgstr ""
-
-#: \views\contents\edit.ctp:54
+#: \views\contents\edit.ctp:45
 msgid "(No parent)"
 msgstr ""
 
-#: \views\contents\edit.ctp:135
+#: \views\contents\edit.ctp:127
 #: \views\contents\edit_upload.ctp:38
 msgid "Description"
 msgstr ""
 
-#: \views\contents\edit.ctp:150
+#: \views\contents\edit.ctp:142
 msgid "Add Image"
 msgstr ""
 
-#: \views\contents\edit.ctp:150
+#: \views\contents\edit.ctp:142
 msgid "Add File"
 msgstr ""
 
-#: \views\contents\edit.ctp:167
+#: \views\contents\edit.ctp:160
 #: \views\contents\edit_upload.ctp:43
 msgid "Save"
 msgstr ""
@@ -426,15 +422,15 @@ msgstr ""
 msgid "View complete index"
 msgstr ""
 
-#: \views\elements\form_filter.ctp:27
+#: \views\elements\form_filter.ctp:41
 msgid "from"
 msgstr ""
 
-#: \views\elements\form_filter.ctp:31
+#: \views\elements\form_filter.ctp:44
 msgid "to"
 msgstr ""
 
-#: \views\elements\form_filter.ctp:54
+#: \views\elements\form_filter.ctp:67
 msgid "Filter"
 msgstr ""
 
@@ -442,48 +438,40 @@ msgstr ""
 msgid "Are you sure you want to delete this image?"
 msgstr ""
 
-#: \views\elements\index.ctp:24
+#: \views\elements\index.ctp:21
 msgid "Import"
 msgstr ""
 
-#: \views\elements\index.ctp:30
+#: \views\elements\index.ctp:27
 msgid "Export"
 msgstr ""
 
-#: \views\elements\index.ctp:68;167
+#: \views\elements\index.ctp:65
 msgid "Delete selected"
 msgstr ""
 
-#: \views\elements\index.ctp:81
+#: \views\elements\index.ctp:80
 msgid "Select/Unselect all"
 msgstr ""
 
-#: \views\elements\index.ctp:104
+#: \views\elements\index.ctp:106
 msgid "Sort"
 msgstr ""
 
-#: \views\elements\index.ctp:107
+#: \views\elements\index.ctp:109
 msgid "Actions"
 msgstr ""
 
-#: \views\elements\index.ctp:144;146
+#: \views\elements\index.ctp:151;153
 msgid "Sort up"
 msgstr ""
 
-#: \views\elements\index.ctp:148;150
+#: \views\elements\index.ctp:155;157
 msgid "Sort down"
 msgstr ""
 
-#: \views\elements\index.ctp:172
+#: \views\elements\index.ctp:179
 msgid "There are no %s"
-msgstr ""
-
-#: \views\elements\menu.ctp:23;29
-msgid "Choose site"
-msgstr ""
-
-#: \views\elements\menu.ctp:31
-msgid "Go"
 msgstr ""
 
 #: \views\elements\pagination.ctp:8
@@ -498,7 +486,7 @@ msgstr ""
 msgid "Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%"
 msgstr ""
 
-#: \views\elements\pagination.ctp:49
+#: \views\elements\pagination.ctp:54
 msgid "%s per page"
 msgstr ""
 
@@ -591,22 +579,34 @@ msgid "No records checked for deletion"
 msgstr ""
 
 #: \views\layouts\brownie_default.ctp:16
-msgid "Choose"
+msgid "Select"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:21
+#: \views\layouts\brownie_default.ctp:17
+msgid "Unselect"
+msgstr ""
+
+#: \views\layouts\brownie_default.ctp:19
+msgid "Show advanced filters"
+msgstr ""
+
+#: \views\layouts\brownie_default.ctp:20
+msgid "Hide advanced filters"
+msgstr ""
+
+#: \views\layouts\brownie_default.ctp:24
 msgid "Admin panel"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:36
+#: \views\layouts\brownie_default.ctp:39
 msgid "User: %s"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:38
+#: \views\layouts\brownie_default.ctp:41
 msgid "Home"
 msgstr ""
 
-#: \views\layouts\brownie_default.ctp:42
+#: \views\layouts\brownie_default.ctp:45
 msgid "Logout"
 msgstr ""
 
