@@ -25,14 +25,13 @@ class PanelBehavior extends ModelBehavior {
 			'hide' => array('lft', 'rght'),
 			'export' => array(),
 			'no_export' => array('lft', 'rght'),
-			'search' => array(),
-			'no_search' => array(),
 			'no_editor' => array(),
 			'virtual' => array(),
 			'conditional' => array(),
 			'code' => array(),
 			'no_sanitize_html' => array(),
 			'names' => array(),
+			'legends' => array(),
 			'filter' => array(),
 			'filter_advanced' => array(),
 			'date_ranges' => array(),
@@ -614,12 +613,12 @@ class PanelBehavior extends ModelBehavior {
 				'no_view' => array('password'),
 				'virtual' => array('repeat_password' => array('after' => 'password')),
 				'hide' => array('last_login'),
+				'legends' => array(
+					'password' => __d('brownie', 'Leave blank for no change', true),
+				),
 			),
 			'paginate' => array(
 				'fields' => array('id', 'email'),
-			),
-			'legends' => array(
-				'password' => __d('brownie', 'Leave blank for no change', true),
 			),
 		);
 		if ($Model->alias == 'BrwUser') {
