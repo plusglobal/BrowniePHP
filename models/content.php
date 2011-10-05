@@ -363,9 +363,13 @@ class Content extends BrownieAppModel {
 		));
 		foreach ($actionsTitles as $action => $title) {
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
-				$url = array('controller' => 'contents', 'action' => $action, $Model->alias);
+				$url = array(
+					'controller' => 'contents',
+					'action' => ($action == 'add') ? 'edit' : $action,
+					$Model->alias
+				);
 				$options = array('title' => $title);
-				if ($action != 'index') {
+				if (!in_array($action, array('index', 'add'))) {
 					$url[] = $record[$Model->alias]['id'];
 				}
 				$actions[$action] = Set::merge($defaultAction, array(
