@@ -58,12 +58,6 @@ class BrownieController extends BrownieAppController {
 			$translations[Inflector::humanize(Inflector::underscore($Model->name))] = true;
 			$schema = (array)$Model->_schema;
 			foreach ($schema as $key => $value) {
-				if (strstr($value['type'], 'enum(')) {
-					$options = enum2array($value['type']);
-					foreach ($options as $option) {
-						$translations[$option] = true;
-					}
-				}
 				$translations[Inflector::humanize(str_replace('_id', '', $key))] = true;
 			}
 			foreach ($Model->brwConfig['custom_actions'] as $action => $config) {

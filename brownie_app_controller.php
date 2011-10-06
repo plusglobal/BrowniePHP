@@ -113,7 +113,3 @@ class BrownieAppController extends AppController {
 
 }
 
-
-function enum2array($string) {
-	return explode("','", substr($string, 6, -2));
-}
