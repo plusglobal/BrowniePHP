@@ -11,6 +11,15 @@ class BrownieController extends BrownieAppController {
 			} else {
 				$this->render('custom_home');
 			}
+		} elseif (!empty($this->brwMenu)) {
+			$url = array_shift(array_shift($this->brwMenu));
+			if (!is_array($url)) {
+				 $url = array(
+				 	'controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie',
+				 	'brw' => false, $url
+				);
+			}
+			$this->redirect($url);
 		}
 	}
 
