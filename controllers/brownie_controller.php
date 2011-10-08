@@ -3,6 +3,7 @@ class BrownieController extends BrownieAppController {
 
 	var $name = 'Brownie';
 
+
 	function index() {
 		$customHome = Configure::read('brwSettings.customHome');
 		if ($customHome) {
@@ -23,6 +24,7 @@ class BrownieController extends BrownieAppController {
 		}
 	}
 
+
 	function beforeFilter() {
 		if (!empty($this->data['BrwUser']) and !$this->BrwUser->find('first')) {
 			$this->BrwUser->create();
@@ -40,6 +42,7 @@ class BrownieController extends BrownieAppController {
 			$this->redirect(array('action' => 'index'));
 		}
     }
+
 
     function logout() {
     	$this->Session->delete('BrwSite');
@@ -76,5 +79,6 @@ class BrownieController extends BrownieAppController {
 		$forTranslate = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . '4translate.php';
 		fwrite(fopen($forTranslate, 'w'), $out);
 	}
+
 
 }

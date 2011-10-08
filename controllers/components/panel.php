@@ -43,6 +43,7 @@ class PanelComponent extends Object{
 
 	var $controller;
 
+
 	function initialize($Controller, $settings = array()) {
 
 		$this->controller = $Controller;
@@ -82,6 +83,7 @@ class PanelComponent extends Object{
 		}
 
 	}
+
 
 	function beforeRender() {
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
@@ -126,5 +128,6 @@ class PanelComponent extends Object{
 			$this->controller->set('brwMenu', $menu);
 		}
 	}
+
 
 }

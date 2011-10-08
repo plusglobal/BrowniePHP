@@ -500,7 +500,6 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
-
 	function _camelize($array) {
 		foreach ($array as $key => $value) {
 			if (is_array($value)) {
@@ -514,6 +513,7 @@ class PanelBehavior extends ModelBehavior {
 		}
 		return $array;
 	}
+
 
 	function _attachUploads($Model) {
 		if (!empty($Model->brwConfig['images'])) {
@@ -721,4 +721,6 @@ class PanelBehavior extends ModelBehavior {
 		}
 
 	}
+
+
 }

@@ -2,6 +2,7 @@
 
 class BrwBackendBehavior extends ModelBehavior {
 
+
 	function setup($Model, $config = array()) {}
 
 
@@ -15,5 +16,6 @@ class BrwBackendBehavior extends ModelBehavior {
 		}
 		return $query;
 	}
+
 
 }

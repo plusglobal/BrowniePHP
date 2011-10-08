@@ -321,6 +321,7 @@ class ContentsController extends BrownieAppController {
 
 	}
 
+
 	function delete_multiple($model) {
 		$plural = $this->Model->brwConfig['names']['plural'];
 		if (empty($this->data['Content']['id'])) {
@@ -358,26 +359,6 @@ class ContentsController extends BrownieAppController {
 		}
 		$this->redirect($redir);
 	}
-
-
-	/*
-	function _add_images($model, $recordId, $categoryCode) {
-		if (!empty($this->data)) {
-			$saved = 0;
-			foreach ($this->data['BrwImage'] as $image) {
-				if ($this->Model->BrwImage->save($image)) {
-					$saved++;
-				}
-			}
-			if ($saved) {
-				$this->Session->setFlash(sprintf(__d('brownie', '%d images successfully added', true), $saved), 'flash_success');
-				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
-			} else {
-				$this->Session->setFlash(__d('brownie', 'None images uploaded. Please try again.', true), 'flash_notice');
-			}
-		}
-		$this->set(compact('categoryCode', 'recordId', 'imageId'));
-	}*/
 
 
 	function edit_upload($model, $uploadType, $recordId, $categoryCode, $uploadId = null) {
@@ -867,5 +848,6 @@ class ContentsController extends BrownieAppController {
 			break;
 		}
 	}
+
 
 }

@@ -2,7 +2,6 @@
 
 class Content extends BrownieAppModel {
 
-	var $name = 'Content';
 	var $useTable = false;
 	var $brwConfig = array();
 
@@ -151,12 +150,6 @@ class Content extends BrownieAppModel {
 			$Model->validate = $rules;
 		}
 	}
-
-
-
-	/*function isTree($Model) {
-		return in_array('tree', array_map('strtolower', $Model->Behaviors->_attached));
-	}*/
 
 
 	function brownieBeforeSave($data, $Model, $Session) {
@@ -696,5 +689,6 @@ class Content extends BrownieAppModel {
 			$Model->{$model}->Behaviors->attach('Brownie.BrwBackend');
 		}
 	}
+
 
 }
