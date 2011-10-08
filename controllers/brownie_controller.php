@@ -42,8 +42,8 @@ class BrownieController extends BrownieAppController {
     	$userId = $this->Session->read('Auth.BrwUser.id');
     	if ($userId) {
     		if (!empty($this->data['BrwUser']['password'])) {
-    			$authModel = Configure::read('brwSettings.authModel');
-    			$this->{$authModel}->updateLastLogin($userId);
+    			$AuthModel = ClassRegistry::init($this->Session->read('authModel'));
+    			$AuthModel->updateLastLogin($userId);
     		}
 			$this->redirect($this->Auth->redirect());
 		}
@@ -51,7 +51,7 @@ class BrownieController extends BrownieAppController {
 
 
     function logout() {
-    	$this->Session->delete('BrwSite');
+    	$this->Session->delete('authModel');
         $this->redirect($this->Auth->logout());
     }
 

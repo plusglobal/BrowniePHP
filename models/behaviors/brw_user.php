@@ -51,7 +51,7 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	function beforeSave($Model) {
-		if ($Model->alias != 'BrwUser') {
+		if ($Model->alias != 'BrwUser' and isset($Model->data[$Model->alias]['password'])) {
 			$pass = $Model->data[$Model->alias]['password'];
 			$Model->data[$Model->alias]['password'] = Security::hash($pass, null, true);
 		}
@@ -84,11 +84,14 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	function updateLastLogin($Model, $id) {
-		if (!empty($Model->_schema['last_login'])) {
-			return $Model->save(array('id' => $id, 'last_login' => date('Y-m-d H:i:s')));
-		} else {
+		if (empty($Model->_schema['last_login'])) {
 			return null;
 		}
+		$user = $Model->findById($id);
+		return $Model->save(array(
+			'id' => $id, 'last_login' => date('Y-m-d H:i:s'),
+			'modified' => $user[$Model->name]['modified'],
+		));
 	}
 
 
