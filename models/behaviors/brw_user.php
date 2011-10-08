@@ -83,4 +83,13 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
+	function updateLastLogin($Model, $id) {
+		if (!empty($Model->_schema['last_login'])) {
+			return $Model->save(array('id' => $id, 'last_login' => date('Y-m-d H:i:s')));
+		} else {
+			return null;
+		}
+	}
+
+
 }

@@ -612,13 +612,12 @@ class PanelBehavior extends ModelBehavior {
 				'no_add' => array('last_login'),
 				'no_view' => array('password'),
 				'virtual' => array('repeat_password' => array('after' => 'password')),
-				'hide' => array('last_login'),
 				'legends' => array(
 					'password' => __d('brownie', 'Leave blank for no change', true),
 				),
 			),
 			'paginate' => array(
-				'fields' => array('id', 'email'),
+				'fields' => array('id', 'email', 'last_login'),
 			),
 		);
 		if ($Model->alias == 'BrwUser') {

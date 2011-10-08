@@ -1,4 +1,5 @@
 <?php
+
 class BrownieController extends BrownieAppController {
 
 	var $name = 'Brownie';
@@ -38,8 +39,13 @@ class BrownieController extends BrownieAppController {
 
 
     function login() {
-    	if ($this->Session->check('Auth.BrwUser')) {
-			$this->redirect(array('action' => 'index'));
+    	$userId = $this->Session->read('Auth.BrwUser.id');
+    	if ($userId) {
+    		if (!empty($this->data['BrwUser']['password'])) {
+    			$authModel = Configure::read('brwSettings.authModel');
+    			$this->{$authModel}->updateLastLogin($userId);
+    		}
+			$this->redirect($this->Auth->redirect());
 		}
     }
 
