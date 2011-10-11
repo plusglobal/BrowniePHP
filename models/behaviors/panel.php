@@ -565,15 +565,17 @@ class PanelBehavior extends ModelBehavior {
 		$customActionsTypes = array('custom_actions', 'global_custom_actions');
 		foreach ($customActionsTypes as $customActionType) {
 			$customActions = array();
-			foreach ($Model->brwConfig[$customActionType] as $action => $config) {
-				$customActions[$action] = Set::merge($this->brwConfigDefaultCustomActions, $config);
-				$title = Inflector::humanize($action);
-				if (empty($customActions[$action]['title'])) {
-					$customActions[$action]['title'] = $title;
-				}
-				if (empty($customActions[$action]['options']['class'])) {
-					$customActions[$action]['options']['class'] = $action;
-					$customActions[$action]['options']['title'] = $title;
+			if (!empty($Model->brwConfig[$customActionType])) {
+				foreach ($Model->brwConfig[$customActionType] as $action => $config) {
+					$customActions[$action] = Set::merge($this->brwConfigDefaultCustomActions, $config);
+					$title = Inflector::humanize($action);
+					if (empty($customActions[$action]['title'])) {
+						$customActions[$action]['title'] = $title;
+					}
+					if (empty($customActions[$action]['options']['class'])) {
+						$customActions[$action]['options']['class'] = $action;
+						$customActions[$action]['options']['title'] = $title;
+					}
 				}
 			}
 			$Model->brwConfig[$customActionType] = $customActions;
