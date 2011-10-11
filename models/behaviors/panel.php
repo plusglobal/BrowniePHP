@@ -703,7 +703,7 @@ class PanelBehavior extends ModelBehavior {
 			}
 			$type = $Model->brwConfigPerAuthUser[$authModel]['type'];
 			if ($type == 'none') {
-				$Model->bwConfig['actions'] = array(
+				$Model->brwConfig['actions'] = array(
 					'add' => false, 'edit' => false, 'index' => false,
 					'view' => false, 'export' => false, 'import' => false,
 				);
