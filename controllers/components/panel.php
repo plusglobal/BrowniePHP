@@ -88,6 +88,7 @@ class PanelComponent extends Object{
 	function beforeRender() {
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
 			$this->_menuConfig();
+			$this->controller->set('companyName', $this->controller->companyName);
 		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
 	}
