@@ -210,11 +210,14 @@ class Content extends BrownieAppModel {
 
 	function ownedBeforeSave($data, $Model, $authUserId) {
 		$authModel = Configure::read('brwSettings.authModel');
-		if ($Model->brwConfigPerAuthUser[$authModel]['type'] == 'owned') {
-			if ($authModel and $authModel != 'BrwUser') {
-				$data['Content']['fieldList'][] = $fk = $Model->belongsTo[$authModel]['foreignKey'];
-				$data[$Model->name][$fk] = $authUserId;
-			}
+		if (
+			$authModel
+			and $authModel != 'BrwUser'
+			and $Model->name != $authModel
+			and $Model->brwConfigPerAuthUser[$authModel]['type'] == 'owned'
+		) {
+			$data['Content']['fieldList'][] = $fk = $Model->belongsTo[$authModel]['foreignKey'];
+			$data[$Model->name][$fk] = $authUserId;
 		}
 		return $data;
 	}

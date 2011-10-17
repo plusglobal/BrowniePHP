@@ -709,7 +709,7 @@ class PanelBehavior extends ModelBehavior {
 				);
 			} else {
 				$brwConfig = $Model->brwConfigPerAuthUser[$authModel]['brwConfig'];
-				if ($type == 'owned') {
+				if ($Model->name != $authModel and $type == 'owned') {
 					if (empty($Model->belongsTo[$authModel])) {
 						pr('type = owned is valid only for models that belongsTo the auth model');
 					} else  {
