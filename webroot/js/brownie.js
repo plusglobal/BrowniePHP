@@ -176,20 +176,25 @@ function checkMultiple() {
 
 function filterCheckbox() {
 	$('div.filter-checkbox div.checkbox').addClass('clearfix');
-	$button = $('<input type="button" value="' + brwMsg.select + '" class="filter-choose">');
-	$div = $('div.filter-checkbox');
-	$div.before($button).hide();
-	$button.toggle(
-		function(){
-			$div.fadeIn('fast');
-			$button.val(brwMsg.done);
-		},
-		function(){
-			$div.fadeOut('fast');
-			$button.val(brwMsg.select);
-		}
-	);
+	var $button = [];
+	$('div.filter-checkbox').each(function(i){
+		$button[i] = $('<input type="button" value="' + brwMsg.select + '" class="filter-choose" id="filter-choose-'+i+'">');
+		var $div = $(this);
+		$div.before($button[i]).hide();
+		$button[i].toggle(
+			function(){
+				$div.fadeIn('fast');
+				$button[i].val(brwMsg.done);
+			},
+			function(){
+				$div.fadeOut('fast');
+				$button[i].val(brwMsg.select);
+			}
+		);
+	
+	});
 }
+
 
 function showAdvancedFilters() {
 	if ($('.advanced').length) {
