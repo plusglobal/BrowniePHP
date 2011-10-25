@@ -518,7 +518,7 @@ class ContentsController extends BrownieAppController {
 
 	function filter($model) {
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
-		foreach ($this->Model->brwConfig['fields']['filter'] as $field => $multiple) {
+		foreach ($this->Model->_schema as $field => $cnf) {
 			$type = $this->Model->_schema[$field]['type'];
 			if (in_array($type, array('date', 'datetime'))) {
 				$keyFrom = $field . '_from';
