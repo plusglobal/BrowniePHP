@@ -10,7 +10,7 @@ class Content extends BrownieAppModel {
 		if ($model == 'BrwUser') {
 			return true;
 		}
-		return in_array($model, Configure::listObjects('model'));
+		return in_array($model, App::objects('model'));
 	}
 
 

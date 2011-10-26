@@ -39,7 +39,7 @@ if (file_exists(WWW_ROOT . 'js' . DS . 'tiny_mce' . DS . 'jquery.tinymce.js')) {
 Configure::write('brwSettings', Set::merge($defaultSettings, (array)Configure::read('brwSettings')));
 
 
-class PanelComponent extends Object{
+class PanelComponent extends Component{
 
 	var $controller;
 
@@ -52,8 +52,8 @@ class PanelComponent extends Object{
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.BrwUpload');
 
-		if ($Controller->Session->check('Auth.BrwUser')) {
-			$BrwUser = $Controller->Session->read('Auth.BrwUser');
+		$BrwUser = $Controller->Session->read('Auth.BrwUser');
+		if ($BrwUser) {
 			unset($BrwUser['BrwUser']['password']);
 			$Controller->set('BrwUser', $BrwUser);
 			Configure::write('brwSettings.authUser', $BrwUser);
@@ -95,8 +95,9 @@ class PanelComponent extends Object{
 
 
 	function _authSettings() {
-		$this->controller->Auth->userModel = 'BrwUser';
-		$this->controller->Auth->fields = array('username'  => 'email', 'password'  => 'password');
+		var_dump($this->controller->Auth);
+		//$this->controller->Auth->userModel = 'BrwUser';
+		//$this->controller->Auth->fields = array('username'  => 'email', 'password'  => 'password');
 		$this->controller->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->controller->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		$this->controller->Auth->autoRedirect = false;
