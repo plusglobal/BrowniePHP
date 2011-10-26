@@ -4,24 +4,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex,nofollow" />
 <?php
-echo $html->meta('favicon.ico', Router::url('/favicon.ico'), array('type' => 'icon'));
-echo $html->css(Configure::read('brwSettings.css'));
-echo $javascript->link(Configure::read('brwSettings.js'));
+echo $this->Html->meta('favicon.ico', Router::url('/favicon.ico'), array('type' => 'icon'));
+echo $this->Html->css(Configure::read('brwSettings.css'));
+echo $this->Html->script(Configure::read('brwSettings.js'));
 ?>
 <script type="text/javascript">
 var APP_BASE = '<?php echo Router::url('/') ?>';
-var SESSION_ID = '<?php echo $session->id() ?>';
+var SESSION_ID = '<?php //echo $this->Session->id() ?>';
 var brwMsg = {
-	no_checked_for_deletion: '<?php __d('brownie', 'No records checked for deletion') ?>',
-	select: '<?php __d('brownie', 'Select') ?>',
-	unselect: '<?php __d('brownie', 'Unselect') ?>',
-	done: '<?php __d('brownie', 'Done') ?>',
-	show_advanced: '<?php __d('brownie', 'Show advanced filters') ?>',
-	hide_advanced: '<?php __d('brownie', 'Hide advanced filters') ?>'
+	no_checked_for_deletion: '<?php echo __d('brownie', 'No records checked for deletion') ?>',
+	select: '<?php echo __d('brownie', 'Select') ?>',
+	unselect: '<?php echo __d('brownie', 'Unselect') ?>',
+	done: '<?php echo __d('brownie', 'Done') ?>',
+	show_advanced: '<?php echo __d('brownie', 'Show advanced filters') ?>',
+	hide_advanced: '<?php echo __d('brownie', 'Hide advanced filters') ?>'
 };
 </script>
 <title><?php
-__d('brownie', 'Admin panel');
+echo __d('brownie', 'Admin panel');
 if ($companyName) {
 	echo ' - ' . $companyName;
 }
@@ -31,18 +31,18 @@ if ($companyName) {
 	<div id="container">
 		<div id="header">
 			<h1>
-			<?php echo $html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
+			<?php echo $this->Html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
 			</h1>
 		</div>
 		<?php if (!empty($brwAuthUser)) { ?>
 		<div id="options-bar">
 			<p id="welcome-user"><?php echo sprintf(__d('brownie', 'User: %s', true), $brwAuthUser['email']) ?></p>
 			<ul>
-				<li class="home"><?php echo $html->link(__d('brownie', 'Home', true),
+				<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home', true),
 				array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
-				<li class="users"><?php echo $html->link(__d('brownie', 'Users', true),
+				<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users', true),
 				array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, 'BrwUser')) ?></li>
-				<li class="logout"><?php echo $html->link(__d('brownie', 'Logout', true),
+				<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout', true),
 				array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 			</ul>
 		</div>

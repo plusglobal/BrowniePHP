@@ -4,9 +4,13 @@ class BrownieAppController extends AppController {
 
 	var $components = array(
 		//'Brownie.MyAuth',
+		'Auth' => array(
+			'Form' => array('userModel' => 'BrwUser'),
+			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie'),
+		),
 		'Session'
 	);
-	var $helpers = array('Html', 'Session', 'Javascript');
+	var $helpers = array('Html', 'Session', 'Js');
 	var $uses = array('BrwUser');
 	var $layout = 'brownie_default';
 	static $currentUser;

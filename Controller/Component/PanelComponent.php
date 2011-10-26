@@ -44,7 +44,7 @@ class PanelComponent extends Component{
 	var $controller;
 
 
-	function initialize($Controller, $settings = array()) {
+	function __construct($Controller, $settings = array()) {
 
 		$this->controller = $Controller;
 
@@ -70,6 +70,7 @@ class PanelComponent extends Component{
 		}
 
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
+			pr('o');
 			$this->_authSettings();
 		}
 
@@ -95,9 +96,8 @@ class PanelComponent extends Component{
 
 
 	function _authSettings() {
-		var_dump($this->controller->Auth);
-		//$this->controller->Auth->userModel = 'BrwUser';
-		//$this->controller->Auth->fields = array('username'  => 'email', 'password'  => 'password');
+		$this->controller->Auth->authenticate->userModel = 'BrwUser';
+		$this->controller->Auth->authenticate->fields = array('username'  => 'email', 'password'  => 'password');
 		$this->controller->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->controller->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
 		$this->controller->Auth->autoRedirect = false;
