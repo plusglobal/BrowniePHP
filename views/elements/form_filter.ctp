@@ -58,7 +58,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 				$params = array_merge($params, array(
 					'empty' => false,
 					'multiple' => 'checkbox',
-					'between' => '<div class="filter-checkbox clearfix">',
+					'between' => '<div class="filter-checkbox clearfix" id="filter-checkbox-' . $field . '">',
 					'after' => '</div>',
 				));
 			}
