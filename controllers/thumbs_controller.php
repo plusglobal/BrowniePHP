@@ -41,4 +41,5 @@ class ThumbsController extends BrownieAppController{
 		return $r_sizes;
     }
 
+
 }

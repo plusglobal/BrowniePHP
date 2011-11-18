@@ -63,8 +63,8 @@ echo $form->create('Content', array(
 			}
 		}
 
-		if (!empty($brwConfig['legends'][$key])) {
-			$params['after'] = $brwConfig['legends'][$key];
+		if (!empty($brwConfig['fields']['legends'][$key])) {
+			$params['after'] = $brwConfig['fields']['legends'][$key];
 		}
 
 		if (strstr($key, 'password')) {

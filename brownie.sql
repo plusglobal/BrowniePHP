@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `brw_files` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+);
 
 CREATE TABLE IF NOT EXISTS `brw_images` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `brw_images` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `category_code` (`category_code`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+);
 
 CREATE TABLE IF NOT EXISTS `brw_users` (
   `id` int(5) unsigned NOT NULL auto_increment,
@@ -33,4 +33,4 @@ CREATE TABLE IF NOT EXISTS `brw_users` (
   `modified` datetime NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `username` (`email`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+);

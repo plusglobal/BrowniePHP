@@ -2,7 +2,6 @@
 
 class Content extends BrownieAppModel {
 
-	var $name = 'Content';
 	var $useTable = false;
 	var $brwConfig = array();
 
@@ -153,12 +152,6 @@ class Content extends BrownieAppModel {
 	}
 
 
-
-	/*function isTree($Model) {
-		return in_array('tree', array_map('strtolower', $Model->Behaviors->_attached));
-	}*/
-
-
 	function brownieBeforeSave($data, $Model, $Session) {
 		$data['Content']['fieldList'] = array();
 		foreach ($Model->_schema as $field => $value) {
@@ -217,11 +210,14 @@ class Content extends BrownieAppModel {
 
 	function ownedBeforeSave($data, $Model, $authUserId) {
 		$authModel = Configure::read('brwSettings.authModel');
-		if ($Model->brwConfigPerAuthUser[$authModel]['type'] == 'owned') {
-			if ($authModel and $authModel != 'BrwUser') {
-				$data['Content']['fieldList'][] = $fk = $Model->belongsTo[$authModel]['foreignKey'];
-				$data[$Model->name][$fk] = $authUserId;
-			}
+		if (
+			$authModel
+			and $authModel != 'BrwUser'
+			and $Model->name != $authModel
+			and $Model->brwConfigPerAuthUser[$authModel]['type'] == 'owned'
+		) {
+			$data['Content']['fieldList'][] = $fk = $Model->belongsTo[$authModel]['foreignKey'];
+			$data[$Model->name][$fk] = $authUserId;
 		}
 		return $data;
 	}
@@ -363,9 +359,13 @@ class Content extends BrownieAppModel {
 		));
 		foreach ($actionsTitles as $action => $title) {
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
-				$url = array('controller' => 'contents', 'action' => $action, $Model->alias);
+				$url = array(
+					'controller' => 'contents',
+					'action' => ($action == 'add') ? 'edit' : $action,
+					$Model->alias
+				);
 				$options = array('title' => $title);
-				if ($action != 'index') {
+				if (!in_array($action, array('index', 'add'))) {
 					$url[] = $record[$Model->alias]['id'];
 				}
 				$actions[$action] = Set::merge($defaultAction, array(
@@ -691,6 +691,47 @@ class Content extends BrownieAppModel {
 		foreach ($models as $model) {
 			$Model->{$model}->Behaviors->attach('Brownie.BrwBackend');
 		}
+	}
+
+
+	function dateComplete($data, $fromOrTo, $type) {
+		if (!in_array($fromOrTo, array('_from', '_to')) or empty($data['year'])) {
+			return false;
+		}
+		if ($fromOrTo == '_from') {
+			if (empty($data['month'])) {
+				$data['month'] = '01';
+			}
+			if (empty($data['day'])) {
+				$data['day'] = '01';
+			}
+			if ($type == 'datetime') {
+				if (empty($data['hour'])) {
+					$data['hour'] = '00';
+				}
+				if (empty($data['min'])) {
+					$data['min'] = '00';
+				}
+				$data['sec'] = '00';
+			}
+		} elseif ($fromOrTo == '_to') {
+			if (empty($data['month'])) {
+				$data['month'] = '12';
+			}
+			if (empty($data['day'])) {
+				$data['day'] = '31';
+			}
+			if ($type == 'datetime') {
+				if (empty($data['hour'])) {
+					$data['hour'] = '23';
+				}
+				if (empty($data['min'])) {
+					$data['min'] = '59';
+				}
+				$data['sec'] = '59';
+			}
+		}
+		return $data;
 	}
 
 }

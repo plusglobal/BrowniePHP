@@ -14,6 +14,7 @@ class BrownieAppController extends AppController {
 		$this->Auth = $this->MyAuth;
 	}
 
+
 	function beforeFilter() {
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 	    Configure::write('brwSettings.authModel', $this->Session->read('authModel'));
@@ -21,33 +22,12 @@ class BrownieAppController extends AppController {
 		parent::beforeFilter();
 	}
 
+
 	function beforeRender() {
 		$this->_companyName();
 		parent::beforeRender();
 	}
 
-
-	/*
-	function _modelsToDb() {
-		if (Configure::read('debug')) {
-			$modelsHash = $this->_modelsHash();
-			if (!$this->Session->check('modelsHash') or $this->Session->read('modelsHash') != $modelsHash) {
-				$this->Session->write('modelsHash', $modelsHash);
-				$this->BrwModel->toDb();
-			}
-		}
-	}
-
-	function _modelsHash() {
-		$handle = opendir(MODELS);
-		$toHash = date('h');
-		while ($file = readdir($handle)) {
-			if ($file != '.' and $file != '..') {
-				$toHash .= $file . filesize(MODELS . DS . $file);
-			}
-		}
-		return Security::hash($toHash);
-	}*/
 
 	function _companyName() {
 		if ($this->Session->check('BrwSite')) {
@@ -93,6 +73,7 @@ class BrownieAppController extends AppController {
 		return true;
 	}
 
+
 	function arrayPermissions($model) {
 		$ret = array(
 			'view' => false,
@@ -111,9 +92,4 @@ class BrownieAppController extends AppController {
 	}
 
 
-}
-
-
-function enum2array($string) {
-	return explode("','", substr($string, 6, -2));
 }

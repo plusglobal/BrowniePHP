@@ -1,7 +1,9 @@
 <?php
+
 class BrownieController extends BrownieAppController {
 
 	var $name = 'Brownie';
+
 
 	function index() {
 		$customHome = Configure::read('brwSettings.customHome');
@@ -11,8 +13,18 @@ class BrownieController extends BrownieAppController {
 			} else {
 				$this->render('custom_home');
 			}
+		} elseif (!empty($this->brwMenu)) {
+			$url = array_shift(array_shift($this->brwMenu));
+			if (!is_array($url)) {
+				 $url = array(
+				 	'controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie',
+				 	'brw' => false, $url
+				);
+			}
+			$this->redirect($url);
 		}
 	}
+
 
 	function beforeFilter() {
 		if (!empty($this->data['BrwUser']) and !$this->BrwUser->find('first')) {
@@ -27,13 +39,19 @@ class BrownieController extends BrownieAppController {
 
 
     function login() {
-    	if ($this->Session->check('Auth.BrwUser')) {
-			$this->redirect(array('action' => 'index'));
+    	$userId = $this->Session->read('Auth.BrwUser.id');
+    	if ($userId) {
+    		if (!empty($this->data['BrwUser']['password'])) {
+    			$AuthModel = ClassRegistry::init($this->Session->read('authModel'));
+    			$AuthModel->updateLastLogin($userId);
+    		}
+			$this->redirect($this->Auth->redirect());
 		}
     }
 
+
     function logout() {
-    	$this->Session->delete('BrwSite');
+    	$this->Session->delete('authModel');
         $this->redirect($this->Auth->logout());
     }
 
@@ -49,12 +67,6 @@ class BrownieController extends BrownieAppController {
 			$translations[Inflector::humanize(Inflector::underscore($Model->name))] = true;
 			$schema = (array)$Model->_schema;
 			foreach ($schema as $key => $value) {
-				if (strstr($value['type'], 'enum(')) {
-					$options = enum2array($value['type']);
-					foreach ($options as $option) {
-						$translations[$option] = true;
-					}
-				}
 				$translations[Inflector::humanize(str_replace('_id', '', $key))] = true;
 			}
 			foreach ($Model->brwConfig['custom_actions'] as $action => $config) {
@@ -73,5 +85,6 @@ class BrownieController extends BrownieAppController {
 		$forTranslate = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . '4translate.php';
 		fwrite(fopen($forTranslate, 'w'), $out);
 	}
+
 
 }

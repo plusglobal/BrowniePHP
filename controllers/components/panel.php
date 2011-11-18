@@ -43,6 +43,7 @@ class PanelComponent extends Object{
 
 	var $controller;
 
+
 	function initialize($Controller, $settings = array()) {
 
 		$this->controller = $Controller;
@@ -83,20 +84,22 @@ class PanelComponent extends Object{
 
 	}
 
+
 	function beforeRender() {
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
 			$this->_menuConfig();
+			$this->controller->set('companyName', $this->controller->companyName);
 		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
 	}
 
 
 	function _authSettings() {
-		//pr($this->controller->Session->read('Auth.BrwUser'));
 		$this->controller->Auth->userModel = 'BrwUser';
 		$this->controller->Auth->fields = array('username'  => 'email', 'password'  => 'password');
 		$this->controller->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
 		$this->controller->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
+		$this->controller->Auth->autoRedirect = false;
 		$this->controller->Auth->loginError = __d('brownie', 'Login failed. Invalid username or password.', true);
 		$this->controller->Auth->authError = __d('brownie', 'Please login.', true);
 		Configure::write('Auth.BrwUser', $this->controller->Session->read('Auth.BrwUser'));
@@ -117,13 +120,16 @@ class PanelComponent extends Object{
 				$menu = array();
 				$models = App::objects('model');
 				foreach($models as $model) {
-					$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
-					$menu[$button] = $model;
+					if (!in_array($model, array('BrwUser', 'BrwImage', 'BrwFile'))) {
+						$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
+						$menu[$button] = $model;
+					}
 				}
 				$menu = array(__d('brownie', 'Menu', true) => $menu);
 			}
 			$this->controller->set('brwMenu', $menu);
 		}
 	}
+
 
 }

@@ -25,14 +25,13 @@ class PanelBehavior extends ModelBehavior {
 			'hide' => array('lft', 'rght'),
 			'export' => array(),
 			'no_export' => array('lft', 'rght'),
-			'search' => array(),
-			'no_search' => array(),
 			'no_editor' => array(),
 			'virtual' => array(),
 			'conditional' => array(),
 			'code' => array(),
 			'no_sanitize_html' => array(),
 			'names' => array(),
+			'legends' => array(),
 			'filter' => array(),
 			'filter_advanced' => array(),
 			'date_ranges' => array(),
@@ -501,7 +500,6 @@ class PanelBehavior extends ModelBehavior {
 	}
 
 
-
 	function _camelize($array) {
 		foreach ($array as $key => $value) {
 			if (is_array($value)) {
@@ -515,6 +513,7 @@ class PanelBehavior extends ModelBehavior {
 		}
 		return $array;
 	}
+
 
 	function _attachUploads($Model) {
 		if (!empty($Model->brwConfig['images'])) {
@@ -566,15 +565,17 @@ class PanelBehavior extends ModelBehavior {
 		$customActionsTypes = array('custom_actions', 'global_custom_actions');
 		foreach ($customActionsTypes as $customActionType) {
 			$customActions = array();
-			foreach ($Model->brwConfig[$customActionType] as $action => $config) {
-				$customActions[$action] = Set::merge($this->brwConfigDefaultCustomActions, $config);
-				$title = Inflector::humanize($action);
-				if (empty($customActions[$action]['title'])) {
-					$customActions[$action]['title'] = $title;
-				}
-				if (empty($customActions[$action]['options']['class'])) {
-					$customActions[$action]['options']['class'] = $action;
-					$customActions[$action]['options']['title'] = $title;
+			if (!empty($Model->brwConfig[$customActionType])) {
+				foreach ($Model->brwConfig[$customActionType] as $action => $config) {
+					$customActions[$action] = Set::merge($this->brwConfigDefaultCustomActions, $config);
+					$title = Inflector::humanize($action);
+					if (empty($customActions[$action]['title'])) {
+						$customActions[$action]['title'] = $title;
+					}
+					if (empty($customActions[$action]['options']['class'])) {
+						$customActions[$action]['options']['class'] = $action;
+						$customActions[$action]['options']['title'] = $title;
+					}
 				}
 			}
 			$Model->brwConfig[$customActionType] = $customActions;
@@ -613,13 +614,12 @@ class PanelBehavior extends ModelBehavior {
 				'no_add' => array('last_login'),
 				'no_view' => array('password'),
 				'virtual' => array('repeat_password' => array('after' => 'password')),
-				'hide' => array('last_login'),
+				'legends' => array(
+					'password' => __d('brownie', 'Leave blank for no change', true),
+				),
 			),
 			'paginate' => array(
-				'fields' => array('id', 'email'),
-			),
-			'legends' => array(
-				'password' => __d('brownie', 'Leave blank for no change', true),
+				'fields' => array('id', 'email', 'last_login'),
 			),
 		);
 		if ($Model->alias == 'BrwUser') {
@@ -703,13 +703,13 @@ class PanelBehavior extends ModelBehavior {
 			}
 			$type = $Model->brwConfigPerAuthUser[$authModel]['type'];
 			if ($type == 'none') {
-				$Model->bwConfig['actions'] = array(
-					'add' => false, 'edit' => false, 'index' => false,
+				$Model->brwConfig['actions'] = array(
+					'add' => false, 'edit' => false, 'index' => false, 'delete' => false,
 					'view' => false, 'export' => false, 'import' => false,
 				);
 			} else {
 				$brwConfig = $Model->brwConfigPerAuthUser[$authModel]['brwConfig'];
-				if ($type == 'owned') {
+				if ($Model->name != $authModel and $type == 'owned') {
 					if (empty($Model->belongsTo[$authModel])) {
 						pr('type = owned is valid only for models that belongsTo the auth model');
 					} else  {
@@ -722,4 +722,6 @@ class PanelBehavior extends ModelBehavior {
 		}
 
 	}
+
+
 }
