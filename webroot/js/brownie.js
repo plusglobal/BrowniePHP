@@ -176,20 +176,39 @@ function checkMultiple() {
 
 function filterCheckbox() {
 	$('div.filter-checkbox div.checkbox').addClass('clearfix');
-	$button = $('<input type="button" value="' + brwMsg.select + '" class="filter-choose">');
-	$div = $('div.filter-checkbox');
-	$div.before($button).hide();
-	$button.toggle(
-		function(){
-			$div.fadeIn('fast');
-			$button.val(brwMsg.done);
-		},
-		function(){
-			$div.fadeOut('fast');
-			$button.val(brwMsg.select);
+	var $button = [];
+	$('div.filter-checkbox').each(function(i){
+		if ($(this).height() < 200) {
+			$(this).css('overflow', 'hidden');
+		} else {
+			$(this).width($(this).width() + 30);
 		}
-	);
+		$button[i] = $('<input type="button" value="' + brwMsg.select + '" class="filter-choose" id="filter-choose-'+i+'">');
+		var $div = $(this);
+		$div.before($button[i]).hide();
+		$button[i].click(function(event){
+			event.stopPropagation();
+			toggleFilterCheckbox($div, $button[i]);
+		});
+	});
+	$('body').click(hideAllFilterCheckbox);
+	$('div.filter-checkbox').click(function(event){event.stopPropagation()}) ;	
 }
+
+function hideAllFilterCheckbox() {
+	$('div.filter-checkbox').hide();
+	$('input.filter-choose').val(brwMsg.select);
+}
+
+function toggleFilterCheckbox($div, $button) {
+	display = $div.css('display');
+	hideAllFilterCheckbox();
+	if (display == 'none') {
+		$div.show();
+		$button.val(brwMsg.done);
+	}
+}
+
 
 function showAdvancedFilters() {
 	if ($('.advanced').length) {

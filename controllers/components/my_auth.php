@@ -4,6 +4,7 @@ App::import('Component', 'Auth');
 
 class MyAuthComponent extends AuthComponent {
 
+
     function identify($user = null, $conditions = null) {
 		$models = Configure::read('brwSettings.userModels');
         foreach ($models as $model) {

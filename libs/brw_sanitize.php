@@ -2,12 +2,14 @@
 
 class BrwSanitize {
 
+
 	static function html($str) {
 		if (!is_string($str)) {
 			return $str;
 		}
 		return str_replace(array('<', '>'), array('&lt;', '&gt;'), $str);
 	}
+
 
 	function url($string) {
 		$http = strtolower(substr($string, 0, 7));
@@ -18,5 +20,6 @@ class BrwSanitize {
 			return $string;
 		}
 	}
+
 
 }

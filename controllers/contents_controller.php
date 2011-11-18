@@ -321,6 +321,7 @@ class ContentsController extends BrownieAppController {
 
 	}
 
+
 	function delete_multiple($model) {
 		$plural = $this->Model->brwConfig['names']['plural'];
 		if (empty($this->data['Content']['id'])) {
@@ -358,26 +359,6 @@ class ContentsController extends BrownieAppController {
 		}
 		$this->redirect($redir);
 	}
-
-
-	/*
-	function _add_images($model, $recordId, $categoryCode) {
-		if (!empty($this->data)) {
-			$saved = 0;
-			foreach ($this->data['BrwImage'] as $image) {
-				if ($this->Model->BrwImage->save($image)) {
-					$saved++;
-				}
-			}
-			if ($saved) {
-				$this->Session->setFlash(sprintf(__d('brownie', '%d images successfully added', true), $saved), 'flash_success');
-				$this->redirect(array('controller' => 'contents', 'action' => 'view', $this->Model->name, $recordId));
-			} else {
-				$this->Session->setFlash(__d('brownie', 'None images uploaded. Please try again.', true), 'flash_notice');
-			}
-		}
-		$this->set(compact('categoryCode', 'recordId', 'imageId'));
-	}*/
 
 
 	function edit_upload($model, $uploadType, $recordId, $categoryCode, $uploadId = null) {
@@ -537,29 +518,16 @@ class ContentsController extends BrownieAppController {
 
 	function filter($model) {
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
-		foreach ($this->Model->brwConfig['fields']['filter'] as $field => $multiple) {
+		foreach ($this->Model->_schema as $field => $cnf) {
 			$type = $this->Model->_schema[$field]['type'];
 			if (in_array($type, array('date', 'datetime'))) {
 				$keyFrom = $field . '_from';
-				$data = $this->data[$model];
 				foreach (array('_from', '_to') as $key) {
-					if (
-						!empty($this->data[$model][$field . $key]['year'])
-						and !empty($this->data[$model][$field . $key]['month'])
-						and !empty($this->data[$model][$field . $key]['day'])
-					) {
-						$url[$model . '.' . $field . $key] = $data[$field . $key]['year']
-							. '-' . $data[$field . $key]['month'] . '-' . $data[$field . $key]['day'];
+					if (!empty($this->data[$model][$field . $key]['year'])) {
+						$data = $this->Content->dateComplete($this->data[$model][$field . $key], $key, $type);
+						$url[$model . '.' . $field . $key] = $data['year'] . '-' . $data['month'] . '-' . $data['day'];
 						if ($type == 'datetime') {
-							if (
-								!empty($this->data[$model][$field . $key]['hour'])
-								and !empty($this->data[$model][$field . $key]['min'])
-							) {
-								$url[$model . '.' . $field . $key] .= ' ' . $data[$field . $key]['hour']
-									. ':' . $data[$field . $key]['min'] . ':00';
-							} else {
-								$url[$model . '.' . $field . $key] .= ' ' . (($key == 'from') ? '00:00:00' : '23:59:59');
-							}
+							$url[$model . '.' . $field . $key] .= ' ' . $data['hour'] . ':' . $data['min'] . ':' . $data['sec'];
 						}
 					}
 				}
@@ -568,7 +536,9 @@ class ContentsController extends BrownieAppController {
 				($type == 'integer' and !$this->Content->isForeignKey($this->Model, $field))
 			) {
 				foreach (array('_from', '_to') as $key) {
-					$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
+					if (!empty($this->data[$model][$field . $key])) {
+						$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
+					}
 				}
 			} elseif (!empty($this->data[$model][$field])) {
 				if (is_array($this->data[$model][$field])) {
@@ -867,5 +837,6 @@ class ContentsController extends BrownieAppController {
 			break;
 		}
 	}
+
 
 }

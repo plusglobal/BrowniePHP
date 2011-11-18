@@ -2,6 +2,7 @@
 
 class BrwUserBehavior extends ModelBehavior {
 
+
 	function setup($Model) {
 		$Model->displayField = 'email';
 		$Model->validate = $this->_validate($Model);
@@ -49,21 +50,8 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	/*function beforeFind($Model, $query) {
-		$user = Configure::read('Auth.BrwUser');
-		if ($user and !$user['root']) {
-			if (!empty($query['conditions']['BrwUser.id']) and $query['conditions']['BrwUser.id'] != $user['id']) {
-				$query['conditions']['BrwUser.id'] = 'noexiste';
-			} else {
-				$query['conditions']['BrwUser.id'] = $user['id'];
-			}
-		}
-		return $query;
-	}*/
-
-
 	function beforeSave($Model) {
-		if ($Model->alias != 'BrwUser') {
+		if ($Model->alias != 'BrwUser' and isset($Model->data[$Model->alias]['password'])) {
 			$pass = $Model->data[$Model->alias]['password'];
 			$Model->data[$Model->alias]['password'] = Security::hash($pass, null, true);
 		}
@@ -88,9 +76,23 @@ class BrwUserBehavior extends ModelBehavior {
 		return ($password == $repeat_password);
 	}
 
+
 	function brwBeforeEdit($Model, $data) {
 		$data[$Model->alias]['password'] = $data[$Model->alias]['repeat_password'] = '';
 		return $data;
 	}
+
+
+	function updateLastLogin($Model, $id) {
+		if (empty($Model->_schema['last_login'])) {
+			return null;
+		}
+		$user = $Model->findById($id);
+		return $Model->save(array(
+			'id' => $id, 'last_login' => date('Y-m-d H:i:s'),
+			'modified' => $user[$Model->name]['modified'],
+		));
+	}
+
 
 }
