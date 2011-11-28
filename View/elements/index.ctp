@@ -7,7 +7,7 @@
 		<?php
 		if ($permissions[$model]['add']) {
 			echo '
-			<li class="add">' . $html->link(
+			<li class="add">' . $this->Html->link(
 				String::insert(
 					__d('brownie', 'Add :name_singular', true),
 					array('name_singular' => $brwConfig['names']['singular'])
@@ -17,21 +17,21 @@
 		}
 		if ($brwConfig['actions']['import']) {
 			echo '
-			<li class="import">' . $html->link(
+			<li class="import">' . $this->Html->link(
 				__d('brownie', 'Import', true),
 				array('action' => 'import', $model)
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['export']) {
 			$url = array_merge(array('action' => 'export', $model), $filters, $this->params['named']);
-			echo '<li class="export">' . $html->link(__d('brownie', 'Export', true), $url) . '</li>';
+			echo '<li class="export">' . $this->Html->link(__d('brownie', 'Export', true), $url) . '</li>';
 		}
 
 		foreach ($brwConfig['global_custom_actions'] as $customAction => $params) {
 			$params['url'] = array_merge($params['url'], $this->params['named']);
 			echo '
 			<li class="global_custom_action ' . $params['class'] . '">
-			' . $html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) . '
+			' . $this->Html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) . '
 			</li>';
 		}
 
@@ -57,7 +57,7 @@ if ($records) {
 	}
 
 	if ($brwConfig['actions']['delete']) {
-		echo $form->create('Content', array(
+		echo $this->Form->create('Content', array(
 			'id' => 'deleteMultiple',
 			'url' => array('controller' => 'contents', 'action' => 'delete_multiple', $model)
 		));
@@ -148,11 +148,11 @@ if ($records) {
 		): ?>
 			<td class="sortable actions">
 			<?php
-			echo $html->link(__d('brownie', 'Sort up', true),
+			echo $this->Html->link(__d('brownie', 'Sort up', true),
 				array('controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']),
 				array('class' => 'up', 'title' => __d('brownie', 'Sort up', true))
 			);
-			echo $html->link(__d('brownie', 'Sort down', true),
+			echo $this->Html->link(__d('brownie', 'Sort down', true),
 				array('controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']),
 				array('class' => 'down', 'title' => __d('brownie', 'Sort down', true))
 			);
@@ -172,7 +172,7 @@ if ($records) {
 	echo '</table>';
 	if ($brwConfig['actions']['delete']) {
 		echo $deleteButton;
-		echo $form->end();
+		echo $this->Form->end();
 	}
 } else {
 	echo '<p class="norecords">'

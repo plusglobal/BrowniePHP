@@ -1,7 +1,7 @@
 <div class="form">
 <?php
 $adding = true;
-echo $form->create('Content', array(
+echo $this->Form->create('Content', array(
 	'type' => 'file',
 	'url' => array(
 		'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
@@ -20,10 +20,10 @@ if ($uploadType == 'BrwFile') {
 <?php for ($i = 0; $i < $max; $i++): ?>
 <fieldset>
 	<?php
-	echo $form->input($uploadType . '.' . $i . '.id', array('value' => $uploadId, 'type' => 'hidden'));
-	echo $form->input($uploadType . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden'));
-	echo $form->input($uploadType . '.' . $i . '.record_id', array('value' => $recordId, 'type' => 'hidden'));
-	echo $form->input($uploadType . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
+	echo $this->Form->input($uploadType . '.' . $i . '.id', array('value' => $uploadId, 'type' => 'hidden'));
+	echo $this->Form->input($uploadType . '.' . $i . '.model', array('value' => $model, 'type' => 'hidden'));
+	echo $this->Form->input($uploadType . '.' . $i . '.record_id', array('value' => $recordId, 'type' => 'hidden'));
+	echo $this->Form->input($uploadType . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
 	$params = array(
 		'type' => 'file',
 		'label' => ($uploadType == 'BrwFile')? __d('brownie', 'File', true): __d('brownie', 'Image', true)
@@ -33,12 +33,12 @@ if ($uploadType == 'BrwFile') {
 			. __d('brownie', 'You can leave the file field blank if you don\'t want to change the file', true)
 			. '</div>';
 	}
-	echo $form->input($uploadType . '.' . $i . '.file', $params);
+	echo $this->Form->input($uploadType . '.' . $i . '.file', $params);
 	if($upload['description']) {
-		echo $form->input($uploadType . '.' . $i . '.description', array('label' => __d('brownie', 'Description', true)));
+		echo $this->Form->input($uploadType . '.' . $i . '.description', array('label' => __d('brownie', 'Description', true)));
 	}
 ?>
 </fieldset>
 <?php endfor ?>
-<?php echo $form->end(__d('brownie', 'Save', true)); ?>
+<?php echo $this->Form->end(__d('brownie', 'Save', true)); ?>
 </div>

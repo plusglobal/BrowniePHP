@@ -38,8 +38,8 @@ class BrownieController extends BrownieAppController {
 	}
 
 
-    function login() {
-    	$userId = $this->Session->read('Auth.BrwUser.id');
+/*    function login() {
+    	/*$userId = $this->Session->read('Auth.BrwUser.id');
     	if ($userId) {
     		if (!empty($this->data['BrwUser']['password'])) {
     			$AuthModel = ClassRegistry::init($this->Session->read('authModel'));
@@ -47,13 +47,31 @@ class BrownieController extends BrownieAppController {
     		}
 			$this->redirect($this->Auth->redirect());
 		}
+		pr($this->Auth);
     }
 
 
     function logout() {
     	$this->Session->delete('authModel');
         $this->redirect($this->Auth->logout());
-    }
+    }*/
+
+	function login() {
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
+				return $this->redirect($this->Auth->redirect());
+			} else {
+				$this->Session->setFlash(__('Username or password is incorrect'), 'default', array(), 'auth');
+			}
+		}
+	}
+
+
+	function logout() {
+		$this->redirect($this->Auth->logout());
+	}
+
+
 
 
 	function translations() {

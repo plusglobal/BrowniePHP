@@ -3,9 +3,13 @@
 class BrownieAppController extends AppController {
 
 	var $components = array(
-		//'Brownie.MyAuth',
 		'Auth' => array(
-			'Form' => array('userModel' => 'BrwUser'),
+			'authenticate' => array(
+				'Brownie.Brw' => array(
+                	'fields' => array('username' => 'email'),
+				),
+			),
+			'authError' => 'Did you really think you are allowed to see that?',
 			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie'),
 		),
 		'Session'
@@ -16,13 +20,13 @@ class BrownieAppController extends AppController {
 	static $currentUser;
 
 
-	function constructClasses() {
+	/*function constructClasses() {
 		parent::constructClasses();
 		$this->Auth = $this->MyAuth;
-	}
+	}*/
 
 
-	function beforeFilter() {
+	function b_eforeFilter() {
 		$this->pageTitle = __d('brownie', 'Control panel', true);
 	    Configure::write('brwSettings.authModel', $this->Session->read('authModel'));
 	    Configure::write('brwAuthUser', $this->Session->read('Auth.BrwUser'));

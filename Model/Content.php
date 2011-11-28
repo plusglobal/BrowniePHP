@@ -39,7 +39,7 @@ class Content extends BrownieAppModel {
 
 
 	function _fieldsForForm($Model, $action) {
-		$schema = $Model->_schema;
+		$schema = $Model->schema();
 		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach ($fieldsNotUsed as $field) {
@@ -154,7 +154,7 @@ class Content extends BrownieAppModel {
 
 	function brownieBeforeSave($data, $Model, $Session) {
 		$data['Content']['fieldList'] = array();
-		foreach ($Model->_schema as $field => $value) {
+		foreach ($Model->schema() as $field => $value) {
 			if (
 				$value['null']
 				and !empty($data[$Model->name][$field])
@@ -225,7 +225,7 @@ class Content extends BrownieAppModel {
 
 	function fckFields($Model) {
 		$out = array();
-		foreach ($Model->_schema as $field => $metadata) {
+		foreach ($Model->schema() as $field => $metadata) {
 			if ($metadata['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_editor'])) {
 				$out[] = $field;
 			}
@@ -236,7 +236,7 @@ class Content extends BrownieAppModel {
 
 	function defaults($Model) {
 		$data = array();
-		foreach ($Model->_schema as $field => $value) {
+		foreach ($Model->schema() as $field => $value) {
 			if (array_key_exists($field, $Model->brwConfig['default'])) {
 				$data[$field] = $Model->brwConfig['default'][$field];
 			} elseif (!empty($value['default'])) {
@@ -309,7 +309,7 @@ class Content extends BrownieAppModel {
 
 
 	function schemaForView($Model) {
-		$schema = $Model->_schema;
+		$schema = $Model->schema();
 		foreach ($schema as $field => $extra) {
 			switch ($extra['type']) {
 				case 'float':
@@ -451,7 +451,7 @@ class Content extends BrownieAppModel {
 			$Model->Behaviors->disable('Translate');
 		}
 		if (!$restricted) {
-			if (!empty($named['sort']) and in_array($named['sort'], array_keys($Model->_schema))) {
+			if (!empty($named['sort']) and in_array($named['sort'], array_keys($Model->schema()))) {
 				$sort_field = $named['sort'];
 				$direction = 'asc';
 				if (!empty($named['direction']) and in_array($named['direction'], array('desc', 'asc'))) {
@@ -623,7 +623,7 @@ class Content extends BrownieAppModel {
 
 	function filterConditions($Model, $named, $forData = false) {
 		$filter = array();
-		foreach ($Model->_schema as $field => $value) {
+		foreach ($Model->schema() as $field => $value) {
 			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
 			$isRange = (!$forData and (

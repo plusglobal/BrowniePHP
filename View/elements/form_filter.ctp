@@ -1,12 +1,12 @@
 <?php if ($isAnyFilter): ?>
 <div class="flash_notice flash">
 	<?php __d('brownie', 'This following listing is filtered.'); ?>
-	<?php echo $html->link(__d('brownie', 'View complete index', true), array('action' => 'index', $model)) ?>
+	<?php echo $this->Html->link(__d('brownie', 'View complete index', true), array('action' => 'index', $model)) ?>
 </div>
 <?php  endif ?>
 
 <?php
-echo $form->create('Filter', array(
+echo $this->Form->create('Filter', array(
 	'url' => array('controller' => 'contents', 'action' => 'filter', $model),
 	'class' => 'filter clearfix'
 ));
@@ -37,10 +37,10 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 					'empty' => '-',
 				);
 			}
-			echo $before . $form->input(
+			echo $before . $this->Form->input(
 				$model . '.' . $field . '_from',
 				$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'from', true))
-			) . $form->input(
+			) . $this->Form->input(
 				$model . '.' . $field . '_to',
 				$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'to', true))
 			) . $after;
@@ -62,11 +62,11 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 					'after' => '</div>',
 				));
 			}
-			echo $before . $form->input($model . '.' . $field, $params) . $after;
+			echo $before . $this->Form->input($model . '.' . $field, $params) . $after;
 		}
 	}
 }
-echo $form->submit(__d('brownie', 'Filter', true), array('id' => 'filterSubmit'));
-echo $form->end();
+echo $this->Form->submit(__d('brownie', 'Filter', true), array('id' => 'filterSubmit'));
+echo $this->Form->end();
 ?>
 

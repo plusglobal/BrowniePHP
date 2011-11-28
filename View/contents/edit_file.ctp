@@ -1,11 +1,11 @@
 <div class="form">
 <?php
 $adding = true;
-echo $form->create('Content', array('type' => 'file', 'action' => 'edit_file', 'plugin' => 'brownie'));
+echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit_file', 'plugin' => 'brownie'));
 ?>
 <h1><?php __d('brownie', 'Add file'); ?></h1>
 <?php
-echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
+echo $this->Form->input('model', array('value' => $model, 'type' => 'hidden'));
 
 if(!empty($brwConfig['files'][$categoryCode])){
 		$file = $brwConfig['files'][$categoryCode];
@@ -15,8 +15,8 @@ if(!empty($brwConfig['files'][$categoryCode])){
 		<legend>' . $file['name_category'] . '</legend>';
 
 		echo '
-		' . $form->input('BrwFile.id', array('value' => $fileId)) . '
-		' . $form->input('BrwFile.file', array('type' => 'file', 'label' => __d('brownie', 'File', true)));
+		' . $this->Form->input('BrwFile.id', array('value' => $fileId)) . '
+		' . $this->Form->input('BrwFile.file', array('type' => 'file', 'label' => __d('brownie', 'File', true)));
 		if($fileId){
 			echo '
 			<div>' .
@@ -24,13 +24,13 @@ if(!empty($brwConfig['files'][$categoryCode])){
 			. '</div>';
 		}
 		echo '
-		' . $form->input('BrwFile.model', array('value' => $model, 'type' => 'hidden')) . '
-		' .	$form->input('BrwFile.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
+		' . $this->Form->input('BrwFile.model', array('value' => $model, 'type' => 'hidden')) . '
+		' .	$this->Form->input('BrwFile.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
 
 		if($file['description']) {
-			echo $form->input('BrwFile.description', array('label' => __d('brownie', 'File description', true)));
+			echo $this->Form->input('BrwFile.description', array('label' => __d('brownie', 'File description', true)));
 		}
-		echo $form->input('BrwFile.record_id', array('value' => $recordId, 'type' => 'hidden'));
+		echo $this->Form->input('BrwFile.record_id', array('value' => $recordId, 'type' => 'hidden'));
 
 		echo '
 		</fieldset>';
@@ -39,5 +39,5 @@ if(!empty($brwConfig['files'][$categoryCode])){
 ?>
 
 
-<?php echo $form->end(__d('brownie', 'Submit', true)); ?>
+<?php echo $this->Form->end(__d('brownie', 'Submit', true)); ?>
 </div>

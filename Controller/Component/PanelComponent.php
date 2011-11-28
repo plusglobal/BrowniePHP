@@ -71,7 +71,7 @@ class PanelComponent extends Component{
 
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
 			pr('o');
-			$this->_authSettings();
+			//$this->_authSettings();
 		}
 
 		if (Configure::read('Config.languages')) {
@@ -95,7 +95,7 @@ class PanelComponent extends Component{
 	}
 
 
-	function _authSettings() {
+	/*function _authSettings() {
 		$this->controller->Auth->authenticate->userModel = 'BrwUser';
 		$this->controller->Auth->authenticate->fields = array('username'  => 'email', 'password'  => 'password');
 		$this->controller->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
@@ -107,7 +107,7 @@ class PanelComponent extends Component{
 		$this->controller->set('brwAuthUser', $this->controller->Session->read('Auth.BrwUser'));
 		$this->controller->set('BrwUser', $this->controller->Session->read('Auth.BrwUser'));
 		$this->controller->currentUser = $this->controller->Session->read('Auth.BrwUser');
-	}
+	}*/
 
 
 	function _menuConfig() {

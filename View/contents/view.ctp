@@ -8,7 +8,7 @@
 			if (!empty($neighbors['prev'])) {
 				echo '
 				<li class="prev">
-					' . $html->link(__d('brownie', 'Previous', true),
+					' . $this->Html->link(__d('brownie', 'Previous', true),
 					array('action' => 'view', $model, $neighbors['prev'][$model]['id']) + $this->params['named'],
 					array('title' => __d('brownie', 'Previous', true))).'
 				</li>';
@@ -16,7 +16,7 @@
 			if (!empty($neighbors['next'])) {
 				echo '
 				<li class="next">
-					' . $html->link(__d('brownie', 'Next', true),
+					' . $this->Html->link(__d('brownie', 'Next', true),
 					array('action' => 'view', $model, $neighbors['next'][$model]['id']) + $this->params['named'],
 					array('title' => __d('brownie', 'Next', true))).'
 				</li>';
@@ -35,7 +35,7 @@
 				}
 				echo '
 				<li class="back">
-					' . $html->link(__d('brownie', 'Back', true), $backToUrl, array('title' => __d('brownie', 'Back', true))) . '
+					' . $this->Html->link(__d('brownie', 'Back', true), $backToUrl, array('title' => __d('brownie', 'Back', true))) . '
 				<li>';
 			}
 			?>
@@ -74,7 +74,7 @@
 			<td class="habtm">
 				<ul>
 				<?php foreach ($rel['data'] as $id => $name) : ?>
-					<li><?php echo $html->link($name, array('plugin' => 'brownie',
+					<li><?php echo $this->Html->link($name, array('plugin' => 'brownie',
 					'controller' => 'contents', 'action' => 'view', $rel['model'], $id)) ?></li>
 				<?php endforeach ?>
 				</ul>
@@ -99,7 +99,7 @@ foreach ($uploadModels as $uploadKey => $uploadModel): ?>
 		}
 		if ($canAdd) {
 			echo '<div class="actions ' . $uploadKey . '-actions"><ul class="actions"><li class="add-' . $uploadKey . '">
-			' . $html->link(__d('brownie', 'Add', true), array(
+			' . $this->Html->link(__d('brownie', 'Add', true), array(
 				'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
 				$model, $uploadModel, $record[$model]['id'], $catCode
 			)) . '</li></ul></div>';

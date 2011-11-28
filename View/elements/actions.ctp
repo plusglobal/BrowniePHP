@@ -48,7 +48,7 @@ if (!empty($record[$model]['brw_actions'])): ?>
 		or ($action == 'index' and ($calledFrom == 'index' or $calledFrom == 'parent'))
 	) continue ?>
 	<li class="<?php echo $params['class'] ?>">
-	<?php echo $html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) ?>
+	<?php echo $this->Html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) ?>
 	</li>
 <?php endforeach ?>
 </ul>

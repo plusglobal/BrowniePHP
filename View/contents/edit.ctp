@@ -6,7 +6,7 @@ $adding = empty($this->data[$model]['id']);
 if (!$adding) {
 	$url[] = $this->data[$model]['id'];
 }
-echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url));
+echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url));
 ?>
 <fieldset>
 	<legend>
@@ -16,14 +16,14 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 	?>
 	</legend>
 	<?php
-	echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
+	echo $this->Form->input('model', array('value' => $model, 'type' => 'hidden'));
 
 
 	/*if (!empty($langs3chars)) {
 		echo '<div id="enabledLangs" class="clearfix">
 		<label class="enabledLangs">' . __d('brownie', 'Enabled languages', true) . '</label>' ;
 		foreach ($langs3chars as $lang2 => $lang3) {
-			echo $form->input('enabled_' . $lang3, array(
+			echo $this->Form->input('enabled_' . $lang3, array(
 				'type' => 'checkbox', 'label' => $this->i18n->humanize($lang3)
 			));
 		}
@@ -74,7 +74,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 			$params['class'] = 'richEditor';
 		}
 		if (!in_array($key, $i18nFields)) {
-			echo $form->input($model . '.' . $key, $params);
+			echo $this->Form->input($model . '.' . $key, $params);
 		} else {
 			echo $this->element('i18n_input', array('model' => $model, 'field' => $key, 'params' => $params));
 		}
@@ -92,7 +92,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 					$javascript->link('/brownie/js/jquery.selso', false);
 					$javascript->link('/brownie/js/jquery.comboselect', false);
 				}
-				echo $form->input($key . '.' . $key, $params);
+				echo $this->Form->input($key . '.' . $key, $params);
 			}
 		}
 	}
@@ -123,7 +123,7 @@ foreach ($uploads as $upload) :
 					<input type="hidden" name="data[Brw<?php echo $upload ?>][category_code][]" value="<?php echo $categoryCode ?>" />
 					<?php
 					if ($uploadCat['description']) :
-						echo $form->input('Brw' . $upload . '.' . $i . '.description', array(
+						echo $this->Form->input('Brw' . $upload . '.' . $i . '.description', array(
 							'label' => __d('brownie', 'Description', true),
 							'name' => 'data[Brw' . $upload . '][description][]',
 						));
@@ -153,13 +153,13 @@ endforeach;
 ?>
 
 <fieldset>
-<?php echo $form->input('after_save', $afterSaveOptionsParams) ?>
+<?php echo $this->Form->input('after_save', $afterSaveOptionsParams) ?>
 </fieldset>
-<?php echo $form->hidden('referer') ?>
+<?php echo $this->Form->hidden('referer') ?>
 <div class="submit">
 	<input type="submit" value="<?php echo __d('brownie', 'Save', true) ?>" />
 	<a href="<?php echo Router::url(array('controller' => 'brownie', 'action' => 'index')) ?>" class="cancel">Cancel</a>
 </div>
 
-<?php echo $form->end(); ?>
+<?php echo $this->Form->end(); ?>
 </div>

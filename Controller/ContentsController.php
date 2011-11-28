@@ -54,6 +54,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function index() {
+		pr($this->paginate);
 		$this->paginate = $this->Model->brwConfig['paginate'];
 		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
