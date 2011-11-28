@@ -694,4 +694,44 @@ class Content extends BrownieAppModel {
 	}
 
 
+	function dateComplete($data, $fromOrTo, $type) {
+		if (!in_array($fromOrTo, array('_from', '_to')) or empty($data['year'])) {
+			return false;
+		}
+		if ($fromOrTo == '_from') {
+			if (empty($data['month'])) {
+				$data['month'] = '01';
+			}
+			if (empty($data['day'])) {
+				$data['day'] = '01';
+			}
+			if ($type == 'datetime') {
+				if (empty($data['hour'])) {
+					$data['hour'] = '00';
+				}
+				if (empty($data['min'])) {
+					$data['min'] = '00';
+				}
+				$data['sec'] = '00';
+			}
+		} elseif ($fromOrTo == '_to') {
+			if (empty($data['month'])) {
+				$data['month'] = '12';
+			}
+			if (empty($data['day'])) {
+				$data['day'] = '31';
+			}
+			if ($type == 'datetime') {
+				if (empty($data['hour'])) {
+					$data['hour'] = '23';
+				}
+				if (empty($data['min'])) {
+					$data['min'] = '59';
+				}
+				$data['sec'] = '59';
+			}
+		}
+		return $data;
+	}
+
 }

@@ -522,25 +522,12 @@ class ContentsController extends BrownieAppController {
 			$type = $this->Model->_schema[$field]['type'];
 			if (in_array($type, array('date', 'datetime'))) {
 				$keyFrom = $field . '_from';
-				$data = $this->data[$model];
 				foreach (array('_from', '_to') as $key) {
-					if (
-						!empty($this->data[$model][$field . $key]['year'])
-						and !empty($this->data[$model][$field . $key]['month'])
-						and !empty($this->data[$model][$field . $key]['day'])
-					) {
-						$url[$model . '.' . $field . $key] = $data[$field . $key]['year']
-							. '-' . $data[$field . $key]['month'] . '-' . $data[$field . $key]['day'];
+					if (!empty($this->data[$model][$field . $key]['year'])) {
+						$data = $this->Content->dateComplete($this->data[$model][$field . $key], $key, $type);
+						$url[$model . '.' . $field . $key] = $data['year'] . '-' . $data['month'] . '-' . $data['day'];
 						if ($type == 'datetime') {
-							if (
-								!empty($this->data[$model][$field . $key]['hour'])
-								and !empty($this->data[$model][$field . $key]['min'])
-							) {
-								$url[$model . '.' . $field . $key] .= ' ' . $data[$field . $key]['hour']
-									. ':' . $data[$field . $key]['min'] . ':00';
-							} else {
-								$url[$model . '.' . $field . $key] .= ' ' . (($key == 'from') ? '00:00:00' : '23:59:59');
-							}
+							$url[$model . '.' . $field . $key] .= ' ' . $data['hour'] . ':' . $data['min'] . ':' . $data['sec'];
 						}
 					}
 				}
@@ -549,7 +536,9 @@ class ContentsController extends BrownieAppController {
 				($type == 'integer' and !$this->Content->isForeignKey($this->Model, $field))
 			) {
 				foreach (array('_from', '_to') as $key) {
-					$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
+					if (!empty($this->data[$model][$field . $key])) {
+						$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
+					}
 				}
 			} elseif (!empty($this->data[$model][$field])) {
 				if (is_array($this->data[$model][$field])) {
