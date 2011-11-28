@@ -86,8 +86,8 @@ if ($records) {
 					echo '
 					<th class="' . $field_name . ' ' . $schema[$field_name]['class'] . '">
 					' . $this->Paginator->sort(
-						__($brwConfig['fields']['names'][$field_name]),
 						$field_name,
+						__($brwConfig['fields']['names'][$field_name]),
 						array('model' => $model, 'escape' => false)
 					) . '</th>';
 					if ($field_name == 'id') {

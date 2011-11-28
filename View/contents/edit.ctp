@@ -89,8 +89,8 @@ echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit', 
 					$params['escape'] = false;
 					$params['size'] = 5;
 					$params['class'] = 'combo-select';
-					$javascript->link('/brownie/js/jquery.selso', false);
-					$javascript->link('/brownie/js/jquery.comboselect', false);
+					echo $this->Html->script('/brownie/js/jquery.selso');
+					echo $this->Html->script('/brownie/js/jquery.comboselect');
 				}
 				echo $this->Form->input($key . '.' . $key, $params);
 			}
