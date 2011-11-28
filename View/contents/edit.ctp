@@ -11,7 +11,7 @@ echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit', 
 <fieldset>
 	<legend>
 	<?php
-	$action = $adding ? __d('brownie', 'Add :name_singular', true) : __d('brownie', 'Edit :name_singular', true);
+	$action = $adding ? __d('brownie', 'Add :name_singular') : __d('brownie', 'Edit :name_singular');
 	echo String::insert($action, array('name_singular' => $brwConfig['names']['singular']));
 	?>
 	</legend>
@@ -42,7 +42,7 @@ echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit', 
 				$params = array(
 					'type' => 'select',
 					'options' => $related['tree'][$key],
-					'empty' => __d('brownie', '(No parent)', true),
+					'empty' => __d('brownie', '(No parent)'),
 				);
 				if (!empty($this->params['named'][$key])) {
 					$params['selected'] = $this->params['named'][$key];
@@ -124,7 +124,7 @@ foreach ($uploads as $upload) :
 					<?php
 					if ($uploadCat['description']) :
 						echo $this->Form->input('Brw' . $upload . '.' . $i . '.description', array(
-							'label' => __d('brownie', 'Description', true),
+							'label' => __d('brownie', 'Description'),
 							'name' => 'data[Brw' . $upload . '][description][]',
 						));
 					else : ?>
@@ -139,7 +139,7 @@ foreach ($uploads as $upload) :
 				<?php if (!$uploadCat['index']) : ?>
 				<div id="cloneHoder<?php echo $i ?>" class="cloneHolder"></div>
 				<a href="#" class="cloneLink cloneLink_<?php echo $upload ?>" id="clone_<?php echo $i ?>"><?php
-				($upload == 'Image')? __d('brownie', 'Add Image') : __d('brownie', 'Add File')
+				echo ($upload == 'Image')? __d('brownie', 'Add Image') : __d('brownie', 'Add File')
 				?></a>
 				<?php endif ?>
 			</fieldset>
@@ -157,7 +157,7 @@ endforeach;
 </fieldset>
 <?php echo $this->Form->hidden('referer') ?>
 <div class="submit">
-	<input type="submit" value="<?php echo __d('brownie', 'Save', true) ?>" />
+	<input type="submit" value="<?php echo __d('brownie', 'Save') ?>" />
 	<a href="<?php echo Router::url(array('controller' => 'brownie', 'action' => 'index')) ?>" class="cancel">Cancel</a>
 </div>
 

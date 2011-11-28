@@ -19,7 +19,7 @@ class BrwUploadBehavior extends ModelBehavior {
 			'file' => array (
 				'valid_size' => array(
 					'rule' => array('validateSizeFile'),
-					'message' => sprintf(__d('brownie', 'File too heavy. Maximum allowed: %s KB (%s MB)', true), $kB, $mB)
+					'message' => __d('brownie', 'File too heavy. Maximum allowed: %s KB (%s MB)', $kB, $mB)
 				),
 			),
 		);
@@ -27,7 +27,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		if ($Model->alias == 'BrwImage') {
 			$Model->validate['file']['valid_image'] = array(
 				'rule' => array('validateImageFile'),
-				'message' => __d('brownie', 'Invalid image. Only jpg, gif and png are allowed.', true),
+				'message' => __d('brownie', 'Invalid image. Only jpg, gif and png are allowed.'),
 			);
 		}
 

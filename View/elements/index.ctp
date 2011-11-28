@@ -9,7 +9,7 @@
 			echo '
 			<li class="add">' . $this->Html->link(
 				String::insert(
-					__d('brownie', 'Add :name_singular', true),
+					__d('brownie', 'Add :name_singular'),
 					array('name_singular' => $brwConfig['names']['singular'])
 				),
 				array_merge(array('action' => 'edit', $model), $filters)
@@ -18,13 +18,13 @@
 		if ($brwConfig['actions']['import']) {
 			echo '
 			<li class="import">' . $this->Html->link(
-				__d('brownie', 'Import', true),
+				__d('brownie', 'Import'),
 				array('action' => 'import', $model)
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['export']) {
 			$url = array_merge(array('action' => 'export', $model), $filters, $this->params['named']);
-			echo '<li class="export">' . $this->Html->link(__d('brownie', 'Export', true), $url) . '</li>';
+			echo '<li class="export">' . $this->Html->link(__d('brownie', 'Export'), $url) . '</li>';
 		}
 
 		foreach ($brwConfig['global_custom_actions'] as $customAction => $params) {
@@ -63,7 +63,7 @@ if ($records) {
 			'url' => array('controller' => 'contents', 'action' => 'delete_multiple', $model)
 		));
 		$deleteButton = '
-		<div class="submit"><button><span>' . __d('brownie', 'Delete selected', true) . '</span></button></div>
+		<div class="submit"><button><span>' . __d('brownie', 'Delete selected') . '</span></button></div>
 		';
 		if ($controlsOnTop) {
 			echo $deleteButton;
@@ -78,7 +78,7 @@ if ($records) {
 			if ($brwConfig['actions']['delete']) {
 				echo '
 				<th class="delete_multiple">
-					<input type="checkbox" id="deleteCheckAll" title="' . __d('brownie', 'Select/Unselect all', true) . '">
+					<input type="checkbox" id="deleteCheckAll" title="' . __d('brownie', 'Select/Unselect all') . '">
 				</th>';
 			}
 			foreach ($brwConfig['paginate']['fields'] as $field_name) {
@@ -104,10 +104,10 @@ if ($records) {
 				$brwConfig['actions']['edit'] and
 				(($brwConfig['sortable'] and empty($this->params['named']['sort'])) or !empty($isTree))
 			) {
-				echo '<th class="actions sortable">' . __d('brownie', 'Sort', true) . '</th>';
+				echo '<th class="actions sortable">' . __d('brownie', 'Sort') . '</th>';
 			}
 
-			echo '<th class="actions">' . __d('brownie', 'Actions', true) . '</th>';
+			echo '<th class="actions">' . __d('brownie', 'Actions') . '</th>';
 
 			echo '
 			</tr>';
@@ -149,13 +149,13 @@ if ($records) {
 		): ?>
 			<td class="sortable actions">
 			<?php
-			echo $this->Html->link(__d('brownie', 'Sort up', true),
+			echo $this->Html->link(__d('brownie', 'Sort up'),
 				array('controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']),
-				array('class' => 'up', 'title' => __d('brownie', 'Sort up', true))
+				array('class' => 'up', 'title' => __d('brownie', 'Sort up'))
 			);
-			echo $this->Html->link(__d('brownie', 'Sort down', true),
+			echo $this->Html->link(__d('brownie', 'Sort down'),
 				array('controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']),
-				array('class' => 'down', 'title' => __d('brownie', 'Sort down', true))
+				array('class' => 'down', 'title' => __d('brownie', 'Sort down'))
 			);
 			?>
 			</td>
@@ -177,7 +177,7 @@ if ($records) {
 	}
 } else {
 	echo '<p class="norecords">'
-	. sprintf(__d('brownie', 'There are no %s', true), $brwConfig['names']['plural'])
+	. __d('brownie', 'There are no %s', $brwConfig['names']['plural'])
 	. '</p>';
 };
 

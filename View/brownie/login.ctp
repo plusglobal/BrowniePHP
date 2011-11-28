@@ -10,9 +10,9 @@
 		<?php
 		echo $this->Session->flash('auth');
 		echo $this->Form->create();
-		echo $this->Form->input('BrwUser.email', array('label' => __d('brownie', 'Username', true)));
-		echo $this->Form->input('BrwUser.password', array('label' => __d('brownie', 'Password', true)));
-		echo $this->Form->end(__d('brownie', 'Login', true), array('class' => 'submit'));
+		echo $this->Form->input('BrwUser.email', array('label' => __d('brownie', 'Username')));
+		echo $this->Form->input('BrwUser.password', array('label' => __d('brownie', 'Password')));
+		echo $this->Form->end(__d('brownie', 'Login'), array('class' => 'submit'));
 		?>
 	</div>
 </div>

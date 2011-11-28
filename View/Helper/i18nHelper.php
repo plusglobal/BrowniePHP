@@ -5,14 +5,14 @@ class i18nHelper extends Helper {
 	function humanize($lang) {
 		$out = $lang;
 		switch ($lang) {
-			case 'cat': $out = __d('brownie', 'Catalá', true); break;
-			case 'por': $out = __d('brownie', 'Portugues', true); break;
-			case 'deu': $out = __d('brownie', 'German', true); break;
-			case 'eng': $out = __d('brownie', 'English', true); break;
-			case 'fre': $out = __d('brownie', 'French', true); break;
-			case 'ita': $out = __d('brownie', 'Italian', true); break;
-			case 'dut': $out = __d('brownie', 'Dutch', true); break;
-			case 'spa': $out = __d('brownie', 'Spanish', true); break;
+			case 'cat': $out = __d('brownie', 'Catalá'); break;
+			case 'por': $out = __d('brownie', 'Portugues'); break;
+			case 'deu': $out = __d('brownie', 'German'); break;
+			case 'eng': $out = __d('brownie', 'English'); break;
+			case 'fre': $out = __d('brownie', 'French'); break;
+			case 'ita': $out = __d('brownie', 'Italian'); break;
+			case 'dut': $out = __d('brownie', 'Dutch'); break;
+			case 'spa': $out = __d('brownie', 'Spanish'); break;
 		}
 		return $out;
 	}

@@ -193,8 +193,8 @@ class ContentsController extends BrownieAppController {
 			}
 			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'The %s has been saved [male]', true), $this->Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'The %s has been saved [female]', true), $this->Model->brwConfig['names']['singular']);
+					__d('brownie', 'The %s has been saved [male]', $this->Model->brwConfig['names']['singular']):
+					__d('brownie', 'The %s has been saved [female]', $this->Model->brwConfig['names']['singular']);
 				$this->Session->setFlash($msg, 'flash_success');
 
 				if (!empty($this->data['Content']['after_save'])) {
@@ -202,13 +202,13 @@ class ContentsController extends BrownieAppController {
 				}
 			} else {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', true), $this->Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', true), $this->Model->brwConfig['names']['singular']);
+					__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', $this->Model->brwConfig['names']['singular']):
+					__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', $this->Model->brwConfig['names']['singular']);
 				$this->Session->setFlash($msg, 'flash_error');
 			}
 		}
 
-		$this->Model->brwConfig['fields']['no_sanitize_html'] = array_keys($this->Model->_schema);
+		$this->Model->brwConfig['fields']['no_sanitize_html'] = array_keys($this->Model->schema());
 
 		$contain = $related = array();
 		if (!empty($this->Model->belongsTo)) {
@@ -282,9 +282,9 @@ class ContentsController extends BrownieAppController {
 		}
 
 		if ($this->Content->delete($this->Model, $id)) {
-			$this->Session->setFlash(__d('brownie', 'Successful delete', true), 'flash_success');
+			$this->Session->setFlash(__d('brownie', 'Successful delete'), 'flash_success');
 		} else {
-			$this->Session->setFlash(__d('brownie', 'Unable to delete', true), 'flash_error');
+			$this->Session->setFlash(__d('brownie', 'Unable to delete'), 'flash_error');
 		}
 
 		$afterDelete = empty($this->params['named']['after_delete'])? null : $this->params['named']['after_delete'];
@@ -326,7 +326,7 @@ class ContentsController extends BrownieAppController {
 	function delete_multiple($model) {
 		$plural = $this->Model->brwConfig['names']['plural'];
 		if (empty($this->data['Content']['id'])) {
-			$msg = sprintf(__d('brownie', 'No %s selected to delete', true), $plural);
+			$msg = __d('brownie', 'No %s selected to delete', $plural);
 			$this->Session->setFlash($msg, 'flash_notice');
 		} else {
 			$deleted = $no_deleted = 0;
@@ -339,10 +339,10 @@ class ContentsController extends BrownieAppController {
 			}
 			$msg_deleted = $msg_no_deleted = '';
 			if ($deleted) {
-				$msg_deleted = sprintf(__d('brownie', '%d %s deleted.', true), $deleted, $plural) . ' ';
+				$msg_deleted = __d('brownie', '%d %s deleted.', $deleted, $plural) . ' ';
 			}
 			if ($no_deleted) {
-				$msg_no_deleted = sprintf(__d('brownie', '%d %s no deleted.', true), $no_deleted, $plural) . ' ';
+				$msg_no_deleted = __d('brownie', '%d %s no deleted.', $no_deleted, $plural) . ' ';
 			}
 
 			if ($deleted) {
@@ -379,13 +379,13 @@ class ContentsController extends BrownieAppController {
 			}
 			if ($cantSaved) {
 				$msg = ($uploadType == 'BrwFile') ?
-					sprintf(__d('brownie', '%s files saved', true), $cantSaved):
-					sprintf(__d('brownie', '%s images saved', true), $cantSaved);
+					__d('brownie', '%s files saved', $cantSaved) :
+					__d('brownie', '%s images saved', $cantSaved);
 				$msgType = 'flash_success';
 			} else {
 				$msg = ($uploadType == 'BrwFile') ?
-					sprintf(__d('brownie', 'No files saved', true), $cantSaved):
-					sprintf(__d('brownie', 'No images saved', true), $cantSaved);
+					__d('brownie', 'No files saved', $cantSaved):
+					__d('brownie', 'No images saved', $cantSaved);
 				$msgType = 'flash_notice';
 			}
 			$this->Session->setFlash($msg, $msgType);
@@ -414,13 +414,13 @@ class ContentsController extends BrownieAppController {
 		}
 		if ($this->Model->{$uploadType}->delete($recordId)) {
 			$msg = ($uploadType == 'BrwFile') ?
-				__d('brownie', 'The file was deleted', true) :
-				__d('brownie', 'The image was deleted', true);
+				__d('brownie', 'The file was deleted') :
+				__d('brownie', 'The image was deleted');
 			$this->Session->setFlash($msg, 'flash_success');
 		} else {
 			$msg = ($uploadType == 'BrwFile') ?
-				__d('brownie', 'The file could not be deleted', true) :
-				__d('brownie', 'The image could not be deleted', true);
+				__d('brownie', 'The file could not be deleted') :
+				__d('brownie', 'The image could not be deleted');
 			$this->Session->setFlash($msg, 'flash_error');
 		}
 
@@ -448,7 +448,7 @@ class ContentsController extends BrownieAppController {
 					$import['msg'] = $import['result'] = $result;
 					$import['flash'] = 'flash_success';
 				} else {
-					$import['msg'] = __d('brownie', 'The import could not be done. Please try again', true);
+					$import['msg'] = __d('brownie', 'The import could not be done. Please try again');
 					$import['result'] = false;
 					$import['flash'] = 'flash_error';
 				}
@@ -462,7 +462,7 @@ class ContentsController extends BrownieAppController {
 		}
 
 		if (Configure::read('debug') and !method_exists($this->Model, 'brwImport')) {
-			$msg = sprintf(__d('brownie', 'Warning: %s::brwImport() must be defined', true), $model);
+			$msg = __d('brownie', 'Warning: %s::brwImport() must be defined', $model);
 			$this->Session->setFlash($msg, 'flash_error');
 		}
 	}
@@ -504,9 +504,9 @@ class ContentsController extends BrownieAppController {
 		}
 
 		if ($this->Content->reorder($this->Model, $direction, $id)) {
-			$this->Session->setFlash(__d('brownie', 'Successfully reordered', true), 'flash_success');
+			$this->Session->setFlash(__d('brownie', 'Successfully reordered'), 'flash_success');
 		} else {
-			$this->Session->setFlash(__d('brownie', 'Failed to reorder', true), 'flash_error');
+			$this->Session->setFlash(__d('brownie', 'Failed to reorder'), 'flash_error');
 		}
 
 		if ($ref = env('HTTP_REFERER')) {
@@ -519,8 +519,8 @@ class ContentsController extends BrownieAppController {
 
 	function filter($model) {
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
-		foreach ($this->Model->_schema as $field => $cnf) {
-			$type = $this->Model->_schema[$field]['type'];
+		foreach ($this->Model->schema() as $field => $cnf) {
+			$type = $cnf['type'];
 			if (in_array($type, array('date', 'datetime'))) {
 				$keyFrom = $field . '_from';
 				foreach (array('_from', '_to') as $key) {
@@ -591,17 +591,20 @@ class ContentsController extends BrownieAppController {
 						));
 						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 					}
-				} elseif (!empty($Model->_schema[$key]['type'])) {
-					switch($Model->_schema[$key]['type']) {
-						case 'boolean':
-							$retData[$Model->name][$key] = $retData[$Model->name][$key]? __d('brownie', 'Yes', true): __d('brownie', 'No', true);
-						break;
-						case 'datetime':
-							$retData[$Model->name][$key] = $this->_formatDateTime($retData[$Model->name][$key]);
-						break;
-						case 'date':
-							$retData[$Model->name][$key] = $this->_formatDate($retData[$Model->name][$key]);
-						break;
+				} else {
+					$schema = $Model->schema();
+					if (!empty($schema[$key]['type'])) {
+						switch($schema[$key]['type']) {
+							case 'boolean':
+								$retData[$Model->name][$key] = $retData[$Model->name][$key]? __d('brownie', 'Yes'): __d('brownie', 'No');
+							break;
+							case 'datetime':
+								$retData[$Model->name][$key] = $this->_formatDateTime($retData[$Model->name][$key]);
+							break;
+							case 'date':
+								$retData[$Model->name][$key] = $this->_formatDate($retData[$Model->name][$key]);
+							break;
+						}
 					}
 				}
 			}
@@ -625,7 +628,7 @@ class ContentsController extends BrownieAppController {
 
 	function _formatDate($date) {
 		if (empty($date) or $date == '0000-00-00') {
-			return __d('brownie', 'Date not set', true);
+			return __d('brownie', 'Date not set');
 		} else {
 			return date(Configure::read('brwSettings.dateFormat'), strtotime($date));
 		}
@@ -634,7 +637,7 @@ class ContentsController extends BrownieAppController {
 
 	function _formatDateTime($datetime) {
 		if (empty($datetime) or $datetime == '0000-00-00 00:00:00') {
-			return __d('brownie', 'Datetime not set', true);
+			return __d('brownie', 'Datetime not set');
 		} else {
 			return date(Configure::read('brwSettings.datetimeFormat'), strtotime($datetime));
 		}
@@ -657,26 +660,26 @@ class ContentsController extends BrownieAppController {
 
 		$params = array(
 			'type' => 'select',
-			'label' => __d('brownie', 'After save', true),
+			'label' => __d('brownie', 'After save'),
 			'options' => array(
-				'referer' => __d('brownie', 'Back to where I was', true),
+				'referer' => __d('brownie', 'Back to where I was'),
 				'view' => ($Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'View saved %s [male]', true), $Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'View saved %s [female]', true), $Model->brwConfig['names']['singular'])
+					__d('brownie', 'View saved %s [male]', $Model->brwConfig['names']['singular']):
+					__d('brownie', 'View saved %s [female]', $Model->brwConfig['names']['singular'])
 				,
 				'add' =>  ($Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Add another %s [male]', true), $Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'Add another %s [female]', true), $Model->brwConfig['names']['singular'])
+					__d('brownie', 'Add another %s [male]', $Model->brwConfig['names']['singular']):
+					__d('brownie', 'Add another %s [female]', $Model->brwConfig['names']['singular'])
 				,
 				'index' => ($Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Go to to index of all %s [male]', true), $Model->brwConfig['names']['plural']):
-					sprintf(__d('brownie', 'Go to to index of all %s [female]', true), $Model->brwConfig['names']['plural'])
+					__d('brownie', 'Go to to index of all %s [male]', $Model->brwConfig['names']['plural']):
+					__d('brownie', 'Go to to index of all %s [female]', $Model->brwConfig['names']['plural'])
 				,
 				'edit' => ($Model->brwConfig['names']['gender'] == 1) ?
-					sprintf(__d('brownie', 'Continue editing this %s [male]', true), $Model->brwConfig['names']['singular']):
-					sprintf(__d('brownie', 'Continue editing this %s [female]', true), $Model->brwConfig['names']['singular'])
+					__d('brownie', 'Continue editing this %s [male]', $Model->brwConfig['names']['singular']):
+					__d('brownie', 'Continue editing this %s [female]', $Model->brwConfig['names']['singular'])
 				,
-				'home' => __d('brownie', 'Go home', true),
+				'home' => __d('brownie', 'Go home'),
 			),
 			'default' => $default,
 		);
@@ -689,8 +692,8 @@ class ContentsController extends BrownieAppController {
 		if ($Model->brwConfig['parent']) {
 			$parentModel = $Model->{$Model->brwConfig['parent']};
 			$params['options']['parent'] =	($parentModel->brwConfig['names']['gender'] == 1) ?
-				sprintf(__d('brownie', 'Go to the %s [male]', true), $parentModel->brwConfig['names']['singular']):
-				sprintf(__d('brownie', 'Go to the %s [female]', true), $parentModel->brwConfig['names']['singular']);
+				__d('brownie', 'Go to the %s [male]', $parentModel->brwConfig['names']['singular']):
+				__d('brownie', 'Go to the %s [female]', $parentModel->brwConfig['names']['singular']);
 		}
 		if (!$data['Content']['referer'] or !empty($this->params['named']['after_save'])) {
 			unset($params['options']['referer']);
@@ -718,7 +721,8 @@ class ContentsController extends BrownieAppController {
 		$filterFields = $this->Model->brwConfig['fields']['filter'];
 		$model = $Model->alias;
 		foreach ($filterFields as $field => $multiple) {
-			$type = $this->Model->_schema[$field]['type'];
+			$schema = $Model->schema();
+			$type = $schema[$field]['type'];
 			$isRange = (in_array($type, array('date', 'datetime', 'float')) or (
 				in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field)
 			));
@@ -760,7 +764,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function _checkBrwUserCrud() {
-		$authModel = $this->Session->read('authModel');
+		$authModel = AuthComponent::user('model');
 		$mustRedirect = false;
 		if ($this->Model->alias == 'BrwUser') {
 			if ($authModel != 'BrwUser') {

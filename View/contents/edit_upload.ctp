@@ -26,19 +26,19 @@ if ($uploadType == 'BrwFile') {
 	echo $this->Form->input($uploadType . '.' . $i . '.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
 	$params = array(
 		'type' => 'file',
-		'label' => ($uploadType == 'BrwFile')? __d('brownie', 'File', true): __d('brownie', 'Image', true)
+		'label' => ($uploadType == 'BrwFile')? __d('brownie', 'File'): __d('brownie', 'Image')
 	);
 	if($uploadId) {
 		$params['after'] = '<div>'
-			. __d('brownie', 'You can leave the file field blank if you don\'t want to change the file', true)
+			. __d('brownie', 'You can leave the file field blank if you don\'t want to change the file')
 			. '</div>';
 	}
 	echo $this->Form->input($uploadType . '.' . $i . '.file', $params);
 	if($upload['description']) {
-		echo $this->Form->input($uploadType . '.' . $i . '.description', array('label' => __d('brownie', 'Description', true)));
+		echo $this->Form->input($uploadType . '.' . $i . '.description', array('label' => __d('brownie', 'Description')));
 	}
 ?>
 </fieldset>
 <?php endfor ?>
-<?php echo $this->Form->end(__d('brownie', 'Save', true)); ?>
+<?php echo $this->Form->end(__d('brownie', 'Save')); ?>
 </div>

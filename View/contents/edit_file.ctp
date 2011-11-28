@@ -3,7 +3,7 @@
 $adding = true;
 echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit_file', 'plugin' => 'brownie'));
 ?>
-<h1><?php __d('brownie', 'Add file'); ?></h1>
+<h1><?php echo __d('brownie', 'Add file'); ?></h1>
 <?php
 echo $this->Form->input('model', array('value' => $model, 'type' => 'hidden'));
 
@@ -16,11 +16,11 @@ if(!empty($brwConfig['files'][$categoryCode])){
 
 		echo '
 		' . $this->Form->input('BrwFile.id', array('value' => $fileId)) . '
-		' . $this->Form->input('BrwFile.file', array('type' => 'file', 'label' => __d('brownie', 'File', true)));
+		' . $this->Form->input('BrwFile.file', array('type' => 'file', 'label' => __d('brownie', 'File')));
 		if($fileId){
 			echo '
 			<div>' .
-			__d('brownie', 'You can leave the file field blank if you don\'t want to change the file', true)
+			__d('brownie', 'You can leave the file field blank if you don\'t want to change the file')
 			. '</div>';
 		}
 		echo '
@@ -28,7 +28,7 @@ if(!empty($brwConfig['files'][$categoryCode])){
 		' .	$this->Form->input('BrwFile.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
 
 		if($file['description']) {
-			echo $this->Form->input('BrwFile.description', array('label' => __d('brownie', 'File description', true)));
+			echo $this->Form->input('BrwFile.description', array('label' => __d('brownie', 'File description')));
 		}
 		echo $this->Form->input('BrwFile.record_id', array('value' => $recordId, 'type' => 'hidden'));
 
@@ -39,5 +39,5 @@ if(!empty($brwConfig['files'][$categoryCode])){
 ?>
 
 
-<?php echo $this->Form->end(__d('brownie', 'Submit', true)); ?>
+<?php echo $this->Form->end(__d('brownie', 'Submit')); ?>
 </div>

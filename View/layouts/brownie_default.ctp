@@ -34,15 +34,15 @@ if ($companyName) {
 			<?php echo $this->Html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
 			</h1>
 		</div>
-		<?php if (!empty($brwAuthUser)) { ?>
+		<?php if (AuthComponent::user('id')) { ?>
 		<div id="options-bar">
-			<p id="welcome-user"><?php echo sprintf(__d('brownie', 'User: %s', true), $brwAuthUser['email']) ?></p>
+			<p id="welcome-user"><?php echo __d('brownie', 'User: %s', AuthComponent::user('email')) ?></p>
 			<ul>
-				<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home', true),
+				<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home'),
 				array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
-				<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users', true),
+				<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users'),
 				array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, 'BrwUser')) ?></li>
-				<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout', true),
+				<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout'),
 				array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 			</ul>
 		</div>

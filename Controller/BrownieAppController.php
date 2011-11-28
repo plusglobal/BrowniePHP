@@ -27,8 +27,8 @@ class BrownieAppController extends AppController {
 
 
 	function b_eforeFilter() {
-		$this->pageTitle = __d('brownie', 'Control panel', true);
-	    Configure::write('brwSettings.authModel', $this->Session->read('authModel'));
+		$this->pageTitle = __d('brownie', 'Control panel');
+	    //Configure::write('brwSettings.authModel', AuthComponent::user('model'));
 	    Configure::write('brwAuthUser', $this->Session->read('Auth.BrwUser'));
 		parent::beforeFilter();
 	}

@@ -7,7 +7,7 @@ class BrwBackendBehavior extends ModelBehavior {
 
 
 	function beforeFind($Model, $query) {
-		$authModel = Configure::read('brwSettings.authModel');
+		$authModel = AuthComponent::user('model');
 		if ($authModel and $authModel != 'BrwUser' and !empty($Model->brwConfigPerAuthUser[$authModel])) {
 			if ($Model->brwConfigPerAuthUser[$authModel]['type'] == 'owned') {
 				if ($Model->name == $authModel) {

@@ -150,7 +150,8 @@ class PanelBehavior extends ModelBehavior {
 				if (!$related['dependent']) {
 					$rel = ClassRegistry::init($related['className']);
 					if ($rel) {
-						if ($rel->_schema[$related['foreignKey']]['null']) {
+						$schema = $rel->schema($related['foreignKey']);
+						if ($schema['null']) {
 							$toNullModels[] = array('model' => $rel, 'foreignKey' => $related['foreignKey']);
 						} else {
 							$hasAny = $rel->find('first', array(
@@ -217,7 +218,8 @@ class PanelBehavior extends ModelBehavior {
 			if (!$Model->schema($sortField)) {
 				$Model->brwConfig['sortable'] = false;
 			} else {
-				if ($Model->_schema[$sortField]['type'] == 'integer' and $Model->_schema['id']['type'] == 'integer') {
+				$schema = $Model->schema();
+				if ($schema[$sortField]['type'] == 'integer' and $schema['id']['type'] == 'integer') {
 					if (empty($Model->brwConfig['sortable']['direction'])) {
 						$Model->brwConfig['sortable']['direction'] = 'asc';
 					}
@@ -615,7 +617,7 @@ class PanelBehavior extends ModelBehavior {
 				'no_view' => array('password'),
 				'virtual' => array('repeat_password' => array('after' => 'password')),
 				'legends' => array(
-					'password' => __d('brownie', 'Leave blank for no change', true),
+					'password' => __d('brownie', 'Leave blank for no change'),
 				),
 			),
 			'paginate' => array(
@@ -624,9 +626,9 @@ class PanelBehavior extends ModelBehavior {
 		);
 		if ($Model->alias == 'BrwUser') {
 			$brwUserDefaults['names'] = array(
-				'section' => __d('brownie', 'User', true),
-				'singular' => __d('brownie', 'User', true),
-				'plural' => __d('brownie', 'Users', true),
+				'section' => __d('brownie', 'User'),
+				'singular' => __d('brownie', 'User'),
+				'plural' => __d('brownie', 'Users'),
 			);
 		}
 		$defaults = Set::merge($defaults, $brwUserDefaults);
@@ -696,7 +698,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function _configPerAuthUser($Model) {
-		$authModel = Configure::read('brwSettings.authModel');
+		$authModel = AuthComponent::user('model');
 		if ($authModel and $authModel != 'BrwUser') {
 			if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
 				$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';

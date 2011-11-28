@@ -98,7 +98,7 @@ class Content extends BrownieAppModel {
 				$rules[$key][] = array(
 					'rule' => array('minLength', '1'),
 					'allowEmpty' => $allowEmpty,
-					'message' => __d('brownie', 'This field is required', true)
+					'message' => __d('brownie', 'This field is required')
 				);
 			} else {
 				$allowEmpty = true;
@@ -109,7 +109,7 @@ class Content extends BrownieAppModel {
 					$rules[$key][] = array(
 						'rule' => 'numeric',
 						'allowEmpty' => $allowEmpty,
-						'message' => __d('brownie', 'Please supply  a valid number', true)
+						'message' => __d('brownie', 'Please supply  a valid number')
 					);
 				}
 			}
@@ -118,14 +118,14 @@ class Content extends BrownieAppModel {
 				$rules[$key][] = array(
 					'rule' => 'email',
 					'allowEmpty' => $allowEmpty,
-					'message' => __d('brownie', 'Please supply a valid email address', true)
+					'message' => __d('brownie', 'Please supply a valid email address')
 				);
 			}
 
 			if ($value['type'] == 'boolean') {
 				$rules[$key][] = array(
 					'rule' => 'boolean',
-					'message' => __d('brownie', 'Incorrect value', true)
+					'message' => __d('brownie', 'Incorrect value')
 				);
 			}
 
@@ -133,9 +133,9 @@ class Content extends BrownieAppModel {
 				$rules[$key][] = array(
 					'rule' => 'isUnique',
 					'message' => sprintf(
-						($Model->brwConfig['names']['gender']==1) ?
-							__d('brownie', "This value must be unique and it's already in use by another %s [male]", true):
-							__d('brownie', "This value must be unique and it's already in use by another %s [female]", true),
+						($Model->brwConfig['names']['gender'] == 1) ?
+							__d('brownie', "This value must be unique and it's already in use by another %s [male]"):
+							__d('brownie', "This value must be unique and it's already in use by another %s [female]"),
 						$Model->brwConfig['names']['singular']
 					),
 					'allowEmpty' => true,
@@ -209,7 +209,7 @@ class Content extends BrownieAppModel {
 
 
 	function ownedBeforeSave($data, $Model, $authUserId) {
-		$authModel = Configure::read('brwSettings.authModel');
+		$authModel = AuthComponent::user('model');
 		if (
 			$authModel
 			and $authModel != 'BrwUser'
@@ -351,11 +351,11 @@ class Content extends BrownieAppModel {
 			'confirmMessage' => false,
 		);
 		$actionsTitles = array_merge($actionsTitles, array(
-			'add' => __d('brownie', 'Add', true),
-			'view' => __d('brownie', 'View', true),
-			'edit' => __d('brownie', 'Edit', true),
-			'delete' => __d('brownie', 'Delete', true),
-			'index' => __d('brownie', 'List all', true),
+			'add' => __d('brownie', 'Add'),
+			'view' => __d('brownie', 'View'),
+			'edit' => __d('brownie', 'Edit'),
+			'delete' => __d('brownie', 'Delete'),
+			'index' => __d('brownie', 'List all'),
 		));
 		foreach ($actionsTitles as $action => $title) {
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {
@@ -375,8 +375,8 @@ class Content extends BrownieAppModel {
 					'confirmMessage' => ($action == 'delete') ?
 						sprintf(
 							($Model->brwConfig['names']['gender'] == 1) ?
-								__d('brownie', 'Are you sure you want to delete this %s?[male]', true):
-								__d('brownie', 'Are you sure you want to delete this %s?[female]', true)
+								__d('brownie', 'Are you sure you want to delete this %s?[male]'):
+								__d('brownie', 'Are you sure you want to delete this %s?[female]')
 							,
 							$Model->brwConfig['names']['singular']
 						):
@@ -464,9 +464,10 @@ class Content extends BrownieAppModel {
 				$direction = 'asc';
 			}
 			$sort_field = str_replace($Model->alias . '.', '', $sort_field);
+			$schema = $Model->schema();
 			if (
-				!empty($Model->_schema[$sort_field]['key']) and
-				in_array($Model->_schema[$sort_field]['key'], array('unique', 'primary'))
+				!empty($schema[$sort_field]['key']) and
+				in_array($schema[$sort_field]['key'], array('unique', 'primary'))
 			) {
 				$neighbors = $Model->find('neighbors', array(
 					'field' => $sort_field,
@@ -560,7 +561,7 @@ class Content extends BrownieAppModel {
 		foreach ($containedModels as $containedModel => $fields) {
 			if (
 				!in_array($containedModel, $containedForIndex)
-				and $containedModel != Configure::read('brwSettings.authModel')
+				and $containedModel != AuthComponent::user('model')
 			) {
 				unset($containedModels[$containedModel]);
 			} else {

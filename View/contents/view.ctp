@@ -1,6 +1,6 @@
 <div class="view" id="<?php echo $model;?>_view">
 	<div class="clearfix">
-	<h1><?php  __d('brownie', $brwConfig['names']['singular']);?></h1>
+	<h1><?php  echo __d('brownie', $brwConfig['names']['singular']) ?></h1>
 	<div class="actions-view">
 		<ul class="actions neighbors">
 			<?php
@@ -8,17 +8,17 @@
 			if (!empty($neighbors['prev'])) {
 				echo '
 				<li class="prev">
-					' . $this->Html->link(__d('brownie', 'Previous', true),
+					' . $this->Html->link(__d('brownie', 'Previous'),
 					array('action' => 'view', $model, $neighbors['prev'][$model]['id']) + $this->params['named'],
-					array('title' => __d('brownie', 'Previous', true))).'
+					array('title' => __d('brownie', 'Previous'))).'
 				</li>';
 			}
 			if (!empty($neighbors['next'])) {
 				echo '
 				<li class="next">
-					' . $this->Html->link(__d('brownie', 'Next', true),
+					' . $this->Html->link(__d('brownie', 'Next'),
 					array('action' => 'view', $model, $neighbors['next'][$model]['id']) + $this->params['named'],
-					array('title' => __d('brownie', 'Next', true))).'
+					array('title' => __d('brownie', 'Next'))).'
 				</li>';
 			}
 			?>
@@ -35,7 +35,7 @@
 				}
 				echo '
 				<li class="back">
-					' . $this->Html->link(__d('brownie', 'Back', true), $backToUrl, array('title' => __d('brownie', 'Back', true))) . '
+					' . $this->Html->link(__d('brownie', 'Back'), $backToUrl, array('title' => __d('brownie', 'Back'))) . '
 				<li>';
 			}
 			?>
@@ -99,7 +99,7 @@ foreach ($uploadModels as $uploadKey => $uploadModel): ?>
 		}
 		if ($canAdd) {
 			echo '<div class="actions ' . $uploadKey . '-actions"><ul class="actions"><li class="add-' . $uploadKey . '">
-			' . $this->Html->link(__d('brownie', 'Add', true), array(
+			' . $this->Html->link(__d('brownie', 'Add'), array(
 				'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
 				$model, $uploadModel, $record[$model]['id'], $catCode
 			)) . '</li></ul></div>';

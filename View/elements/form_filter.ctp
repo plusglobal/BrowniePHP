@@ -1,7 +1,7 @@
 <?php if ($isAnyFilter): ?>
 <div class="flash_notice flash">
-	<?php __d('brownie', 'This following listing is filtered.'); ?>
-	<?php echo $this->Html->link(__d('brownie', 'View complete index', true), array('action' => 'index', $model)) ?>
+	<?php echo __d('brownie', 'This following listing is filtered.'); ?>
+	<?php echo $this->Html->link(__d('brownie', 'View complete index'), array('action' => 'index', $model)) ?>
 </div>
 <?php  endif ?>
 
@@ -39,10 +39,10 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			}
 			echo $before . $this->Form->input(
 				$model . '.' . $field . '_from',
-				$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'from', true))
+				$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'from'))
 			) . $this->Form->input(
 				$model . '.' . $field . '_to',
-				$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'to', true))
+				$params + array('label' => $brwConfig['fields']['names'][$field] . ' ' . __d('brownie', 'to'))
 			) . $after;
 		} else {
 			$params += array(
@@ -52,7 +52,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			if ($fieldType == 'boolean') {
 				$params += array(
 					'type' => 'select',
-					'options' => array(1 => __d('brownie', 'Yes', true), 0 => __d('brownie', 'No', true)),
+					'options' => array(1 => __d('brownie', 'Yes'), 0 => __d('brownie', 'No')),
 				);
 			} elseif ($multiple) {
 				$params = array_merge($params, array(
@@ -66,7 +66,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 		}
 	}
 }
-echo $this->Form->submit(__d('brownie', 'Filter', true), array('id' => 'filterSubmit'));
+echo $this->Form->submit(__d('brownie', 'Filter'), array('id' => 'filterSubmit'));
 echo $this->Form->end();
 ?>
 

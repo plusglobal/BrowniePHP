@@ -8,7 +8,7 @@ $url = array(
 );
 echo $this->Form->create('Content', array('url' => $url, 'type' => 'file'));
 ?>
-<h1><?php __d('brownie', 'Add image'); ?></h1>
+<h1><?php echo __d('brownie', 'Add image'); ?></h1>
 <?php
 
 echo $this->Form->input('model', array('value' => $model, 'type' => 'hidden'));
@@ -29,12 +29,12 @@ if (!empty($brwConfig['images'][$categoryCode])) {
 	for ($i = 0; $i < $iterations; $i++) {
 		echo '
 		' . $this->Form->input('BrwImage.'.$i.'.id') . '
-		' . $this->Form->input('BrwImage.'.$i.'.file', array('type' => 'file', 'label' => __d('brownie', 'Image', true))) . '
+		' . $this->Form->input('BrwImage.'.$i.'.file', array('type' => 'file', 'label' => __d('brownie', 'Image'))) . '
 		' . $this->Form->input('BrwImage.'.$i.'.model', array('value' => $model, 'type' => 'hidden')) . '
 		' .	$this->Form->input('BrwImage.'.$i.'.category_code', array('value' => $categoryCode, 'type' => 'hidden'));
 
 		if($image['description']) {
-			echo $this->Form->input('BrwImage.'.$i.'.description', array('label' => __d('brownie', 'Image description', true)));
+			echo $this->Form->input('BrwImage.'.$i.'.description', array('label' => __d('brownie', 'Image description')));
 		}
 		echo $this->Form->input('BrwImage.'.$i.'.record_id', array('value' => $recordId, 'type' => 'hidden'));
 
@@ -47,5 +47,5 @@ if (!empty($brwConfig['images'][$categoryCode])) {
 ?>
 
 
-<?php echo $this->Form->end(__d('brownie', 'Submit', true)); ?>
+<?php echo $this->Form->end(__d('brownie', 'Submit')); ?>
 </div>

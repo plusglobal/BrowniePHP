@@ -7,14 +7,14 @@ $h = $brwConfig['images'][$image['category_code']]['array_sizes'][0]['h'];
 		<?php
 		if($permissions[$model]['edit']){
 			echo '
-			<li class="edit">' . $this->Html->link(__d('brownie', 'Edit', true), array(
+			<li class="edit">' . $this->Html->link(__d('brownie', 'Edit'), array(
 				'controller' => 'contents', 'action' => 'edit_upload', 'plugin' => 'brownie',
 				$image['model'], 'BrwImage', $image['record_id'], $image['category_code'], $image['id']
 			)) . '</li>
-			<li class="delete">' . $this->Html->link(__d('brownie', 'Delete', true), array(
+			<li class="delete">' . $this->Html->link(__d('brownie', 'Delete'), array(
 				'controller' => 'contents', 'action' => 'delete_upload', 'plugin' => 'brownie',
 				$image['model'], 'BrwImage', $image['id']
-			), null, __d('brownie', 'Are you sure you want to delete this image?', true)) . '</li>';
+			), null, __d('brownie', 'Are you sure you want to delete this image?')) . '</li>';
 		}
 		?>
 	</ul>

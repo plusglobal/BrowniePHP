@@ -14,35 +14,35 @@ class BrwUserBehavior extends ModelBehavior {
 			'email' => array(
 				array(
 					'rule' => 'isUnique',
-					'message' =>  __d('brownie', 'Email already registered', true),
+					'message' =>  __d('brownie', 'Email already registered'),
 				),
 				array(
 					'rule' => 'email',
-					'message' => __d('brownie', 'Email not valid', true),
+					'message' => __d('brownie', 'Email not valid'),
 				),
 				array(
 					'rule' => 'notEmpty',
 					'on' => 'create',
 					'required' => true,
-					'message' =>  __d('brownie', 'Email cannot be empty', true),
+					'message' =>  __d('brownie', 'Email cannot be empty'),
 				),
 			),
 			'password' => array(
 				array(
 					'rule' => 'notEmpty',
 					'on' => 'create',
-					'message' =>  __d('brownie', 'Password cannot be empty', true),
+					'message' =>  __d('brownie', 'Password cannot be empty'),
 				),
 			),
 			'repeat_password' => array(
 				array(
 					'rule' => 'notEmpty',
 					'on' => 'create',
-					'message' => __d('brownie', 'Password cannot be empty', true),
+					'message' => __d('brownie', 'Password cannot be empty'),
 				),
 				array(
 					'rule' => array('checkPasswordMatch'),
-					'message' => __d('brownie', 'Passwords do not match', true),
+					'message' => __d('brownie', 'Passwords do not match'),
 				),
 			)
 		);
@@ -84,7 +84,7 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	function updateLastLogin($Model, $id) {
-		if (empty($Model->_schema['last_login'])) {
+		if (!$Model->schema('last_login')) {
 			return null;
 		}
 		$user = $Model->findById($id);

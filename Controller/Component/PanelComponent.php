@@ -44,7 +44,7 @@ class PanelComponent extends Component{
 	var $controller;
 
 
-	function __construct($Controller, $settings = array()) {
+	function initialize($Controller, $settings = array()) {
 
 		$this->controller = $Controller;
 
@@ -70,7 +70,7 @@ class PanelComponent extends Component{
 		}
 
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
-			pr('o');
+			//pr('o');
 			//$this->_authSettings();
 		}
 
@@ -111,8 +111,8 @@ class PanelComponent extends Component{
 
 
 	function _menuConfig() {
-		if ($this->controller->currentUser) {
-			$authModel = $this->controller->Session->read('authModel');
+		if (AuthComponent::user('id')) {
+			$authModel = AuthComponent::user('model');
 			if ($authModel != 'BrwUser') {
 				$menu = $this->controller->brwMenuPerAuthUser[$authModel];
 			} elseif (!empty($this->controller->brwMenu)) {
@@ -126,7 +126,7 @@ class PanelComponent extends Component{
 						$menu[$button] = $model;
 					}
 				}
-				$menu = array(__d('brownie', 'Menu', true) => $menu);
+				$menu = array(__d('brownie', 'Menu') => $menu);
 			}
 			$this->controller->set('brwMenu', $menu);
 		}
