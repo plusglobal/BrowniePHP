@@ -50,7 +50,7 @@
 		if (!empty($schema[$field_name]) and !in_array($field_name, $brwConfig['fields']['no_view'])) {
 			echo '
 			<tr>
-				<td class="label">' . __($brwConfig['fields']['names'][$field_name], true) . '</td>';
+				<td class="label">' . __($brwConfig['fields']['names'][$field_name]) . '</td>';
 				if (in_array($field_name, $i18nFields)) {
 					echo '
 					<td class="multiLang">

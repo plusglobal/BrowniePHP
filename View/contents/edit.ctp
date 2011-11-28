@@ -69,7 +69,7 @@ echo $this->Form->create('Content', array('type' => 'file', 'action' => 'edit', 
 		}
 
 		$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
-		$params['label'] = __($brwConfig['fields']['names'][$key], true);
+		$params['label'] = __($brwConfig['fields']['names'][$key]);
 		if (in_array($key, $fckFields)) {
 			$params['class'] = 'richEditor';
 		}

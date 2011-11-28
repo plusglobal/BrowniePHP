@@ -31,7 +31,7 @@
 			$params['url'] = array_merge($params['url'], $this->params['named']);
 			echo '
 			<li class="global_custom_action ' . $params['class'] . '">
-			' . $this->Html->link(__($params['title'], true), $params['url'], $params['options'], __($params['confirmMessage'], true)) . '
+			' . $this->Html->link(__($params['title']), $params['url'], $params['options'], __($params['confirmMessage'])) . '
 			</li>';
 		}
 
@@ -86,7 +86,7 @@ if ($records) {
 					echo '
 					<th class="' . $field_name . ' ' . $schema[$field_name]['class'] . '">
 					' . $this->Paginator->sort(
-						__($brwConfig['fields']['names'][$field_name], true),
+						__($brwConfig['fields']['names'][$field_name]),
 						$field_name,
 						array('model' => $model, 'escape' => false)
 					) . '</th>';

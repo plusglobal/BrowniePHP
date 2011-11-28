@@ -47,7 +47,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 		} else {
 			$params += array(
 				'empty' => '-',
-				'label' => __($brwConfig['fields']['names'][$field], true),
+				'label' => __($brwConfig['fields']['names'][$field]),
 			);
 			if ($fieldType == 'boolean') {
 				$params += array(

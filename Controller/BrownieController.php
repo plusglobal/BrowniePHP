@@ -43,7 +43,7 @@ class BrownieController extends BrownieAppController {
 			if ($this->Auth->login()) {
 				return $this->redirect($this->Auth->redirect());
 			} else {
-				$this->Session->setFlash(__('Username or password is incorrect'), 'default', array(), 'auth');
+				$this->Session->setFlash(__d('brownie', 'Username or password is incorrect'), 'default', array(), 'auth');
 			}
 		}
 	}
