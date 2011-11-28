@@ -214,7 +214,7 @@ class PanelBehavior extends ModelBehavior {
 	function _sortableConfig($Model) {
 		if ($Model->brwConfig['sortable']) {
 			$sortField = $Model->brwConfig['sortable']['field'];
-			if (empty($Model->_schema[$sortField])) {
+			if (!$Model->schema($sortField)) {
 				$Model->brwConfig['sortable'] = false;
 			} else {
 				if ($Model->_schema[$sortField]['type'] == 'integer' and $Model->_schema['id']['type'] == 'integer') {
@@ -236,7 +236,7 @@ class PanelBehavior extends ModelBehavior {
 				'integer', 'float', 'string', 'boolean',
 				'date', 'datetime', 'time', 'timestamp',
 			);
-			$fields = array(); $i = 0; $schema = (array)$Model->_schema;
+			$fields = array(); $i = 0; $schema = (array)$Model->schema();
 			$blacklist = array_merge(
 				array('lft', 'rght', 'parent_id', 'created', 'modified'),
 				$Model->brwConfig['fields']['hide']
@@ -325,8 +325,8 @@ class PanelBehavior extends ModelBehavior {
 
 	function _sanitizeConfig($Model) {
 		$no_sanitize = array();
-		if ($Model->_schema) {
-			foreach ($Model->_schema as $field => $type) {
+		if ($Model->schema()) {
+			foreach ($Model->schema() as $field => $type) {
 				if ($type['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_sanitize_html'])) {
 					$Model->brwConfig['fields']['no_sanitize_html'][] = $field;
 				}
@@ -347,7 +347,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function fieldsForForm($Model, $action) {
-		$schema = $Model->_schema;
+		$schema = $Model->schema();
 		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach($fieldsNotUsed as $field) {
@@ -411,7 +411,7 @@ class PanelBehavior extends ModelBehavior {
 
 	function _addBrwUploadsPaths($r, $Model, $fileType) {
 
-		App::import('Brownie.BrwSanitize');
+		App::import('Lib', 'Brownie.BrwSanitize');
 		$ret = array();
 		foreach ($Model->brwConfig[$fileType] as $catCode => $value) {
 			$ret[$catCode] = array();
@@ -544,7 +544,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function sanitizeHtml($Model, $results) {
-		App::import('Brownie.BrwSanitize');
+		App::import('Lib', 'Brownie.BrwSanitize');
 		foreach ($results as $i => $result) {
 			if (!empty($result[$Model->alias])) {
 				foreach ($result[$Model->alias] as $key => $value) {
@@ -585,7 +585,7 @@ class PanelBehavior extends ModelBehavior {
 
 	function _fieldsNames($Model) {
 		$defaultNames = array();
-		foreach ((array)$Model->_schema as $field => $value) {
+		foreach ((array)$Model->schema() as $field => $value) {
 			$defaultNames[$field] = Inflector::humanize(str_replace('_id', '', $field));
 		}
 		foreach ($Model->brwConfig['fields']['virtual'] as $field => $value) {
@@ -650,7 +650,7 @@ class PanelBehavior extends ModelBehavior {
 
 
 	function _setDefaultDateRanges($Model) {
-		foreach ((array)$Model->_schema as $field => $config) {
+		foreach ((array)$Model->schema() as $field => $config) {
 			if (in_array($config['type'], array('date', 'datetime'))) {
 				foreach (array('minYear', 'maxYear') as $yearType) {
 					if (empty($Model->brwConfig['fields']['date_ranges'][$field][$yearType])) {
@@ -676,7 +676,7 @@ class PanelBehavior extends ModelBehavior {
 
 	function _exportConfig($Model) {
 		if (empty($Model->brwConfig['fields']['export'])) {
-			foreach ($Model->_schema as $field => $config) {
+			foreach ($Model->schema() as $field => $config) {
 				if ($config['type'] != 'text') {
 					$Model->brwConfig['fields']['export'][] = $field;
 				}

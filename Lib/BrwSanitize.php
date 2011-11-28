@@ -2,7 +2,6 @@
 
 class BrwSanitize {
 
-
 	static function html($str) {
 		if (!is_string($str)) {
 			return $str;

@@ -2,10 +2,11 @@
 
 class ContentsController extends BrownieAppController {
 
-	var $name = 'Contents';
-	var $helpers = array('Brownie.i18n');
-	var $Model;
-	var $uses = array('Brownie.Content');
+	public $helpers = array('Brownie.i18n');
+	public $Model;
+	public $uses = array('Brownie.Content');
+	public $paginate = array();
+	public $data = array();
 
 
 	function beforeFilter() {
@@ -54,7 +55,6 @@ class ContentsController extends BrownieAppController {
 
 
 	function index() {
-		pr($this->paginate);
 		$this->paginate = $this->Model->brwConfig['paginate'];
 		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
