@@ -112,6 +112,7 @@ class BrwPanelBehavior extends ModelBehavior {
 				}
 			}
 		}
+		return true;
 	}
 
 
@@ -133,7 +134,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		if (
 			$Model->brwConfig['sortable']
 			and $created
-			and !in_array('tree', array_map('strtolower', $Model->Behaviors->_attached))
+			and !in_array('tree', array_map('strtolower', $Model->Behaviors->attached()))
 		) {
 			$data = $Model->data;
 			$Model->saveField($Model->brwConfig['sortable']['field'], $Model->id);

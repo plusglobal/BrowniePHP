@@ -3,6 +3,7 @@
 class BrownieAppController extends AppController {
 
 	var $components = array(
+		'Session',
 		'Auth' => array(
 			'authenticate' => array(
 				'Brownie.Brw' => array(
@@ -12,7 +13,6 @@ class BrownieAppController extends AppController {
 			'authError' => 'Did you really think you are allowed to see that?',
 			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie'),
 		),
-		'Session'
 	);
 	var $helpers = array('Html', 'Session', 'Js');
 	var $uses = array('BrwUser');

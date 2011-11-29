@@ -5,7 +5,7 @@ class BrwUserBehavior extends ModelBehavior {
 
 	function setup($Model) {
 		$Model->displayField = 'email';
-		$Model->validate = $this->_validate($Model);
+		//$Model->validate = $this->_validate($Model);
 	}
 
 
@@ -50,7 +50,7 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	function beforeSave($Model) {
+	function b_eforeSave($Model) {
 		if ($Model->alias != 'BrwUser' and isset($Model->data[$Model->alias]['password'])) {
 			$pass = $Model->data[$Model->alias]['password'];
 			$Model->data[$Model->alias]['password'] = Security::hash($pass, null, true);

@@ -2,8 +2,6 @@
 
 class BrownieController extends BrownieAppController {
 
-	var $name = 'Brownie';
-
 
 	function index() {
 		$customHome = Configure::read('brwSettings.customHome');
@@ -26,16 +24,16 @@ class BrownieController extends BrownieAppController {
 	}
 
 
-	function beforeFilter() {
-		if (!empty($this->data['BrwUser']) and !$this->BrwUser->find('first')) {
+	/*function beforeFilter() {
+		if (!empty($this->request->data['BrwUser']) and !$this->BrwUser->find('first')) {
 			$this->BrwUser->create();
 			$this->BrwUser->save(array(
-				'email' => $this->data['BrwUser']['email'],
-				'password' => $this->Auth->password($this->data['BrwUser']['password']),
+				'email' => $this->request->data['BrwUser']['email'],
+				'password' => $this->Auth->password($this->request->data['BrwUser']['password']),
 			));
 		}
 		parent::beforeFilter();
-	}
+	}*/
 
 
 	function login() {

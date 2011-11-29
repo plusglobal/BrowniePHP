@@ -14,8 +14,8 @@ class ContentsController extends BrownieAppController {
 
 		if (!empty($this->params['pass'][0])) {
 			$model = $this->params['pass'][0];
-		} elseif (!empty($this->data['Content']['model'])) {
-			$model = $this->data['Content']['model'];
+		} elseif (!empty($this->request->data['Content']['model'])) {
+			$model = $this->request->data['Content']['model'];
 		}
 		if (empty($model) or !$this->Content->modelExists($model)) {
 			pr('Model does not exists');
@@ -162,6 +162,7 @@ class ContentsController extends BrownieAppController {
 
 
 	function edit($model, $id = null) {
+
 		if (!empty($id)) {
 			if (!$this->Model->read(array('id'), $id)) {
 				pr('Record does not exists');
@@ -176,28 +177,28 @@ class ContentsController extends BrownieAppController {
 			$this->cakeError('error404');
 		}
 		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
-		if (!empty($this->data)) {
-			if (!empty($this->data[$this->Model->alias]['id']) and $this->data[$this->Model->alias]['id'] != $id) {
+		if (!empty($this->request->data)) {
+			if (!empty($this->request->data[$this->Model->alias]['id']) and $this->request->data[$this->Model->alias]['id'] != $id) {
 				pr('Record does not exists');
 				$this->cakeError('error404');
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
-			$this->data = $this->Content->brownieBeforeSave($this->data, $this->Model, $this->Session);
+			$this->request->data = $this->Content->brownieBeforeSave($this->request->data, $this->Model, $this->Session);
 			$fieldList = array_merge(
 				array_keys($fields),
 				array('name', 'model', 'category_code', 'description', 'record_id'),
-				$this->data['Content']['fieldList']
+				$this->request->data['Content']['fieldList']
 			);
 			if ($this->Model->brwConfig['sortable']) {
 				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
 			}
-			if ($this->Model->saveAll($this->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
+			if ($this->Model->saveAll($this->request->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
 					__d('brownie', 'The %s has been saved [male]', $this->Model->brwConfig['names']['singular']):
 					__d('brownie', 'The %s has been saved [female]', $this->Model->brwConfig['names']['singular']);
 				$this->Session->setFlash($msg, 'flash_success');
 
-				if (!empty($this->data['Content']['after_save'])) {
+				if (!empty($this->request->data['Content']['after_save'])) {
 					$this->_afterSaveRedirect();
 				}
 			} else {
@@ -239,7 +240,7 @@ class ContentsController extends BrownieAppController {
 		}
 		$this->set('related', $related);
 
-		if (empty($this->data)) {
+		if (empty($this->request->data)) {
 			if ($id) {
 				$this->Model->Behaviors->attach('Containable');
 				if ($this->Model->brwConfig['images']) {
@@ -248,29 +249,29 @@ class ContentsController extends BrownieAppController {
 				if ($this->Model->brwConfig['files']) {
 					$contain[] = 'BrwFile';
 				}
-				$this->data = $this->Model->find('first', array(
+				$this->request->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),
 					'contain' => $contain,
 				));
-				$this->data = $this->Content->i18nForEdit($this->data, $this->Model);
+				$this->request->data = $this->Content->i18nForEdit($this->request->data, $this->Model);
 			} else {
-				$this->data = Set::merge(
+				$this->request->data = Set::merge(
 					$this->Content->defaults($this->Model),
 					$this->_filterConditions($this->Model, true)
 				);
 			}
-			$this->data['Content']['referer'] = env('HTTP_REFERER') ? $this->referer() : null;
+			$this->request->data['Content']['referer'] = env('HTTP_REFERER') ? $this->referer() : null;
 		}
 
 		if (method_exists($this->Model, 'brwBeforeEdit') or !empty($this->Model->Behaviors->__methods['brwBeforeEdit'])) {
-			$this->data = $this->Model->brwBeforeEdit($this->data);
+			$this->request->data = $this->Model->brwBeforeEdit($this->request->data);
 			$this->set('schema', $this->Content->schemaForView($this->Model));
 		}
 
 		$this->set('fields', $fields);
 		$this->set('fckFields', $this->Content->fckFields($this->Model));
 		$this->_setI18nParams($this->Model);
-		$this->_setAfterSaveOptionsParams($this->Model, $this->data);
+		$this->_setAfterSaveOptionsParams($this->Model, $this->request->data);
 	}
 
 
@@ -325,12 +326,12 @@ class ContentsController extends BrownieAppController {
 
 	function delete_multiple($model) {
 		$plural = $this->Model->brwConfig['names']['plural'];
-		if (empty($this->data['Content']['id'])) {
+		if (empty($this->request->data['Content']['id'])) {
 			$msg = __d('brownie', 'No %s selected to delete', $plural);
 			$this->Session->setFlash($msg, 'flash_notice');
 		} else {
 			$deleted = $no_deleted = 0;
-			foreach ($this->data['Content']['id'] as $id) {
+			foreach ($this->request->data['Content']['id'] as $id) {
 				if ($this->Content->delete($this->Model, $id)) {
 					$deleted++;
 				} else {
@@ -370,9 +371,9 @@ class ContentsController extends BrownieAppController {
 			$this->cakeError('error404');
 		}
 
-		if (!empty($this->data)) {
+		if (!empty($this->request->data)) {
 			$cantSaved = 0;
-			foreach ($this->data[$uploadType] as $data) {
+			foreach ($this->request->data[$uploadType] as $data) {
 				if ($this->Model->{$uploadType}->save($data)) {
 					$cantSaved++;
 				}
@@ -396,9 +397,9 @@ class ContentsController extends BrownieAppController {
 			));
 
 		}
-		if (empty($this->data) and $uploadId) {
+		if (empty($this->request->data) and $uploadId) {
 			$data = $this->Model->{$uploadType}->findById($uploadId);
-			$this->data[$uploadType][0] = $data[$uploadType];
+			$this->request->data[$uploadType][0] = $data[$uploadType];
 			$max = 1;
 		} else {
 			$uploadKey = ($uploadType == 'BrwFile') ? 'files' : 'images';
@@ -436,8 +437,8 @@ class ContentsController extends BrownieAppController {
 		if (!$this->Model->brwConfig['actions']['import']) {
 			$this->cakeError('error404');
 		}
-		if (!empty($this->data)) {
-			$result = $this->Model->brwImport($this->data);
+		if (!empty($this->request->data)) {
+			$result = $this->Model->brwImport($this->request->data);
 			if (is_array($result)) {
 				$import = $result;
 				if (empty($import['flash'])) {
@@ -524,8 +525,8 @@ class ContentsController extends BrownieAppController {
 			if (in_array($type, array('date', 'datetime'))) {
 				$keyFrom = $field . '_from';
 				foreach (array('_from', '_to') as $key) {
-					if (!empty($this->data[$model][$field . $key]['year'])) {
-						$data = $this->Content->dateComplete($this->data[$model][$field . $key], $key, $type);
+					if (!empty($this->request->data[$model][$field . $key]['year'])) {
+						$data = $this->Content->dateComplete($this->request->data[$model][$field . $key], $key, $type);
 						$url[$model . '.' . $field . $key] = $data['year'] . '-' . $data['month'] . '-' . $data['day'];
 						if ($type == 'datetime') {
 							$url[$model . '.' . $field . $key] .= ' ' . $data['hour'] . ':' . $data['min'] . ':' . $data['sec'];
@@ -537,15 +538,15 @@ class ContentsController extends BrownieAppController {
 				($type == 'integer' and !$this->Content->isForeignKey($this->Model, $field))
 			) {
 				foreach (array('_from', '_to') as $key) {
-					if (!empty($this->data[$model][$field . $key])) {
-						$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
+					if (!empty($this->request->data[$model][$field . $key])) {
+						$url[$model . '.' . $field . $key] = $this->request->data[$model][$field . $key];
 					}
 				}
-			} elseif (!empty($this->data[$model][$field])) {
-				if (is_array($this->data[$model][$field])) {
-					$url[$model . '.' . $field] = join('.', $this->data[$model][$field]);
+			} elseif (!empty($this->request->data[$model][$field])) {
+				if (is_array($this->request->data[$model][$field])) {
+					$url[$model . '.' . $field] = join('.', $this->request->data[$model][$field]);
 				} else {
-					$url[$model . '.' . $field] = urlencode($this->data[$model][$field]);
+					$url[$model . '.' . $field] = urlencode($this->request->data[$model][$field]);
 				}
 			}
 		}
@@ -729,7 +730,7 @@ class ContentsController extends BrownieAppController {
 			if ($isRange) {
 				foreach (array('_from', '_to') as $key) {
 					if (isset($this->params['named'][$model . '.' . $field . $key])) {
-						$this->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
+						$this->request->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
 					}
 				}
 			} elseif ($type == 'integer' or $type == 'boolean' or $type == 'string') {
@@ -738,7 +739,7 @@ class ContentsController extends BrownieAppController {
 					if ($type  == 'integer' and strstr($fieldData, '.')) {
 						$fieldData = explode('.', $fieldData);
 					}
-					$this->data[$model][$field] = $fieldData;
+					$this->request->data[$model][$field] = $fieldData;
 				}
 			}
 		}
@@ -804,10 +805,10 @@ class ContentsController extends BrownieAppController {
 
 
 	function _afterSaveRedirect() {
-		switch ($this->data['Content']['after_save']) {
+		switch ($this->request->data['Content']['after_save']) {
 			case 'referer':
-				if ($this->data['Content']['referer']) {
-					$this->redirect($this->data['Content']['referer']);
+				if ($this->request->data['Content']['referer']) {
+					$this->redirect($this->request->data['Content']['referer']);
 				} else {
 					$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
 				}
@@ -824,8 +825,8 @@ class ContentsController extends BrownieAppController {
 			case 'parent':
 				if ($parent = $this->Model->brwConfig['parent']) {
 					$foreignKey = $this->Model->belongsTo[$parent]['foreignKey'];
-					if (!empty($this->data[$this->Model->alias][$foreignKey])) {
-						$idRedir = $this->data[$this->Model->alias][$foreignKey];
+					if (!empty($this->request->data[$this->Model->alias][$foreignKey])) {
+						$idRedir = $this->request->data[$this->Model->alias][$foreignKey];
 					} else {
 						$record = $this->Model->findById($this->Model->id);
 						$idRedir = $record[$this->Model->alias][$foreignKey];
