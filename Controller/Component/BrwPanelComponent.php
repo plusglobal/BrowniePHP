@@ -39,7 +39,7 @@ if (file_exists(WWW_ROOT . 'js' . DS . 'tiny_mce' . DS . 'jquery.tinymce.js')) {
 Configure::write('brwSettings', Set::merge($defaultSettings, (array)Configure::read('brwSettings')));
 
 
-class PanelComponent extends Component{
+class BrwPanelComponent extends Component{
 
 	var $controller;
 

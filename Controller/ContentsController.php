@@ -24,7 +24,7 @@ class ContentsController extends BrownieAppController {
 
 		$this->Model = ClassRegistry::init($model);
 		$this->Model->recursive = -1;
-		$this->Model->Behaviors->attach('Brownie.Panel');
+		$this->Model->Behaviors->attach('Brownie.BrwPanel');
 		$this->Content->attachBackend($this->Model);
 
 		$action = $this->params['action'];
@@ -115,7 +115,7 @@ class ContentsController extends BrownieAppController {
 					} else {
 						$AssocModel = $this->Model->$key_model;
 					}
-					$AssocModel->Behaviors->attach('Brownie.Panel');
+					$AssocModel->Behaviors->attach('Brownie.BrwPanel');
 					if ($this->_brwCheckPermissions($key_model)) {
 						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brwConfig['paginate']['fields'])) {
 							unset($AssocModel->brwConfig['paginate']['fields'][$indx]);

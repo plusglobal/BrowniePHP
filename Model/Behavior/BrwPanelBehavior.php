@@ -1,6 +1,6 @@
 <?php
 
-class PanelBehavior extends ModelBehavior {
+class BrwPanelBehavior extends ModelBehavior {
 
 	var $brwConfigDefault = array(
 		'names' => array(
