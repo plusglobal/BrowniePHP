@@ -62,7 +62,7 @@ class BrwPanelComponent extends Component{
 		if (!empty($Controller->params['brw'])) {
 			//cambiar esto por una validacion más en serio
 			if (!$Controller->Session->check('Auth.BrwUser')) {
-				$Controller->cakeError('error404');
+				$this->response->statusCode('404');
 			}
 			App::build(array('views' => ROOT . DS . 'plugins' . DS . 'brownie' . DS . 'views' . DS));
 			$Controller->helpers[] = 'javascript';

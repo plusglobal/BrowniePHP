@@ -19,7 +19,7 @@ class ContentsController extends BrownieAppController {
 		}
 		if (empty($model) or !$this->Content->modelExists($model)) {
 			pr('Model does not exists');
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		$this->Model = ClassRegistry::init($model);
@@ -33,7 +33,7 @@ class ContentsController extends BrownieAppController {
 		}
 		if (!$this->_brwCheckPermissions($model, $action)) {
 			pr('No permissions');
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		$this->Model->brwConfig['actions'] = array_merge(
@@ -88,7 +88,7 @@ class ContentsController extends BrownieAppController {
 
 		if (empty($record)) {
 			pr('Record does not exists');
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		if (method_exists($this->Model, 'brwAfterFind')) {
@@ -162,11 +162,10 @@ class ContentsController extends BrownieAppController {
 
 
 	function edit($model, $id = null) {
-
 		if (!empty($id)) {
 			if (!$this->Model->read(array('id'), $id)) {
 				pr('Record does not exists');
-				$this->cakeError('error404');
+				$this->response->statusCode('404');
 			}
 			$action = 'edit';
 		} else {
@@ -174,13 +173,13 @@ class ContentsController extends BrownieAppController {
 		}
 		if (!$this->_brwCheckPermissions($model, $action)) {
 			pr('No permissions');
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
 		if (!empty($this->request->data)) {
 			if (!empty($this->request->data[$this->Model->alias]['id']) and $this->request->data[$this->Model->alias]['id'] != $id) {
 				pr('Record does not exists');
-				$this->cakeError('error404');
+				$this->response->statusCode('404');
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->request->data = $this->Content->brownieBeforeSave($this->request->data, $this->Model, $this->Session);
@@ -279,7 +278,7 @@ class ContentsController extends BrownieAppController {
 		$record = $this->Model->findById($id);
 		if (!$record) {
 			pr('Record does not exists');
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		if ($this->Content->delete($this->Model, $id)) {
@@ -368,7 +367,7 @@ class ContentsController extends BrownieAppController {
 			!in_array($uploadType, array('BrwFile', 'BrwImage'))
 			or empty($this->Model->brwConfig[($uploadType == 'BrwFile') ? 'files' : 'images'][$categoryCode])
 		) {
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		if (!empty($this->request->data)) {
@@ -411,7 +410,7 @@ class ContentsController extends BrownieAppController {
 
 	function delete_upload($model, $uploadType, $recordId) {
 		if (!in_array($uploadType, array('BrwFile', 'BrwImage'))) {
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 		if ($this->Model->{$uploadType}->delete($recordId)) {
 			$msg = ($uploadType == 'BrwFile') ?
@@ -435,7 +434,7 @@ class ContentsController extends BrownieAppController {
 
 	function import($model) {
 		if (!$this->Model->brwConfig['actions']['import']) {
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 		if (!empty($this->request->data)) {
 			$result = $this->Model->brwImport($this->request->data);
@@ -472,7 +471,7 @@ class ContentsController extends BrownieAppController {
 	function export($model) {
 		$type = $this->Model->brwConfig['export']['type'];
 		if (empty($type)) {
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 		if (!in_array($type, array('xml', 'csv', 'json', 'php', 'xls', 'xlsx'))) {
 			$type = 'xml';
@@ -501,7 +500,7 @@ class ContentsController extends BrownieAppController {
 			and !$this->Model->Bheaviors->attached('Tree')
 			and empty($this->Model->brwConfig['sortable'])
 		) {
-			$this->CakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		if ($this->Content->reorder($this->Model, $direction, $id)) {

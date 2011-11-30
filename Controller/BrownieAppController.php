@@ -2,7 +2,7 @@
 
 class BrownieAppController extends AppController {
 
-	var $components = array(
+	public $components = array(
 		'Session',
 		'Auth' => array(
 			'authenticate' => array(
@@ -10,28 +10,27 @@ class BrownieAppController extends AppController {
                 	'fields' => array('username' => 'email'),
 				),
 			),
-			'authError' => 'Did you really think you are allowed to see that?',
 			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie'),
 		),
 	);
-	var $helpers = array('Html', 'Session', 'Js');
-	var $uses = array('BrwUser');
-	var $layout = 'brownie_default';
+	public $helpers = array('Html', 'Session', 'Js');
+	public $uses = array('BrwUser');
+	public $layout = 'brownie_default';
 	static $currentUser;
 
 
-	/*function constructClasses() {
-		parent::constructClasses();
-		$this->Auth = $this->MyAuth;
-	}*/
+	function __construct($request, $response) {
+		$this->components['Auth']['authError'] = __d('brownie', 'Please provide a valid username and password');
+		parent::__construct($request, $response);
+	}
 
 
-	function b_eforeFilter() {
+	/*function b_eforeFilter() {
 		$this->pageTitle = __d('brownie', 'Control panel');
 	    //Configure::write('brwSettings.authModel', AuthComponent::user('model'));
 	    Configure::write('brwAuthUser', $this->Session->read('Auth.BrwUser'));
 		parent::beforeFilter();
-	}
+	}*/
 
 
 	function beforeRender() {
@@ -41,9 +40,7 @@ class BrownieAppController extends AppController {
 
 
 	function _companyName() {
-		if ($this->Session->check('BrwSite')) {
-			$this->companyName = $this->Session->read('BrwSite.Site.name');
-		} elseif (empty($this->companyName)) {
+		if (empty($this->companyName)) {
 			$this->companyName = '';
 		}
 		$this->set('companyName', $this->companyName);

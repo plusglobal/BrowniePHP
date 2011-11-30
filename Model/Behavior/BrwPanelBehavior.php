@@ -474,7 +474,7 @@ class BrwPanelBehavior extends ModelBehavior {
 							'plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'view',
 							$value['model'], $value['record_id'], $size, $value['category_code'], $value['name']
 						);
-						foreach (Configure::read('Routing.prefixes') as $prefix) {
+						foreach ((array)Configure::read('Routing.prefixes') as $prefix) {
 							$url[$prefix] = false;
 						}
 						$paths['sizes'][$size] = Router::url($url);
@@ -699,31 +699,32 @@ class BrwPanelBehavior extends ModelBehavior {
 
 
 	function _configPerAuthUser($Model) {
-		$authModel = AuthComponent::user('model');
-		if ($authModel and $authModel != 'BrwUser') {
-			if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
-				$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
-			}
-			$type = $Model->brwConfigPerAuthUser[$authModel]['type'];
-			if ($type == 'none') {
-				$Model->brwConfig['actions'] = array(
-					'add' => false, 'edit' => false, 'index' => false, 'delete' => false,
-					'view' => false, 'export' => false, 'import' => false,
-				);
-			} else {
-				$brwConfig = $Model->brwConfigPerAuthUser[$authModel]['brwConfig'];
-				if ($Model->name != $authModel and $type == 'owned') {
-					if (empty($Model->belongsTo[$authModel])) {
-						pr('type = owned is valid only for models that belongsTo the auth model');
-					} else  {
-						$fk = $Model->belongsTo[$authModel]['foreignKey'];
-						$brwConfig['fields']['hide'][] = $fk;
-					}
+		if (class_exists('AuthComponent')) {
+			$authModel = AuthComponent::user('model');
+			if ($authModel and $authModel != 'BrwUser') {
+				if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
+					$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
 				}
-				$Model->brwConfig = Set::merge($Model->brwConfig, $brwConfig);
+				$type = $Model->brwConfigPerAuthUser[$authModel]['type'];
+				if ($type == 'none') {
+					$Model->brwConfig['actions'] = array(
+						'add' => false, 'edit' => false, 'index' => false, 'delete' => false,
+						'view' => false, 'export' => false, 'import' => false,
+					);
+				} else {
+					$brwConfig = $Model->brwConfigPerAuthUser[$authModel]['brwConfig'];
+					if ($Model->name != $authModel and $type == 'owned') {
+						if (empty($Model->belongsTo[$authModel])) {
+							pr('type = owned is valid only for models that belongsTo the auth model');
+						} else  {
+							$fk = $Model->belongsTo[$authModel]['foreignKey'];
+							$brwConfig['fields']['hide'][] = $fk;
+						}
+					}
+					$Model->brwConfig = Set::merge($Model->brwConfig, $brwConfig);
+				}
 			}
 		}
-
 	}
 
 

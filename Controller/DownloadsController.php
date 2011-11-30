@@ -2,7 +2,6 @@
 
 class DownloadsController extends BrownieAppController {
 
-	var $name = 'Downloads';
 	var $uses = array();
 
 
@@ -28,7 +27,7 @@ class DownloadsController extends BrownieAppController {
 
 		$isPublic = (substr($file, 0, strlen(WWW_ROOT)) === WWW_ROOT);
 		if (!$isPublic and !$this->Session->check('Auth.BrwUser')) {
-			$this->cakeError('error404');
+			$this->response->statusCode('404');
 		}
 
 		$this->view = 'Media';

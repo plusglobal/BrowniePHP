@@ -52,7 +52,7 @@ class BrwUploadBehavior extends ModelBehavior {
 			}
 			$Model->data[$Model->alias]['name'] = $this->_cleanFileName($Model->data[$Model->alias]['name']);
 		}
-
+		return true;
 	}
 
 
@@ -63,7 +63,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		$updating = !empty($Model->data[$Model->alias]['id']);
 		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($updating) {
-			if($file_changed) {
+			if ($file_changed) {
 				$image = array_shift($Model->findById($Model->id));
 				$Model->data['name_prev'] = $image['name'];
 			} else {
@@ -84,7 +84,7 @@ class BrwUploadBehavior extends ModelBehavior {
 			$uploadType = ($Model->alias == 'BrwFile')? 'files' : 'images';
 			$uploadsPath = classRegistry::init($data['model'])->brwConfig[$uploadType][$data['category_code']]['path'];
 			$dest_dir = $uploadsPath . DS . $data['model'] . DS . $data['record_id'];
-			if (!empty($data['id'])) {
+			if (!$created) {
 				$this->_deleteFiles($uploadsPath, $data['model'], $data['record_id'], $Model->data['name_prev']);
 			}
 			if (!is_dir($dest_dir)) {
@@ -125,6 +125,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		$relModel = ClassRegistry::init($upload['model']);
 		$uploadsPath = $relModel->brwConfig[$uploadType][$upload['category_code']]['path'];
 		$this->_deleteFiles($uploadsPath, $upload['model'], $upload['record_id'], $upload['name']);
+		return true;
 	}
 
 

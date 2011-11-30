@@ -16,7 +16,10 @@ class BrwAuthenticate extends FormAuthenticate {
 				return array_merge($authenticated, array('model' => $userModel));
 			}
 		}
-		$newUser = ClassRegistry::init('BrwUser')->checkAndCreate('test@test.com', '123');
+		$newUser = ClassRegistry::init('BrwUser')->checkAndCreate(
+			$request->data['BrwUser']['email'],
+			$request->data['BrwUser']['password']
+		);
 		if ($newUser) {
 			return array_merge($newUser, array('model' => 'BrwUser'));
 		}

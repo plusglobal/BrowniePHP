@@ -5,7 +5,7 @@ class BrwUserBehavior extends ModelBehavior {
 
 	function setup($Model) {
 		$Model->displayField = 'email';
-		//$Model->validate = $this->_validate($Model);
+		$Model->validate = $this->_validate($Model);
 	}
 
 
@@ -50,17 +50,18 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	function b_eforeSave($Model) {
-		if ($Model->alias != 'BrwUser' and isset($Model->data[$Model->alias]['password'])) {
-			$pass = $Model->data[$Model->alias]['password'];
-			$Model->data[$Model->alias]['password'] = Security::hash($pass, null, true);
+	function beforeSave($Model) {
+		if (!empty($Model->data[$Model->alias]['password'])) {
+			$Model->data[$Model->alias]['password'] = AuthComponent::password($Model->data[$Model->alias]['password']);
 		}
-		if (!empty($Model->data[$Model->alias]['id']) and isset($Model->data[$Model->alias]['password'])) {
-			if (Security::hash('', null, true) == $Model->data[$Model->alias]['password']) {
-				unset($Model->data[$Model->alias]['password']);
-				if (isset($Model->data[$Model->alias]['repeat_password'])) {
-					unset($Model->data[$Model->alias]['repeat_password']);
-				}
+		if (
+			!empty($Model->data[$Model->alias]['id'])
+			and isset($Model->data[$Model->alias]['password'])
+			and $Model->data[$Model->alias]['password'] == ''
+		) {
+			unset($Model->data[$Model->alias]['password']);
+			if (isset($Model->data[$Model->alias]['repeat_password'])) {
+				unset($Model->data[$Model->alias]['repeat_password']);
 			}
 		}
 		return $Model->data;
@@ -70,9 +71,6 @@ class BrwUserBehavior extends ModelBehavior {
 	function checkPasswordMatch($Model, $data) {
 		$password = $Model->data[$Model->name]['password'];
 		$repeat_password = $Model->data[$Model->name]['repeat_password'];
-		if ($Model->alias == 'BrwUser') {
-			$repeat_password = Security::hash($repeat_password, null, true);
-		}
 		return ($password == $repeat_password);
 	}
 
@@ -94,5 +92,14 @@ class BrwUserBehavior extends ModelBehavior {
 		));
 	}
 
+
+	function checkAndCreate($Model, $email, $password) {
+		if (!$Model->find('first')) {
+			if ($Model->save(array('id' => null, 'email' => $email, 'password' => $password))) {
+				return array_merge(array_shift($Model->findById($Model->id)), array('model' => 'BrwUser'));
+			}
+		}
+		return false;
+	}
 
 }

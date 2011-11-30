@@ -16,8 +16,8 @@ class ThumbsController extends BrownieAppController{
 		$cachedFile = $BrwImage->resizedVersions($model, $recordId, $sizes, $category_code, $file);
 		if (is_file($cachedFile)) {
 			$isPublic = (substr($cachedFile, 0, strlen(WWW_ROOT)) === WWW_ROOT);
-			if (!$isPublic and !$this->Session->check('Auth.BrwUser')) {
-				$this->cakeError('error404');
+			if (!$isPublic and !AuthComponent::user()) {
+				$this->response->statusCode('404');
 			}
 			$cachedImage = getimagesize($cachedFile);
 			header('Content-Type: '.$cachedImage['mime']);
