@@ -96,6 +96,7 @@ class BrwUserBehavior extends ModelBehavior {
 	function checkAndCreate($Model, $email, $password) {
 		if (!$Model->find('first')) {
 			if ($Model->save(array('id' => null, 'email' => $email, 'password' => $password))) {
+				$Model->updateLastLogin($Model->id);
 				return array_merge(array_shift($Model->findById($Model->id)), array('model' => 'BrwUser'));
 			}
 		}

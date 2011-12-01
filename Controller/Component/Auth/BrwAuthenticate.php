@@ -5,14 +5,13 @@ class BrwAuthenticate extends FormAuthenticate {
 
 
 	public function authenticate(CakeRequest $request, CakeResponse $response) {
-		$BrwUser = ClassRegistry::init('BrwUser');
 
-		$userModels = array('Author', 'BrwUser');
-		foreach ($userModels as $userModel) {
+		foreach (Configure::read('brwSettings.userModels') as $userModel) {
 			$this->settings['userModel'] = $userModel;
 			$request->data[$userModel] = $request->data['BrwUser'];
 	        $authenticated = parent::authenticate($request, $response);
 	        if ($authenticated) {
+	        	ClassRegistry::init($userModel)->updateLastLogin($authenticated['id']);
 				return array_merge($authenticated, array('model' => $userModel));
 			}
 		}
