@@ -96,21 +96,6 @@ class BrwPanelComponent extends Component{
 	}
 
 
-	/*function _authSettings() {
-		$this->controller->Auth->authenticate->userModel = 'BrwUser';
-		$this->controller->Auth->authenticate->fields = array('username'  => 'email', 'password'  => 'password');
-		$this->controller->Auth->loginAction = array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie');
-		$this->controller->Auth->loginRedirect = array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie');
-		$this->controller->Auth->autoRedirect = false;
-		$this->controller->Auth->loginError = __d('brownie', 'Login failed. Invalid username or password.', true);
-		$this->controller->Auth->authError = __d('brownie', 'Please login.', true);
-		Configure::write('Auth.BrwUser', $this->controller->Session->read('Auth.BrwUser'));
-		$this->controller->set('brwAuthUser', $this->controller->Session->read('Auth.BrwUser'));
-		$this->controller->set('BrwUser', $this->controller->Session->read('Auth.BrwUser'));
-		$this->controller->currentUser = $this->controller->Session->read('Auth.BrwUser');
-	}*/
-
-
 	function _menuConfig() {
 		if (AuthComponent::user('id')) {
 			$authModel = AuthComponent::user('model');

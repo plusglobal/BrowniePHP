@@ -25,34 +25,12 @@ class BrownieAppController extends AppController {
 	}
 
 
-	/*function b_eforeFilter() {
-		$this->pageTitle = __d('brownie', 'Control panel');
-	    //Configure::write('brwSettings.authModel', AuthComponent::user('model'));
-	    Configure::write('brwAuthUser', $this->Session->read('Auth.BrwUser'));
-		parent::beforeFilter();
-	}*/
-
-
-	function beforeRender() {
-		$this->_companyName();
-		parent::beforeRender();
-	}
-
-
-	function _companyName() {
-		if (empty($this->companyName)) {
-			$this->companyName = '';
-		}
-		$this->set('companyName', $this->companyName);
-	}
-
-
 	function _brwCheckPermissions($model, $action = 'read', $id = null) {
 		$Model = ClassRegistry::getObject($model);
 		if (!$Model) {
 			return false;
 		}
-		//really bad patch, solucionar con permisos reales
+		//really bad patch, fix with proper permissions
 		if ($action == 'read') {
 			return true;
 		}

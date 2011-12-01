@@ -170,7 +170,7 @@ class Content extends BrownieAppModel {
 		if ($Model->Behaviors->attached('Translate')) {
 			$data = $this->translateBeforeSave($data, $Model);
 		}
-		$data = $this->ownedBeforeSave($data, $Model, $Session->read('Auth.BrwUser.id'));
+		$data = $this->ownedBeforeSave($data, $Model, AuthComponent::user('id'));
 		$data = $this->convertUploadsArray($data);
 		return $data;
 	}

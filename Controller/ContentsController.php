@@ -776,7 +776,7 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 		if ($mustRedirect) {
-			$this->redirect(array('action' => 'view', $authModel, $this->Session->read('Auth.BrwUser.id')));
+			$this->redirect(array('action' => 'view', $authModel, AuthComponent::user('id')));
 		}
 	}
 
