@@ -702,6 +702,9 @@ class BrwPanelBehavior extends ModelBehavior {
 		if (class_exists('AuthComponent')) {
 			$authModel = AuthComponent::user('model');
 			if ($authModel and $authModel != 'BrwUser') {
+				if (!isset($Model->brwConfigPerAuthUser)) {
+					$Model->brwConfigPerAuthUser = array();
+				}
 				if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
 					$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
 				}
