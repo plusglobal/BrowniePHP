@@ -111,7 +111,7 @@ function bindCKEditor(id) {
 			removePlugins: 'elementspath',
 			entities: false,
 			toolbar : [
-				['Bold','Italic','Underline','TextColor','-','Link','Unlink','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','OrderedList','UnorderedList','Table'],
+				['Bold','Italic','Underline','TextColor','-','Link','Unlink','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','BulletedList','NumberedList','Table'],
 				['Source','RemoveFormat']
 			]
 		};
