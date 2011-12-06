@@ -10,7 +10,8 @@ class BrownieAppController extends AppController {
                 	'fields' => array('username' => 'email'),
 				),
 			),
-			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie'),
+			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie', 'brw' => false),
+			'loginRedirect' => array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false),
 		),
 	);
 	public $helpers = array('Html', 'Session', 'Js');
