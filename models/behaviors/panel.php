@@ -699,7 +699,7 @@ class PanelBehavior extends ModelBehavior {
 		$authModel = Configure::read('brwSettings.authModel');
 		if ($authModel and $authModel != 'BrwUser') {
 			if (empty($Model->brwConfigPerAuthUser[$authModel]['type'])) {
-				$Model->brwConfigPerAuthUser[$authModel]['type'] = 'none';
+				$Model->brwConfigPerAuthUser[$authModel]['type'] = Configure::read('brwSettings.defaultPermissionPerAuthModel');
 			}
 			$type = $Model->brwConfigPerAuthUser[$authModel]['type'];
 			if ($type == 'none') {
@@ -708,7 +708,8 @@ class PanelBehavior extends ModelBehavior {
 					'view' => false, 'export' => false, 'import' => false,
 				);
 			} else {
-				$brwConfig = $Model->brwConfigPerAuthUser[$authModel]['brwConfig'];
+				$brwConfig = !empty($Model->brwConfigPerAuthUser[$authModel]['brwConfig']) ?
+					$Model->brwConfigPerAuthUser[$authModel]['brwConfig'] : array();
 				if ($Model->name != $authModel and $type == 'owned') {
 					if (empty($Model->belongsTo[$authModel])) {
 						pr('type = owned is valid only for models that belongsTo the auth model');
