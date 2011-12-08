@@ -103,7 +103,7 @@ echo $form->create('Content', array(
 </fieldset>
 <?php
 $uploads = array('Image', 'File');
-$i=0;
+$i = 0;
 foreach ($uploads as $upload) :
 
 	$continue = false;
