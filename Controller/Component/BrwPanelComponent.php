@@ -31,8 +31,7 @@ class BrwPanelComponent extends Component{
 		}
 
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
-			//pr('o');
-			//$this->_authSettings();
+			$this->_menuConfig();
 		}
 
 		if (Configure::read('Config.languages')) {
@@ -49,7 +48,6 @@ class BrwPanelComponent extends Component{
 
 	function beforeRender() {
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
-			$this->_menuConfig();
 			$this->controller->set('companyName', Configure::read('brwSettings.companyName'));
 		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
@@ -74,6 +72,7 @@ class BrwPanelComponent extends Component{
 				}
 				$menu = array(__d('brownie', 'Menu') => $menu);
 			}
+			$this->controller->brwMenu = $menu;
 			$this->controller->set('brwMenu', $menu);
 		}
 	}
