@@ -2,26 +2,14 @@
 
 class BrownieAppController extends AppController {
 
-	public $components = array(
-		'Session',
-		'Auth' => array(
-			'authenticate' => array(
-				'Brownie.Brw' => array(
-                	'fields' => array('username' => 'email'),
-				),
-			),
-			'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie', 'brw' => false),
-			'loginRedirect' => array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false),
-		),
-	);
+	public $components = array('Session');
 	public $helpers = array('Html', 'Session', 'Js');
 	public $uses = array('BrwUser');
 	public $layout = 'brownie_default';
-	static $currentUser;
 
 
 	function __construct($request, $response) {
-		$this->components['Auth']['authError'] = __d('brownie', 'Please provide a valid username and password');
+		$this->components['Auth'] = Configure::read('brwAuthConfig');
 		parent::__construct($request, $response);
 	}
 

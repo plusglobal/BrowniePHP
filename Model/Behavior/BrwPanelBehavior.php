@@ -192,7 +192,6 @@ class BrwPanelBehavior extends ModelBehavior {
 			$Model->brwConfig = array();
 		}
 		$userModels = Configure::read('brwSettings.userModels');
-		//pr($userModels);
 		if (is_array($userModels) and in_array($Model->alias, $userModels)) {
 			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
 		}

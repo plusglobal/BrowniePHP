@@ -2,32 +2,24 @@
 
 class BrwPanelComponent extends Component{
 
-	var $controller;
+	public $controller;
 
 
 	function initialize($Controller, $settings = array()) {
-
 		$this->controller = $Controller;
-
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.BrwUpload');
-
-		$BrwUser = $Controller->Session->read('Auth.BrwUser');
-		if ($BrwUser) {
-			unset($BrwUser['BrwUser']['password']);
-			$Controller->set('BrwUser', $BrwUser);
-			Configure::write('brwSettings.authUser', $BrwUser);
-		}
-
 		if (!empty($Controller->params['brw'])) {
-			//cambiar esto por una validacion más en serio
-			if (!$Controller->Session->check('Auth.BrwUser')) {
-				$this->response->statusCode('404');
+			if (!class_exists('AuthComponent')) {
+				$Controller->Components->load('Auth', Configure::read('brwAuthConfig'));
 			}
-			App::build(array('views' => ROOT . DS . 'plugins' . DS . 'brownie' . DS . 'views' . DS));
-			$Controller->helpers[] = 'javascript';
+			App::build(array('views' => ROOT . DS . APP_DIR . DS . 'Plugin' . DS . 'Brownie' . DS . 'View' . DS));
+			$Controller->helpers[] = 'Js';
 			$Controller->layout = 'brownie_default';
+			if (!empty($Controller->modelClass)) {
+				$Controller->{$Controller->modelClass}->attachBackend();
+			}
 		}
 
 		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {

@@ -38,3 +38,10 @@ if (file_exists(WWW_ROOT . 'js' . DS . 'tiny_mce' . DS . 'jquery.tinymce.js')) {
 
 Configure::write('brwSettings', Set::merge($defaultSettings, (array)Configure::read('brwSettings')));
 
+Configure::write('brwAuthConfig', array(
+	'authenticate' => array('Brownie.Brw' => array('fields' => array('username' => 'email'))),
+	'loginAction' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie', 'brw' => false),
+	'loginRedirect' => array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false),
+	'authError' => __d('brownie', 'Please provide a valid username and password'),
+));
+

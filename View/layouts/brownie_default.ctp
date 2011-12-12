@@ -41,7 +41,7 @@ if ($companyName) {
 				<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home'),
 				array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 				<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users'),
-				array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, 'BrwUser')) ?></li>
+				array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, AuthComponent::user('model'))) ?></li>
 				<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout'),
 				array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 			</ul>
