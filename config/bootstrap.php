@@ -20,7 +20,7 @@ $defaultSettings = array(
 	'datetimeFormat' => 'Y-m-d h:i:s',
 	'defaultExportType' => 'csv',
 	'companyName' => __d('brownie', 'Control panel'),
-	'defaultPermissionPerAuthModel' => 'none',
+	'defaultPermissionPerAuthUser' => 'none',
 );
 if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 	$defaultSettings['css'][] = 'brownie';
