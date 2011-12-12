@@ -210,34 +210,16 @@ class ContentsController extends BrownieAppController {
 
 		$this->Model->brwConfig['fields']['no_sanitize_html'] = array_keys($this->Model->schema());
 
-		$contain = $related = array();
-		if (!empty($this->Model->belongsTo)) {
-			foreach ($this->Model->belongsTo as $key_model => $related_model) {
-				$AssocModel = $this->Model->$key_model;
-				if (!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
-					if ($AssocModel->Behaviors->attached('Tree')) {
-						$relatedData = $AssocModel->generatetreelist();
-					} else {
-						$relatedData = $this->Content->findList($AssocModel, $related_model);
-					}
-					$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
-				}
-			}
-		}
-
+		$contain = array();
 		if (!empty($this->Model->hasAndBelongsToMany)) {
 			foreach ($this->Model->hasAndBelongsToMany as $key_model => $related_model) {
-				$related['hasAndBelongsToMany'][$key_model] = $this->Model->$key_model->find('list', $related_model);
 				if (!in_array($key_model, $contain)) {
 					$contain[] = $key_model;
 				}
 			}
 		}
 
-		if ($this->Model->Behaviors->enabled('Tree')) {
-			$related['tree']['parent_id'] = $this->Model->generatetreelist();
-		}
-		$this->set('related', $related);
+		$this->set('related', $this->Content->relatedData($this->Model));
 
 		if (empty($this->request->data)) {
 			if ($id) {
@@ -465,6 +447,8 @@ class ContentsController extends BrownieAppController {
 			$msg = __d('brownie', 'Warning: %s::brwImport() must be defined', $model);
 			$this->Session->setFlash($msg, 'flash_error');
 		}
+
+		$this->set('related', $this->Content->relatedData($this->Model));
 	}
 
 

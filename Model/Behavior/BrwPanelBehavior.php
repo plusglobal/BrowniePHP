@@ -35,6 +35,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			'filter' => array(),
 			'filter_advanced' => array(),
 			'date_ranges' => array(),
+			'import' => array(),
 		),
 		'actions' => array(
 			'index' => true,
