@@ -4,3 +4,5 @@ Router::connect('/img/*', array('plugin' => 'brownie', 'controller' => 'thumbs',
 Router::connect('/thumbs/*', array('plugin' => 'brownie', 'controller' => 'thumbs', 'action' => 'generate'));
 Router::connect('/admin', array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'login'));
 Router::connect('/admin/:controller/:action/*', array('plugin' => 'brownie'));
+
+Configure::write('Routing.prefixes', array('brw'));
