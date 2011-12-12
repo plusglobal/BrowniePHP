@@ -681,20 +681,6 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function attachBackend($Model) {
-		$Model->Behaviors->attach('Brownie.BrwBackend');
-		$models = array_merge(
-			array_keys($Model->belongsTo),
-			array_keys($Model->hasAndBelongsToMany),
-			array_keys($Model->hasOne),
-			array_keys($Model->hasMany)
-		);
-		foreach ($models as $model) {
-			$Model->{$model}->Behaviors->attach('Brownie.BrwBackend');
-		}
-	}
-
-
 	function dateComplete($data, $fromOrTo, $type) {
 		if (!in_array($fromOrTo, array('_from', '_to')) or empty($data['year'])) {
 			return false;

@@ -2,7 +2,7 @@
 
 class BrwPanelBehavior extends ModelBehavior {
 
-	var $brwConfigDefault = array(
+	public $brwConfigDefault = array(
 		'names' => array(
 			'section' => false,
 			'plural' => false,
@@ -69,7 +69,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	);
 
 
-	var $brwConfigDefaultCustomActions = array(
+	public $brwConfigDefaultCustomActions = array(
 		'title' => '',
 		'url' => array('plugin' => false),
 		'options' => array('target' => '_self'),
@@ -192,11 +192,17 @@ class BrwPanelBehavior extends ModelBehavior {
 			$Model->brwConfig = array();
 		}
 		$userModels = Configure::read('brwSettings.userModels');
+		//pr($userModels);
 		if (is_array($userModels) and in_array($Model->alias, $userModels)) {
 			$defaults = $this->_brwConfigUserDefault($Model, $defaults);
 		}
-		if (AuthComponent::user('model') and in_array($Model->name, array('BrwImage', 'BrwFile', 'Content'))) {
-			$Model->brwConfigPerAuthUser = array(AuthComponent::user('model') => array('type' => 'all'));
+		if (class_exists('AuthComponent')) {
+			if (in_array($Model->name, array('BrwImage', 'BrwFile', 'Content'))) {
+				$Model->brwConfigPerAuthUser = array(AuthComponent::user('model') => array('type' => 'all'));
+			}
+			if (AuthComponent::user('model') != 'BrwUser' and $Model->name == 'BrwUser') {
+				$Model->brwConfigPerAuthUser = array(AuthComponent::user('model') => array('type' => 'none'));
+			}
 		}
 
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
@@ -732,9 +738,28 @@ class BrwPanelBehavior extends ModelBehavior {
 					}
 					$Model->brwConfig = Set::merge($Model->brwConfig, $brwConfig);
 				}
+				if ($Model->name == $authModel) {
+					$Model->brwConfig['actions']['add'] = false;
+					$Model->brwConfig['actions']['delete'] = false;
+					$Model->brwConfig['actions']['index'] = false;
+					$Model->brwConfig['show_children'] = false;
+				}
 			}
 		}
 	}
 
+
+	function attachBackend($Model) {
+		$Model->Behaviors->attach('Brownie.BrwBackend');
+		$models = array_merge(
+			array_keys($Model->belongsTo),
+			array_keys($Model->hasAndBelongsToMany),
+			array_keys($Model->hasOne),
+			array_keys($Model->hasMany)
+		);
+		foreach ($models as $model) {
+			$Model->{$model}->Behaviors->attach('Brownie.BrwBackend');
+		}
+	}
 
 }
