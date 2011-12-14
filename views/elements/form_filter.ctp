@@ -22,11 +22,15 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			$after = '</div>';
 			$isAvanced = true;
 		}
+		if ($schema[$field]['class'] == 'number') {
+			$params += array('class' => 'number');
+		}
 
-		if (in_array($fieldType, array('datetime', 'date')) or $schema[$field]['class'] == 'number') {
-			if ($schema[$field]['class'] == 'number') {
-				$params += array('class' => 'number');
-			} else {
+		if (
+			in_array($fieldType, array('datetime', 'date'))
+			or ($schema[$field]['class'] == 'number' and empty($brwConfig['fields']['filter'][$field]))
+		) {
+			if ($schema[$field]['class'] == 'date') {
 				$params += array(
 					'type' => $fieldType,
 					'minYear' => $brwConfig['fields']['date_ranges'][$field]['minYear'],
@@ -35,6 +39,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 					'monthNames' => $brwConfig['fields']['date_ranges'][$field]['monthNames'],
 					'timeFormat' => '24',
 					'empty' => '-',
+					'separator' => '',
 				);
 			}
 			echo $before . $form->input(
@@ -54,7 +59,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 					'type' => 'select',
 					'options' => array(1 => __d('brownie', 'Yes', true), 0 => __d('brownie', 'No', true)),
 				);
-			} elseif ($multiple) {
+			} elseif ($multiple and $schema[$field]['class'] != 'number') {
 				$params = array_merge($params, array(
 					'empty' => false,
 					'multiple' => 'checkbox',
