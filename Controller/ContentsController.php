@@ -18,8 +18,7 @@ class ContentsController extends BrownieAppController {
 			$model = $this->request->data['Content']['model'];
 		}
 		if (empty($model) or !$this->Content->modelExists($model)) {
-			pr('Model does not exists');
-			$this->response->statusCode('404');
+			throw new NotFoundException('Model does not exists');
 		}
 
 		$this->Model = ClassRegistry::init($model);
@@ -32,8 +31,7 @@ class ContentsController extends BrownieAppController {
 			$action = 'add';
 		}
 		if (!$this->_brwCheckPermissions($model, $action)) {
-			pr('No permissions');
-			$this->response->statusCode('404');
+			throw new NotFoundException('No permissions');
 		}
 
 		$this->Model->brwConfig['actions'] = array_merge(
