@@ -738,4 +738,34 @@ class Content extends BrownieAppModel {
 		return $data;
 	}
 
+
+	function relatedData($Model) {
+		$related = array();
+		if (!empty($Model->belongsTo)) {
+			foreach ($Model->belongsTo as $key_model => $related_model) {
+				$AssocModel = $Model->$key_model;
+				if (!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
+					if ($AssocModel->Behaviors->enabled('Tree')) {
+						$relatedData = $AssocModel->generatetreelist();
+					} else {
+						$relatedData = $this->findList($AssocModel, $related_model);
+					}
+					$related['belongsTo'][$related_model['foreignKey']] = $relatedData;
+				}
+			}
+		}
+
+		if (!empty($Model->hasAndBelongsToMany)) {
+			foreach ($Model->hasAndBelongsToMany as $key_model => $related_model) {
+				$related['hasAndBelongsToMany'][$key_model] = $Model->$key_model->find('list', $related_model);
+			}
+		}
+
+		if ($Model->Behaviors->enabled('Tree')) {
+			$related['tree']['parent_id'] = $Model->generatetreelist();
+		}
+
+		return $related;
+	}
+
 }

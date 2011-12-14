@@ -21,6 +21,7 @@ $defaultSettings = array(
 	'dateFormat' => 'Y-m-d',
 	'datetimeFormat' => 'Y-m-d h:i:s',
 	'defaultExportType' => 'csv',
+	'defaultPermissionPerAuthModel' => 'none',
 );
 if (file_exists(WWW_ROOT . 'css' . DS . 'brownie.css')) {
 	$defaultSettings['css'][] = 'brownie';

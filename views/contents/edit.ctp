@@ -6,7 +6,10 @@ $adding = empty($this->data[$model]['id']);
 if (!$adding) {
 	$url[] = $this->data[$model]['id'];
 }
-echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url));
+echo $form->create('Content', array(
+	'type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url,
+	'inputDefaults' => array('separator' => ' '),
+));
 ?>
 <fieldset>
 	<legend>
@@ -100,7 +103,7 @@ echo $form->create('Content', array('type' => 'file', 'action' => 'edit', 'autoc
 </fieldset>
 <?php
 $uploads = array('Image', 'File');
-$i=0;
+$i = 0;
 foreach ($uploads as $upload) :
 
 	$continue = false;

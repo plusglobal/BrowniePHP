@@ -11,6 +11,14 @@ echo $form->create('Content', array('type' => 'file', 'url' => $url));
 	<?php
 	echo $form->input('model', array('value' => $model, 'type' => 'hidden'));
 	echo $form->input('file', array('type' => 'file'));
+	foreach ($brwConfig['fields']['import'] as $field) {
+		//estoy lo hago asi nomas para ahora, pero hay que hacerlo bien para todo tipo de campos
+		echo $this->Form->input($field, array(
+			'options' => $related['belongsTo'][$field],
+			'empty' => '-',
+			'label' => $brwConfig['fields']['names'][$field],
+		));
+	}
 	?>
 </fieldset>
 <?php echo $form->end(__d('brownie', 'Submit', true));?>

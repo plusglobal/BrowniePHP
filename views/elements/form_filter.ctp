@@ -8,7 +8,8 @@
 <?php
 echo $form->create('Filter', array(
 	'url' => array('controller' => 'contents', 'action' => 'filter', $model),
-	'class' => 'filter clearfix'
+	'class' => 'filter clearfix',
+	'inputDefaults' => array('separator' => ' '),
 ));
 
 $isAvanced = false;
