@@ -28,37 +28,37 @@ if ($companyName) {
 ?></title>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1>
-			<?php echo $this->Html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
-			</h1>
-		</div>
-		<?php if (AuthComponent::user('id')) { ?>
-		<div id="options-bar">
-			<p id="welcome-user"><?php echo __d('brownie', 'User: %s', AuthComponent::user('email')) ?></p>
-			<ul>
-				<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home'),
-				array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
-				<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users'),
-				array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, AuthComponent::user('model'))) ?></li>
-				<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout'),
-				array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
-			</ul>
-		</div>
-		<div id="menu"><?php echo $this->element('menu') ?></div>
-		<div id="content">
-			<?php
-			echo $this->Session->flash();
-			echo $content_for_layout;
-			?>
-		</div>
-	<?php
-	} else {
+<div id="container">
+	<div id="header">
+		<h1>
+		<?php echo $this->Html->link($companyName, array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false)) ?>
+		</h1>
+	</div>
+	<?php if (AuthComponent::user('id')) { ?>
+	<div id="options-bar">
+		<p id="welcome-user"><?php echo __d('brownie', 'User: %s', AuthComponent::user('email')) ?></p>
+		<ul>
+			<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home'),
+			array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
+			<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users'),
+			array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, AuthComponent::user('model'))) ?></li>
+			<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout'),
+			array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
+		</ul>
+	</div>
+	<div id="menu"><?php echo $this->element('menu') ?></div>
+	<div id="content">
+		<?php
 		echo $this->Session->flash();
 		echo $content_for_layout;
-	} ?>
+		?>
 	</div>
-	<div id="footer">&nbsp;</div>
+<?php
+} else {
+	echo $this->Session->flash();
+	echo $content_for_layout;
+} ?>
+</div>
+<div id="footer">&nbsp;</div>
 </body>
 </html>
