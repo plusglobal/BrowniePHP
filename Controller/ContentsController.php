@@ -85,8 +85,7 @@ class ContentsController extends BrownieAppController {
 		$record = $this->Model->find('all', $params);
 
 		if (empty($record)) {
-			pr('Record does not exists');
-			$this->response->statusCode('404');
+			throw new NotFoundException('Record does not exists');
 		}
 
 		if (method_exists($this->Model, 'brwAfterFind')) {
@@ -162,22 +161,19 @@ class ContentsController extends BrownieAppController {
 	function edit($model, $id = null) {
 		if (!empty($id)) {
 			if (!$this->Model->read(array('id'), $id)) {
-				pr('Record does not exists');
-				$this->response->statusCode('404');
+				throw new NotFoundException('Record does not exists');
 			}
 			$action = 'edit';
 		} else {
 			$action = 'add';
 		}
 		if (!$this->_brwCheckPermissions($model, $action)) {
-			pr('No permissions');
-			$this->response->statusCode('404');
+			throw new NotFoundException('No permissions');
 		}
 		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
 		if (!empty($this->request->data)) {
 			if (!empty($this->request->data[$this->Model->alias]['id']) and $this->request->data[$this->Model->alias]['id'] != $id) {
-				pr('Record does not exists');
-				$this->response->statusCode('404');
+				throw new NotFoundException('Record does not exists');
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->request->data = $this->Content->brownieBeforeSave($this->request->data, $this->Model, $this->Session);
@@ -257,8 +253,7 @@ class ContentsController extends BrownieAppController {
 	function delete($model, $id) {
 		$record = $this->Model->findById($id);
 		if (!$record) {
-			pr('Record does not exists');
-			$this->response->statusCode('404');
+			throw new NotFoundException('Record does not exists');
 		}
 
 		if ($this->Content->delete($this->Model, $id)) {
