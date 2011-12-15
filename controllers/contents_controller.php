@@ -524,7 +524,11 @@ class ContentsController extends BrownieAppController {
 				)
 			) {
 				foreach (array('_from', '_to') as $key) {
-					if (array_key_exists($field . $key, $this->data[$model])) {
+					if (
+						array_key_exists($field . $key, $this->data[$model])
+						and
+						$this->data[$model][$field . $key] != ''
+					) {
 						$url[$model . '.' . $field . $key] = $this->data[$model][$field . $key];
 					}
 				}
