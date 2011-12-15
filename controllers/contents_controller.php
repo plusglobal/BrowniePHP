@@ -505,7 +505,6 @@ class ContentsController extends BrownieAppController {
 		foreach ($this->Model->_schema as $field => $cnf) {
 			$type = $this->Model->_schema[$field]['type'];
 			if (in_array($type, array('date', 'datetime'))) {
-				$keyFrom = $field . '_from';
 				foreach (array('_from', '_to') as $key) {
 					if (!empty($this->data[$model][$field . $key]['year'])) {
 						$data = $this->Content->dateComplete($this->data[$model][$field . $key], $key, $type);
@@ -517,7 +516,12 @@ class ContentsController extends BrownieAppController {
 				}
 			} elseif (
 				$type == 'float' or
-				($type == 'integer' and !$this->Content->isForeignKey($this->Model, $field))
+				(
+					$type == 'integer'
+					and !$this->Content->isForeignKey($this->Model, $field)
+					and array_key_exists($field, $this->Model->brwConfig['fields']['filter'])
+					and empty($this->Model->brwConfig['fields']['filter'][$field])
+				)
 			) {
 				foreach (array('_from', '_to') as $key) {
 					if (array_key_exists($field . $key, $this->data[$model])) {
@@ -702,9 +706,11 @@ class ContentsController extends BrownieAppController {
 		$model = $Model->alias;
 		foreach ($filterFields as $field => $multiple) {
 			$type = $this->Model->_schema[$field]['type'];
-			$isRange = (in_array($type, array('date', 'datetime', 'float')) or (
-				in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field)
-			));
+			$isRange = (
+				in_array($type, array('date', 'datetime', 'float'))
+				or
+				(in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field) and !$multiple)
+			);
 			if ($isRange) {
 				foreach (array('_from', '_to') as $key) {
 					if (isset($this->params['named'][$model . '.' . $field . $key])) {
