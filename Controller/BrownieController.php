@@ -43,8 +43,6 @@ class BrownieController extends BrownieAppController {
 	}
 
 
-
-
 	function translations() {
 		$models = Configure::listObjects('model');
 		$translations = array();

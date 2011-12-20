@@ -30,7 +30,8 @@ class BrwPanelComponent extends Component{
 			$langs3chars = array();
 			$l10n = new L10n();
 			foreach ((array)Configure::read('Config.languages') as $lang) {
-				$langs3chars[$lang] = $l10n->__l10nCatalog[$lang]['localeFallback'];
+				$catalog = $l10n->catalog($lang);
+				$langs3chars[$lang] = $catalog['localeFallback'] ;
 			}
 			Configure::write('Config.langs', $langs3chars);
 		}
