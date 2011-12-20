@@ -629,7 +629,11 @@ class Content extends BrownieAppModel {
 			$keyNamed = $Model->alias . '.' . $field;
 			$isRange = (!$forData and (
 				in_array($value['type'], array('datetime', 'date', 'float'))
-				or ($value['type'] == 'integer' and !$this->isForeignKey($Model, $field))
+				or (
+					$value['type'] == 'integer'
+					and !$this->isForeignKey($Model, $field)
+					and empty($Model->brwConfig['fields']['filter'][$field])
+				)
 			));
 			if ($isRange) {
 				if (array_key_exists($keyNamed . '_from', $named)) {

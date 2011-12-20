@@ -506,7 +506,6 @@ class ContentsController extends BrownieAppController {
 		foreach ($this->Model->schema() as $field => $cnf) {
 			$type = $cnf['type'];
 			if (in_array($type, array('date', 'datetime'))) {
-				$keyFrom = $field . '_from';
 				foreach (array('_from', '_to') as $key) {
 					if (!empty($this->request->data[$model][$field . $key]['year'])) {
 						$data = $this->Content->dateComplete($this->request->data[$model][$field . $key], $key, $type);
@@ -518,10 +517,19 @@ class ContentsController extends BrownieAppController {
 				}
 			} elseif (
 				$type == 'float' or
-				($type == 'integer' and !$this->Content->isForeignKey($this->Model, $field))
+				(
+					$type == 'integer'
+					and !$this->Content->isForeignKey($this->Model, $field)
+					and array_key_exists($field, $this->Model->brwConfig['fields']['filter'])
+					and empty($this->Model->brwConfig['fields']['filter'][$field])
+				)
 			) {
 				foreach (array('_from', '_to') as $key) {
-					if (!empty($this->request->data[$model][$field . $key])) {
+					if (
+						array_key_exists($field . $key, $this->request->data[$model])
+						and
+						$this->request->data[$model][$field . $key] != ''
+					) {
 						$url[$model . '.' . $field . $key] = $this->request->data[$model][$field . $key];
 					}
 				}
@@ -707,9 +715,11 @@ class ContentsController extends BrownieAppController {
 		foreach ($filterFields as $field => $multiple) {
 			$schema = $Model->schema();
 			$type = $schema[$field]['type'];
-			$isRange = (in_array($type, array('date', 'datetime', 'float')) or (
-				in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field)
-			));
+			$isRange = (
+				in_array($type, array('date', 'datetime', 'float'))
+				or
+				(in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field) and !$multiple)
+			);
 			if ($isRange) {
 				foreach (array('_from', '_to') as $key) {
 					if (isset($this->params['named'][$model . '.' . $field . $key])) {
@@ -826,6 +836,5 @@ class ContentsController extends BrownieAppController {
 			break;
 		}
 	}
-
 
 }
