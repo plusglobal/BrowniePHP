@@ -63,10 +63,13 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			} elseif ($multiple and $schema[$field]['class'] != 'number') {
 				$params = array_merge($params, array(
 					'empty' => false,
-					'multiple' => 'checkbox',
+					'multiple' => 'multiple',
 					'between' => '<div class="filter-checkbox clearfix" id="filter-checkbox-' . $field . '">',
 					'after' => '</div>',
 				));
+			}
+			if ($fieldType == 'integer' and $schema[$field]['class'] == 'string' and empty($params['multiple'])) {
+				$params['class'] = 'single-select';
 			}
 			echo $before . $form->input($model . '.' . $field, $params) . $after;
 		}

@@ -174,7 +174,7 @@ function checkMultiple() {
 	});
 }
 
-function filterCheckbox() {
+/*function filterCheckbox() {
 	$('div.filter-checkbox div.checkbox').addClass('clearfix');
 	var $button = [];
 	$('div.filter-checkbox').each(function(i){
@@ -207,7 +207,7 @@ function toggleFilterCheckbox($div, $button) {
 		$div.show();
 		$button.val(brwMsg.done);
 	}
-}
+}*/
 
 
 function showAdvancedFilters() {
@@ -221,4 +221,25 @@ function showAdvancedFilters() {
 			$(this).html(brwMsg.show_advanced)
 		});
 	}
+}
+
+
+function filterCheckbox() {
+	$('.filter-checkbox select').each(function() {
+		options = $(this).children('option').size();
+		$(this).multiselect({
+			checkAllText: 'all',
+			uncheckAllText: 'none',
+			selectedList: 5,
+		});
+		if (options > 30) {
+			$(this).multiselectfilter();
+		}
+	});
+	$('.filter select.single-select').multiselect({
+	   multiple: false,
+	   header: false,
+	   selectedList: 1,
+	   header: false,
+	});
 }

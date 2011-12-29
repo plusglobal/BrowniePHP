@@ -1390,7 +1390,7 @@ div#content form.filter div.input input{
 div#enabledLangs label.enabledLangs{
 	padding: 6px;
 }
-
+/*
 div.filter-checkbox{
 	border: 1px solid #999;
 	position: absolute;
@@ -1420,7 +1420,7 @@ div.filter-checkbox div.checkbox:hover{
 #content form.filter div.filter-checkbox input{
 	margin: 5px 4px 4px 4px;
 }
-
+*/
 #content form.filter input.filter-choose{
 	padding: 1px;
 	font-size: 12px;
