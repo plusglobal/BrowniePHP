@@ -15,7 +15,7 @@ echo $form->create('Content', array(
 	<legend>
 	<?php
 	$action = $adding ? __d('brownie', 'Add :name_singular', true) : __d('brownie', 'Edit :name_singular', true);
-	echo String::insert($action, array('name_singular' => $brwConfig['names']['singular']));
+	echo String::insert($action, array('name_singular' => __($brwConfig['names']['singular'], true)));
 	?>
 	</legend>
 	<?php
