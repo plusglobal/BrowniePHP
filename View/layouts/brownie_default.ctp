@@ -11,6 +11,7 @@ echo $this->Html->script(Configure::read('brwSettings.js'));
 <script type="text/javascript">
 var APP_BASE = '<?php echo Router::url('/') ?>';
 var SESSION_ID = '<?php //echo $this->Session->id() ?>';
+var BRW_AUTH_USER = <?php echo json_encode(AuthComponent::user()); ?>;
 var brwMsg = {
 	no_checked_for_deletion: '<?php echo __d('brownie', 'No records checked for deletion') ?>',
 	select: '<?php echo __d('brownie', 'Select') ?>',
@@ -40,8 +41,16 @@ if ($companyName) {
 		<ul>
 			<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home'),
 			array('controller' => 'brownie', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false)) ?></li>
-			<li class="users"><?php echo $this->Html->link(__d('brownie', 'Users'),
-			array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, AuthComponent::user('model'))) ?></li>
+			<li class="users"><?php
+			$url = array('controller' => 'contents', 'action' => 'index', 'plugin' => 'brownie', 'brw' => false, AuthComponent::user('model'));
+			$anchorText = __d('brownie', 'Users');
+			if (AuthComponent::user('model') != 'BrwUser') {
+				$url['action'] = 'view';
+				$url[] = AuthComponent::user('id');
+				$anchorText = __d('brownie', 'User');
+			}
+			echo $this->Html->link($anchorText, $url);
+			?></li>
 			<li class="logout"><?php echo $this->Html->link(__d('brownie', 'Logout'),
 			array('controller' => 'brownie', 'action' => 'logout', 'plugin' => 'brownie', 'brw' => false)) ?></li>
 		</ul>

@@ -6,7 +6,7 @@ class BrwBackendBehavior extends ModelBehavior {
 
 	function setup($Model, $config = array()) {
 		// I don't know why $Model->belongsTo is empty in BrwBackendBehavior::beforeFind(), so I have to cache it
-		$this->cachedBelongsTo = $Model->belongsTo;
+		$Model->cachedBelongsTo = $Model->belongsTo;
 	}
 
 
@@ -17,8 +17,8 @@ class BrwBackendBehavior extends ModelBehavior {
 			if ($Model->brwConfigPerAuthUser[$authModel]['type'] == 'owned') {
 				if ($Model->name == $authModel) {
 					$query['conditions'][$Model->name . '.id'] = $authId;
-				} elseif (!empty($this->cachedBelongsTo[$authModel])) {
-					$fk = $this->cachedBelongsTo[$authModel]['foreignKey'];
+				} elseif (!empty($Model->cachedBelongsTo[$authModel])) {
+					$fk = $Model->cachedBelongsTo[$authModel]['foreignKey'];
 					$query['conditions'][$Model->name . '.' . $fk] = $authId;
 				}
 			}

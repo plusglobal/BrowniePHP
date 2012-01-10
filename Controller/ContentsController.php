@@ -830,5 +830,4 @@ class ContentsController extends BrownieAppController {
 		}
 	}
 
-
 }
