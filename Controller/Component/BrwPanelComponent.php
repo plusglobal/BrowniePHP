@@ -58,7 +58,7 @@ class BrwPanelComponent extends Component{
 				$menu = array();
 				$models = App::objects('model');
 				foreach($models as $model) {
-					if (!in_array($model, array('BrwUser', 'BrwImage', 'BrwFile'))) {
+					if (!in_array($model, array('BrwUser', 'BrwImage', 'BrwFile', 'AppModel'))) {
 						$button = Inflector::humanize(Inflector::underscore(Inflector::pluralize($model)));
 						$menu[$button] = $model;
 					}
