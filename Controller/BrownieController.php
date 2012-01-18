@@ -44,7 +44,7 @@ class BrownieController extends BrownieAppController {
 
 
 	function translations() {
-		$models = Configure::listObjects('model');
+		$models = array_diff(App::objects('model'), array('AppModel'));
 		$translations = array();
 		$out = "<?php\n__('January');__('February');__('March');__('April');__('May');__('June');
 		__('July');__('August');__('September');__('October');__('November');__('December');
@@ -69,7 +69,7 @@ class BrownieController extends BrownieAppController {
 			$out .= "__('" . $translation . "');\n";
 		}
 
-		$forTranslate = ROOT . DS . APP_DIR . DS . 'views' . DS . 'elements' . DS . '4translate.php';
+		$forTranslate = ROOT . DS . APP_DIR . DS . 'View' . DS . 'Elements' . DS . '4translate.php';
 		fwrite(fopen($forTranslate, 'w'), $out);
 	}
 
