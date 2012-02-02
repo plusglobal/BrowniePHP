@@ -537,10 +537,10 @@ class Content extends BrownieAppModel {
 	function relatedModelsForView($Model) {
 		$ret = array_keys(array_merge($Model->hasAndBelongsToMany, $Model->belongsTo));
 		if ($Model->brwConfig['images']) {
-			$ret['BrwImage'] = array('fields' => '*', 'order' => 'BrwImage.id desc');
+			$ret['BrwImage'] = array('fields' => '*', 'order' => 'BrwImage.id asc');
 		}
 		if ($Model->brwConfig['files']) {
-			$ret['BrwFile'] = array('fields' => '*', 'order' => 'BrwFile.id desc');
+			$ret['BrwFile'] = array('fields' => '*', 'order' => 'BrwFile.id asc');
 		}
 		return $ret;
 	}
