@@ -736,7 +736,7 @@ class Content extends BrownieAppModel {
 				$AssocModel = $Model->$key_model;
 				if (!in_array($AssocModel, array('BrwImage', 'BrwFile'))) {
 					if ($AssocModel->Behaviors->enabled('Tree')) {
-						$relatedData = $AssocModel->generatetreelist();
+						$relatedData = $AssocModel->generateTreeList();
 					} else {
 						$relatedData = $this->findList($AssocModel, $related_model);
 					}
@@ -752,7 +752,7 @@ class Content extends BrownieAppModel {
 		}
 
 		if ($Model->Behaviors->enabled('Tree')) {
-			$related['tree']['parent_id'] = $Model->generatetreelist();
+			$related['tree']['parent_id'] = $Model->generateTreeList();
 		}
 
 		return $related;

@@ -132,14 +132,18 @@ class BrwPanelBehavior extends ModelBehavior {
 
 
 	function afterSave($Model, $created) {
+		$isTree = in_array('tree', array_map('strtolower', $Model->Behaviors->attached()));
 		if (
 			$Model->brwConfig['sortable']
 			and $created
-			and !in_array('tree', array_map('strtolower', $Model->Behaviors->attached()))
+			and !$isTree
 		) {
 			$data = $Model->data;
 			$Model->saveField($Model->brwConfig['sortable']['field'], $Model->id);
 			$Model->data = $data;
+		}
+		if ($isTree) {
+			$Model->recover();
 		}
 	}
 
