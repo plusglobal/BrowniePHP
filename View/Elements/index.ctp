@@ -1,7 +1,7 @@
 <div class="model-index" id="<?php echo $model ?>_index">
 
 <div class="index clearfix">
-	<h2><?php echo $brwConfig['names']['plural'] ?></h2>
+	<h2><?php echo __($brwConfig['names']['plural'], true) ?></h2>
 	<div class="actions">
 		<ul>
 		<?php
@@ -9,8 +9,8 @@
 			echo '
 			<li class="add">' . $this->Html->link(
 				String::insert(
-					__d('brownie', 'Add :name_singular'),
-					array('name_singular' => $brwConfig['names']['singular'])
+					__d('brownie', 'Add :name_singular', true),
+					array('name_singular' => __($brwConfig['names']['singular']))
 				),
 				array_merge(array('action' => 'edit', $model), $filters)
 			) . '</li>';

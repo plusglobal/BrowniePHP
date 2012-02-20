@@ -1,6 +1,6 @@
 <div class="view" id="<?php echo $model;?>_view">
 	<div class="clearfix">
-	<h1><?php  echo __d('brownie', $brwConfig['names']['singular']) ?></h1>
+	<h1><?php  echo __($brwConfig['names']['singular']);?></h1>
 	<div class="actions-view">
 		<ul class="actions neighbors">
 			<?php
@@ -137,4 +137,3 @@ foreach ($assoc_models as $key => $assoc) {
 	echo $this->element('index', $assoc);
 }
 ?>
-

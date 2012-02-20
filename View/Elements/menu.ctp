@@ -10,7 +10,7 @@
 					$url = array('plugin' => 'brownie', 'controller' => 'contents', 'action'=> 'index', $url);
 				}
 				$url = array_merge(array('brw' => false, 'plugin' => 'brownie'), $url);
-				echo $this->Html->link($label, $url); ?>
+				echo $html->link(__($label), $url); ?>
 			</li>
 		<?php endforeach ?>
 		</ul>

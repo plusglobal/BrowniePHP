@@ -671,6 +671,9 @@ class Content extends BrownieAppModel {
 				}
 			}
 		}
+		if (!$forData and method_exists($Model, 'brwFilter')) {
+			$filter = $Model->brwFilter($filter, $named);
+		}
 		return $filter;
 	}
 

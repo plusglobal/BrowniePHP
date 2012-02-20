@@ -18,7 +18,7 @@
 	<p class="counter">' . $this->Paginator->counter(array(
 		'format' => String::insert(
 			__d('brownie', 'Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%'),
-			array('name_plural' => $brwConfig['names']['plural'])
+			array('name_plural' => __($brwConfig['names']['plural']))
 		),
 		'model' => $model
 	)) . '</p>';
@@ -51,7 +51,7 @@
 	if ($limits) {
 		echo '
 		<div class="limiter">
-			<p>' . __d('brownie', '%s per page', $brwConfig['names']['plural']) . ':</p>
+			<p>' . sprintf(__d('brownie', '%s per page', true), __($brwConfig['names']['plural'])) . ':</p>
 			<ul>' . $limits . '</ul>
 		</div>';
 	}

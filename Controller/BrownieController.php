@@ -52,6 +52,8 @@ class BrownieController extends BrownieAppController {
 		foreach ($models as $model) {
 			$Model = ClassRegistry::init($model);
 			$translations[Inflector::humanize(Inflector::underscore($Model->name))] = true;
+			$translations[$Model->brwConfig['names']['singular']] = true;
+			$translations[$Model->brwConfig['names']['plural']] = true;
 			$schema = (array)$Model->schema();
 			foreach ($schema as $key => $value) {
 				$translations[Inflector::humanize(str_replace('_id', '', $key))] = true;
