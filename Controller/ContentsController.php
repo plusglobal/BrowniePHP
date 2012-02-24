@@ -734,7 +734,12 @@ class ContentsController extends BrownieAppController {
 			if (in_array($relatedModel['foreignKey'], array_keys($filterFields))) {
 				$varSet = Inflector::pluralize($relatedModel['className']);
 				$varSet[0] = strToLower($varSet[0]);
-				$this->set($varSet, $this->Model->{$relatedModel['className']}->find('list'));
+				if ($this->Model->{$relatedModel['className']}->Behaviors->attached('Tree')) {
+					$list = $this->Model->{$relatedModel['className']}->generateTreeList(null, null, null, '_');
+				} else {
+					$list = $this->Model->{$relatedModel['className']}->find('list');
+				}
+				$this->set($varSet, $list);
 			}
 		}
 
