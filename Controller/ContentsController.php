@@ -566,7 +566,7 @@ class ContentsController extends BrownieAppController {
 					unset($retData[$Model->name][$key]);
 				} elseif (in_array($key, $fieldsConfig['code'])) {
 					$retData[$Model->name][$key] = '<pre>' . htmlspecialchars($retData[$Model->name][$key]) . '</pre>';
-				} elseif (isset($fK[$key])) {
+				} elseif (isset($fK[$key]) and !empty($data[$fK[$key]['alias']])) {
 					$RelModel = ($fK[$key]['className'] == $Model->name) ? $Model : $Model->{$fK[$key]['alias']};
 					$retData[$Model->name][$key] = $data[$fK[$key]['alias']][$RelModel->displayField];
 					if ($this->_brwCheckPermissions($RelModel->name, 'view', $data[$fK[$key]['alias']]['id'])) {
