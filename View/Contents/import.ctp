@@ -6,7 +6,7 @@ echo $this->Form->create('Content', array('type' => 'file', 'url' => $url));
 ?>
 <fieldset>
 	<legend><?php
-	echo String::insert(__d('brownie', 'Import :name_plural'), array('name_plural' => $brwConfig['names']['plural']));
+	echo String::insert(__d('brownie', 'Import :name_plural'), array('name_plural' => __($brwConfig['names']['plural'])));
 	?></legend>
 	<?php
 	echo $this->Form->input('model', array('value' => $model, 'type' => 'hidden'));

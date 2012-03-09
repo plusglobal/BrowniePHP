@@ -187,8 +187,8 @@ class ContentsController extends BrownieAppController {
 			}
 			if ($this->Model->saveAll($this->request->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
-					__d('brownie', 'The %s has been saved [male]', $this->Model->brwConfig['names']['singular']):
-					__d('brownie', 'The %s has been saved [female]', $this->Model->brwConfig['names']['singular']);
+					__d('brownie', 'The %s has been saved [male]', __($this->Model->brwConfig['names']['singular'])):
+					__d('brownie', 'The %s has been saved [female]', __($this->Model->brwConfig['names']['singular']));
 				$this->Session->setFlash($msg, 'flash_success');
 
 				if (!empty($this->request->data['Content']['after_save'])) {
@@ -196,8 +196,8 @@ class ContentsController extends BrownieAppController {
 				}
 			} else {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
-					__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', $this->Model->brwConfig['names']['singular']):
-					__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', $this->Model->brwConfig['names']['singular']);
+					__d('brownie', 'The %s could not be saved. Please, check the error messages.[male]', __($this->Model->brwConfig['names']['singular'])):
+					__d('brownie', 'The %s could not be saved. Please, check the error messages.[female]', __($this->Model->brwConfig['names']['singular']));
 				$this->Session->setFlash($msg, 'flash_error');
 			}
 		}
@@ -649,20 +649,20 @@ class ContentsController extends BrownieAppController {
 			'options' => array(
 				'referer' => __d('brownie', 'Back to where I was'),
 				'view' => ($Model->brwConfig['names']['gender'] == 1) ?
-					__d('brownie', 'View saved %s [male]', $Model->brwConfig['names']['singular']):
-					__d('brownie', 'View saved %s [female]', $Model->brwConfig['names']['singular'])
+					__d('brownie', 'View saved %s [male]', __($Model->brwConfig['names']['singular'])):
+					__d('brownie', 'View saved %s [female]', __($Model->brwConfig['names']['singular']))
 				,
 				'add' =>  ($Model->brwConfig['names']['gender'] == 1) ?
-					__d('brownie', 'Add another %s [male]', $Model->brwConfig['names']['singular']):
-					__d('brownie', 'Add another %s [female]', $Model->brwConfig['names']['singular'])
+					__d('brownie', 'Add another %s [male]', __($Model->brwConfig['names']['singular'])):
+					__d('brownie', 'Add another %s [female]', __($Model->brwConfig['names']['singular']))
 				,
 				'index' => ($Model->brwConfig['names']['gender'] == 1) ?
-					__d('brownie', 'Go to to index of all %s [male]', $Model->brwConfig['names']['plural']):
-					__d('brownie', 'Go to to index of all %s [female]', $Model->brwConfig['names']['plural'])
+					__d('brownie', 'Go to to index of all %s [male]', __($Model->brwConfig['names']['plural'])):
+					__d('brownie', 'Go to to index of all %s [female]', __($Model->brwConfig['names']['plural']))
 				,
 				'edit' => ($Model->brwConfig['names']['gender'] == 1) ?
-					__d('brownie', 'Continue editing this %s [male]', $Model->brwConfig['names']['singular']):
-					__d('brownie', 'Continue editing this %s [female]', $Model->brwConfig['names']['singular'])
+					__d('brownie', 'Continue editing this %s [male]', __($Model->brwConfig['names']['singular'])):
+					__d('brownie', 'Continue editing this %s [female]', __($Model->brwConfig['names']['singular']))
 				,
 				'home' => __d('brownie', 'Go home'),
 			),
@@ -677,8 +677,8 @@ class ContentsController extends BrownieAppController {
 		if ($Model->brwConfig['parent']) {
 			$parentModel = $Model->{$Model->brwConfig['parent']};
 			$params['options']['parent'] =	($parentModel->brwConfig['names']['gender'] == 1) ?
-				__d('brownie', 'Go to the %s [male]', $parentModel->brwConfig['names']['singular']):
-				__d('brownie', 'Go to the %s [female]', $parentModel->brwConfig['names']['singular']);
+				__d('brownie', 'Go to the %s [male]', __($parentModel->brwConfig['names']['singular'])):
+				__d('brownie', 'Go to the %s [female]', __($parentModel->brwConfig['names']['singular']));
 		}
 		if (!$data['Content']['referer'] or !empty($this->params['named']['after_save'])) {
 			unset($params['options']['referer']);

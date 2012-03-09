@@ -136,7 +136,7 @@ class Content extends BrownieAppModel {
 						($Model->brwConfig['names']['gender'] == 1) ?
 							__d('brownie', "This value must be unique and it's already in use by another %s [male]"):
 							__d('brownie', "This value must be unique and it's already in use by another %s [female]"),
-						$Model->brwConfig['names']['singular']
+						__($Model->brwConfig['names']['singular'])
 					),
 					'allowEmpty' => true,
 				);
@@ -378,7 +378,7 @@ class Content extends BrownieAppModel {
 								__d('brownie', 'Are you sure you want to delete this %s?[male]'):
 								__d('brownie', 'Are you sure you want to delete this %s?[female]')
 							,
-							$Model->brwConfig['names']['singular']
+							__($Model->brwConfig['names']['singular'])
 						):
 						false,
 					'class' => $action,

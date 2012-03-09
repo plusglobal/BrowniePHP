@@ -12,7 +12,7 @@ foreach ($brwConfig['fields']['export'] as $col => $field) {
 	} else {
 		$tmp = explode('.', $field); $relModel = $tmp[0]; $relField = $tmp[1];
 		if (!empty($relatedBrwConfig[$relModel])) {
-			$fieldName = $relatedBrwConfig[$relModel]['names']['singular'] . ' ' .
+			$fieldName = __($relatedBrwConfig[$relModel]['names']['singular']) . ' ' .
 			$relatedBrwConfig[$relModel]['fields']['names'][$relField];
 		}
 	}

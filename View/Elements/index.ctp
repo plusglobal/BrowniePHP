@@ -177,7 +177,7 @@ if ($records) {
 	}
 } else {
 	echo '<p class="norecords">'
-	. __d('brownie', 'There are no %s', $brwConfig['names']['plural'])
+	. __d('brownie', 'There are no %s', __($brwConfig['names']['plural']))
 	. '</p>';
 };
 
