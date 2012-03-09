@@ -13,7 +13,7 @@ echo $this->Form->create('Filter', array(
 ));
 
 $isAvanced = false;
-foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
+foreach ($brwConfig['fields']['filter'] as $field => $value) {
 	if (!in_array($field, $brwConfig['fields']['hide'])) {
 		$fieldType = $schema[$field]['type'];
 		$params = array();
@@ -60,7 +60,7 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 					'type' => 'select',
 					'options' => array(1 => __d('brownie', 'Yes', true), 0 => __d('brownie', 'No', true)),
 				);
-			} elseif ($multiple and $schema[$field]['class'] != 'number') {
+			} elseif ($schema[$field]['class'] != 'number') {
 				$params = array_merge($params, array(
 					'empty' => false,
 					'multiple' => 'multiple',
