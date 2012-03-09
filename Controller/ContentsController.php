@@ -448,7 +448,7 @@ class ContentsController extends BrownieAppController {
 	function export($model) {
 		$type = $this->Model->brwConfig['export']['type'];
 		if (empty($type)) {
-			$this->response->statusCode('404');
+			throw new NotFoundException();
 		}
 		if (!in_array($type, array('xml', 'csv', 'json', 'php', 'xls', 'xlsx'))) {
 			$type = 'xml';
@@ -457,7 +457,7 @@ class ContentsController extends BrownieAppController {
 		if ($type == 'xml') {
 			$this->helpers[] = 'Xml';
 		}
-		header('Content-Disposition: attachment; filename=' . $model . '.' . $type);
+		header('Content-Disposition: attachment; filename=' . $model . '.' . $type . '');
 		header('Content-Type: application/force-download');
 		header('Pragma: no-cache');
 		header('Pragma: public');
@@ -467,7 +467,7 @@ class ContentsController extends BrownieAppController {
 			'records' => $this->Content->getForExport($this->Model, $this->params['named']),
 			'relatedBrwConfig' => $this->Content->getRelatedBrwConfig($this->Model),
 		));
-		$this->render('export/' . $type);
+		$this->render('Contents/export/' . $type);
 	}
 
 
