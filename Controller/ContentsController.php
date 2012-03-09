@@ -696,6 +696,8 @@ class ContentsController extends BrownieAppController {
 		foreach ($filters as $field => $value) {
 			if (strstr($field, '>') or strstr($field, '<')) {
 				unset($filters[$field]);
+			} elseif (is_array($value)) {
+				$filters[$field] = join('.', $value);
 			}
 		}
 		return $filters;
