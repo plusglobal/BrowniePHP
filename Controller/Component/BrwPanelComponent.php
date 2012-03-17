@@ -3,14 +3,21 @@
 class BrwPanelComponent extends Component{
 
 	public $controller;
-
+	public $isBrwPanel;
 
 	function initialize($Controller, $settings = array()) {
 		$this->controller = $Controller;
+
+		$this->isBrwPanel = (
+			(!empty($Controller->request->params['prefix']) and $Controller->request->params['prefix'] == 'brw')
+			or
+			$this->controller->params['plugin'] == 'brownie'
+  		);
+
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
 		ClassRegistry::init('BrwImage')->Behaviors->attach('Brownie.BrwUpload');
 		ClassRegistry::init('BrwFile')->Behaviors->attach('Brownie.BrwUpload');
-		if (!empty($Controller->params['brw'])) {
+		if (!empty($Controller->request->params['prefix']) and $Controller->request->params['prefix'] == 'brw') {
 			if (!class_exists('AuthComponent')) {
 				$Controller->Components->load('Auth', Configure::read('brwAuthConfig'));
 			}
@@ -22,7 +29,7 @@ class BrwPanelComponent extends Component{
 			}
 		}
 
-		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
+		if ($this->isBrwPanel) {
 			$this->_menuConfig();
 		}
 
@@ -40,7 +47,7 @@ class BrwPanelComponent extends Component{
 
 
 	function beforeRender() {
-		if (!empty($this->controller->params['brw']) or $this->controller->params['plugin'] == 'brownie') {
+		if ($this->isBrwPanel) {
 			$this->controller->set('companyName', Configure::read('brwSettings.companyName'));
 		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
