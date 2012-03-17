@@ -666,8 +666,20 @@ class Content extends BrownieAppModel {
 		foreach ($Model->hasAndBelongsToMany as $related) {
 			if (!empty($named[$related['className']])) {
 				$values = explode('.', $named[$related['className']]);
-				foreach ($values as $value) {
-					$filter[$related['className']][]['id'] = $value;
+				if ($forData) {
+					$filter[$related['className']][$related['className']] = $values;
+				} else {
+					$relatedIds = $Model->{$related['with']}->find('all', array('conditions' => array(
+						$related['with'] . '.' . $related['associationForeignKey'] => $values
+					)));
+					$xpath = '{n}.' . $related['with'] . '.' . $related['foreignKey'];
+					$ids = Set::extract($xpath, $relatedIds);
+					if (empty($filter[$Model->alias . '.id'])) {
+						$filter[$Model->alias . '.id'] = $ids;
+					} else {
+						$filter[$Model->alias . '.id'] = array_diff($filter[$Model->alias . '.id'], $ids);
+					}
+
 				}
 			}
 		}

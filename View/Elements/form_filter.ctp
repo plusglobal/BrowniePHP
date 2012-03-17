@@ -14,7 +14,7 @@ echo $this->Form->create('Filter', array(
 
 $isAvanced = false;
 foreach ($brwConfig['fields']['filter'] as $field => $value) {
-	if (!in_array($field, $brwConfig['fields']['hide'])) {
+	if (!in_array($field, $brwConfig['fields']['hide']) and $field != 'brwHABTM') {
 		$fieldType = $schema[$field]['type'];
 		$params = array();
 		$before = $after = '';
@@ -74,6 +74,16 @@ foreach ($brwConfig['fields']['filter'] as $field => $value) {
 			echo $before . $this->Form->input($model . '.' . $field, $params) . $after;
 		}
 	}
+}
+
+foreach ($brwConfig['fields']['filter']['brwHABTM'] as $relatedModel) {
+	$params = array(
+		'empty' => false,
+		'multiple' => 'multiple',
+		'between' => '<div class="filter-checkbox clearfix" id="filter-checkbox-' . $relatedModel . '">',
+		'after' => '</div>',
+	);
+	echo $this->Form->input($relatedModel . '.' . $relatedModel, $params);
 }
 echo $this->Form->submit(__d('brownie', 'Filter', true), array('id' => 'filterSubmit'));
 echo $this->Form->end();

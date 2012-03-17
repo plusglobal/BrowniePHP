@@ -32,8 +32,8 @@ class BrwPanelBehavior extends ModelBehavior {
 			'no_sanitize_html' => array(),
 			'names' => array(),
 			'legends' => array(),
-			'filter' => array(),
-			'filter_advanced' => array(),
+			'filter' => array('brwHABTM' => array()),
+			'filter_advanced' => array('brwHABTM' => array()),
 			'date_ranges' => array(),
 			'import' => array(),
 		),
@@ -620,14 +620,12 @@ class BrwPanelBehavior extends ModelBehavior {
 	function _fieldsFilters($Model) {
 		$filter = Set::normalize($Model->brwConfig['fields']['filter']);
 		$filterAdvanced = Set::normalize($Model->brwConfig['fields']['filter_advanced']);
-
-		$filter = array_merge($filter, $filterAdvanced);
+		$filter = Set::merge($filter, $filterAdvanced);
 		foreach ($filter as $field => $cnf) {
 			if (in_array($field, $Model->brwConfig['fields']['hide'])) {
 				unset($filter[$field]);
 			}
 		}
-
 		$Model->brwConfig['fields']['filter_advanced'] = $filterAdvanced;
 		$Model->brwConfig['fields']['filter'] = $filter;
 	}

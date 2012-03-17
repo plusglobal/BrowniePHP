@@ -534,6 +534,11 @@ class ContentsController extends BrownieAppController {
 				}
 			}
 		}
+		foreach ($this->Model->hasAndBelongsToMany as $relatedModel => $cnf) {
+			if (!empty($this->request->data[$relatedModel][$relatedModel])) {
+				$url[$relatedModel] = join('.', $this->request->data[$relatedModel][$relatedModel]);
+			}
+		}
 		$this->redirect($url);
 	}
 
@@ -708,6 +713,7 @@ class ContentsController extends BrownieAppController {
 		$filterFields = $this->Model->brwConfig['fields']['filter'];
 		$model = $Model->alias;
 		foreach ($filterFields as $field => $multiple) {
+			if ($field == 'brwHABTM') continue;
 			$schema = $Model->schema();
 			$type = $schema[$field]['type'];
 			$isRange = (
@@ -731,20 +737,32 @@ class ContentsController extends BrownieAppController {
 				}
 			}
 		}
-
-		foreach ($Model->belongsTo as $relatedModel) {
-			if (in_array($relatedModel['foreignKey'], array_keys($filterFields))) {
-				$varSet = Inflector::pluralize($relatedModel['className']);
-				$varSet[0] = strToLower($varSet[0]);
-				if ($this->Model->{$relatedModel['className']}->Behaviors->attached('Tree')) {
-					$list = $this->Model->{$relatedModel['className']}->generateTreeList(null, null, null, '_');
-				} else {
-					$list = $this->Model->{$relatedModel['className']}->find('list');
-				}
-				$this->set($varSet, $list);
+		foreach ($filterFields['brwHABTM'] as $relatedModel) {
+			if (!empty($this->params['named'][$relatedModel])) {
+				$this->request->data[$relatedModel][$relatedModel] = explode('.', $this->params['named'][$relatedModel]);
 			}
 		}
-
+		$relatedClassNames = array();
+		foreach ($Model->belongsTo as $relatedModel) {
+			if (in_array($relatedModel['foreignKey'], array_keys($filterFields))) {
+				$relatedClassNames[] = $relatedModel['className'];
+			}
+		}
+		foreach ($Model->hasAndBelongsToMany as $relatedModel) {
+			if (in_array($relatedModel['className'], $filterFields['brwHABTM'])) {
+				$relatedClassNames[] = $relatedModel['className'];
+			}
+		}
+		foreach ($relatedClassNames as $className) {
+			$varSet = Inflector::pluralize($className);
+			$varSet[0] = strToLower($varSet[0]);
+			if ($this->Model->{$className}->Behaviors->attached('Tree')) {
+				$list = $this->Model->{$className}->generateTreeList(null, null, null, '_');
+			} else {
+				$list = $this->Model->{$className}->find('list');
+			}
+			$this->set($varSet, $list);
+		}
 	}
 
 
