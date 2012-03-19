@@ -34,7 +34,10 @@ class BrwPanelBehavior extends ModelBehavior {
 			'legends' => array(),
 			'filter' => array('brwHABTM' => array()),
 			'filter_advanced' => array('brwHABTM' => array()),
-			'date_ranges' => array(),
+			'date_ranges' => array(
+				'created' => array('maxYear' => 'today'),
+				'modified' => array('maxYear' => 'today'),
+			),
 			'import' => array(),
 		),
 		'actions' => array(
