@@ -1365,21 +1365,22 @@ div#content form.filter div.text{
 }
 
 div#content form.filter div.submit{
-	margin-top: 25px;
+	margin-top: 27px;
 	padding: 0;
 }
 
 div#content form.filter div.input select{
 	max-width: 150px;
+	padding: 2px 1px 1px 1px;
 }
 
 div#content form.filter div.input select, div#content form.filter div.input input{
-	border: 1px solid #888;
+	border: 1px solid #d3d3d3;
 }
 
 div#content form.filter div.input input{
 	font-size: 11px;
-	padding: 2px;
+	padding: 4px 2px 5px 2px;
 }
 
 #content form div#enabledLangs label, #content form div#enabledLangs div{
