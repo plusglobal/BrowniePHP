@@ -40,7 +40,7 @@
 	</div>
 </div>
 <?php
-if ($brwConfig['fields']['filter'] and $calledFrom == 'index') {
+if ($calledFrom == 'index') {
 	echo $this->element('form_filter', array('brwConfig' => $brwConfig));
 }
 
