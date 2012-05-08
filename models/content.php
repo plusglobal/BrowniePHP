@@ -311,12 +311,14 @@ class Content extends BrownieAppModel {
 	function schemaForView($Model) {
 		$schema = $Model->_schema;
 		foreach ($schema as $field => $extra) {
+			$isForeignKey = $this->isForeignKey($Model, $field);
+			$schema[$field]['isForeignKey'] = $isForeignKey;
 			switch ($extra['type']) {
 				case 'float':
 					$class = 'number';
 				break;
 				case 'integer':
-					$class = ($this->isForeignKey($Model, $field)) ? 'string' : 'number';
+					$class = ($isForeignKey) ? 'string' : 'number';
 				break;
 				case 'date': case 'datetime':
 					$class = 'date';
