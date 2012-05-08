@@ -71,6 +71,13 @@ foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 			if ($fieldType == 'integer' and $schema[$field]['class'] == 'string' and empty($params['multiple'])) {
 				$params['class'] = 'single-select';
 			}
+			if (
+				!$schema[$field]['isForeignKey']
+				and
+				(in_array($schema[$field]['type'], array('string', 'integer', 'float')))
+			) {
+				$params['type'] = 'text';
+			}
 			echo $before . $form->input($model . '.' . $field, $params) . $after;
 		}
 	}
