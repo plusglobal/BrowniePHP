@@ -1,30 +1,5 @@
 <?php
 
-/*$defaultSettings = array(
-	'css' => array(
-		'/brownie/css/brownie',
-		'/brownie/css/fancybox/jquery.fancybox-1.3.1',
-		'/brownie/css/themes/jquery-ui-1.8.16.custom',
-		'/brownie/css/jquery.multiselect',
-	),
-	'js' => array(
-		'/brownie/js/jquery-1.3.2.min',
-		'/brownie/js/jquery.fancybox-1.3.1.pack',
-		'/brownie/js/jquery.selso',
-		'/brownie/js/jquery.comboselect',
-		'/brownie/js/jquery.jDoubleSelect',
-		'/brownie/js/brownie',
-	),
-	'customHome' => false,
-	'userModels' => array('BrwUser'),
-	'uploadsPath' => './uploads',
-	'dateFormat' => 'Y-m-d',
-	'datetimeFormat' => 'Y-m-d h:i:s',
-	'defaultExportType' => 'csv',
-	'companyName' => __d('brownie', 'Control panel'),
-	'defaultPermissionPerAuthUser' => 'none',
-);*/
-
 $defaultSettings = array(
 	'css' => array(
 		'/brownie/css/brownie',
