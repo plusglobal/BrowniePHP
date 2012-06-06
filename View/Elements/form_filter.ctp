@@ -1,7 +1,7 @@
 <?php if ($isAnyFilter): ?>
 <div class="flash_notice flash">
-	<?php __d('brownie', 'This following listing is filtered.'); ?>
-	<?php echo $this->Html->link(__d('brownie', 'View complete index', true), array('action' => 'index', $model)) ?>
+	<?php echo __d('brownie', 'The following listing is filtered.'); ?>
+	<?php echo $this->Html->link(__d('brownie', 'View all', true), array('action' => 'index', $model)) ?>.
 </div>
 <?php  endif ?>
 
