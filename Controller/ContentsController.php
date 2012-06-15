@@ -252,49 +252,42 @@ class ContentsController extends BrownieAppController {
 
 	function delete($model, $id) {
 		$record = $this->Model->findById($id);
-		if (!$record) {
+		if (empty($record)) {
 			throw new NotFoundException('Record does not exists');
 		}
-
-		if ($this->Content->delete($this->Model, $id)) {
-			$this->Session->setFlash(__d('brownie', 'Successful delete'), 'flash_success');
-		} else {
+		$home = array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false);
+		$redirect = $this->referer($home);
+		$deleted = $this->Content->delete($this->Model, $id);
+		if (!$deleted) {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete'), 'flash_error');
-		}
-
-		$afterDelete = empty($this->params['named']['after_delete'])? null : $this->params['named']['after_delete'];
-
-		if ($afterDelete == 'parent') {
-			$parentModel = $this->Model->brwConfig['parent'];
-			if (!$parentModel) {
-				$afterDelete = 'index';
-			} else {
-				$foreignKey = $this->Model->belongsTo[$parentModel]['foreignKey'];
-				$redirect = array(
-					'plugin' => 'brownie', 'controller' => 'contents',
-					'action' => 'view', $parentModel, $record[$model][$foreignKey]
-				);
+			$this->redirect($redirect);
+		} else {
+			$this->Session->setFlash(__d('brownie', 'Successful delete'), 'flash_success');
+			$afterDelete = empty($this->params['named']['after_delete'])? null : $this->params['named']['after_delete'];
+			if ($afterDelete == 'parent') {
+				$parentModel = $this->Model->brwConfig['parent'];
+				if (!$parentModel) {
+					$afterDelete = 'index';
+				} else {
+					$foreignKey = $this->Model->belongsTo[$parentModel]['foreignKey'];
+					$redirect = array(
+						'plugin' => 'brownie', 'controller' => 'contents',
+						'action' => 'view', $parentModel, $record[$model][$foreignKey]
+					);
+				}
 			}
-		}
-
-		if ($afterDelete == 'index') {
-			$redirect = array(
-				'plugin' => 'brownie', 'controller' => 'contents',
-				'action' => 'index', $model
-			);
-		}
-
-		if (!$afterDelete) {
-			$referer = env('HTTP_REFERER');
-			if ($referer) {
-				$redirect = $referer;
-			} else {
-				$redirect = array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index');
+			if ($afterDelete == 'index') {
+				if ($this->Model->brwConfig['actions']['index']) {
+					$redirect = array(
+						'plugin' => 'brownie', 'controller' => 'contents',
+						'action' => 'index', $model
+					);
+				} else {
+					$redirect = $home;
+				}
 			}
+			$this->redirect($redirect);
 		}
-
-		$this->redirect($redirect);
-
 	}
 
 
