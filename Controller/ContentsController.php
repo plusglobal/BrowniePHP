@@ -523,7 +523,7 @@ class ContentsController extends BrownieAppController {
 				if (is_array($this->request->data[$model][$field])) {
 					$url[$model . '.' . $field] = join('.', $this->request->data[$model][$field]);
 				} else {
-					$url[$model . '.' . $field] = urlencode($this->request->data[$model][$field]);
+					$url[$model . '.' . $field] = $this->request->data[$model][$field];
 				}
 			}
 		}
