@@ -751,6 +751,9 @@ class BrwPanelBehavior extends ModelBehavior {
 							$brwConfig['fields']['hide'][] = $fk;
 						}
 					}
+					if (array_key_exists('fields', $brwConfig) and array_key_exists('filter', $brwConfig['fields'])) {
+						$Model->brwConfig['fields']['filter'] = $brwConfig['fields']['filter'];
+					}
 					$Model->brwConfig = Set::merge($Model->brwConfig, $brwConfig);
 				}
 				if ($Model->name == $authModel) {
