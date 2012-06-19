@@ -18,13 +18,13 @@
 		if ($brwConfig['actions']['import']) {
 			echo '
 			<li class="import">' . $this->Html->link(
-				__d('brownie', 'Import'),
+				$brwConfig['action_labels']['import'],
 				array('action' => 'import', $model)
 			) . '</li>';
 		}
 		if ($brwConfig['actions']['export']) {
 			$url = array_merge(array('action' => 'export', $model), $filters, $this->params['named']);
-			echo '<li class="export">' . $this->Html->link(__d('brownie', 'Export'), $url) . '</li>';
+			echo '<li class="export">' . $this->Html->link($brwConfig['action_labels']['export'], $url) . '</li>';
 		}
 
 		foreach ($brwConfig['global_custom_actions'] as $customAction => $params) {
