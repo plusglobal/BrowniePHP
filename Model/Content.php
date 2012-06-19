@@ -351,11 +351,11 @@ class Content extends BrownieAppModel {
 			'confirmMessage' => false,
 		);
 		$actionsTitles = array_merge($actionsTitles, array(
-			'add' => __d('brownie', 'Add'),
-			'view' => __d('brownie', 'View'),
-			'edit' => __d('brownie', 'Edit'),
-			'delete' => __d('brownie', 'Delete'),
-			'index' => __d('brownie', 'List all'),
+			'add' => __d('brownie', $Model->brwConfig['action_labels']['add']),
+			'view' => __d('brownie', $Model->brwConfig['action_labels']['view']),
+			'edit' => __d('brownie', $Model->brwConfig['action_labels']['edit']),
+			'delete' => __d('brownie', $Model->brwConfig['action_labels']['delete']),
+			'index' => __d('brownie', $Model->brwConfig['action_labels']['index']),
 		));
 		foreach ($actionsTitles as $action => $title) {
 			if (!empty($permissions[$action]) or in_array($action, array('up', 'down'))) {

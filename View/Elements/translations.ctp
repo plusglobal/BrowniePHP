@@ -20,4 +20,13 @@ __d('brownie', 'December');
 __d('brownie', 'Brw User');
 __d('brownie', 'Add User');
 
+//Action labels
+__d('brownie', 'Add');
+__d('brownie', 'View');
+__d('brownie', 'Edit');
+__d('brownie', 'Delete');
+__d('brownie', 'List all');
+__d('brownie', 'Export');
+__d('brownie', 'Import');
+
 ?>
