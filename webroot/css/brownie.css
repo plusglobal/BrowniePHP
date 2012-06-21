@@ -609,6 +609,7 @@ th.actions, th.index_image{
 	padding-left: 10px;
 	padding-right: 10px;
 	color: #fff;
+	width: 10px;
 }
 
 table td.actions{
