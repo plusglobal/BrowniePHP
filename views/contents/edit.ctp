@@ -70,9 +70,9 @@ echo $form->create('Content', array(
 		if (strstr($key, 'password')) {
 			$params['type'] = 'password';
 		} elseif (
-			!$schema[$key]['isForeignKey']
-			and
-			(in_array($schema[$key]['type'], array('string', 'integer', 'float')))
+			(empty($schema[$key]['key']) or $schema[$key]['key'] != 'primary')
+			and !$schema[$key]['isForeignKey']
+			and (in_array($schema[$key]['type'], array('string', 'integer', 'float')))
 		) {
 			$params['type'] = 'text';
 		}
