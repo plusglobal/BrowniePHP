@@ -69,7 +69,14 @@ echo $this->Form->create('Content', array(
 
 		if (strstr($key, 'password')) {
 			$params['type'] = 'password';
+		} elseif (
+			!$schema[$key]['isForeignKey']
+			and
+			(in_array($schema[$key]['type'], array('string', 'integer', 'float')))
+		) {
+			$params['type'] = 'text';
 		}
+
 
 		$params['div'] = array('id' => 'brw' . $model . Inflector::camelize($key));
 		$params['label'] = __($brwConfig['fields']['names'][$key]);

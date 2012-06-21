@@ -14,7 +14,7 @@ if (count($brwConfig['fields']['filter']) > 1) {
 	));
 
 	$isAvanced = false;
-	foreach ($brwConfig['fields']['filter'] as $field => $value) {
+	foreach ($brwConfig['fields']['filter'] as $field => $multiple) {
 		if (!in_array($field, $brwConfig['fields']['hide']) and $field != 'brwHABTM') {
 			$fieldType = $schema[$field]['type'];
 			$params = array();
@@ -61,7 +61,7 @@ if (count($brwConfig['fields']['filter']) > 1) {
 						'type' => 'select',
 						'options' => array(1 => __d('brownie', 'Yes', true), 0 => __d('brownie', 'No', true)),
 					);
-				} elseif ($schema[$field]['class'] != 'number') {
+				} elseif ($multiple and $schema[$field]['class'] != 'number') {
 					$params = array_merge($params, array(
 						'empty' => false,
 						'multiple' => 'multiple',
@@ -71,6 +71,13 @@ if (count($brwConfig['fields']['filter']) > 1) {
 				}
 				if ($fieldType == 'integer' and $schema[$field]['class'] == 'string' and empty($params['multiple'])) {
 					$params['class'] = 'single-select';
+				}
+				if (
+					!$schema[$field]['isForeignKey']
+					and
+					(in_array($schema[$field]['type'], array('string', 'integer', 'float')))
+				) {
+					$params['type'] = 'text';
 				}
 				echo $before . $this->Form->input($model . '.' . $field, $params) . $after;
 			}
