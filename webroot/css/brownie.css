@@ -228,7 +228,25 @@ a{
 	height: 40px;
 	line-height: 40px;
 	float: left;
-	padding: 0 20px;
+	padding: 0 14px;
+}
+
+#toggle-menu{
+	float: left;
+}
+
+#toggle-menu a{
+	float: left;
+	width: 18px;
+	height: 15px;
+	background: url(img/toggle-menu.png) 0 0 no-repeat;
+	overflow: hidden;
+	margin: 14px 0 0 14px;
+	padding: 0;
+}
+
+#toggle-menu a.toggle-hidden{
+	background-position: 0 -100px;
 }
 
 #options-bar ul{

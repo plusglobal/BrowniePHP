@@ -76,4 +76,10 @@ class BrownieController extends BrownieAppController {
 	}
 
 
+	function toggle_menu() {
+		$hidden = $this->Session->read('brw.hideMenu');
+		$this->Session->write('brw.hideMenu', $hidden ? false : true);
+		$this->redirect($this->referer());
+	}
+
 }

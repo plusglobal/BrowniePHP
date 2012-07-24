@@ -18,9 +18,16 @@ var brwMsg = {
 	unselect: '<?php echo __d('brownie', 'Unselect') ?>',
 	done: '<?php echo __d('brownie', 'Done') ?>',
 	show_advanced: '<?php echo __d('brownie', 'Show advanced filters') ?>',
-	hide_advanced: '<?php echo __d('brownie', 'Hide advanced filters') ?>'
+	hide_advanced: '<?php echo __d('brownie', 'Hide advanced filters') ?>',
+	hide_menu: '<?php echo __d('brownie', 'Hide menu') ?>',
+	show_menu: '<?php echo __d('brownie', 'Show menu') ?>',
 };
 </script>
+<style type="text/css">
+<?php if ($brwHideMenu): ?>
+#menu{display: none;}
+<?php endif; ?>
+</style>
 <title><?php
 echo __d('brownie', 'Admin panel');
 if ($companyName) {
@@ -37,6 +44,16 @@ if ($companyName) {
 	</div>
 	<?php if (AuthComponent::user('id')) { ?>
 	<div id="options-bar">
+		<p id="toggle-menu">
+			<?php
+			$title = $brwHideMenu ? __d('brownie', 'Show menu') : __d('brownie', 'Hide menu');
+			echo $this->Html->link(
+				$title,
+				array('controller' => 'brownie', 'action' => 'toggle_menu', 'plugin' => 'brownie', 'brw' => false),
+				array('title' => $title, 'class' => $brwHideMenu ? 'toggle-hidden' : '')
+			);
+			?>
+		</p>
 		<p id="welcome-user"><?php echo __d('brownie', 'User: %s', AuthComponent::user('email')) ?></p>
 		<ul>
 			<li class="home"><?php echo $this->Html->link(__d('brownie', 'Home'),

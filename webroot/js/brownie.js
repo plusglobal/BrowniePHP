@@ -10,6 +10,7 @@ $(document).ready(function(){
 	filterCheckbox();
 	showAdvancedFilters();
 	$('.submit .cancel').click(function(){ history.go(-1); return false;})
+	toggleMenu();
 });
 
 function flashClick() {
@@ -206,3 +207,20 @@ function filterCheckbox() {
 	});
 	$('.filter-checkbox').css('display', 'block');
 }
+
+function toggleMenu() {
+	$('#toggle-menu a').click(function() {
+		$('#menu').slideToggle('fast', function(){
+			if ($('#menu').is(':visible')) {
+				$('#toggle-menu a').removeClass('toggle-hidden');
+				$('#toggle-menu a').attr('title', brwMsg.hide_menu);
+			} else {
+				$('#toggle-menu a').addClass('toggle-hidden');
+				$('#toggle-menu a').attr('title', brwMsg.show_menu);
+			}
+		});
+		$.get(APP_BASE + 'admin/brownie/toggle_menu');
+		return false;
+	});
+}
+

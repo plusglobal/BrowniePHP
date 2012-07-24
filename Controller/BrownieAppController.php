@@ -14,6 +14,12 @@ class BrownieAppController extends AppController {
 	}
 
 
+	function beforeRender() {
+		$this->set('brwHideMenu', $this->Session->read('brw.hideMenu'));
+		parent::beforeRender();
+	}
+
+
 	function _brwCheckPermissions($model, $action = 'read', $id = null) {
 		$Model = ClassRegistry::getObject($model);
 		if (!$Model) {

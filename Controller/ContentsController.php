@@ -736,14 +736,14 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 		$relatedClassNames = array();
-		foreach ($Model->belongsTo as $relatedModel) {
+		foreach ($Model->belongsTo as $alias => $relatedModel) {
 			if (in_array($relatedModel['foreignKey'], array_keys($filterFields))) {
-				$relatedClassNames[] = $relatedModel['className'];
+				$relatedClassNames[] = $alias;
 			}
 		}
-		foreach ($Model->hasAndBelongsToMany as $relatedModel) {
+		foreach ($Model->hasAndBelongsToMany as $alias => $relatedModel) {
 			if (in_array($relatedModel['className'], $filterFields['brwHABTM'])) {
-				$relatedClassNames[] = $relatedModel['className'];
+				$relatedClassNames[] = $alias;
 			}
 		}
 		foreach ($relatedClassNames as $className) {
