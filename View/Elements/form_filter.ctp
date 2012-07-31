@@ -79,6 +79,9 @@ if (count($brwConfig['fields']['filter']) > 1) {
 				) {
 					$params['type'] = 'text';
 				}
+				if ($schema[$field]['isVirtual'] and $schema[$field]['type'] == 'select') {
+					$params['options'] = $schema[$field]['options'];
+				}
 				echo $before . $this->Form->input($model . '.' . $field, $params) . $after;
 			}
 		}

@@ -39,40 +39,12 @@ class Content extends BrownieAppModel {
 
 
 	function _fieldsForForm($Model, $action) {
-		$schema = $Model->schema();
+		$schema = $Model->brwSchema();
 		$fieldsConfig = $Model->brwConfig['fields'];
-		$schema = $this->_addVirtualFields($schema, $fieldsConfig['virtual']);
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
 		foreach ($fieldsNotUsed as $field) {
 			if (isset($schema[$field])) {
 				unset($schema[$field]);
-			}
-		}
-		return $schema;
-	}
-
-
-	function _addVirtualFields($schema, $virtuals) {
-		$default = array(
-			'type' => array('type' => 'string', 'null' => true, 'length' => 255),
-			'after' => null,
-		);
-		foreach ($virtuals as $virtualField => $options) {
-			if (empty($options)) {
-				$options = array();
-			}
-			$options = array_merge($default, $options);
-			if (empty($options['after'])) {
-				$schema[$virtualField] = $options['type'];
-			} else {
-				$ret = array();
-				foreach ($schema as $field => $type) {
-					$ret[$field] = $type;
-					if ($field == $options['after']) {
-						$ret[$virtualField] = $options['type'];
-					}
-				}
-				$schema = $ret;
 			}
 		}
 		return $schema;
@@ -308,7 +280,7 @@ class Content extends BrownieAppModel {
 
 
 	function schemaForView($Model) {
-		$schema = Set::merge($Model->brwConfig['fields']['virtual'], $Model->schema());
+		$schema = $Model->brwSchema();
 		foreach ($schema as $field => $extra) {
 			$isForeignKey = $this->isForeignKey($Model, $field);
 			$schema[$field]['isForeignKey'] = $isForeignKey;

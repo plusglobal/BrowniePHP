@@ -92,6 +92,7 @@ class BrwPanelBehavior extends ModelBehavior {
         'null' => null,
         'default' => '',
         'length' => 255,
+        'isVirtual' => true,
 	);
 
 
@@ -803,6 +804,27 @@ class BrwPanelBehavior extends ModelBehavior {
 		foreach ($models as $model) {
 			$Model->{$model}->Behaviors->attach('Brownie.BrwBackend');
 		}
+	}
+
+
+	function brwSchema($Model) {
+		$schema = $Model->schema();
+		$retSchema = array();
+		$virtuals = $Model->brwConfig['fields']['virtual'];
+		foreach ($schema as $field => $type) {
+			$retSchema[$field] = Set::merge($type, array('isVirtual' => false));
+			foreach ($virtuals as $virtualField => $options) {
+				if ($options['after'] == $field) {
+					$retSchema[$virtualField] = $options;
+				}
+			}
+		}
+		foreach ($virtuals as $virtualField => $options) {
+			if (!$options['after']) {
+				$retSchema[$virtualField] = $options;
+			}
+		}
+		return $retSchema;
 	}
 
 }

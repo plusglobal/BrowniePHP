@@ -490,7 +490,7 @@ class ContentsController extends BrownieAppController {
 
 	function filter($model) {
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
-		foreach ($this->Model->schema() as $field => $cnf) {
+		foreach ($this->Model->brwSchema() as $field => $cnf) {
 			$type = $cnf['type'];
 			if (in_array($type, array('date', 'datetime'))) {
 				foreach (array('_from', '_to') as $key) {
@@ -708,7 +708,7 @@ class ContentsController extends BrownieAppController {
 		$model = $Model->alias;
 		foreach ($filterFields as $field => $multiple) {
 			if ($field == 'brwHABTM') continue;
-			$schema = $Model->schema();
+			$schema = $Model->brwSchema();
 			$type = $schema[$field]['type'];
 			$isRange = (
 				in_array($type, array('date', 'datetime', 'float'))
@@ -721,7 +721,7 @@ class ContentsController extends BrownieAppController {
 						$this->request->data[$model][$field . $key] = $this->params['named'][$model . '.' . $field . $key];
 					}
 				}
-			} elseif ($type == 'integer' or $type == 'boolean' or $type == 'string') {
+			} elseif ($type == 'integer' or $type == 'boolean' or $type == 'string' or $type == 'select') {
 				if (!empty($this->params['named'][$model . '.' . $field])) {
 					$fieldData = $this->params['named'][$model . '.' . $field];
 					if ($type  == 'integer' and strstr($fieldData, '.')) {
