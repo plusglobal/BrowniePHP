@@ -40,20 +40,21 @@ class ContentsController extends BrownieAppController {
 		);
 		$this->_checkBrwUserCrud();
 		$this->Content->i18nInit($this->Model);
-	}
 
-
-	function beforeRender() {
 		$brwConfig = $this->Model->brwConfig;
 		$schema = $this->Content->schemaForView($this->Model);
 		$model = $this->Model->alias;
 		$this->set(compact('model', 'schema', 'brwConfig'));
-		parent::beforeRender();
 	}
 
 
 	function index() {
 		$this->paginate = $this->Model->brwConfig['paginate'];
+		$this->paginate['fields'] = array_diff(
+			$this->Model->brwConfig['paginate']['fields'],
+			array_keys($this->Model->brwConfig['fields']['virtual'])
+		);
+
 		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';

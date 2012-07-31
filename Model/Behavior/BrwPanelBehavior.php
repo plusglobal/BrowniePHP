@@ -86,6 +86,15 @@ class BrwPanelBehavior extends ModelBehavior {
 	);
 
 
+	public $brwDefaultVirtualField = array(
+		'after' => null,
+		'type' => 'string',
+        'null' => null,
+        'default' => '',
+        'length' => 255,
+	);
+
+
 	function setup($Model, $config = array()) {
 		if (empty($Model->brwInitiated)) {
 			$this->brwConfigInit($Model);
@@ -216,6 +225,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		}
 
 		$Model->brwConfig = Set::merge($defaults, $Model->brwConfig);
+		$this->_virtualFieldsConfig($Model);
 		$this->_configPerAuthUser($Model);
 		$this->_sortableConfig($Model);
 		$this->_paginateConfig($Model);
@@ -230,6 +240,17 @@ class BrwPanelBehavior extends ModelBehavior {
 		$this->_setDefaultDateRanges($Model);
 		if ($Model->brwConfig['actions']['export']) {
 			$this->_exportConfig($Model);
+		}
+	}
+
+
+	function _virtualFieldsConfig($Model) {
+		$Model->brwConfig['fields']['virtual'] = Set::normalize($Model->brwConfig['fields']['virtual']);
+		foreach ($Model->brwConfig['fields']['virtual'] as $field => $config) {
+			$Model->brwConfig['fields']['virtual'][$field] = Set::merge(
+				$this->brwDefaultVirtualField,
+				$Model->brwConfig['fields']['virtual'][$field]
+			);
 		}
 	}
 
