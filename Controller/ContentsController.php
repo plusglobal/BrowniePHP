@@ -124,6 +124,10 @@ class ContentsController extends BrownieAppController {
 							array('conditions' => $filters),
 							array('contain' => $this->Content->relatedModelsForIndex($AssocModel, $AssocModel->brwConfig['paginate']))
 						);
+						$this->paginate[$AssocModel->name]['fields'] = array_diff(
+							$AssocModel->brwConfig['paginate']['fields'],
+							array_keys($AssocModel->brwConfig['fields']['virtual'])
+						);
 						$assoc_models[] = array(
 							'brwConfig' => $AssocModel->brwConfig,
 							'model' => $key_model,
