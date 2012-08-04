@@ -20,6 +20,10 @@ class BrwPanelComponent extends Component{
 		if (!empty($Controller->request->params['prefix']) and $Controller->request->params['prefix'] == 'brw') {
 			if (!class_exists('AuthComponent')) {
 				$Controller->Components->load('Auth', Configure::read('brwAuthConfig'));
+			} else {
+				foreach (Configure::read('brwAuthConfig') as $key => $value) {
+					$this->controller->Auth->{$key} = $value;
+				}
 			}
 			App::build(array('views' => ROOT . DS . APP_DIR . DS . 'Plugin' . DS . 'Brownie' . DS . 'View' . DS));
 			$Controller->helpers[] = 'Js';
@@ -42,7 +46,6 @@ class BrwPanelComponent extends Component{
 			}
 			Configure::write('Config.langs', $langs3chars);
 		}
-
 	}
 
 
