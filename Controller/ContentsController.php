@@ -528,7 +528,7 @@ class ContentsController extends BrownieAppController {
 				if (is_array($this->request->data[$model][$field])) {
 					$url[$model . '.' . $field] = join('.', $this->request->data[$model][$field]);
 				} else {
-					$url[$model . '.' . $field] = $this->request->data[$model][$field];
+					$url[$model . '.' . $field] = trim($this->request->data[$model][$field]);
 				}
 			}
 		}
