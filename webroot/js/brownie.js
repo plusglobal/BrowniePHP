@@ -11,6 +11,7 @@ $(document).ready(function(){
 	showAdvancedFilters();
 	$('.submit .cancel').click(function(){ history.go(-1); return false;})
 	toggleMenu();
+	multipleUpload();
 });
 
 function flashClick() {
@@ -224,3 +225,16 @@ function toggleMenu() {
 	});
 }
 
+function multipleUpload() {
+	$('a.upload-link').each(function() {
+		 multipleUploadLink = $(this).attr('data-multiple-upload-link');
+		 $(this).attr('href', multipleUploadLink);
+		 $(this).fancybox({
+			'type': 'iframe',
+			'onClosed': function() { window.location.reload(); },
+			'width': 750,
+			'height': 315,
+			'scrolling': 'no'
+		 });
+	});
+}
