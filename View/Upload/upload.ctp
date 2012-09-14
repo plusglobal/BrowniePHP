@@ -18,7 +18,7 @@ $(function() {
 	$("#uploader").plupload({
 		// General settings
 		runtimes : 'html5,gears,flash',
-		url : '<?php echo Router::url(array(
+		url : '<?php echo $this->Html->url(array(
 			'controller' => 'upload', 'action' => 'upload',
 			$model, $uploadModel, $record_id, $category_code
 		)); ?>',
