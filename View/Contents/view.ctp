@@ -103,7 +103,7 @@ foreach ($uploadModels as $uploadKey => $uploadModel): ?>
 			} else {
 				$params = array(
 					'class' => 'upload-link',
-					'data-multiple-upload-link' => Router::url(array(
+					'data-multiple-upload-link' => $this->Html->url(array(
 						'plugin' => 'brownie', 'controller' => 'upload', 'action' => 'upload',
 						$model, $uploadModel, $record[$model]['id'], $catCode
 					)),
