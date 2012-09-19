@@ -465,7 +465,7 @@ class ContentsController extends BrownieAppController {
 			'records' => $this->Content->getForExport($this->Model, $this->params['named']),
 			'relatedBrwConfig' => $this->Content->getRelatedBrwConfig($this->Model),
 		));
-		$this->render('export/' . $type);
+		$this->render('/Contents/export/' . $type);
 	}
 
 
