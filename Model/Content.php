@@ -598,7 +598,6 @@ class Content extends BrownieAppModel {
 	function filterConditions($Model, $named, $forData = false) {
 		$filter = array();
 		foreach ($Model->schema() as $field => $value) {
-			if ($field == 'id') continue;
 			$keyNamed = $Model->alias . '.' . $field;
 			$isRange = (!$forData and (
 				in_array($value['type'], array('datetime', 'date', 'float'))
