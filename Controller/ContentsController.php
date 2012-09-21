@@ -59,7 +59,8 @@ class ContentsController extends BrownieAppController {
 			$this->set('isTree', true);
 			$this->paginate['order'] = 'lft';
 		}
-		$this->paginate['conditions'] = $filters = $this->_filterConditions($this->Model);
+		$filters = $this->_filterConditions($this->Model);
+		$this->paginate['conditions'] = Set::merge($this->paginate['conditions'], $filters);
 		$this->paginate['contain'] = $this->Content->relatedModelsForIndex($this->Model, $this->paginate);
 		$records = $this->paginate($this->Model);
 		if (method_exists($this->Model, 'brwAfterFind')) {
