@@ -20,8 +20,12 @@ class ThumbsController extends BrownieAppController{
 				$this->response->statusCode('404');
 			}
 			$cachedImage = getimagesize($cachedFile);
-			header('Content-Type: '.$cachedImage['mime']);
+			header('Content-Type: ' . $cachedImage['mime']);
 			readfile($cachedFile);
+			$Model = ClassRegistry::init($model);
+			if (method_exists($Model, 'brwAfterThumbnail')) {
+				$Model->brwAfterThumbnail($recordId, $sizes, $category_code, $file);
+			}
 			exit;
 		}
     }
