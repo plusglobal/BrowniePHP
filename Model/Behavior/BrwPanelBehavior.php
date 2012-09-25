@@ -13,6 +13,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			'limit' => 20,
 			'fields' => array(),
 			'images' => array(),
+			'conditions' => array(),
 		),
 		'index' => array(
 			'home' => true,
