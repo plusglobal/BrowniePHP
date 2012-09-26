@@ -51,7 +51,10 @@ class BrwPanelComponent extends Component{
 
 	function beforeRender() {
 		if ($this->isBrwPanel) {
-			$this->controller->set('companyName', Configure::read('brwSettings.companyName'));
+			$this->controller->set(array(
+				'companyName' => Configure::read('brwSettings.companyName'),
+				'brwHideMenu' => $this->controller->Session->read('brw.hideMenu')
+			));
 		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
 	}
