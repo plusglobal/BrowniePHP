@@ -42,7 +42,7 @@
 				$("#"+name1).change(function(){
 					// REMOVE OLD ELEMENT, ADD NEW SELECT, BIND CHANGE EVENT AND TRIGGER IT
 					$("#"+name2).remove();
-					el.next().next().after("<select id='"+name2+"' >"+el.find("optgroup[label="+$(this).val()+"]").html()+"</select>");
+					el.next().next().after("<select id='"+name2+"' >"+el.find("optgroup[label='"+$(this).val()+"']").html()+"</select>");
 					//el.val($("#"+name2).val());
 					$("#"+name2).trigger("change");
 				});
