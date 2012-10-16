@@ -2,17 +2,17 @@
 
 class BrwUploadBehavior extends ModelBehavior {
 
-	var $max_upload_size = 0;
-	var $extensions = array('png', 'jpg', 'gif', 'jpeg');
-	var $excluded_extensions = array('php');
+	public $max_upload_size = 0;
+	public $extensions = array('png', 'jpg', 'gif', 'jpeg');
+	public $excluded_extensions = array('php');
 
 
-	function setup($Model, $config = array()) {
+	public function setup(Model $Model, $config = array()) {
 		$this->max_upload_size = 50 * 1024 * 1024;
 	}
 
 
-	function beforeValidate($Model) {
+	public function beforeValidate(Model $Model) {
 		$kB = round($this->max_upload_size / 1024, 2);
 		$mB = round($this->max_upload_size / (1024 * 1024), 2);
 		$Model->validate = array (
@@ -56,7 +56,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function beforeSave($Model) {
+	public function beforeSave(Model $Model) {
 		if (!empty($Model->data[$Model->alias]['description'])) {
 			$Model->data[$Model->alias]['description'] = trim($Model->data[$Model->alias]['description']);
 		}
@@ -78,7 +78,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function afterSave($Model, $created) {
+	public function afterSave(Model $Model, $created) {
 		if (!empty($Model->data[$Model->alias]['file'])) {
 			$data = $Model->data[$Model->alias];
 			$uploadType = ($Model->alias == 'BrwFile')? 'files' : 'images';
@@ -99,7 +99,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function _copy($Model, $source, $dest) {
+	public function _copy($Model, $source, $dest) {
 		$newDest = $dest;
 		while (is_file($newDest)) {
 			$parts = explode(DS, $newDest);
@@ -119,7 +119,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function beforeDelete($Model) {
+	public function beforeDelete(Model $Model, $cascade = true) {
 		$upload = array_shift($Model->read());
 		$uploadType = ($Model->alias == 'BrwImage') ? 'images' : 'files';
 		$relModel = ClassRegistry::init($upload['model']);
@@ -129,7 +129,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function _deleteFiles($uploadsPath, $model, $record, $filename) {
+	public function _deleteFiles($uploadsPath, $model, $record, $filename) {
 		$baseFilePath = $uploadsPath . DS . $model . DS . $record;
 		$filePath = $baseFilePath . DS . $filename;
 		if (is_file($filePath)) {
@@ -155,7 +155,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function validateSizeFile($Model, $data) {
+	public function validateSizeFile($Model, $data) {
 		if (empty($Model->data[$Model->alias]['file'])) {
 			return true;
 		}
@@ -174,7 +174,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function validateImageFile($Model, $data) {
+	public function validateImageFile($Model, $data) {
 		if (empty($Model->data[$Model->alias]['file'])) {
 			return true;
 		}
@@ -182,7 +182,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function _cleanFileName($filename) {
+	public function _cleanFileName($filename) {
 		$info = pathinfo($filename);
 		$parts = explode('.', $info['basename']);
 		foreach ($parts as $key => $part) {
@@ -192,7 +192,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	function resizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
+	public function resizedVersions($Model, $model, $recordId, $sizes, $category_code, $file) {
 		$RelModel = ClassRegistry::init($model);
 		$uploadsPath = $RelModel->brwConfig['images'][$category_code]['path'];
 		$sourceFile = $uploadsPath . DS . $model . DS . $recordId . DS . $file;

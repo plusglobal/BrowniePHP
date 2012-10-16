@@ -2,11 +2,11 @@
 
 class Content extends BrownieAppModel {
 
-	var $useTable = false;
-	var $brwConfig = array();
+	public $useTable = false;
+	public $brwConfig = array();
 
 
-	function modelExists($model) {
+	public function modelExists($model) {
 		if ($model == 'BrwUser') {
 			return true;
 		}
@@ -14,7 +14,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function getForeignKeys($Model) {
+	public function getForeignKeys($Model) {
 		$out = array();
 		if (!empty($Model->belongsTo)) {
 			foreach ($Model->belongsTo as $alias => $assocModel) {
@@ -28,17 +28,17 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function fieldsAdd($Model) {
+	public function fieldsAdd($Model) {
 		return $this->_fieldsForForm($Model, 'add');
 	}
 
 
-	function fieldsEdit($Model) {
+	public function fieldsEdit($Model) {
 		return $this->_fieldsForForm($Model, 'edit');
 	}
 
 
-	function _fieldsForForm($Model, $action) {
+	public function _fieldsForForm($Model, $action) {
 		$schema = $Model->brwSchema();
 		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
@@ -51,7 +51,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function addValidationsRules($Model, $edit) {
+	public function addValidationsRules($Model, $edit) {
 		if ($edit) {
 			$fields = $this->fieldsEdit($Model);
 		} else {
@@ -123,7 +123,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function brownieBeforeSave($data, $Model, $Session) {
+	public function brownieBeforeSave($data, $Model, $Session) {
 		$data['Content']['fieldList'] = array();
 		foreach ($Model->schema() as $field => $value) {
 			if (
@@ -147,7 +147,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function treeBeforeSave($data, $Model) {
+	public function treeBeforeSave($data, $Model) {
 		if (!empty($data[$Model->name]['parent_id_NULL']) and $data[$Model->name]['parent_id_NULL']) {
 			$data[$Model->name]['parent_id'] = NULL;
 		}
@@ -161,7 +161,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function translateBeforeSave($data, $Model) {
+	public function translateBeforeSave($data, $Model) {
 		/*
 		foreach (Configure::read('Config.languages') as $lang) {
 			if (empty($data['Content']['enabled_' . $lang])) {
@@ -179,7 +179,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function ownedBeforeSave($data, $Model, $authUserId) {
+	public function ownedBeforeSave($data, $Model, $authUserId) {
 		$authModel = AuthComponent::user('model');
 		if (
 			$authModel
@@ -194,7 +194,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function fckFields($Model) {
+	public function fckFields($Model) {
 		$out = array();
 		foreach ($Model->schema() as $field => $metadata) {
 			if ($metadata['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_editor'])) {
@@ -205,7 +205,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function defaults($Model) {
+	public function defaults($Model) {
 		$data = array();
 		foreach ($Model->schema() as $field => $value) {
 			if (array_key_exists($field, $Model->brwConfig['default'])) {
@@ -218,7 +218,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function delete($Model, $id) {
+	public function remove($Model, $id) {
 		if ($Model->Behaviors->attached('Tree')) {
 			$deleted = $Model->removeFromTree($id, true);
 		} else {
@@ -228,7 +228,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function fieldUnique($Model, $field) {
+	public function fieldUnique($Model, $field) {
 		$indexes = $Model->getDataSource()->index($Model->table);
 		foreach ($indexes as $index) {
 			if ($index['column'] == $field and !empty($index['unique'])) {
@@ -239,7 +239,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function reorder($Model, $direction, $id) {
+	public function reorder($Model, $direction, $id) {
 		if ($Model->Behaviors->attached('Tree')) {
 			return ($direction == 'down') ? $Model->moveDown($id, 1) : $Model->moveUp($id, 1);
 		}
@@ -279,10 +279,10 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function schemaForView($Model) {
+	public function schemaForView($Model) {
 		$schema = $Model->brwSchema();
 		foreach ($schema as $field => $extra) {
-			$isForeignKey = $this->isForeignKey($Model, $field);
+			$isForeignKey = $this->brwIsForeignKey($Model, $field);
 			$schema[$field]['isForeignKey'] = $isForeignKey;
 			switch ($extra['type']) {
 				case 'float':
@@ -304,7 +304,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function isForeignKey($Model, $field) {
+	public function brwIsForeignKey($Model, $field) {
 		foreach ($Model->belongsTo as $model => $belongsTo) {
 			if ($belongsTo['foreignKey'] == $field) {
 				return $model;
@@ -314,7 +314,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function actions($Model, $record, $permissions) {
+	public function actions($Model, $record, $permissions) {
 		$actions = $actionsTitles = array();
 		$defaultAction = array(
 			'title' => false,
@@ -372,7 +372,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function convertUploadsArray($data) {
+	public function convertUploadsArray($data) {
 		foreach (array('BrwImage', 'BrwFile') as $upload) {
 			if (!empty($data[$upload]['model'])) {
 				$retData = array();
@@ -398,7 +398,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function findList($Model, $relationData) {
+	public function findList($Model, $relationData) {
 		$parent = $Model->brwConfig['parent'];
 		$displayField = $Model->displayField;
 		if (!$parent) {
@@ -417,7 +417,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function neighborsForView($Model, $record, $restricted, $named = array()) {
+	public function neighborsForView($Model, $record, $restricted, $named = array()) {
 		$neighbors = array();
 		$isTanslatable = $Model->Behaviors->enabled('Translate');
 		if ($isTanslatable) {
@@ -463,7 +463,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function i18nInit($Model) {
+	public function i18nInit($Model) {
 		if ($Model->Behaviors->attached('Translate')) {
 			$i18nSettings = $Model->Behaviors->Translate->settings[$Model->alias];
 			$settings = array();
@@ -477,7 +477,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function addI18nValues($record, $Model) {
+	public function addI18nValues($record, $Model) {
 		if ($Model->Behaviors->attached('Translate')) {
 			$translated = $Model->find('first', array(
 				'conditions' => array($Model->alias . '.id' => $record[$Model->alias]['id']),
@@ -490,7 +490,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function i18nForEdit($data, $Model) {
+	public function i18nForEdit($data, $Model) {
 		if ($Model->Behaviors->attached('Translate')) {
 			$dataWithTranslations = $this->addI18nValues($data, $Model);
 			$settings = $Model->Behaviors->Translate->settings[$Model->alias];
@@ -507,7 +507,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function relatedModelsForView($Model) {
+	public function relatedModelsForView($Model) {
 		$ret = array_keys(array_merge($Model->hasAndBelongsToMany, $Model->belongsTo));
 		if ($Model->brwConfig['images']) {
 			$ret['BrwImage'] = array('fields' => '*', 'order' => 'BrwImage.id asc');
@@ -519,10 +519,10 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function relatedModelsForIndex($Model, $paginate) {
+	public function relatedModelsForIndex($Model, $paginate) {
 		$containedForIndex = array();
 		foreach ($paginate['fields'] as $field) {
-			$relModel = $this->isForeignKey($Model, $field);
+			$relModel = $this->brwIsForeignKey($Model, $field);
 			if ($relModel) {
 				$containedForIndex[] = $relModel;
 			}
@@ -549,7 +549,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function formatHABTMforView($record, $Model) {
+	public function formatHABTMforView($record, $Model) {
 		$record['HABTM'] = array();
 		$i = 0;
 		foreach ($Model->hasAndBelongsToMany as $relModel => $settings) {
@@ -568,7 +568,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function getForExport($Model, $named) {
+	public function getForExport($Model, $named) {
 		if (!empty($named['direction']) and !empty($named['sort'])) {
 			$order = array($Model->alias . '.' . $named['sort'] => $named['direction']);
 		} else {
@@ -583,7 +583,7 @@ class Content extends BrownieAppModel {
 		if ($Model->brwConfig['export']['replace_foreign_keys']) {
 			foreach ($records as $i => $record) {
 				foreach ($record[$Model->alias] as $field => $value) {
-					$relModel = $this->isForeignKey($Model, $field);
+					$relModel = $this->brwIsForeignKey($Model, $field);
 					if ($relModel) {
 						$displayField = $Model->{$relModel}->displayField;
 						$records[$i][$Model->alias][$field] = $records[$i][$relModel][$displayField];
@@ -595,7 +595,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function filterConditions($Model, $named, $forData = false) {
+	public function filterConditions($Model, $named, $forData = false) {
 		$filter = array();
 		foreach ($Model->schema() as $field => $value) {
 			$keyNamed = $Model->alias . '.' . $field;
@@ -603,7 +603,7 @@ class Content extends BrownieAppModel {
 				in_array($value['type'], array('datetime', 'date', 'float'))
 				or (
 					$value['type'] == 'integer'
-					and !$this->isForeignKey($Model, $field)
+					and !$this->brwIsForeignKey($Model, $field)
 					and empty($Model->brwConfig['fields']['filter'][$field])
 				)
 			));
@@ -662,7 +662,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function getRelatedBrwConfig($Model) {
+	public function getRelatedBrwConfig($Model) {
 		$brwConfigs = array();
 		$models = array_merge($Model->hasAndBelongsToMany, $Model->belongsTo, $Model->hasMany, $Model->hasOne);
 		foreach ($models as $model => $config) {
@@ -672,7 +672,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function dateComplete($data, $fromOrTo, $type) {
+	public function dateComplete($data, $fromOrTo, $type) {
 		if (!in_array($fromOrTo, array('_from', '_to')) or empty($data['year'])) {
 			return false;
 		}
@@ -713,7 +713,7 @@ class Content extends BrownieAppModel {
 	}
 
 
-	function relatedData($Model) {
+	public function relatedData($Model) {
 		$related = array();
 		if (!empty($Model->belongsTo)) {
 			foreach ($Model->belongsTo as $key_model => $related_model) {

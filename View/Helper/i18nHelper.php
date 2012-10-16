@@ -2,7 +2,7 @@
 
 class i18nHelper extends Helper {
 
-	function humanize($lang) {
+	public function humanize($lang) {
 		$out = $lang;
 		switch ($lang) {
 			case 'cat': $out = __d('brownie', 'Catalá'); break;

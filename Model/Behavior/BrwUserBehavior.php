@@ -3,13 +3,13 @@
 class BrwUserBehavior extends ModelBehavior {
 
 
-	function setup($Model) {
+	public function setup(Model $Model, $config = array()) {
 		$Model->displayField = 'email';
 		$Model->validate = $this->_validate($Model);
 	}
 
 
-	function _validate($Model) {
+	public function _validate($Model) {
 		$defaultValidate = array(
 			'email' => array(
 				array(
@@ -50,7 +50,7 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	function beforeSave($Model) {
+	public function beforeSave(Model $Model) {
 		if (!empty($Model->data[$Model->alias]['password'])) {
 			$Model->data[$Model->alias]['password'] = AuthComponent::password($Model->data[$Model->alias]['password']);
 		}
@@ -68,20 +68,20 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	function checkPasswordMatch($Model, $data) {
+	public function checkPasswordMatch($Model, $data) {
 		$password = $Model->data[$Model->name]['password'];
 		$repeat_password = $Model->data[$Model->name]['repeat_password'];
 		return ($password == $repeat_password);
 	}
 
 
-	function brwBeforeEdit($Model, $data) {
+	public function brwBeforeEdit($Model, $data) {
 		$data[$Model->alias]['password'] = $data[$Model->alias]['repeat_password'] = '';
 		return $data;
 	}
 
 
-	function updateLastLogin($Model, $id) {
+	public function updateLastLogin($Model, $id) {
 		if (!$Model->schema('last_login')) {
 			return null;
 		}
@@ -93,7 +93,7 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	function checkAndCreate($Model, $email, $password) {
+	public function checkAndCreate($Model, $email, $password) {
 		if (!$Model->find('first')) {
 			if ($Model->save(array('id' => null, 'email' => $email, 'password' => $password))) {
 				$Model->updateLastLogin($Model->id);
@@ -102,5 +102,6 @@ class BrwUserBehavior extends ModelBehavior {
 		}
 		return false;
 	}
+
 
 }

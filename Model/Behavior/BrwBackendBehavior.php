@@ -4,13 +4,13 @@ class BrwBackendBehavior extends ModelBehavior {
 
 	public $cachedBelongsTo;
 
-	function setup($Model, $config = array()) {
+	public function setup(Model $Model, $config = array()) {
 		// I don't know why $Model->belongsTo is empty in BrwBackendBehavior::beforeFind(), so I have to cache it
 		$Model->cachedBelongsTo = $Model->belongsTo;
 	}
 
 
-	function beforeFind($Model, $query) {
+	public function beforeFind(Model $Model, $query) {
 		$authModel = AuthComponent::user('model');
 		$authId = AuthComponent::user('id');
 		if ($authModel and $authModel != 'BrwUser' and !empty($Model->brwConfigPerAuthUser[$authModel])) {

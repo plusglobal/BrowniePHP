@@ -4,16 +4,16 @@
 */
 
 class XmlExcelHelper extends AppHelper {
-    var $data;
-    var $header;
-    var $rows;
-    var $title;
-    var $sheetName;
-    var $columnsWidth;
-    var $columns;
-    var $xls;
+    public $data;
+    public $header;
+    public $rows;
+    public $title;
+    public $sheetName;
+    public $columnsWidth;
+    public $columns;
+    public $xls;
 
-    function generate($data, $title, $columnWidth = null) {
+    public function generate($data, $title, $columnWidth = null) {
         $this->data = $data;
         $this->columnsWidth = $columnWidth;
         $this->sheetName = $title;
@@ -29,7 +29,7 @@ class XmlExcelHelper extends AppHelper {
         echo $this->xls;
     }
 
-    function setHeader() {
+    public function setHeader() {
         foreach ($this->data as $row) {
             foreach ($row as $model){
                 foreach ($model as $field => $value)
@@ -39,14 +39,14 @@ class XmlExcelHelper extends AppHelper {
         }
     }
 
-    function setColumWidth(){
+    public function setColumWidth(){
         foreach ($this->columnsWidth as $width){
             $this->columns.='<Column ss:Width="'.$width.'"/>';
         }
         $this->columns;
     }
 
-    function setRows(){
+    public function setRows(){
         foreach ($this->data as $row) {
             $this->rows .='<Row>' . "\n";
             foreach ($row as $model) {
@@ -58,7 +58,7 @@ class XmlExcelHelper extends AppHelper {
         }
     }
 
-    function getXML(){
+    public function getXML(){
 	    $this->xls = '<?xml version="1.0"?>
 		<?mso-application progid="Excel.Sheet"?>
 		<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office"

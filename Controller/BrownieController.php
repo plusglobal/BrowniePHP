@@ -3,7 +3,7 @@
 class BrownieController extends BrownieAppController {
 
 
-	function index() {
+	public function index() {
 		$customHome = Configure::read('brwSettings.customHome');
 		if ($customHome) {
 			if (!empty($customHome['plugin']) and $customHome['plugin'] == 'brownie') {
@@ -24,7 +24,7 @@ class BrownieController extends BrownieAppController {
 	}
 
 
-	function login() {
+	public function login() {
 		if (AuthComponent::user()) {
 			$this->redirect(array('controller' => 'brownie', 'action' => 'index'));
 		}
@@ -38,12 +38,12 @@ class BrownieController extends BrownieAppController {
 	}
 
 
-	function logout() {
+	public function logout() {
 		$this->redirect($this->Auth->logout());
 	}
 
 
-	function translations() {
+	public function translations() {
 		$models = array_diff(App::objects('model'), array('AppModel'));
 		$translations = array();
 		$out = "<?php\n__('January');__('February');__('March');__('April');__('May');__('June');
@@ -76,7 +76,7 @@ class BrownieController extends BrownieAppController {
 	}
 
 
-	function toggle_menu() {
+	public function toggle_menu() {
 		$hidden = $this->Session->read('brw.hideMenu');
 		$this->Session->write('brw.hideMenu', $hidden ? false : true);
 		$this->redirect($this->referer());

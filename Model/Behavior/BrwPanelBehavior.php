@@ -97,7 +97,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	);
 
 
-	function setup($Model, $config = array()) {
+	public function setup(Model $Model, $config = array()) {
 		if (empty($Model->brwInitiated)) {
 			$this->brwConfigInit($Model);
 			$this->_attachUploads($Model);
@@ -106,7 +106,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function beforeValidate($Model) {
+	public function beforeValidate(Model $Model) {
 		if ($Model->brwConfig['fields']['conditional']) {
 			foreach ($Model->brwConfig['fields']['conditional'] as $field => $rules) {
 				if (isset($Model->data[$Model->alias][$field])) {
@@ -135,7 +135,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function afterFind($Model, $results, $primary) {
+	public function afterFind(Model $Model, $results, $primary) {
 		if ($Model->name != 'BrwImage') {
 			$results = $this->_addImagePaths($results, $Model);
 		}
@@ -149,7 +149,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function afterSave($Model, $created) {
+	public function afterSave(Model $Model, $created) {
 		$isTree = in_array('tree', array_map('strtolower', $Model->Behaviors->attached()));
 		if (
 			$Model->brwConfig['sortable']
@@ -166,7 +166,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function beforeDelete($Model) {
+	public function beforeDelete(Model $Model, $cascade = true) {
 		$toNullModels = array();
 		$assoc = array_merge($Model->hasMany, $Model->hasOne);
 		foreach($assoc as $related) {
@@ -205,7 +205,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function brwConfigInit($Model) {
+	public function brwConfigInit($Model) {
 		if (!$Model->Behaviors->attached('Containable')) {
 			$Model->Behaviors->attach('Containable');
 		}
@@ -246,7 +246,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _virtualFieldsConfig($Model) {
+	public function _virtualFieldsConfig($Model) {
 		$Model->brwConfig['fields']['virtual'] = Set::normalize($Model->brwConfig['fields']['virtual']);
 		foreach ($Model->brwConfig['fields']['virtual'] as $field => $config) {
 			$Model->brwConfig['fields']['virtual'][$field] = Set::merge(
@@ -257,7 +257,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _sortableConfig($Model) {
+	public function _sortableConfig($Model) {
 		if ($Model->brwConfig['sortable']) {
 			$sortField = $Model->brwConfig['sortable']['field'];
 			if (!$Model->schema($sortField)) {
@@ -277,7 +277,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _paginateConfig($Model) {
+	public function _paginateConfig($Model) {
 		if (empty($Model->brwConfig['paginate']['fields'])) {
 			$listableTypes = array(
 				'integer', 'float', 'string', 'boolean',
@@ -312,7 +312,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _namesConfig($Model) {
+	public function _namesConfig($Model) {
 		$modelName = Inflector::underscore($Model->alias);
 		if (empty($Model->brwConfig['names']['singular'])) {
 			$Model->brwConfig['names']['singular'] = Inflector::humanize($modelName);
@@ -326,7 +326,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _uploadsConfig($Model) {
+	public function _uploadsConfig($Model) {
 		foreach (array('BrwFile' => 'files', 'BrwImage' => 'images') as $uploadModel => $uploadType) {
 			if ($Model->brwConfig[$uploadType]) {
 				$Model->bindModel(array('hasMany' => array($uploadModel => array(
@@ -363,14 +363,14 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _conditionalConfig($Model) {
+	public function _conditionalConfig($Model) {
 		if (!empty($Model->brwConfig['fields']['conditional'])) {
 			$Model->brwConfig['fields']['conditional_camelized'] = $this->_camelize($Model->brwConfig['fields']['conditional']);
 		}
 	}
 
 
-	function _sanitizeConfig($Model) {
+	public function _sanitizeConfig($Model) {
 		$no_sanitize = array();
 		if ($Model->schema()) {
 			foreach ($Model->schema() as $field => $type) {
@@ -383,17 +383,17 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function fieldsAdd($Model) {
+	public function fieldsAdd($Model) {
 		return $this->fieldsForForm($Model, 'add');
 	}
 
 
-	function fieldsEdit($Model) {
+	public function fieldsEdit($Model) {
 		return $this->fieldsForForm($Model, 'edit');
 	}
 
 
-	function fieldsForForm($Model, $action) {
+	public function fieldsForForm($Model, $action) {
 		$schema = $Model->schema();
 		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsNotUsed = array_merge(array('created', 'modified'), $fieldsConfig['no_' . $action], $fieldsConfig['hide']);
@@ -406,7 +406,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _addImagePaths($r, $Model) {
+	public function _addImagePaths($r, $Model) {
 		foreach ($r as $key => $value) {
 			if ($key === 'BrwImage') {
 				$thisModel = $Model;
@@ -426,7 +426,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _addFilePaths($r, $Model) {
+	public function _addFilePaths($r, $Model) {
 		foreach($r as $key => $value) {
 			if ($key === 'BrwFile') {
 				$thisModel = $Model;
@@ -446,17 +446,17 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _addBrwFilePaths($r, $Model) {
+	public function _addBrwFilePaths($r, $Model) {
 		return $this->_addBrwUploadsPaths($r, $Model, 'files');
 	}
 
 
-	function _addBrwImagePaths($r, $Model) {
+	public function _addBrwImagePaths($r, $Model) {
 		return $this->_addBrwUploadsPaths($r, $Model, 'images');
 	}
 
 
-	function _addBrwUploadsPaths($r, $Model, $fileType) {
+	public function _addBrwUploadsPaths($r, $Model, $fileType) {
 
 		App::import('Lib', 'Brownie.BrwSanitize');
 		$ret = array();
@@ -501,7 +501,7 @@ class BrwPanelBehavior extends ModelBehavior {
 				'force_download' => $forceDownloadUrl,
 				'tag_force_download' => '
 					<a title="' . $value['title'] . '" href="' . $forceDownloadUrl
-					. '" class="brw-file ' . end(explode('.', $value['name'])) . '">' . $value['title']
+					. '" class="brw-file ' . pathinfo($value['name'], PATHINFO_EXTENSION) . '">' . $value['title']
 					. '</a>
 				',
 			);
@@ -547,7 +547,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _camelize($array) {
+	public function _camelize($array) {
 		foreach ($array as $key => $value) {
 			if (is_array($value)) {
 				$array[Inflector::camelize($key)] = $this->_camelize($value);
@@ -562,7 +562,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _attachUploads($Model) {
+	public function _attachUploads($Model) {
 		if (!empty($Model->brwConfig['images'])) {
 			$Model->bindModel(array('hasMany' => array('BrwImage' => array(
 				'foreignKey' => 'record_id',
@@ -595,7 +595,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function sanitizeHtml($Model, $results) {
+	public function sanitizeHtml($Model, $results) {
 		App::import('Lib', 'Brownie.BrwSanitize');
 		foreach ($results as $i => $result) {
 			if (!empty($result[$Model->alias])) {
@@ -613,7 +613,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _customActionsConfig($Model) {
+	public function _customActionsConfig($Model) {
 		$customActionsTypes = array('custom_actions', 'global_custom_actions');
 		foreach ($customActionsTypes as $customActionType) {
 			$customActions = array();
@@ -635,7 +635,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _fieldsNames($Model) {
+	public function _fieldsNames($Model) {
 		$defaultNames = array();
 		foreach ((array)$Model->schema() as $field => $value) {
 			$defaultNames[$field] = Inflector::humanize(str_replace('_id', '', $field));
@@ -647,7 +647,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _fieldsFilters($Model) {
+	public function _fieldsFilters($Model) {
 		$filter = Set::normalize($Model->brwConfig['fields']['filter']);
 		$filterAdvanced = Set::normalize($Model->brwConfig['fields']['filter_advanced']);
 		$filter = Set::merge($filter, $filterAdvanced);
@@ -661,7 +661,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _brwConfigUserDefault($Model, $defaults) {
+	public function _brwConfigUserDefault($Model, $defaults) {
 		$Model->Behaviors->attach('Brownie.BrwUser');
 		$brwUserDefaults = array(
 			'fields' => array(
@@ -689,7 +689,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _removeDuplicates($Model) {
+	public function _removeDuplicates($Model) {
 		$brwConfig = $Model->brwConfig;
 
 		$brwConfig['paginate']['fields'] = array_keys(array_flip($brwConfig['paginate']['fields']));
@@ -704,7 +704,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _setDefaultDateRanges($Model) {
+	public function _setDefaultDateRanges($Model) {
 		foreach ((array)$Model->schema() as $field => $config) {
 			if (in_array($config['type'], array('date', 'datetime'))) {
 				foreach (array('minYear', 'maxYear') as $yearType) {
@@ -729,7 +729,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _exportConfig($Model) {
+	public function _exportConfig($Model) {
 		if (empty($Model->brwConfig['fields']['export'])) {
 			foreach ($Model->schema() as $field => $config) {
 				if ($config['type'] != 'text') {
@@ -750,7 +750,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function _configPerAuthUser($Model) {
+	public function _configPerAuthUser($Model) {
 		if (class_exists('AuthComponent')) {
 			$authModel = AuthComponent::user('model');
 			if ($authModel and $authModel != 'BrwUser') {
@@ -794,7 +794,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function attachBackend($Model) {
+	public function attachBackend($Model) {
 		$Model->Behaviors->attach('Brownie.BrwBackend');
 		$models = array_merge(
 			array_keys($Model->belongsTo),
@@ -808,7 +808,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	function brwSchema($Model) {
+	public function brwSchema($Model) {
 		$schema = $Model->schema();
 		$retSchema = array();
 		$virtuals = $Model->brwConfig['fields']['virtual'];

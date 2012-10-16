@@ -9,7 +9,7 @@ class ContentsController extends BrownieAppController {
 	public $data = array();
 
 
-	function beforeFilter() {
+	public function beforeFilter() {
 		parent::beforeFilter();
 
 		if (!empty($this->params['pass'][0])) {
@@ -48,7 +48,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function index() {
+	public function index() {
 		$this->paginate = $this->Model->brwConfig['paginate'];
 		$this->paginate['fields'] = array_diff(
 			$this->Model->brwConfig['paginate']['fields'],
@@ -78,7 +78,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function view($model, $id) {
+	public function view($model, $id) {
 		$this->Model->Behaviors->attach('Containable');
 		$params = array(
 			'conditions' => array($this->Model->name . '.id' => $id),
@@ -164,7 +164,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function edit($model, $id = null) {
+	public function edit($model, $id = null) {
 		if (!empty($id)) {
 			if (!$this->Model->read(array('id'), $id)) {
 				throw new NotFoundException('Record does not exists');
@@ -256,14 +256,14 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function delete($model, $id) {
+	public function delete($model, $id) {
 		$record = $this->Model->findById($id);
 		if (empty($record)) {
 			throw new NotFoundException('Record does not exists');
 		}
 		$home = array('plugin' => 'brownie', 'controller' => 'brownie', 'action' => 'index', 'brw' => false);
 		$redirect = $this->referer($home);
-		$deleted = $this->Content->delete($this->Model, $id);
+		$deleted = $this->Content->remove($this->Model, $id);
 		if (!$deleted) {
 			$this->Session->setFlash(__d('brownie', 'Unable to delete'), 'flash_error');
 			$this->redirect($redirect);
@@ -297,7 +297,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function delete_multiple($model) {
+	public function delete_multiple($model) {
 		$plural = $this->Model->brwConfig['names']['plural'];
 		if (empty($this->request->data['Content']['id'])) {
 			$msg = __d('brownie', 'No %s selected to delete', $plural);
@@ -305,7 +305,7 @@ class ContentsController extends BrownieAppController {
 		} else {
 			$deleted = $no_deleted = 0;
 			foreach ($this->request->data['Content']['id'] as $id) {
-				if ($this->Content->delete($this->Model, $id)) {
+				if ($this->Content->remove($this->Model, $id)) {
 					$deleted++;
 				} else {
 					$no_deleted++;
@@ -336,7 +336,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function edit_upload($model, $uploadType, $recordId, $categoryCode, $uploadId = null) {
+	public function edit_upload($model, $uploadType, $recordId, $categoryCode, $uploadId = null) {
 		if (
 			!in_array($uploadType, array('BrwFile', 'BrwImage'))
 			or empty($this->Model->brwConfig[($uploadType == 'BrwFile') ? 'files' : 'images'][$categoryCode])
@@ -382,7 +382,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function delete_upload($model, $uploadType, $recordId) {
+	public function delete_upload($model, $uploadType, $recordId) {
 		if (!in_array($uploadType, array('BrwFile', 'BrwImage'))) {
 			$this->response->statusCode('404');
 		}
@@ -406,7 +406,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function import($model) {
+	public function import($model) {
 		if (!$this->Model->brwConfig['actions']['import']) {
 			$this->response->statusCode('404');
 		}
@@ -444,7 +444,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function export($model) {
+	public function export($model) {
 		$type = $this->Model->brwConfig['export']['type'];
 		if (empty($type)) {
 			throw new NotFoundException();
@@ -470,7 +470,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function reorder($model, $direction, $id) {
+	public function reorder($model, $direction, $id) {
 		if (
 			!in_array($direction, array('up', 'down'))
 			and !$this->Model->Bheaviors->attached('Tree')
@@ -493,7 +493,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function filter($model) {
+	public function filter($model) {
 		$url = array('controller' => 'contents', 'action' => 'index', $model);
 		foreach ($this->Model->brwSchema() as $field => $cnf) {
 			$type = $cnf['type'];
@@ -511,7 +511,7 @@ class ContentsController extends BrownieAppController {
 				$type == 'float' or
 				(
 					$type == 'integer'
-					and !$this->Content->isForeignKey($this->Model, $field)
+					and !$this->Content->brwIsForeignKey($this->Model, $field)
 					and array_key_exists($field, $this->Model->brwConfig['fields']['filter'])
 					and empty($this->Model->brwConfig['fields']['filter'][$field])
 				)
@@ -542,7 +542,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _formatForView($data, $Model) {
+	public function _formatForView($data, $Model) {
 		$out = array();
 		if (!empty($data[$Model->name])) {
 			$out = $this->_formatSingleForView($data, $Model);
@@ -558,7 +558,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _formatSingleForView($data, $Model, $inView = false) {
+	public function _formatSingleForView($data, $Model, $inView = false) {
 		$fieldsConfig = $Model->brwConfig['fields'];
 		$fieldsHide = $fieldsConfig['hide'];
 		$fK = $this->Content->getForeignKeys($Model);
@@ -603,7 +603,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _formatTree($data, $Model) {
+	public function _formatTree($data, $Model) {
 		$treeList = $Model->generateTreeList(null, null, null, '<span class="tree_prepend"></span>');
 		foreach ($data as $i => $value) {
 			$displayValue = $data[$i][$Model->alias][$Model->displayField];
@@ -615,7 +615,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _formatDate($date) {
+	public function _formatDate($date) {
 		if (empty($date) or $date == '0000-00-00') {
 			return __d('brownie', 'Date not set');
 		} else {
@@ -624,7 +624,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _formatDateTime($datetime) {
+	public function _formatDateTime($datetime) {
 		if (empty($datetime) or $datetime == '0000-00-00 00:00:00') {
 			return __d('brownie', 'Datetime not set');
 		} else {
@@ -633,7 +633,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _setAfterSaveOptionsParams($Model, $data) {
+	public function _setAfterSaveOptionsParams($Model, $data) {
 
 		if (!empty($this->params['named']['after_save'])) {
 			$default = $this->params['named']['after_save'];
@@ -691,12 +691,12 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _filterConditions($Model, $forData = false) {
+	public function _filterConditions($Model, $forData = false) {
 		return $this->Content->filterConditions($Model, $this->params['named'], $forData);
 	}
 
 
-	function _filtersForView($filters) {
+	public function _filtersForView($filters) {
 		foreach ($filters as $field => $value) {
 			if (strstr($field, '>') or strstr($field, '<')) {
 				unset($filters[$field]);
@@ -708,7 +708,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _setFilterData($Model) {
+	public function _setFilterData($Model) {
 		$filterFields = $this->Model->brwConfig['fields']['filter'];
 		$model = $Model->alias;
 		foreach ($filterFields as $field => $multiple) {
@@ -718,7 +718,7 @@ class ContentsController extends BrownieAppController {
 			$isRange = (
 				in_array($type, array('date', 'datetime', 'float'))
 				or
-				(in_array($type, array('integer')) and !$this->Content->isForeignKey($this->Model, $field) and !$multiple)
+				(in_array($type, array('integer')) and !$this->Content->brwIsForeignKey($this->Model, $field) and !$multiple)
 			);
 			if ($isRange) {
 				foreach (array('_from', '_to') as $key) {
@@ -765,7 +765,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _setI18nParams($Model) {
+	public function _setI18nParams($Model) {
 		$i18nFields = array();
 		if ($Model->Behaviors->enabled('Translate')) {
 			$i18nFields = array_keys($Model->Behaviors->Translate->settings[$Model->alias]);
@@ -774,7 +774,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _checkBrwUserCrud() {
+	public function _checkBrwUserCrud() {
 		$authModel = AuthComponent::user('model');
 		$mustRedirect = false;
 		if ($this->Model->alias == 'BrwUser') {
@@ -792,7 +792,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _hideConditionalFields($Model, $record) {
+	public function _hideConditionalFields($Model, $record) {
 		$habtmToHide = $fieldsToHide = array();
 		foreach ($Model->brwConfig['fields']['conditional'] as $field => $config) {
 			if (isset($record[$Model->alias][$field])) {
@@ -814,7 +814,7 @@ class ContentsController extends BrownieAppController {
 	}
 
 
-	function _afterSaveRedirect() {
+	public function _afterSaveRedirect() {
 		switch ($this->request->data['Content']['after_save']) {
 			case 'referer':
 				if ($this->request->data['Content']['referer']) {

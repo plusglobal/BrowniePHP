@@ -2,16 +2,16 @@
 
 class ThumbsController extends BrownieAppController{
 
-	var $uses = array();
-	var $autoRender = false;
+	public $uses = array();
+	public $autoRender = false;
 
 
-	function beforeFilter() {
+	public function beforeFilter() {
 		$this->Auth->allow('*');
 	}
 
 
-	function view($model = '', $recordId = '', $sizes = '', $category_code = '', $file = '') {
+	public function view($model = '', $recordId = '', $sizes = '', $category_code = '', $file = '') {
 		$BrwImage = ClassRegistry::init('BrwImage');
 		$cachedFile = $BrwImage->resizedVersions($model, $recordId, $sizes, $category_code, $file);
 		if (is_file($cachedFile)) {
@@ -31,7 +31,7 @@ class ThumbsController extends BrownieAppController{
     }
 
 
-	function _sizes($sizes) {
+	public function _sizes($sizes) {
 		$r_sizes = array();
 		$s = explode('x', $sizes);
     	if(count($s == 2) and ctype_digit($s[0]) and ctype_digit($s[1])) {

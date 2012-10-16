@@ -8,13 +8,13 @@ class BrownieAppController extends AppController {
 	public $layout = 'brownie_default';
 
 
-	function __construct($request, $response) {
+	public function __construct($request, $response) {
 		$this->components['Auth'] = Configure::read('brwAuthConfig');
 		parent::__construct($request, $response);
 	}
 
 
-	function _brwCheckPermissions($model, $action = 'read', $id = null) {
+	public function _brwCheckPermissions($model, $action = 'read', $id = null) {
 		$Model = ClassRegistry::getObject($model);
 		if (!$Model) {
 			return false;
@@ -49,7 +49,7 @@ class BrownieAppController extends AppController {
 	}
 
 
-	function arrayPermissions($model) {
+	public function arrayPermissions($model) {
 		$ret = array(
 			'view' => false,
 			'add' => false,

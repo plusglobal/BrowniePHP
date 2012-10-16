@@ -2,6 +2,6 @@
 
 class BrownieAppModel extends AppModel {
 
-	var $actsAs = array('Containable');
+	public $actsAs = array('Containable');
 
 }

@@ -5,13 +5,13 @@ class BrwPanelComponent extends Component{
 	public $controller;
 	public $isBrwPanel;
 
-	function initialize($Controller, $settings = array()) {
+	public function initialize(Controller $Controller, $settings = array()) {
 		$this->controller = $Controller;
 
 		$this->isBrwPanel = (
 			(!empty($Controller->request->params['prefix']) and $Controller->request->params['prefix'] == 'brw')
 			or
-			$this->controller->params['plugin'] == 'brownie'
+			$Controller->params['plugin'] == 'brownie'
   		);
 
 		ClassRegistry::init('BrwUser')->Behaviors->attach('Brownie.BrwUser');
@@ -22,7 +22,7 @@ class BrwPanelComponent extends Component{
 				$Controller->Components->load('Auth', Configure::read('brwAuthConfig'));
 			} else {
 				foreach (Configure::read('brwAuthConfig') as $key => $value) {
-					$this->controller->Auth->{$key} = $value;
+					$Controller->Auth->{$key} = $value;
 				}
 			}
 			App::build(array('views' => ROOT . DS . APP_DIR . DS . 'Plugin' . DS . 'Brownie' . DS . 'View' . DS));
@@ -49,18 +49,18 @@ class BrwPanelComponent extends Component{
 	}
 
 
-	function beforeRender() {
+	public function beforeRender(Controller $controller) {
 		if ($this->isBrwPanel) {
-			$this->controller->set(array(
+			$controller->set(array(
 				'companyName' => Configure::read('brwSettings.companyName'),
-				'brwHideMenu' => $this->controller->Session->read('brw.hideMenu')
+				'brwHideMenu' => $controller->Session->read('brw.hideMenu')
 			));
 		}
 		$this->controller->set('brwSettings', Configure::read('brwSettings'));
 	}
 
 
-	function _menuConfig() {
+	public function _menuConfig() {
 		if (AuthComponent::user('id')) {
 			$authModel = AuthComponent::user('model');
 			if ($authModel != 'BrwUser') {

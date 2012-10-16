@@ -2,7 +2,7 @@
 
 class Image extends BrownieAppModel{
 
-	var $name = 'Image';
-	var $useTable = false;
+	public $name = 'Image';
+	public $useTable = false;
 
 }

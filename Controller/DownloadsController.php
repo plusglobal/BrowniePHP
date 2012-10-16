@@ -2,25 +2,25 @@
 
 class DownloadsController extends BrownieAppController {
 
-	var $uses = array();
+	public $uses = array();
 
 
-	function beforeFilter() {
+	public function beforeFilter() {
 		$this->Auth->allow('*');
 	}
 
 
-	function view($model, $idRecord, $category_code, $file) {
+	public function view($model, $idRecord, $category_code, $file) {
 		$this->_get($model, $idRecord, $category_code, $file, false);
 	}
 
 
-	function get($model, $idRecord, $category_code, $file) {
+	public function get($model, $idRecord, $category_code, $file) {
 		$this->_get($model, $idRecord, $category_code, $file, true);
 	}
 
 
-	function _get($model, $idRecord, $category_code, $file, $download = true) {
+	public function _get($model, $idRecord, $category_code, $file, $download = true) {
 		$Model = ClassRegistry::init($model);
 		$filePath = $Model->brwConfig['files'][$category_code]['path']
 			. DS . $model . DS . $idRecord . DS . $file;
