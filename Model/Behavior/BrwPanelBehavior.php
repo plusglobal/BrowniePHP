@@ -473,7 +473,7 @@ class BrwPanelBehavior extends ModelBehavior {
 				. DS . $value['model'] . DS . $value['record_id'] . DS . $value['name'];
 			$forceDownloadUrl = Router::url(array(
 				'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'get',
-				$Model->alias, $value['record_id'], $value['category_code'], $value['name']
+				$Model->alias, $fileType, $value['record_id'], $value['category_code'], $value['name']
 			));
 			if ($Model->brwConfig[$fileType][$value['category_code']]['description']) {
 				$value['description'] = BrwSanitize::html($value['description']);
