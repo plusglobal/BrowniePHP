@@ -45,7 +45,8 @@ class BrwUploadBehavior extends ModelBehavior {
 					break;
 				}
 			} elseif(is_string($Model->data[$Model->alias]['file'])) {
-				$Model->data[$Model->alias]['name'] = end(explode(DS, $Model->data[$Model->alias]['file']));
+				$parts = explode(DS, $Model->data[$Model->alias]['file']);
+				$Model->data[$Model->alias]['name'] = end($parts);
 				if ($Model->data[$Model->alias]['file'][0] == '/') {
 					$Model->data[$Model->alias]['file'] = substr($Model->data[$Model->alias]['file'], 1);
 				}
@@ -180,7 +181,6 @@ class BrwUploadBehavior extends ModelBehavior {
 		}
 		return getimagesize($Model->data[$Model->alias]['file']);
 	}
-
 
 	public function _cleanFileName($filename) {
 		$info = pathinfo($filename);
