@@ -47,9 +47,7 @@ class BrownieController extends BrownieAppController {
 	public function translations() {
 		$models = array_diff(App::objects('model'), array('AppModel'));
 		$translations = array();
-		$out = "<?php\n__('January');__('February');__('March');__('April');__('May');__('June');
-		__('July');__('August');__('September');__('October');__('November');__('December');
-		__('This field cannot be left blank');";
+		$out = "<?php ";
 		foreach ($models as $model) {
 			$Model = ClassRegistry::init($model);
 			$translations[Inflector::humanize(Inflector::underscore($Model->name))] = true;
