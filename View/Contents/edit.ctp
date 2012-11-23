@@ -73,6 +73,7 @@ echo $this->Form->create('Content', array(
 			(empty($schema[$key]['key']) or $schema[$key]['key'] != 'primary')
 			and !$schema[$key]['isForeignKey']
 			and (in_array($schema[$key]['type'], array('string', 'integer', 'float')))
+			and empty($related['tree'][$key])
 		) {
 			$params['type'] = 'text';
 		}
