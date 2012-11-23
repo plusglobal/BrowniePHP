@@ -17,7 +17,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		),
 		'index' => array(
 			'home' => true,
-			'menu' => true
+			'menu' => true,
 		),
 		'fields' => array(
 			'no_add' => array(),
