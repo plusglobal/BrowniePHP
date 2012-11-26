@@ -65,7 +65,8 @@ class BrwUploadBehavior extends ModelBehavior {
 		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($updating) {
 			if ($file_changed) {
-				$image = array_shift($Model->findById($Model->id));
+				$image = $Model->findById($Model->id);
+				$image = $image[$Model->alias];
 				$Model->data['name_prev'] = $image['name'];
 			} else {
 				unset($Model->data[$Model->alias]['name']);
@@ -121,7 +122,8 @@ class BrwUploadBehavior extends ModelBehavior {
 
 
 	public function beforeDelete(Model $Model, $cascade = true) {
-		$upload = array_shift($Model->read());
+		$upload = $Model->findById($Model->id);
+		$upload = $upload[$Model->alias];
 		$uploadType = ($Model->alias == 'BrwImage') ? 'images' : 'files';
 		$relModel = ClassRegistry::init($upload['model']);
 		$uploadsPath = $relModel->brwConfig[$uploadType][$upload['category_code']]['path'];
