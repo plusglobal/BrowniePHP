@@ -183,15 +183,9 @@ class ContentsController extends BrownieAppController {
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->request->data = $this->Content->brownieBeforeSave($this->request->data, $this->Model, $this->Session);
-			$fieldList = array_merge(
-				array_keys($fields),
-				array('name', 'model', 'category_code', 'description', 'record_id'),
-				$this->request->data['Content']['fieldList']
-			);
-			if ($this->Model->brwConfig['sortable']) {
-				$fieldList[] = $this->Model->brwConfig['sortable']['field'];
-			}
-			if ($this->Model->saveAll($this->request->data, array('fieldList' => $fieldList, 'validate' => 'first'))) {
+			//pr($this->request->data);
+
+			if ($this->Content->makeSave($this->Model, $this->request->data, $fields)) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
 					__d('brownie', 'The %s has been saved [male]', __($this->Model->brwConfig['names']['singular'])):
 					__d('brownie', 'The %s has been saved [female]', __($this->Model->brwConfig['names']['singular']));

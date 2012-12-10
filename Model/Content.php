@@ -161,6 +161,32 @@ class Content extends BrownieAppModel {
 	}
 
 
+	/**
+	* This method is to solve a cake issue with saveAll and languages
+	*/
+	public function makeSave($Model, $data, $fields) {
+		$fieldList = array_merge(
+			array_keys($fields),
+			array('name', 'model', 'category_code', 'description', 'record_id'),
+			$data['Content']['fieldList']
+		);
+		if ($Model->brwConfig['sortable']) {
+			$fieldList[] = $Model->brwConfig['sortable']['field'];
+		}
+		$result = $Model->saveAll($data, array('fieldList' => $fieldList, 'validate' => 'first'));
+		if (!$result) {
+			return false;
+		}
+		if ($Model->Behaviors->attached('Translate')) {
+			if (empty($data[$Model->alias]['id'])) {
+				$data[$Model->alias]['id'] = $Model->id;
+			}
+			return $Model->save($data, array('fieldList' => $fieldList, 'validate' => 'first'));
+		}
+		return $result;
+	}
+
+
 	public function translateBeforeSave($data, $Model) {
 		/*
 		foreach (Configure::read('Config.languages') as $lang) {
