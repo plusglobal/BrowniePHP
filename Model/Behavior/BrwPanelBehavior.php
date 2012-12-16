@@ -40,6 +40,7 @@ class BrwPanelBehavior extends ModelBehavior {
 				'modified' => array('maxYear' => 'today'),
 			),
 			'import' => array(),
+			'email' => array(),
 		),
 		'actions' => array(
 			'index' => true,
@@ -237,6 +238,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		$this->_sanitizeConfig($Model);
 		$this->_customActionsConfig($Model);
 		$this->_fieldsNames($Model);
+		$this->_fieldsEmail($Model);
 		$this->_fieldsFilters($Model);
 		$this->_removeDuplicates($Model);
 		$this->_setDefaultDateRanges($Model);
@@ -646,6 +648,16 @@ class BrwPanelBehavior extends ModelBehavior {
 		$Model->brwConfig['fields']['names'] = Set::merge($defaultNames, $Model->brwConfig['fields']['names']);
 	}
 
+
+	public function _fieldsEmail($Model) {
+		$fieldsEmail = array();
+		foreach ((array)$Model->schema() as $field => $value) {
+			if ($value['type'] == 'string' and strstr('email', $field)) {
+				$fieldsEmail[] = $field;
+			}
+		}
+		$Model->brwConfig['fields']['email'] = Set::merge($fieldsEmail, $Model->brwConfig['fields']['email']);
+	}
 
 	public function _fieldsFilters($Model) {
 		$filter = Set::normalize($Model->brwConfig['fields']['filter']);

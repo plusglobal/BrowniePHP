@@ -558,6 +558,7 @@ class ContentsController extends BrownieAppController {
 		$fK = $this->Content->getForeignKeys($Model);
 		$permissions = $this->arrayPermissions($Model->name);
 		$retData = $data;
+		$schema = $Model->schema();
 		if (!empty($retData[$Model->name])) {
 			foreach ($retData[$Model->name] as $key => $value) {
 				if (in_array($key, $fieldsHide)) {
@@ -575,7 +576,6 @@ class ContentsController extends BrownieAppController {
 						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 					}
 				} else {
-					$schema = $Model->schema();
 					if (!empty($schema[$key]['type'])) {
 						switch($schema[$key]['type']) {
 							case 'boolean':
@@ -589,6 +589,10 @@ class ContentsController extends BrownieAppController {
 							break;
 						}
 					}
+				}
+				if (in_array($key, $fieldsConfig['email']) and $schema[$key]['type'] == 'string') {
+					$email = $retData[$Model->name][$key];
+					$retData[$Model->name][$key] = '<a class="mailto" href="mailto:' . $email . '">' . $email . '</a>';
 				}
 			}
 			$retData[$Model->name]['brw_actions'] = $this->Content->actions($Model, $data, $permissions);
