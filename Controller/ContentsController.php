@@ -183,7 +183,6 @@ class ContentsController extends BrownieAppController {
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
 			$this->request->data = $this->Content->brownieBeforeSave($this->request->data, $this->Model, $this->Session);
-			//pr($this->request->data);
 
 			if ($this->Content->makeSave($this->Model, $this->request->data, $fields)) {
 				$msg =	($this->Model->brwConfig['names']['gender'] == 1) ?
@@ -202,7 +201,6 @@ class ContentsController extends BrownieAppController {
 			}
 		}
 
-		$this->Model->brwConfig['fields']['no_sanitize_html'] = array_keys($this->Model->schema());
 
 		$contain = array();
 		if (!empty($this->Model->hasAndBelongsToMany)) {
@@ -223,6 +221,9 @@ class ContentsController extends BrownieAppController {
 				}
 				if ($this->Model->brwConfig['files']) {
 					$contain[] = 'BrwFile';
+				}
+				foreach ((array)$this->Model->schema() as $field => $cnf) {
+					$this->Model->brwConfig['fields']['sanitize_html'][$field] = false;
 				}
 				$this->request->data = $this->Model->find('first', array(
 					'conditions' => array($this->Model->name . '.id' => $id),

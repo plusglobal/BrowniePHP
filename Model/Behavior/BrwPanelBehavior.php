@@ -30,7 +30,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			'virtual' => array(),
 			'conditional' => array(),
 			'code' => array(),
-			'no_sanitize_html' => array(),
+			'sanitize_html' => array(),
 			'names' => array(),
 			'legends' => array(),
 			'filter' => array('brwHABTM' => array()),
@@ -373,15 +373,11 @@ class BrwPanelBehavior extends ModelBehavior {
 
 
 	public function _sanitizeConfig($Model) {
-		$no_sanitize = array();
-		if ($Model->schema()) {
-			foreach ($Model->schema() as $field => $type) {
-				if ($type['type'] == 'text' and !in_array($field, $Model->brwConfig['fields']['no_sanitize_html'])) {
-					$Model->brwConfig['fields']['no_sanitize_html'][] = $field;
-				}
-			}
+		$defaults = array();
+		foreach ((array)$Model->schema() as $field => $type) {
+			$defaults[$field] = ($type['type'] == 'text') ? false : true;
 		}
-		return true;
+		$Model->brwConfig['fields']['sanitize_html'] = Set::merge($defaults, $Model->brwConfig['fields']['sanitize_html']);
 	}
 
 
@@ -602,10 +598,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		foreach ($results as $i => $result) {
 			if (!empty($result[$Model->alias])) {
 				foreach ($result[$Model->alias] as $key => $value) {
-					if (
-						!empty($Model->brwConfig['fields']['no_sanitize_html']) and
-						!in_array($key, $Model->brwConfig['fields']['no_sanitize_html'])
-					) {
+					if ($Model->brwConfig['fields']['sanitize_html'][$key]) {
 						$results[$i][$Model->alias][$key] = BrwSanitize::html($results[$i][$Model->alias][$key]);
 					}
 				}
@@ -709,7 +702,6 @@ class BrwPanelBehavior extends ModelBehavior {
 		$brwConfig['fields']['no_edit'] = array_keys(array_flip($brwConfig['fields']['no_edit']));
 		$brwConfig['fields']['hide'] = array_keys(array_flip($brwConfig['fields']['hide']));
 		$brwConfig['fields']['no_view'] = array_keys(array_flip($brwConfig['fields']['no_view']));
-		$brwConfig['fields']['no_sanitize_html'] = array_keys(array_flip($brwConfig['fields']['no_sanitize_html']));
 		$brwConfig['hide_children'] = array_keys(array_flip($brwConfig['hide_children']));
 
 		$Model->brwConfig = $brwConfig;
