@@ -520,6 +520,14 @@ class ContentsController extends BrownieAppController {
 						$url[$model . '.' . $field . $key] = $this->request->data[$model][$field . $key];
 					}
 				}
+			} elseif ($type == 'boolean') {
+				if (
+					array_key_exists($field, $this->request->data[$model])
+					and
+					in_array($this->request->data[$model][$field], array('1', '0'))
+				) {
+					$url[$model . '.' . $field] = $this->request->data[$model][$field];
+				}
 			} elseif (!empty($this->request->data[$model][$field])) {
 				if (is_array($this->request->data[$model][$field])) {
 					$url[$model . '.' . $field] = join('.', $this->request->data[$model][$field]);
