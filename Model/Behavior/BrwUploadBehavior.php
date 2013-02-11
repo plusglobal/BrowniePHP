@@ -15,21 +15,24 @@ class BrwUploadBehavior extends ModelBehavior {
 	public function beforeValidate(Model $Model) {
 		$kB = round($this->max_upload_size / 1024, 2);
 		$mB = round($this->max_upload_size / (1024 * 1024), 2);
-		$Model->validate = array (
-			'file' => array (
+		$validate = array(
+			'file' => array(
 				'valid_size' => array(
 					'rule' => array('validateSizeFile'),
 					'message' => __d('brownie', 'File too heavy. Maximum allowed: %s KB (%s MB)', $kB, $mB)
 				),
 			),
 		);
-
 		if ($Model->alias == 'BrwImage') {
-			$Model->validate['file']['valid_image'] = array(
+			$validate['file']['valid_image'] = array(
 				'rule' => array('validateImageFile'),
 				'message' => __d('brownie', 'Invalid image. Only jpg, gif and png are allowed.'),
 			);
 		}
+		if (!empty($Model->validate['file'])) {
+			$validate['file'] = Hash::merge($validate['file'], $Model->validate['file']);
+		}
+		$Model->validate['file'] = $validate['file'];
 
 		$Model->data[$Model->alias]['name'] = null;
 		if (!empty($Model->data[$Model->alias]['file'])) {
