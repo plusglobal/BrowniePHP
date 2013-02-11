@@ -173,17 +173,7 @@ class Content extends BrownieAppModel {
 		if ($Model->brwConfig['sortable']) {
 			$fieldList[] = $Model->brwConfig['sortable']['field'];
 		}
-		$result = $Model->saveAll($data, array('fieldList' => $fieldList, 'validate' => 'first'));
-		if (!$result) {
-			return false;
-		}
-		if ($Model->Behaviors->attached('Translate')) {
-			if (empty($data[$Model->alias]['id'])) {
-				$data[$Model->alias]['id'] = $Model->id;
-			}
-			return $Model->save($data, array('fieldList' => $fieldList, 'validate' => 'first'));
-		}
-		return $result;
+		return $Model->saveAll($data, array('fieldList' => $fieldList, 'validate' => 'first'));
 	}
 
 

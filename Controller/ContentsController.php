@@ -588,7 +588,12 @@ class ContentsController extends BrownieAppController {
 					if (!empty($schema[$key]['type'])) {
 						switch($schema[$key]['type']) {
 							case 'boolean':
-								$retData[$Model->name][$key] = $retData[$Model->name][$key]? __d('brownie', 'Yes'): __d('brownie', 'No');
+								if (!is_null($retData[$Model->name][$key])) {
+									$retData[$Model->name][$key] = $retData[$Model->name][$key] ?
+										__d('brownie', 'Yes'): __d('brownie', 'No');
+								} else {
+									$retData[$Model->name][$key] = '';
+								}
 							break;
 							case 'datetime':
 								$retData[$Model->name][$key] = $this->_formatDateTime($retData[$Model->name][$key]);

@@ -598,7 +598,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		foreach ($results as $i => $result) {
 			if (!empty($result[$Model->alias])) {
 				foreach ($result[$Model->alias] as $key => $value) {
-					if ($Model->brwConfig['fields']['sanitize_html'][$key]) {
+					if (!empty($Model->brwConfig['fields']['sanitize_html'][$key])) {
 						$results[$i][$Model->alias][$key] = BrwSanitize::html($results[$i][$Model->alias][$key]);
 					}
 				}
