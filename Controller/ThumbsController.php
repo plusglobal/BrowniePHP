@@ -7,7 +7,7 @@ class ThumbsController extends BrownieAppController{
 
 
 	public function beforeFilter() {
-		$this->Auth->allow('*');
+		$this->Auth->allow();
 	}
 
 
