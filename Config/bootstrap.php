@@ -23,7 +23,7 @@ $defaultSettings = array(
 	'uploadsPath' => './uploads',
 	'dateFormat' => 'Y-m-d',
 	'formDateFormat' => 'MDY',
-	'datetimeFormat' => 'Y-m-d h:i:s',
+	'datetimeFormat' => 'Y-m-d H:i:s',
 	'defaultExportType' => 'csv',
 	'defaultPermissionPerAuthModel' => 'none',
 );
