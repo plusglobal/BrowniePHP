@@ -11,6 +11,7 @@ if (count($brwConfig['fields']['filter']) > 1) {
 		'url' => array('controller' => 'contents', 'action' => 'filter', $model),
 		'class' => 'filter clearfix',
 		'inputDefaults' => array('separator' => ' '),
+		'novalidate' => true,
 	));
 
 	$isAvanced = false;
