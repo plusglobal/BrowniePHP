@@ -2,7 +2,7 @@
 /**
 * helped by http://mediumexposure.com/smart-image-resizing-while-preserving-transparency-php-and-gd-library/
 */
-function resizeImage($file, $sizes, $quality = 95) {
+function brwResizeImage($file, $sizes) {
 	if (!is_file($file)) {
 		return false;
 	}
@@ -130,6 +130,7 @@ function resizeImage($file, $sizes, $quality = 95) {
 	imagecopyresampled($newImage, $oldImage, 0, 0, $startX, $startY, $applyWidth, $applyHeight, $oldWidth, $oldHeight);
 
 	//save the image to disk
+	$quality = Configure::read('brwSettings.defaultImageQuality');
 	$saved = false;
 	switch ($ext) {
 		case 'gif':

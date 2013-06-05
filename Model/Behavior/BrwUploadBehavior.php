@@ -218,7 +218,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		if (!is_file($cachedFile)) {
 			ini_set('memory_limit', '128M');
 			copy($sourceFile, $cachedFile);
-			resizeImage($cachedFile, $sizes);
+			brwResizeImage($cachedFile, $sizes);
 		}
 		return $cachedFile;
 	}
