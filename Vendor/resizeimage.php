@@ -6,6 +6,25 @@ function resizeImage($file, $sizes, $quality = 95) {
 	if (!is_file($file)) {
 		return false;
 	}
+	list($oldWidth, $oldHeight, $type) = getimagesize($file);
+	$ext = image_type_to_extension($type, false);
+	switch ($ext) {
+		case 'gif':
+			$oldImage = imagecreatefromgif($file);
+		break;
+		case 'png':
+			$oldImage = imagecreatefrompng($file);
+		break;
+		case 'jpg': case 'jpeg':
+			$oldImage = imagecreatefromjpeg($file);
+			if (brw_image_fix_orientation($oldImage, $file)) {
+				$tmp = $oldWidth; $oldWidth = $oldHeight; $oldHeight = $tmp;
+			}
+		break;
+		default:
+			return false;
+		break;
+	}
 
 	$s = explode('x', $sizes);
 	if(count($s == 2) and ctype_digit($s[0]) and ctype_digit($s[1])) {
@@ -22,8 +41,6 @@ function resizeImage($file, $sizes, $quality = 95) {
 			return false;
 		}
 	}
-	list($oldWidth, $oldHeight, $type) = getimagesize($file);
-	$ext = image_type_to_extension($type, false);
 
 	if ($crop == 'resize') {
 		if ($oldWidth < $newWidth) {
@@ -36,17 +53,15 @@ function resizeImage($file, $sizes, $quality = 95) {
 
 	switch ($crop) {
 		case 'resize':
-			//Maintains the aspect ratio of the image and makes sure that it fits
+			//Maintain the aspect ratio of the image and makes sure that it fits
 			//within the maxW(newWidth) and maxH(newHeight) (thus some side will be smaller)
 			$widthScale = $heightScale = 2;
 			if ($newWidth) {
 				$widthScale = $newWidth / $oldWidth;
 			}
-
 			if ($newHeight) {
 				$heightScale = $newHeight / $oldHeight;
 			}
-
 			if ($widthScale < $heightScale) {
 				$maxWidth = $newWidth;
 				$maxHeight = false;
@@ -57,7 +72,6 @@ function resizeImage($file, $sizes, $quality = 95) {
 				$maxHeight = $newHeight;
 				$maxWidth = $newWidth;
 			}
-
 			if ($maxWidth > $maxHeight) {
 				$applyWidth = $maxWidth;
 				$applyHeight = ($oldHeight*$applyWidth)/$oldWidth;
@@ -68,7 +82,6 @@ function resizeImage($file, $sizes, $quality = 95) {
 				$applyWidth = $maxWidth;
 				$applyHeight = $maxHeight;
 			}
-
 			$startX = $startY = 0;
 		break;
 
@@ -89,31 +102,6 @@ function resizeImage($file, $sizes, $quality = 95) {
 			}
 			$applyWidth = $newWidth;
 			$applyHeight = $newHeight;
-		break;
-
-		/*case 'crop':
-			//a straight centered crop
-			$startY = ($oldHeight - $newHeight)/2;
-			$startX = ($oldWidth - $newWidth)/2;
-			$oldHeight = $newHeight;
-			$applyHeight = $newHeight;
-			$oldWidth = $newWidth;
-			$applyWidth = $newWidth;
-		break;*/
-	}
-
-	switch ($ext) {
-		case 'gif':
-			$oldImage = imagecreatefromgif($file);
-		break;
-		case 'png' :
-			$oldImage = imagecreatefrompng($file);
-		break;
-		case 'jpg': case 'jpeg':
-			$oldImage = imagecreatefromjpeg($file);
-		break;
-		default:
-			return false;
 		break;
 	}
 
@@ -165,35 +153,40 @@ function resizeImage($file, $sizes, $quality = 95) {
 }
 
 
-function is_animated_gif($filename)
-{
+function is_animated_gif($filename) {
 	$filecontents = file_get_contents($filename);
-	$str_loc = 0;
-	$count = 0;
-	while ($count < 2){ // There is no point in continuing after we find a 2nd frame
-		$where1=strpos($filecontents,"\x00\x21\xF9\x04",$str_loc);
-		if ($where1 === FALSE) break;
-		else{
-			$str_loc=$where1+1;
-			$where2=strpos($filecontents,"\x00\x2C",$str_loc);
-			if ($where2 === FALSE) break;
-			else{
-				if ($where1+8 == $where2) $count++;
-				$str_loc=$where2+1;
+	$str_loc = $count = 0;
+	// There is no point in continuing after we find a 2nd frame
+	while ($count < 2) {
+		$where1 = strpos($filecontents, "\x00\x21\xF9\x04", $str_loc);
+		if ($where1 === FALSE) {
+			break;
+		} else {
+			$str_loc = $where1 + 1;
+			$where2 = strpos($filecontents, "\x00\x2C", $str_loc);
+			if ($where2 === FALSE) {
+				break;
+			} else {
+				if ($where1 + 8 == $where2) {
+					$count++;
+				}
+				$str_loc = $where2 + 1;
 			}
 		}
 	}
-	if ($count > 1) return true;
-	else return false;
+	if ($count > 1) {
+		return true;
+	} else {
+		return false;
+	}
+
 }
 
 if ( !function_exists('image_type_to_extension') ) {
 
-    function image_type_to_extension ($type, $dot = true)
-    {
+    function image_type_to_extension ($type, $dot = true) {
         $e = array ( 1 => 'gif', 'jpeg', 'png', 'swf', 'psd', 'bmp',
-            'tiff', 'tiff', 'jpc', 'jp2', 'jpf', 'jb2', 'swc',
-            'aiff', 'wbmp', 'xbm');
+            'tiff', 'tiff', 'jpc', 'jp2', 'jpf', 'jb2', 'swc', 'aiff', 'wbmp', 'xbm');
 
         // We are expecting an integer.
         $type = (int)$type;
@@ -237,4 +230,19 @@ if ( !function_exists('image_type_to_mime_type') ) {
         return $m[$type];
     }
 
+}
+
+function brw_image_fix_orientation(&$image, $filename) {
+	$exif = exif_read_data($filename);
+	if (!empty($exif['Orientation'])) {
+		switch ($exif['Orientation']) {
+			case 3: $image = imagerotate($image, 180, 0); break;
+			case 6: $image = imagerotate($image, -90, 0); break;
+			case 8: $image = imagerotate($image, 90, 0); break;
+		}
+		if (in_array($exif['Orientation'], array(6, 8))) {
+			return true;
+		}
+	}
+	return false;
 }
