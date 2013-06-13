@@ -98,11 +98,27 @@ foreach ($uploadModels as $uploadKey => $uploadModel): ?>
 			$canAdd = false;
 		}
 		if ($canAdd) {
+			if ($fileCat['index']) {
+				$params = array();
+			} else {
+				$params = array(
+					'class' => 'upload-link',
+					'data-multiple-upload-link' => $this->Html->url(array(
+						'plugin' => 'brownie', 'controller' => 'upload', 'action' => 'upload',
+						$model, $uploadModel, $record[$model]['id'], $catCode
+					)),
+				);
+			}
+
 			echo '<div class="actions ' . $uploadKey . '-actions"><ul class="actions"><li class="add-' . $uploadKey . '">
-			' . $this->Html->link(__d('brownie', 'Add'), array(
-				'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
-				$model, $uploadModel, $record[$model]['id'], $catCode
-			)) . '</li></ul></div>';
+			' . $this->Html->link(
+				__d('brownie', 'Add'),
+				array(
+					'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
+					$model, $uploadModel, $record[$model]['id'], $catCode
+				),
+				$params
+			) . '</li></ul></div>';
 		}
 		?>
 		<div class="<?php echo $uploadKey ?>-gallery clearfix">

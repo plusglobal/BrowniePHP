@@ -9,7 +9,7 @@ echo $this->Html->css(Configure::read('brwSettings.css'));
 echo $this->Html->script(Configure::read('brwSettings.js'));
 ?>
 <script type="text/javascript">
-var APP_BASE = '<?php echo Router::url('/') ?>';
+var APP_BASE = '<?php echo $this->Html->url('/') ?>';
 var SESSION_ID = '<?php //echo $this->Session->id() ?>';
 var BRW_AUTH_USER = <?php echo json_encode(AuthComponent::user()); ?>;
 var brwMsg = {

@@ -9,7 +9,7 @@
 		</p>
 		<?php
 		echo $this->Session->flash('auth');
-		echo $this->Form->create();
+		echo $this->Form->create(array('url' => array('controller' => 'brownie', 'action' => 'login', 'plugin' => 'brownie')));
 		echo $this->Form->input('BrwUser.email', array('label' => __d('brownie', 'Username')));
 		echo $this->Form->input('BrwUser.password', array('label' => __d('brownie', 'Password')));
 		echo $this->Form->end(__d('brownie', 'Login'), array('class' => 'submit'));
