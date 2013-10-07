@@ -50,7 +50,7 @@ class BrwUserBehavior extends ModelBehavior {
 	}
 
 
-	public function beforeSave(Model $Model) {
+	public function beforeSave(Model $Model, $options = array()) {
 		if (!empty($Model->data[$Model->alias]['password'])) {
 			$Model->data[$Model->alias]['password'] = AuthComponent::password($Model->data[$Model->alias]['password']);
 		}
