@@ -12,7 +12,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	public function beforeValidate(Model $Model) {
+	public function beforeValidate(Model $Model, $options = array()) {
 		$kB = round($this->max_upload_size / 1024, 2);
 		$mB = round($this->max_upload_size / (1024 * 1024), 2);
 		$validate = array(
@@ -60,7 +60,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	public function beforeSave(Model $Model) {
+	public function beforeSave(Model $Model, $options = array()) {
 		if (!empty($Model->data[$Model->alias]['description'])) {
 			$Model->data[$Model->alias]['description'] = trim($Model->data[$Model->alias]['description']);
 		}
@@ -83,7 +83,7 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 
-	public function afterSave(Model $Model, $created) {
+	public function afterSave(Model $Model, $created, $options = array()) {
 		if (!empty($Model->data[$Model->alias]['file'])) {
 			$data = $Model->data[$Model->alias];
 			$uploadType = ($Model->alias == 'BrwFile')? 'files' : 'images';

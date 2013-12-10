@@ -107,7 +107,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	public function beforeValidate(Model $Model) {
+	public function beforeValidate(Model $Model, $options = array()) {
 		if ($Model->brwConfig['fields']['conditional']) {
 			foreach ($Model->brwConfig['fields']['conditional'] as $field => $rules) {
 				if (isset($Model->data[$Model->alias][$field])) {
@@ -136,7 +136,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	public function afterFind(Model $Model, $results, $primary) {
+	public function afterFind(Model $Model, $results, $primary = false) {
 		if ($Model->name != 'BrwImage') {
 			$results = $this->_addImagePaths($results, $Model);
 		}
@@ -150,7 +150,7 @@ class BrwPanelBehavior extends ModelBehavior {
 	}
 
 
-	public function afterSave(Model $Model, $created) {
+	public function afterSave(Model $Model, $created, $options = array()) {
 		$isTree = in_array('Tree', array_map('strtolower', $Model->Behaviors->attached()));
 		if (
 			$Model->brwConfig['sortable']
