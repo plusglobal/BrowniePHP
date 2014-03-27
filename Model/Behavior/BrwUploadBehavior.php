@@ -166,7 +166,7 @@ class BrwUploadBehavior extends ModelBehavior {
 			return true;
 		}
 
-		if (substr($Model->data[$Model->alias]['file'], 0, 7) == 'http://') {
+		if (in_array(substr($Model->data[$Model->alias]['file'], 0, 7), array('http://', 'https:/'))) {
 			$filesize = 0;
 		} else {
 			$filesize = filesize($Model->data[$Model->alias]['file']);
