@@ -34,6 +34,7 @@ class BrwPanelComponent extends Component{
 		}
 
 		if ($this->isBrwPanel) {
+			AuthComponent::$sessionKey = 'Auth.BrwUserLogged';
 			$this->_menuConfig();
 		}
 
