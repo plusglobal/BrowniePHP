@@ -4,7 +4,9 @@ class BrwUserBehavior extends ModelBehavior {
 
 
 	public function setup(Model $Model, $config = array()) {
-		$Model->displayField = 'email';
+		if (empty($Model->displayField)) {
+			$Model->displayField = 'email';
+		}
 		$Model->validate = $this->_validate($Model);
 	}
 
