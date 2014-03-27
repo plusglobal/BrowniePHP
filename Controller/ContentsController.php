@@ -119,7 +119,11 @@ class ContentsController extends BrownieAppController {
 						if ($indx = array_search($related_model['foreignKey'], $AssocModel->brwConfig['paginate']['fields'])) {
 							unset($AssocModel->brwConfig['paginate']['fields'][$indx]);
 						}
-						$filters = $this->_filterConditions($AssocModel);
+						$filters = Hash::merge(
+							$this->_filterConditions($AssocModel),
+							(!empty($this->Model->hasMany[$AssocModel->name]['conditions'])) ?
+								$this->Model->hasMany[$AssocModel->name]['conditions'] : array()
+						);
 						$this->paginate[$AssocModel->name] = Set::merge(
 							$AssocModel->brwConfig['paginate'],
 							array('conditions' => $filters),
@@ -739,7 +743,7 @@ class ContentsController extends BrownieAppController {
 					}
 				}
 			} elseif ($type == 'integer' or $type == 'boolean' or $type == 'string' or $type == 'select') {
-				if (!empty($this->params['named'][$model . '.' . $field])) {
+				if (array_key_exists($model . '.' . $field, $this->params['named'])) {
 					$fieldData = $this->params['named'][$model . '.' . $field];
 					if ($type  == 'integer' and strstr($fieldData, '.')) {
 						$fieldData = explode('.', $fieldData);
