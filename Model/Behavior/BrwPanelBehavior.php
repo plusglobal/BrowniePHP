@@ -85,6 +85,7 @@ class BrwPanelBehavior extends ModelBehavior {
 		'confirmMessage' => false,
 		'conditions' => array(),
 		'class' => 'custom_action',
+		'enabled' => true,
 	);
 
 
