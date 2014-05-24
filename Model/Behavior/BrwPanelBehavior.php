@@ -288,7 +288,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			);
 			$fields = array(); $i = 0; $schema = (array)$Model->schema();
 			$blacklist = array_merge(
-				array('lft', 'rght', 'parent_id', 'created', 'modified'),
+				array('lft', 'rght', 'parent_id'),
 				$Model->brwConfig['fields']['hide']
 			);
 			foreach ($schema as $key => $values) {
