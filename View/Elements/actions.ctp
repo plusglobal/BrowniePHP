@@ -7,6 +7,9 @@ foreach ($this->params['named'] as $key => $value) {
 }
 
 if (!empty($record[$model]['brw_actions']['view'])) {
+	if (!empty($record[$model]['brw_actions']['view']['url']['page'])) {
+		unset($record[$model]['brw_actions']['view']['url']['page']);
+	}
 	$record[$model]['brw_actions']['view']['url'] += $named;
 	if ($calledFrom == 'index') {
 		$record[$model]['brw_actions']['view']['url'] += array('back_to' => 'index');
@@ -23,7 +26,9 @@ if (!empty($record[$model]['brw_actions']['add'])) {
 
 if (!empty($record[$model]['brw_actions'])): ?>
 <ul class="actions">
-<?php foreach ($record[$model]['brw_actions'] as $action => $params): ?>
+<?php foreach ($record[$model]['brw_actions'] as $action => $params):
+
+?>
 	<?php if (
 		($action == 'view' and $calledFrom == 'view')
 		or ($action == 'add' and $calledFrom != 'view')
