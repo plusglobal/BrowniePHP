@@ -12,6 +12,11 @@ class ThumbsController extends BrownieAppController{
 
 
 	public function view($model = '', $recordId = '', $sizes = '', $category_code = '', $file = '') {
+		$model_list = array_flip(App::objects('model'));
+  		if (!isset($model_list[$model])) {
+  			throw new NotFoundException();
+  		}
+
 		$BrwImage = ClassRegistry::init('BrwImage');
 		$cachedFile = $BrwImage->resizedVersions($model, $recordId, $sizes, $category_code, $file);
 		if (is_file($cachedFile)) {
