@@ -85,7 +85,6 @@ class BrwPanelBehavior extends ModelBehavior {
 		'confirmMessage' => false,
 		'conditions' => array(),
 		'class' => 'custom_action',
-		'enabled' => true,
 	);
 
 
@@ -288,7 +287,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			);
 			$fields = array(); $i = 0; $schema = (array)$Model->schema();
 			$blacklist = array_merge(
-				array('lft', 'rght', 'parent_id'),
+				array('lft', 'rght', 'parent_id', 'created', 'modified'),
 				$Model->brwConfig['fields']['hide']
 			);
 			foreach ($schema as $key => $values) {
