@@ -7,10 +7,10 @@ foreach ($this->params['named'] as $key => $value) {
 }
 
 if (!empty($record[$model]['brw_actions']['view'])) {
+	$record[$model]['brw_actions']['view']['url'] += $named;
 	if (!empty($record[$model]['brw_actions']['view']['url']['page'])) {
 		unset($record[$model]['brw_actions']['view']['url']['page']);
 	}
-	$record[$model]['brw_actions']['view']['url'] += $named;
 	if ($calledFrom == 'index') {
 		$record[$model]['brw_actions']['view']['url'] += array('back_to' => 'index');
 	}
