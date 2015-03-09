@@ -2,6 +2,7 @@
 
 class ContentsController extends BrownieAppController {
 
+	public $components = array('Paginator');
 	public $helpers = array('Brownie.i18n');
 	public $Model;
 	public $uses = array('Brownie.Content');
@@ -49,19 +50,19 @@ class ContentsController extends BrownieAppController {
 
 
 	public function index() {
-		$this->paginate = $this->Model->brwConfig['paginate'];
-		$this->paginate['fields'] = array_diff(
+		$this->Paginator->settings = $this->Model->brwConfig['paginate'];
+		$this->Paginator->settings['fields'] = array_diff(
 			$this->Model->brwConfig['paginate']['fields'],
 			array_keys($this->Model->brwConfig['fields']['virtual'])
 		);
 
 		if ($this->Model->Behaviors->attached('Tree')) {
 			$this->set('isTree', true);
-			$this->paginate['order'] = 'lft';
+			$this->Paginator->settings['order'] = 'lft';
 		}
 		$filters = $this->_filterConditions($this->Model);
-		$this->paginate['conditions'] = Set::merge($this->paginate['conditions'], $filters);
-		$this->paginate['contain'] = $this->Content->relatedModelsForIndex($this->Model, $this->paginate);
+		$this->Paginator->settings['conditions'] = Set::merge($this->Paginator->settings['conditions'], $filters);
+		$this->Paginator->settings['contain'] = $this->Content->relatedModelsForIndex($this->Model, $this->Paginator->settings);
 		$records = $this->paginate($this->Model);
 		if (method_exists($this->Model, 'brwAfterFind')) {
 			$records = $this->Model->brwAfterFind($records);
@@ -124,12 +125,13 @@ class ContentsController extends BrownieAppController {
 							(!empty($this->Model->hasMany[$AssocModel->name]['conditions'])) ?
 								$this->Model->hasMany[$AssocModel->name]['conditions'] : array()
 						);
-						$this->paginate[$AssocModel->name] = Set::merge(
+						$this->Paginator->settings = [];
+						$this->Paginator->settings[$AssocModel->name] = Set::merge(
 							$AssocModel->brwConfig['paginate'],
 							array('conditions' => $filters),
 							array('contain' => $this->Content->relatedModelsForIndex($AssocModel, $AssocModel->brwConfig['paginate']))
 						);
-						$this->paginate[$AssocModel->name]['fields'] = array_diff(
+						$this->Paginator->settings[$AssocModel->name]['fields'] = array_diff(
 							$AssocModel->brwConfig['paginate']['fields'],
 							array_keys($AssocModel->brwConfig['fields']['virtual'])
 						);
