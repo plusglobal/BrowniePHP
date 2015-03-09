@@ -43,7 +43,7 @@ class BrwUploadBehavior extends ModelBehavior {
 						$Model->data[$Model->alias]['name'] = $Model->data[$Model->alias]['file']['name'];
 						$Model->data[$Model->alias]['file'] = $Model->data[$Model->alias]['file']['tmp_name'];
 					break;
-					case 4:
+					default:
 						$Model->data[$Model->alias]['file'] = '';
 					break;
 				}
@@ -188,6 +188,9 @@ class BrwUploadBehavior extends ModelBehavior {
 	}
 
 	public function _cleanFileName($filename) {
+		if (strstr($filename, '?')) {
+			$filename = explode('?', $filename)[0];
+		}
 		$info = pathinfo($filename);
 		$parts = explode('.', $info['basename']);
 		foreach ($parts as $key => $part) {
