@@ -184,7 +184,7 @@ class BrwPanelBehavior extends ModelBehavior {
 									array($rel->alias . '.' . $related['foreignKey'] => $Model->id),
 									(array)$related['conditions']
 								),
-								'fields' => array('id'),
+								'fields' => array($Model->primaryKey),
 							));
 							if ($hasAny) {
 								return false;
@@ -266,7 +266,7 @@ class BrwPanelBehavior extends ModelBehavior {
 				$Model->brwConfig['sortable'] = false;
 			} else {
 				$schema = $Model->schema();
-				if ($schema[$sortField]['type'] == 'integer' and $schema['id']['type'] == 'integer') {
+				if ($schema[$sortField]['type'] == 'integer' and $schema[$Model->primaryKey]['type'] == 'integer') {
 					if (empty($Model->brwConfig['sortable']['direction'])) {
 						$Model->brwConfig['sortable']['direction'] = 'asc';
 					}
@@ -679,7 +679,7 @@ class BrwPanelBehavior extends ModelBehavior {
 				),
 			),
 			'paginate' => array(
-				'fields' => array('id', 'email', 'last_login'),
+				'fields' => array($Model->primaryKey, 'email', 'last_login'),
 			),
 		);
 		if ($Model->alias == 'BrwUser') {

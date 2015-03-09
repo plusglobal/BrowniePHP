@@ -90,7 +90,7 @@ if ($records) {
 						__($brwConfig['fields']['names'][$field_name]),
 						array('model' => $model, 'escape' => false)
 					) . '</th>';
-					if ($field_name == 'id') {
+					if ($field_name == $modelPrimaryKey) {
 						foreach ($brwConfig['paginate']['images'] as $indexImageKey) {
 							echo '
 							<th class="index_image">
@@ -120,7 +120,7 @@ if ($records) {
 		if ($brwConfig['actions']['delete']) {
 			echo '
 			<td class="delete_multiple">
-				<input type="checkbox" name="data[Content][id][]" value="' . $record[$model]['id'] . '">
+				<input type="checkbox" name="data[Content][' . $modelPrimaryKey . '][]" value="' . $record[$model][$modelPrimaryKey] . '">
 			</td>';
 		}
 		foreach($brwConfig['paginate']['fields'] as $field_name) {
@@ -129,7 +129,7 @@ if ($records) {
 				<td class="' . $field_name . ' ' . $schema[$field_name]['class'] . ' field">
 				' . (($record[$model][$field_name] === null or $record[$model][$field_name] === '') ? '&nbsp;' : $record[$model][$field_name] ) . '
 				</td>';
-				if ($field_name == 'id') {
+				if ($field_name == $modelPrimaryKey) {
 					foreach ($brwConfig['paginate']['images'] as $indexImageKey) {
 						echo '<td class="index_image field">';
 						if (!empty($record['BrwImage'][$indexImageKey]['tag'])) {
@@ -150,11 +150,11 @@ if ($records) {
 			<td class="sortable actions">
 			<?php
 			echo $this->Html->link(__d('brownie', 'Sort up'),
-				array('controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model]['id']),
+				array('controller' => 'contents', 'action' => 'reorder', $model, 'up', $record[$model][$modelPrimaryKey]),
 				array('class' => 'up', 'title' => __d('brownie', 'Sort up'))
 			);
 			echo $this->Html->link(__d('brownie', 'Sort down'),
-				array('controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model]['id']),
+				array('controller' => 'contents', 'action' => 'reorder', $model, 'down', $record[$model][$modelPrimaryKey]),
 				array('class' => 'down', 'title' => __d('brownie', 'Sort down'))
 			);
 			?>

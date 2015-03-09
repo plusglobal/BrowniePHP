@@ -56,8 +56,8 @@ class Content extends BrownieAppModel {
 			$fields = $this->fieldsEdit($Model);
 		} else {
 			$fields = $this->fieldsAdd($Model);
-			if (isset($fields['id'])) {
-				unset($fields['id']);
+			if (isset($fields[$Model->primaryKey])) {
+				unset($fields[$Model->primaryKey]);
 			}
 		}
 		$rules = $fields;
@@ -266,7 +266,7 @@ class Content extends BrownieAppModel {
 		}
 
 		$sortField = $Model->brwConfig['sortable']['field'];
-		$record = $Model->findById($id);
+		$record = $Model->find('first', array('conditions' => array($Model->alias . '.' . $Model->primaryKey => $id)));
 		$params = array('field' => $sortField, 'value' => $record[$Model->alias][$sortField]);
 		if ($parent = $Model->brwConfig['parent']) {
 			$foreignKey = $Model->belongsTo[$parent]['foreignKey'];
@@ -283,9 +283,9 @@ class Content extends BrownieAppModel {
 			return false;
 		}
 		$swap = $neighbors[$cual];
-		$saved1 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => null));
-		$saved2 = $Model->save(array('id' => $swap[$Model->alias]['id'], $sortField => $record[$Model->alias][$sortField]));
-		$saved3 = $Model->save(array('id' => $record[$Model->alias]['id'], $sortField => $swap[$Model->alias][$sortField]));
+		$saved1 = $Model->save(array($Model->primaryKey => $record[$Model->alias][$Model->primaryKey], $sortField => null));
+		$saved2 = $Model->save(array($Model->primaryKey => $swap[$Model->alias][$Model->primaryKey], $sortField => $record[$Model->alias][$sortField]));
+		$saved3 = $Model->save(array($Model->primaryKey => $record[$Model->alias][$Model->primaryKey], $sortField => $swap[$Model->alias][$sortField]));
 
 		if ($isTanslatable) {
 			$Model->Behaviors->enable('Translate');
@@ -355,7 +355,7 @@ class Content extends BrownieAppModel {
 				);
 				$options = array('title' => $title);
 				if (!in_array($action, array('index', 'add'))) {
-					$url[] = $record[$Model->alias]['id'];
+					$url[] = $record[$Model->alias][$Model->primaryKey];
 				}
 				$actions[$action] = Set::merge($defaultAction, array(
 					'title' => $title,
@@ -380,7 +380,7 @@ class Content extends BrownieAppModel {
 				$matchCondition = call_user_func(array($Model, $custom['conditions']), $record);
 			}
 			if ($matchCondition) {
-				$custom['url'][] = $record[$Model->alias]['id'];
+				$custom['url'][] = $record[$Model->alias][$Model->primaryKey];
 				$actions[$action] = Set::merge($defaultAction, $custom);
 			}
 		}
@@ -425,7 +425,7 @@ class Content extends BrownieAppModel {
 			$data = $Model->{$parent}->find('all', array('contain' => $Model->name));
 			foreach ($data as $parentModel => $entry) {
 				foreach ($entry[$Model->name] as $value) {
-					$ret[$entry[$parent][$parentDisplayField]][$value['id']] = $value[$displayField];
+					$ret[$entry[$parent][$parentDisplayField]][$value[$Model->primaryKey]] = $value[$displayField];
 				}
 			}
 			return $ret;
@@ -449,7 +449,7 @@ class Content extends BrownieAppModel {
 			} elseif (is_array($Model->order)) {
 				list($sort_field, $direction) = each($Model->order);
 			} else {
-				$sort_field = 'id';
+				$sort_field = $Model->primaryKey;
 				$direction = 'asc';
 			}
 			$sort_field = str_replace($Model->alias . '.', '', $sort_field);
@@ -496,7 +496,7 @@ class Content extends BrownieAppModel {
 	public function addI18nValues($record, $Model) {
 		if ($Model->Behaviors->attached('Translate')) {
 			$translated = $Model->find('first', array(
-				'conditions' => array($Model->alias . '.id' => $record[$Model->alias]['id']),
+				'conditions' => array($Model->alias . '.' . $Model->primaryKey => $record[$Model->alias][$Model->primaryKey]),
 				'contain' => array_values($Model->Behaviors->Translate->settings[$Model->alias]),
 			));
 			unset($translated[$Model->alias]);
@@ -557,7 +557,7 @@ class Content extends BrownieAppModel {
 				if (in_array($containedModel, array('BrwImage', 'BrwFile'))) {
 					$containedModels[$containedModel]['fields'] = '*';
 				} else {
-					$containedModels[$containedModel]['fields'] = array('id', $Model->{$containedModel}->displayField);
+					$containedModels[$containedModel]['fields'] = array($Model->{$containedModel}->primaryKey, $Model->{$containedModel}->displayField);
 				}
 			}
 		}
@@ -575,7 +575,7 @@ class Content extends BrownieAppModel {
 				'data' => array(),
 			);
 			foreach ($record[$relModel] as $value) {
-				$record['HABTM'][$i]['data'][$value['id']] = $value[$Model->{$relModel}->displayField];
+				$record['HABTM'][$i]['data'][$value[$Model->{$relModel}->primaryKey]] = $value[$Model->{$relModel}->displayField];
 			}
 			unset($record[$relModel]);
 			$i++;
@@ -662,10 +662,10 @@ class Content extends BrownieAppModel {
 					)));
 					$xpath = '{n}.' . $related['with'] . '.' . $related['foreignKey'];
 					$ids = Set::extract($xpath, $relatedIds);
-					if (empty($filter[$Model->alias . '.id'])) {
-						$filter[$Model->alias . '.id'] = $ids;
+					if (empty($filter[$Model->alias . '.' . $Model->primaryKey])) {
+						$filter[$Model->alias . '.' . $Model->primaryKey] = $ids;
 					} else {
-						$filter[$Model->alias . '.id'] = array_diff($filter[$Model->alias . '.id'], $ids);
+						$filter[$Model->alias . '.' . $Model->primaryKey] = array_diff($filter[$Model->alias . '.' . $Model->primaryKey], $ids);
 					}
 
 				}

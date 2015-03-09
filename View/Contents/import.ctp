@@ -1,6 +1,6 @@
 <div class="form">
 <?php
-$adding = empty($this->data[$model]['id']);
+$adding = empty($this->data[$model][$modelPrimaryKey]);
 $url = array('controller' => 'contents', 'action' => 'import', $model);
 echo $this->Form->create('Content', array('type' => 'file', 'url' => $url));
 ?>

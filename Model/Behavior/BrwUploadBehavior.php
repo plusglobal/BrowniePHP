@@ -64,7 +64,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		if (!empty($Model->data[$Model->alias]['description'])) {
 			$Model->data[$Model->alias]['description'] = trim($Model->data[$Model->alias]['description']);
 		}
-		$updating = !empty($Model->data[$Model->alias]['id']);
+		$updating = !empty($Model->data[$Model->alias][$Model->primaryKey]);
 		$file_changed = !empty($Model->data[$Model->alias]['file']);
 		if ($updating) {
 			if ($file_changed) {
@@ -114,7 +114,7 @@ class BrwUploadBehavior extends ModelBehavior {
 		if (copy($source, $newDest)) {
 			chmod($newDest, 0777);
 			if ($newDest != $dest) {
-				return $Model->save(array('id' => $Model->id, 'name' => $file), array('callbacks' => false, 'validate' => false));
+				return $Model->save(array($Model->primaryKey => $Model->id, 'name' => $file), array('callbacks' => false, 'validate' => false));
 			} else {
 				return true;
 			}

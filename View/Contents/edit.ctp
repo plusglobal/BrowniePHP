@@ -2,13 +2,14 @@
 <div class="form">
 <?php
 $url = array('controller' => 'contents', 'action' => 'edit', $model);
-$adding = empty($this->data[$model]['id']);
+$adding = empty($this->data[$model][$modelPrimaryKey]);
 if (!$adding) {
-	$url[] = $this->data[$model]['id'];
+	$url[] = $this->data[$model][$modelPrimaryKey];
 }
 echo $this->Form->create('Content', array(
 	'type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url,
-	'inputDefaults' => array('separator' => ' ')
+	'inputDefaults' => array('separator' => ' '),
+	'novalidate' => true,
 ));
 ?>
 <fieldset>

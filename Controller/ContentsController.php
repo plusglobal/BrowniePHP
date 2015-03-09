@@ -44,7 +44,8 @@ class ContentsController extends BrownieAppController {
 		$brwConfig = $this->Model->brwConfig;
 		$schema = $this->Content->schemaForView($this->Model);
 		$model = $this->Model->alias;
-		$this->set(compact('model', 'schema', 'brwConfig'));
+		$modelPrimaryKey = $this->Model->primaryKey;
+		$this->set(compact('model', 'schema', 'brwConfig', 'modelPrimaryKey'));
 	}
 
 
@@ -81,7 +82,7 @@ class ContentsController extends BrownieAppController {
 	public function view($model, $id) {
 		$this->Model->Behaviors->attach('Containable');
 		$params = array(
-			'conditions' => array($this->Model->name . '.id' => $id),
+			'conditions' => array($this->Model->name . '.' . $this->Model->primaryKey => $id),
 			'contain' => $this->Content->relatedModelsForView($this->Model),
 		);
 		$record = $this->Model->find('all', $params);
@@ -148,6 +149,7 @@ class ContentsController extends BrownieAppController {
 								$this->_filterConditions($AssocModel),
 								array($AssocModel->alias . '.' . $related_model['foreignKey'] => $id)
 							),
+							'modelPrimaryKey' => $AssocModel->primaryKey,
 						);
 						$permissions[$key_model] = $this->arrayPermissions($key_model);
 					}
@@ -170,7 +172,7 @@ class ContentsController extends BrownieAppController {
 
 	public function edit($model, $id = null) {
 		if (!empty($id)) {
-			if (!$this->Model->read(array('id'), $id)) {
+			if (!$this->Model->read(array($this->Model->primaryKey), $id)) {
 				throw new NotFoundException('Record does not exists');
 			}
 			$action = 'edit';
@@ -182,7 +184,7 @@ class ContentsController extends BrownieAppController {
 		}
 		$fields = $id ? $this->Content->fieldsEdit($this->Model) : $this->Content->fieldsAdd($this->Model);
 		if (!empty($this->request->data)) {
-			if (!empty($this->request->data[$this->Model->alias]['id']) and $this->request->data[$this->Model->alias]['id'] != $id) {
+			if (!empty($this->request->data[$this->Model->alias][$this->Model->primaryKey]) and $this->request->data[$this->Model->alias][$this->Model->primaryKey] != $id) {
 				throw new NotFoundException('Record does not exists');
 			}
 			$this->Content->addValidationsRules($this->Model, $id);
@@ -230,7 +232,7 @@ class ContentsController extends BrownieAppController {
 					$this->Model->brwConfig['fields']['sanitize_html'][$field] = false;
 				}
 				$this->request->data = $this->Model->find('first', array(
-					'conditions' => array($this->Model->name . '.id' => $id),
+					'conditions' => array($this->Model->name . '.' . $this->Model->primaryKey => $id),
 					'contain' => $contain,
 				));
 				$this->request->data = $this->Content->i18nForEdit($this->request->data, $this->Model);
@@ -256,7 +258,7 @@ class ContentsController extends BrownieAppController {
 
 
 	public function delete($model, $id) {
-		$record = $this->Model->findById($id);
+		$record = $this->Model->find('first', ['conditions' => [$this->Model->alias . '.' . $this->Model->primaryKey => $id]]);
 		if (empty($record)) {
 			throw new NotFoundException('Record does not exists');
 		}
@@ -298,12 +300,12 @@ class ContentsController extends BrownieAppController {
 
 	public function delete_multiple($model) {
 		$plural = $this->Model->brwConfig['names']['plural'];
-		if (empty($this->request->data['Content']['id'])) {
+		if (empty($this->request->data['Content'][$this->Model->primaryKey])) {
 			$msg = __d('brownie', 'No %s selected to delete', $plural);
 			$this->Session->setFlash($msg, 'flash_notice');
 		} else {
 			$deleted = $no_deleted = 0;
-			foreach ($this->request->data['Content']['id'] as $id) {
+			foreach ($this->request->data['Content'][$this->Model->primaryKey] as $id) {
 				if ($this->Content->remove($this->Model, $id)) {
 					$deleted++;
 				} else {
@@ -581,10 +583,10 @@ class ContentsController extends BrownieAppController {
 				} elseif (isset($fK[$key]) and !empty($data[$fK[$key]['alias']])) {
 					$RelModel = ($fK[$key]['className'] == $Model->name) ? $Model : $Model->{$fK[$key]['alias']};
 					$retData[$Model->name][$key] = $data[$fK[$key]['alias']][$RelModel->displayField];
-					if ($this->_brwCheckPermissions($RelModel->name, 'view', $data[$fK[$key]['alias']]['id'])) {
+					if ($this->_brwCheckPermissions($RelModel->name, 'view', $data[$fK[$key]['alias']][$RelModel->primaryKey])) {
 						$relatedURL = Router::url(array(
 							'controller' => 'contents', 'action' => 'view', 'plugin' => 'brownie',
-							$fK[$key]['className'], $data[$fK[$key]['alias']]['id']
+							$fK[$key]['className'], $data[$fK[$key]['alias']][$RelModel->primaryKey]
 						));
 						$retData[$Model->name][$key] = '<a href="'.$relatedURL.'">' . $retData[$Model->name][$key] . '</a>';
 					}
@@ -624,7 +626,7 @@ class ContentsController extends BrownieAppController {
 		foreach ($data as $i => $value) {
 			$displayValue = $data[$i][$Model->alias][$Model->displayField];
 			$data[$i][$Model->alias][$Model->displayField] =
-				str_replace($displayValue, '', $treeList[$value[$Model->alias]['id']])
+				str_replace($displayValue, '', $treeList[$value[$Model->alias][$Model->primaryKey]])
 				. '<span class="tree_arrow"></span>' . $displayValue;
 		}
 		return $data;
@@ -760,17 +762,16 @@ class ContentsController extends BrownieAppController {
 		$relatedClassNames = array();
 		foreach ($Model->belongsTo as $alias => $relatedModel) {
 			if (in_array($relatedModel['foreignKey'], array_keys($filterFields))) {
-				$relatedClassNames[] = $alias;
+				$relatedClassNames[$alias] = $relatedModel['foreignKey'];
 			}
 		}
 		foreach ($Model->hasAndBelongsToMany as $alias => $relatedModel) {
 			if (in_array($relatedModel['className'], $filterFields['brwHABTM'])) {
-				$relatedClassNames[] = $alias;
+				$relatedClassNames[$alias] = $relatedModel['foreignKey'];
 			}
 		}
-		foreach ($relatedClassNames as $className) {
-			$varSet = Inflector::pluralize($className);
-			$varSet[0] = strToLower($varSet[0]);
+		foreach ($relatedClassNames as $className => $foreignKey) {
+			$varSet = Inflector::variable(Inflector::pluralize($foreignKey));
 			if ($this->Model->{$className}->Behaviors->attached('Tree')) {
 				$list = $this->Model->{$className}->generateTreeList(null, null, null, '_');
 			} else {
@@ -854,7 +855,9 @@ class ContentsController extends BrownieAppController {
 					if (!empty($this->request->data[$this->Model->alias][$foreignKey])) {
 						$idRedir = $this->request->data[$this->Model->alias][$foreignKey];
 					} else {
-						$record = $this->Model->findById($this->Model->id);
+						$record = $this->Model->find('first', ['conditions' => [
+							$this->Model->alias . '.' . $this->Model->primaryKey => $this->Model->id
+						]]);
 						$idRedir = $record[$this->Model->alias][$foreignKey];
 					}
 					$this->redirect(array('action' => 'view', $parent, $idRedir));

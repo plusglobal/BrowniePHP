@@ -11,7 +11,8 @@ class BrwAuthenticate extends FormAuthenticate {
 			$request->data[$userModel] = $request->data['BrwUser'];
 	        $authenticated = parent::authenticate($request, $response);
 	        if ($authenticated) {
-	        	ClassRegistry::init($userModel)->updateLastLogin($authenticated['id']);
+	        	$UserModel = ClassRegistry::init($userModel);
+	        	$UserModel->updateLastLogin($authenticated[$UserModel->primaryKey]);
 				return array_merge($authenticated, array('model' => $userModel));
 			}
 		}

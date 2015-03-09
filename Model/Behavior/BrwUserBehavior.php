@@ -57,7 +57,7 @@ class BrwUserBehavior extends ModelBehavior {
 			$Model->data[$Model->alias]['password'] = AuthComponent::password($Model->data[$Model->alias]['password']);
 		}
 		if (
-			!empty($Model->data[$Model->alias]['id'])
+			!empty($Model->data[$Model->alias][$Model->primaryKey])
 			and isset($Model->data[$Model->alias]['password'])
 			and $Model->data[$Model->alias]['password'] == ''
 		) {
@@ -89,7 +89,7 @@ class BrwUserBehavior extends ModelBehavior {
 		}
 		$user = $Model->findById($id);
 		return $Model->save(array(
-			'id' => $id, 'last_login' => date('Y-m-d H:i:s'),
+			$Model->primaryKey => $id, 'last_login' => date('Y-m-d H:i:s'),
 			'modified' => $user[$Model->name]['modified'],
 		));
 	}
@@ -97,7 +97,7 @@ class BrwUserBehavior extends ModelBehavior {
 
 	public function checkAndCreate($Model, $email, $password) {
 		if (!$Model->find('first')) {
-			if ($Model->save(array('id' => null, 'email' => $email, 'password' => $password))) {
+			if ($Model->save(array($Model->primaryKey => null, 'email' => $email, 'password' => $password))) {
 				$Model->updateLastLogin($Model->id);
 				$user = $Model->findById($Model->id);
 				$user = array_shift($user);

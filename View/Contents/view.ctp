@@ -9,7 +9,7 @@
 				echo '
 				<li class="prev">
 					' . $this->Html->link(__d('brownie', 'Previous'),
-					array('action' => 'view', $model, $neighbors['prev'][$model]['id']) + $this->params['named'],
+					array('action' => 'view', $model, $neighbors['prev'][$model][$modelPrimaryKey]) + $this->params['named'],
 					array('title' => __d('brownie', 'Previous'))).'
 				</li>';
 			}
@@ -17,7 +17,7 @@
 				echo '
 				<li class="next">
 					' . $this->Html->link(__d('brownie', 'Next'),
-					array('action' => 'view', $model, $neighbors['next'][$model]['id']) + $this->params['named'],
+					array('action' => 'view', $model, $neighbors['next'][$model][$modelPrimaryKey]) + $this->params['named'],
 					array('title' => __d('brownie', 'Next'))).'
 				</li>';
 			}
@@ -101,7 +101,7 @@ foreach ($uploadModels as $uploadKey => $uploadModel): ?>
 			echo '<div class="actions ' . $uploadKey . '-actions"><ul class="actions"><li class="add-' . $uploadKey . '">
 			' . $this->Html->link(__d('brownie', 'Add'), array(
 				'plugin' => 'brownie', 'controller' => 'contents', 'action' => 'edit_upload',
-				$model, $uploadModel, $record[$model]['id'], $catCode
+				$model, $uploadModel, $record[$model][$modelPrimaryKey], $catCode
 			)) . '</li></ul></div>';
 		}
 		?>

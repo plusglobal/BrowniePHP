@@ -17,7 +17,7 @@ class BrwBackendBehavior extends ModelBehavior {
 			switch ($Model->brwConfigPerAuthUser[$authModel]['type']) {
 				case 'owned':
 					if ($Model->name == $authModel) {
-						$query['conditions'][$Model->name . '.id'] = $authId;
+						$query['conditions'][$Model->name . '.' . $Model->primaryKey] = $authId;
 					} elseif (!empty($Model->cachedBelongsTo[$authModel])) {
 						$fk = $Model->cachedBelongsTo[$authModel]['foreignKey'];
 						$query['conditions'][$Model->name . '.' . $fk] = $authId;
