@@ -7,7 +7,7 @@ if (!$adding) {
 	$url[] = $this->data[$model]['id'];
 }
 echo $this->Form->create('Content', array(
-	'type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url,
+	'type' => 'file', 'action' => 'edit', 'autocomplete' => 'off', 'url' => $url, 'novalidate' => true,
 	'inputDefaults' => array('separator' => ' ')
 ));
 ?>
