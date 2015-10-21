@@ -8,7 +8,7 @@
 		if ($permissions[$model]['add']) {
 			echo '
 			<li class="add">' . $this->Html->link(
-				String::insert(
+				CakeText::insert(
 					__d('brownie', 'Add :name_singular', true),
 					array('name_singular' => __($brwConfig['names']['singular']))
 				),

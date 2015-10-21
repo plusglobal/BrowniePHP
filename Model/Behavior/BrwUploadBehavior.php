@@ -48,8 +48,7 @@ class BrwUploadBehavior extends ModelBehavior {
 					break;
 				}
 			} elseif(is_string($Model->data[$Model->alias]['file'])) {
-				$parts = explode(DS, $Model->data[$Model->alias]['file']);
-				$Model->data[$Model->alias]['name'] = end($parts);
+				$Model->data[$Model->alias]['name'] = basename($Model->data[$Model->alias]['file']);
 				if ($Model->data[$Model->alias]['file'][0] == '/') {
 					$Model->data[$Model->alias]['file'] = substr($Model->data[$Model->alias]['file'], 1);
 				}

@@ -172,7 +172,7 @@ a{
 
 #content{
 	padding: 20px 5px;
-	margin: 0 10px 10px 15px;	
+	margin: 0 10px 10px 15px;
 	overflow: auto;
 }
 
@@ -416,7 +416,7 @@ div.paging_counter{
 
 /* notices and errors */
 
-.error a {
+/*.error a {
 	color:#8a1f11;
 }
 .notice a {
@@ -424,7 +424,7 @@ div.paging_counter{
 }
 .success a {
 	color:#264409;
-}
+}*/
 .error-message, #MessageSendForm div.error-message {
 	margin:7px 0;
 	padding-left: 0;
@@ -458,7 +458,7 @@ p.error em {
 	font-weight: normal;
 	line-height: 140%;
 }
-.notice {
+/* .notice {
 	background: #ffcc00;
 	color: #000;
 	display: block;
@@ -467,11 +467,11 @@ p.error em {
 	line-height: 140%;
 	padding: 0.8em;
 	margin: 1em 0;
-}
-.success {
+} */
+/* .success {
 	background: green;
 	color: #fff;
-}
+} */
 
 #content h2, #content h1{
 	font-weight: bold;
@@ -576,7 +576,7 @@ th a:hover{
 	padding: 0;
 }
 
-#content form#deleteMultiple div.submit button span{ 
+#content form#deleteMultiple div.submit button span{
 	font-size: 11px;
 	background-image: url(ico/16x16/delete.png);
 	background-position: left center;
@@ -981,7 +981,7 @@ div.radio label {
 	margin: 0 0 6px 20px;
 }
 div.checkbox{
-	
+
 }
 div.checkbox label{
 	font-weight: normal;

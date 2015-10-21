@@ -16,7 +16,7 @@
 
 	echo '
 	<p class="counter">' . $this->Paginator->counter(array(
-		'format' => String::insert(
+		'format' => CakeText::insert(
 			__d('brownie', 'Page %page% of %pages%, showing %current% :name_plural out of %count% total, starting on record %start%, ending on %end%'),
 			array('name_plural' => __($brwConfig['names']['plural']))
 		),

@@ -287,7 +287,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			);
 			$fields = array(); $i = 0; $schema = (array)$Model->schema();
 			$blacklist = array_merge(
-				array('lft', 'rght', 'parent_id', 'created', 'modified'),
+				array('lft', 'rght', 'parent_id'),
 				$Model->brwConfig['fields']['hide']
 			);
 			foreach ($schema as $key => $values) {
@@ -486,7 +486,7 @@ class BrwPanelBehavior extends ModelBehavior {
 			} else {
 				$url = Router::url(array(
 					'plugin' => 'brownie', 'controller' => 'downloads', 'action' => 'view',
-					$Model->alias, $value['record_id'], $value['category_code'], $value['name']
+					$Model->alias, $fileType, $value['record_id'], $value['category_code'], $value['name']
 				));
 			}
 			$paths = array(
@@ -726,7 +726,8 @@ class BrwPanelBehavior extends ModelBehavior {
 							= Configure::read('brwSettings.formDateFormat');
 					}
 					if (!isset($Model->brwConfig['fields']['date_ranges'][$field]['monthNames'])) {
-						$Model->brwConfig['fields']['date_ranges'][$field]['monthNames'] = true;
+						$Model->brwConfig['fields']['date_ranges'][$field]['monthNames']
+							= Configure::read('brwSettings.monthNames');
 					}
 				}
 			}

@@ -23,7 +23,7 @@ class BrwUserBehavior extends ModelBehavior {
 					'message' => __d('brownie', 'Email not valid'),
 				),
 				array(
-					'rule' => 'notEmpty',
+					'rule' => 'notBlank',
 					'on' => 'create',
 					'required' => true,
 					'message' =>  __d('brownie', 'Email cannot be empty'),
@@ -31,14 +31,14 @@ class BrwUserBehavior extends ModelBehavior {
 			),
 			'password' => array(
 				array(
-					'rule' => 'notEmpty',
+					'rule' => 'notBlank',
 					'on' => 'create',
 					'message' =>  __d('brownie', 'Password cannot be empty'),
 				),
 			),
 			'repeat_password' => array(
 				array(
-					'rule' => 'notEmpty',
+					'rule' => 'notBlank',
 					'on' => 'create',
 					'message' => __d('brownie', 'Password cannot be empty'),
 				),
