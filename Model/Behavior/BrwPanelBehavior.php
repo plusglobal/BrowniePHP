@@ -10,10 +10,12 @@ class BrwPanelBehavior extends ModelBehavior {
 			'gender' => 1 //1 for male, 2 for female http://en.wikipedia.org/wiki/ISO_5218
 		),
 		'paginate' => array(
-			'limit' => 20,
+			'limit' => 50,
+			'maxLimit' => 500,
 			'fields' => array(),
 			'images' => array(),
 			'conditions' => array(),
+			'default_cols_count' => 5,
 		),
 		'index' => array(
 			'home' => true,
@@ -293,7 +295,8 @@ class BrwPanelBehavior extends ModelBehavior {
 			foreach ($schema as $key => $values) {
 				if (in_array($values['type'], $listableTypes) and !in_array($key, $blacklist)) {
 					$fields[] = $key;
-					if ($i++ > 4) {
+					$i++;
+					if ($i > $Model->brwConfig['paginate']['default_cols_count']) {
 						break;
 					}
 				}

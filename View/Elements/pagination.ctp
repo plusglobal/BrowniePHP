@@ -4,12 +4,18 @@
 	if ($numbers = $this->Paginator->numbers(array('model' => $model, 'separator' => ''))) {
 		echo '
 		<div class="paging clearfix">
+			<span class="prev">' . $this->Paginator->first(
+				'&laquo;&laquo; ' . __d('brownie', 'first'), array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
+			) . '</span>
 			<span class="prev">' . $this->Paginator->prev(
 				'&laquo; ' . __d('brownie', 'previous'), array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
 			) . '</span>
 			' . $numbers . '
 			<span class="next">' . $this->Paginator->next(
 				__d('brownie', 'next').' &raquo;', array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
+			) . '</span>
+			<span class="next">' . $this->Paginator->last(
+				__d('brownie', 'last').' &raquo;&raquo;', array('model' => $model, 'escape' => false), null, array('class'=>'disabled')
 			) . '</span>
 		</div>';
 	}
@@ -51,7 +57,7 @@
 	if ($limits) {
 		echo '
 		<div class="limiter">
-			<p>' . sprintf(__d('brownie', '%s per page', true), __($brwConfig['names']['plural'])) . ':</p>
+			<p>' . __d('brownie', '%s per page', __($brwConfig['names']['plural'])) . ':</p>
 			<ul>' . $limits . '</ul>
 		</div>';
 	}
